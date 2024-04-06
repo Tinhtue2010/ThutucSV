@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\ApproveController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentManagerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +17,35 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/check_login', [AuthController::class, 'checkLogin'])->name('checkLogin');
+Route::get('/log-out', [AuthController::class, 'logout'])->name('logout');
+
+Route::group(['middleware' => ['auth']], function () {
+    // chuyển hướng nếu vô /
+    Route::get('/', function(){
+        if(Role(1))
+        {
+            return redirect()->route('student.info');
+        }
+        return redirect()->route('approve.index');
+    });
+    // chỉ sinh viên được vào
+    Route::middleware('role:student')->group(function () {
+        Route::name('student.')->group(function () {
+            Route::get('/student-info', [StudentController::class, 'index'])->name('info');
+        });
+    });
+
+    //tất cả được vào trừ sinh viên
+    Route::middleware('role')->group(function () {
+        Route::name('approve.')->prefix('approve')->group(function () {
+            Route::get('/', [ApproveController::class, 'index'])->name('index');
+        });
+    });
+
+    // quyền admin hoặc là quyền bên phòng đào tạo được vào
+    Route::middleware('role:studentManager')->name('studentManager.')->prefix('student-manager')->group(function () {
+        Route::get('/', [StudentManagerController::class, 'index'])->name('index');
+    });
 });
