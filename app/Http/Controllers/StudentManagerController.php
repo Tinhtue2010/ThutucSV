@@ -19,13 +19,12 @@ class StudentManagerController extends Controller
     public function getData(Request $request)
     {
         $query = Student::query();
-
         if (isset($request->school_year)) {
             $query->where('school_year', $request->school_year);
         }
         if (isset($request->he_tuyen_sinh)) {
             $query->where('he_tuyen_sinh', $request->he_tuyen_sinh);
-        }
+        } 
         if (isset($request->status_dk)) {
             $query->where('status_dk', $request->status_dk);
         }
