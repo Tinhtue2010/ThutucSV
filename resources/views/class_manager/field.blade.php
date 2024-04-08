@@ -13,5 +13,5 @@
         <span class="required">Ngành học</span>
     </label>
     <!--end::Label-->
-    <input type="text" class="form-control form-control-solid" name="student_code"/>
+    <input type="text" class="form-control form-control-solid" name="nganh"/>
 </div>

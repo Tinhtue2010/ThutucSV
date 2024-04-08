@@ -11,8 +11,9 @@ if (!function_exists('Role')) {
             "department_leader" => 3,// 3 lãnh đạo khoa
             "student_affairs_office" => 4,// 4 phòng công tác hssv
             "student_union_leader" => 5,// 5 lãnh đạo ctsv
-            "school_leader" => 6,// 6 lãnh đạo trường                
+            "school_leader" => 6,// 6 lãnh đạo trường
         ];
+
         if (Auth::check()) {
             $user = Auth::user();
             if ($user->role == $role) {

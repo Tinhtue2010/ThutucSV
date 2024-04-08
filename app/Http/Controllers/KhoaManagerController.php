@@ -3,6 +3,7 @@
     namespace App\Http\Controllers;
 
     use App\Models\Khoa;
+    use Illuminate\Database\QueryException;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
 
@@ -59,31 +60,31 @@
             }
         }
 
-        function create(Request $request)
+        public function create(Request $request)
         {
-            $this->validate($request, [
-                'name' => 'required|string|max:255',
-            ]);
-
-            $model = new Khoa();
-
-            $model->name = $request->input('name');
-            $model->timestamps = true;
-            $model->save();
-
             try {
-                $model->save();
-                return response()->json([
-                    'status'  => 'success',
-                    'message' => 'Thêm khoa mới thành công !',
-                    'data'    => $model,
-                ], 201);
-            } catch (\Exception $e) {
-                return response()->json([
-                    'status'  => 'failed',
-                    'message' => 'Thêm khoa mới thất bại',
-                    'error'   => $e->getMessage(),
-                ], 500);
+                Khoa::create($request->only([
+                    'name',
+                ]));
+
+                return true;
+            } catch (QueryException) {
+                return abort(404);
             }
+        }
+
+        public function update(Request $request, $id)
+        {
+            $khoa = Khoa::find($id);
+
+            if (!$khoa) {
+                return response()->json([
+                    'message' => 'Not found',
+                ], 404);
+            }
+
+            return $khoa->update($request->only([
+                'name',
+            ]));
         }
     }
