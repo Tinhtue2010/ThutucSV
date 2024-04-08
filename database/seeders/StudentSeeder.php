@@ -16,14 +16,14 @@ class StudentSeeder extends Seeder
      */
     public function run()
     {
-        // Khoa::create([
-        //     'name' => 'Công nghệ thông tin',
-        // ]);
-        // Lop::create([
-        //     'name' => 'Khoa học máy tính',
-        //     'khoa_id' => 1,
-        //     'nganh' => 'Công nghệ thông tin'
-        // ]);
+        Khoa::create([
+            'name' => 'Công nghệ thông tin',
+        ]);
+        Lop::create([
+            'name' => 'Khoa học máy tính',
+            'khoa_id' => 1,
+            'nganh' => 'Công nghệ thông tin'
+        ]);
         Student::create([
             'full_name' => 'Nguyen Van A',
             'student_code' => 'SV001',
