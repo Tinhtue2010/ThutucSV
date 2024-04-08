@@ -16,7 +16,9 @@
 
         public function getData(Request $request)
         {
-            $query = Lop::query();
+            $query = Lop::query()
+                ->leftJoin("khoas", "lops.khoa_id", "=", "khoas.id")
+                ->select("lops.*", "khoas.name as khoa_name");
 
             $query->when(
                 $request->has('status_error')

@@ -68,8 +68,8 @@
                 ]));
 
                 return true;
-            } catch (QueryException $e) {
-                abort(404);
+            } catch (QueryException) {
+                return abort(404);
             }
         }
 
