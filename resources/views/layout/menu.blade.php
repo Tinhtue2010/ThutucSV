@@ -10,7 +10,7 @@
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
-                <span class="menu-title">Quản lý tài khoản</span>
+                <span class="menu-title">Quản lý sinh viên</span>
                 <!--end::Title-->
             </a>
             <!--end::Menu link-->
