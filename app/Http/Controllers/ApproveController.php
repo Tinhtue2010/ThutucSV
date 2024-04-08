@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class ApproveController extends Controller
 {
     function index() {
-        dd("duyệt");
+        return view('approve.index');
     }
 }

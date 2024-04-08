@@ -43,7 +43,7 @@
                 <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-10">
                     <div></div>
                     <!--begin::Link-->
-                    <a href="#" class="link-primary" data-kt-translate="sign-in-forgot-password">Quên
+                    <a href="#" class="link-success" data-kt-translate="sign-in-forgot-password">Quên
                         mật khẩu</a>
                     <!--end::Link-->
                 </div>
@@ -51,7 +51,7 @@
                 <!--begin::Actions-->
                 <div class="d-flex flex-stack">
                     <!--begin::Submit-->
-                    <button id="kt_sign_in_submit" class="btn btn-primary me-2 flex-shrink-0">
+                    <button id="kt_sign_in_submit" class="btn btn-success me-2 flex-shrink-0">
                         <!--begin::Indicator label-->
                         <span class="indicator-label" data-kt-translate="sign-in-submit">Đăng
                             nhập</span>

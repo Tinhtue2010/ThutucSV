@@ -20,6 +20,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('role')->default(1); // 0 admin, 1 học sinh, 2 giáo viên, 3 lãnh đạo khoa, 4 phòng công tác hssv, 5 lãnh đạo ctsv, 6 lãnh đạo trường
+            $table->string('avatar')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

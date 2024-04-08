@@ -9,5 +9,5 @@ class Lop extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'khoa_id'];
+    protected $fillable = ['name', 'khoa_id','nganh'];
 }

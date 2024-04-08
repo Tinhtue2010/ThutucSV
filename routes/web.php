@@ -47,5 +47,10 @@ Route::group(['middleware' => ['auth']], function () {
     // quyền admin hoặc là quyền bên phòng đào tạo được vào
     Route::middleware('role:studentManager')->name('studentManager.')->prefix('student-manager')->group(function () {
         Route::get('/', [StudentManagerController::class, 'index'])->name('index');
+        Route::get('get-data', [StudentManagerController::class, 'getData'])->name('getData');
+        Route::get('get-data/{id?}', [StudentManagerController::class, 'getDataChild'])->name('getDataChild');
+        Route::get('detele/{id?}', [StudentManagerController::class, 'detele'])->name('detele');
+        Route::get('detele/{id?}', [StudentManagerController::class, 'detele'])->name('detele');
+        Route::post('create', [StudentManagerController::class, 'create'])->name('create');
     });
 });

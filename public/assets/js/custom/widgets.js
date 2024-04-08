@@ -3296,14 +3296,15 @@ var KTWidgets = function () {
         if ( !formEl ) {
             return;
         }
+
         // init editor
         var options = {
             modules: {
                 toolbar: {
-                    container: "#kt_forms_widget_1_editor_toolbar",
+                    container: "#kt_forms_widget_1_editor_toolbar"
                 }
             },
-            placeholder: '',
+            placeholder: 'What is on your mind ?',
             theme: 'snow'
         };
 
