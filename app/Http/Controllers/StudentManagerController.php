@@ -20,16 +20,15 @@ class StudentManagerController extends Controller
     {
         $query = Student::query();
 
-        // if (isset($request->status_error)) {
-        //     if ($request->status_error != 'all') {
-        //         if ($request->status_error == 0) {
-        //             $query->whereNull('return_type');
-        //         } else {
-        //             $query->where('return_type', $request->status_error);
-        //         }
-        //     }
-        // }
-
+        if (isset($request->school_year)) {
+            $query->where('school_year', $request->school_year);
+        }
+        if (isset($request->he_tuyen_sinh)) {
+            $query->where('he_tuyen_sinh', $request->he_tuyen_sinh);
+        }
+        if (isset($request->status_dk)) {
+            $query->where('status_dk', $request->status_dk);
+        }
         $data = $this->queryPagination($request, $query, ['full_name', 'student_code', 'student_id']);
 
         return $data;

@@ -84,7 +84,7 @@
         <select data-dropdown-parent="#select-parent-{{$type}}-2" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
             name="he_tuyen_sinh" data-placeholder="Hệ đào tạo">
             <option value="1">Đại học</option>
-            <option value="2">Cao đăng</option>
+            <option value="2">Cao đẳng</option>
             <option value="3">Liên thông đại học</option>
             <option value="4">Thạc sĩ</option>
         </select>
