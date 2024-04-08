@@ -27,6 +27,7 @@
                         <!--end::Card toolbar-->
                     </div>
                     <!--end::Card header-->
+
                     <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <!--begin::Table-->
@@ -94,6 +95,8 @@
         </div>
         <!--end::Content-->
     </div>
+    @include('khoa_manager.validate')
     @include('khoa_manager.table')
     @include('khoa_manager.create')
+    @include('khoa_manager.update')
 @endsection

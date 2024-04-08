@@ -53,7 +53,7 @@
                             data: 'nganh'
                         },
                         {
-                            data: 'khoa_id'
+                            data: 'khoa_name'
                         },
                         {
                             data: 'created_at',

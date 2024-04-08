@@ -24,7 +24,7 @@ class StudentManagerController extends Controller
         }
         if (isset($request->he_tuyen_sinh)) {
             $query->where('he_tuyen_sinh', $request->he_tuyen_sinh);
-        } 
+        }
         if (isset($request->status_dk)) {
             $query->where('status_dk', $request->status_dk);
         }
@@ -78,9 +78,11 @@ class StudentManagerController extends Controller
             ]));
 
             $user = new User();
+
             $user->name = $request->full_name;
             $user->password = bcrypt($request->student_code);
             $user->student_id = $student->id;
+
             $user->save();
             return true;
         } catch (QueryException $e) {

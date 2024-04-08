@@ -37,7 +37,7 @@
                                 <th class="text-nowrap" data-name="id">Id</th>
                                 <th class="text-nowrap" data-name="name">{{ __('Tên lớp') }}</th>
                                 <th class="text-nowrap" data-name="nganh">{{ __('Ngành học') }}</th>
-                                <th class="text-nowrap" data-name="khoa_id">{{ __('ID Khoa') }}</th>
+                                <th class="text-nowrap" data-name="khoa_id">{{ __('Khoa') }}</th>
                                 <th class="text-nowrap" data-name="created_at">{{ __('Tạo lúc') }}</th>
                                 <th class="text-nowrap" data-name="updated_at">{{ __('Cập nhật lúc') }}</th>
 
@@ -96,6 +96,8 @@
         </div>
         <!--end::Content-->
     </div>
+    @include('class_manager.validate')
     @include('class_manager.table')
     @include('class_manager.create')
+    @include('class_manager.update')
 @endsection
