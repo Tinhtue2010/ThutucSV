@@ -6,7 +6,7 @@
             <a class="menu-link" href="{{ route('studentManager.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
-                    <i class="ki-outline ki-lock-2 fs-2"></i>
+                    <i class="ki-outline ki-category fs-2"></i>
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
@@ -17,6 +17,41 @@
         </div>
         <!--end::Menu Item-->
     @endif
+
+    @if(Role(0) || Role(3) || Role(6))
+        <div class="menu-item">
+            <!--begin::Menu link-->
+            <a class="menu-link" href="{{ route('khoaManager.index') }}">
+                <!--begin::Icon-->
+                <span class="menu-icon">
+                    <i class="ki-outline ki-category fs-2"></i>
+                </span>
+                <!--end::Icon-->
+                <!--begin::Title-->
+                <span class="menu-title">Quản lý khoa</span>
+                <!--end::Title-->
+            </a>
+            <!--end::Menu link-->
+        </div>
+    @endif
+
+    @if(Role(0) || Role(2) || Role(4))
+        <div class="menu-item">
+            <!--begin::Menu link-->
+            <a class="menu-link" href="{{ route('classManager.index') }}">
+                <!--begin::Icon-->
+                <span class="menu-icon">
+                    <i class="ki-outline ki-category fs-2"></i>
+                </span>
+                <!--end::Icon-->
+                <!--begin::Title-->
+                <span class="menu-title">Quản lý lớp</span>
+                <!--end::Title-->
+            </a>
+            <!--end::Menu link-->
+        </div>
+    @endif
+
     @if (!Role(1))
         <!--begin::Menu Item-->
         <div class="menu-item">
@@ -35,7 +70,7 @@
         </div>
         <!--end::Menu Item-->
     @endif
-    @if (Role(1))
+    @if (Role(0) || Role(1))
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
