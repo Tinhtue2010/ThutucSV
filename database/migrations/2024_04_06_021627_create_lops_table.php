@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('lops', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('nganh');
+            $table->string('nganh')->nullable();
 
             $table->unsignedBigInteger('khoa_id')->nullable();
             $table->foreign('khoa_id')->references('id')->on('khoas')->onDelete('set null');

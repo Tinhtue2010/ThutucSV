@@ -142,6 +142,9 @@
         </div>
         <!--end::Content-->
     </div>
+    @include('student_manager.validate')
     @include('student_manager.table')
     @include('student_manager.create')
+    @include('student_manager.update')
+    @include('student_manager.import')
 @endsection
