@@ -11,45 +11,55 @@ class RoleMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     * @param string|null              $role
+     *
+     * @return  mixed
      */
     public function handle(Request $request, Closure $next, $role = null)
     {
-        if (Auth::check()) {
-            if(isset($role) && $role == "studentManager" && (Role(0) || Role(4) || Role(5)))
-            {
-                return $next($request);
-            }
-
-            if (isset($role) && $role == "khoaManager"
-                && (Role(0) || Role(3)
-                    || Role(6))
-            ) {
-                return $next($request);
-            }
-
-            if (isset($role) && $role == "classManager"
-                && (Role(0) || Role(2)
-                    || Role(4))
-            ) {
-                return $next($request);
-            }
-
-            if (!isset($role) && !Role(1)) {
-                return $next($request);
-            }
-
-            if (isset($role) && Role($role)) {
-                return $next($request);
-            }
-            abort(404);
-        }
-        else
-        {
+        if (!Auth::check()) {
             return redirect()->route('login');
         }
+
+        $userRoles = Auth::user()->roles->pluck('name')->toArray();
+
+        switch ($role) {
+            case 'studentManager':
+                if (in_array('studentManager', $userRoles)
+                    || in_array('role1', $userRoles)
+                    || in_array('role2', $userRoles)
+                ) {
+                    return $next($request);
+                }
+                break;
+
+            case 'khoaManager':
+                if (in_array('khoaManager', $userRoles)
+                    || in_array('role3', $userRoles)
+                    || in_array('role4', $userRoles)
+                ) {
+                    return $next($request);
+                }
+                break;
+
+            case 'classManager':
+                if (in_array('classManager', $userRoles)
+                    || in_array('role5', $userRoles)
+                    || in_array('role6', $userRoles)
+                ) {
+                    return $next($request);
+                }
+                break;
+
+            default:
+                if (in_array('defaultRole', $userRoles)) {
+                    return $next($request);
+                }
+                break;
+        }
+
         abort(404);
     }
 }

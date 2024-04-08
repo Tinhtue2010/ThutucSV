@@ -12,21 +12,22 @@ class CheckLoginMiddleware
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @param \Closure $next
+     *
+     * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::check())
-        {
-            return $next($request);
+        if (Auth::check()) {
             $user = Auth::user();
-            if(Role(1))
-            {
+
+            if (Role(1)) {
                 return redirect()->route('student.info');
             }
+
+            return $next($request);
         }
+
         return redirect()->route('login');
-        
     }
 }
