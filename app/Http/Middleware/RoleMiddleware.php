@@ -22,6 +22,21 @@ class RoleMiddleware
             {
                 return $next($request);
             }
+
+            if (isset($role) && $role == "khoaManager"
+                && (Role(0) || Role(3)
+                    || Role(6))
+            ) {
+                return $next($request);
+            }
+
+            if (isset($role) && $role == "classManager"
+                && (Role(0) || Role(2)
+                    || Role(4))
+            ) {
+                return $next($request);
+            }
+
             if (!isset($role) && !Role(1)) {
                 return $next($request);
             }
