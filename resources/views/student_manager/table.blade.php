@@ -29,7 +29,7 @@
                             data.order = undefined;
                             data.search = '';
                             $('.filter-select').each(function() {
-                                if ($(this).data('name') == undefined || $(this).val() =='all') {
+                                if ($(this).data('name') == undefined || $(this).val() == 'all') {
                                     return;
                                 }
                                 var name_filter = $(this).data('name');
@@ -156,9 +156,6 @@
                         targets: -1,
                         orderable: false,
                         responsivePriority: 1,
-                    }, {
-                        targets: 4,
-                        orderable: false
                     }],
                     responsive: true,
                 });

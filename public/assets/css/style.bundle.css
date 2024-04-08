@@ -49409,3 +49409,6 @@ body,
     display: none !important;
   }
 }
+.dtr-control {
+  padding: 0!important;
+}

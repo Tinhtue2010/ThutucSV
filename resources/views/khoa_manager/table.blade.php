@@ -28,6 +28,13 @@
                             data.columns = undefined;
                             data.order = undefined;
                             data.search = '';
+                            $('.filter-select').each(function() {
+                                if ($(this).data('name') == undefined || $(this).val() == 'all') {
+                                    return;
+                                }
+                                var name_filter = $(this).data('name');
+                                data[name_filter] = $(this).val();
+                            });
                             return $.extend({}, data,
                                 dataCustom);
                         },
@@ -116,12 +123,12 @@
             var handleSearchDatatable = () => {
                 const filterSearch = document.querySelector(
                     '[data-kt-ecommerce-product-filter="search"]');
-                filterSearch.addEventListener('keyup', function (e) {
+                filterSearch.addEventListener('keyup', function(e) {
                     getData();
                 });
                 const filteTableLenght = document.querySelector(
                     '#length-table');
-                filteTableLenght.addEventListener('change', function (e) {
+                filteTableLenght.addEventListener('change', function(e) {
                     getData();
                 })
                 const filterServiceGroup = document.querySelector(
@@ -130,8 +137,12 @@
                     getData();
                 });
 
+                $('.filter-select').change(function() {
+                    getData();
+                })
 
             }
+
 
 
             var loadData = function (data = {}) {
@@ -160,8 +171,6 @@
                 const filteTableLenght = document.querySelector(
                     '#length-table');
 
-                const filterStatusAccount = document.querySelector(
-                    '#status_account_name');
 
                 const arrangeRow = table.querySelector('[aria-sort]');
                 var data = {};
@@ -180,7 +189,6 @@
                 if (filterSearch.value != '') {
                     data.search = filterSearch.value;
                 }
-                data.status = filterStatusAccount.value;
                 data.per_page = filteTableLenght.value;
                 dataCustom = data;
                 datatable.ajax.reload();
