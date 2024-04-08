@@ -924,7 +924,7 @@
         function mess_success(title, content) {
             Swal.fire({
                 text: content,
-                icon: "error",
+                icon: "success",
                 buttonsStyling: false,
                 confirmButtonText: "Oke",
                 customClass: {
@@ -935,7 +935,7 @@
         function mess_error(title, content) {
             Swal.fire({
                 text: content,
-                icon: "success",
+                icon: "error",
                 buttonsStyling: false,
                 confirmButtonText: "Oke",
                 customClass: {

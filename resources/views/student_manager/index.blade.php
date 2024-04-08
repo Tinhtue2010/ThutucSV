@@ -27,7 +27,7 @@
                             <div class="w-100 mw-150px">
                                 <span>Năm</span>
                                 <!--begin::Select2-->
-                                <select class="form-select form-select-solid" data-control="select2" data-placeholder="Năm">
+                                <select class="form-select form-select-solid filter-select" data-name="school_year" data-control="select2" data-placeholder="Năm">
                                     @for ($year = 2000; $year <= 2100; $year++)
                                         <option @if($year == date('Y')) selected="selected" @endif value="{{ $year }}">{{ $year }}</option>
                                     @endfor
@@ -36,19 +36,19 @@
                             </div>
                             <div class="w-100 mw-150px">
                                 <span>Hệ tuyển sinh</span>
-                                <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                <select class="form-select form-select-solid filter-select" data-name="he_tuyen_sinh" data-control="select2" data-hide-search="true"
                                     data-placeholder="Hệ đào tạo">
                                     <option></option>
                                     <option value="all" selected="selected">Hiển thị tất cả</option>
                                     <option value="1">Đại học</option>
-                                    <option value="2">Cao đăng</option>
+                                    <option value="2">Cao đẳng</option>
                                     <option value="3">Liên thông đại học</option>
                                     <option value="4">Thạc sĩ</option>
                                 </select>
                             </div>
                             <div class="w-100 mw-150px">
                                 <span>Trạng thái</span>
-                                <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                <select class="form-select form-select-solid filter-select" data-name="status_dk" data-control="select2" data-hide-search="true"
                                     data-placeholder="Trạng thái">
                                     <option></option>
                                     <option value="all" selected="selected">Hiển thị tất cả</option>
@@ -142,6 +142,9 @@
         </div>
         <!--end::Content-->
     </div>
+    @include('student_manager.validate')
     @include('student_manager.table')
     @include('student_manager.create')
+    @include('student_manager.update')
+    @include('student_manager.import')
 @endsection

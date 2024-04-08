@@ -28,6 +28,13 @@
                             data.columns = undefined;
                             data.order = undefined;
                             data.search = '';
+                            $('.filter-select').each(function() {
+                                if ($(this).data('name') == undefined || $(this).val() =='all') {
+                                    return;
+                                }
+                                var name_filter = $(this).data('name');
+                                data[name_filter] = $(this).val();
+                            });
                             return $.extend({}, data,
                                 dataCustom);
                         },
@@ -56,8 +63,8 @@
                             data: 'student_id'
                         },
                         {
-                            data: 'date_of_birth', 
-                            render: function(data, type,row ){
+                            data: 'date_of_birth',
+                            render: function(data, type, row) {
                                 return moment(data).format("DD/MM/YYYY");
                             }
                         },
@@ -93,8 +100,11 @@
                         },
                         {
                             data: 'so_tien',
-                            render: function(data, type, row){
-                                return data.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+                            render: function(data, type, row) {
+                                return data.toLocaleString("vi-VN", {
+                                    style: "currency",
+                                    currency: "VND"
+                                });
                             }
                         },
                         {
@@ -171,6 +181,9 @@
                     getData();
                 });
 
+                $('.filter-select').change(function() {
+                    getData();
+                })
 
             }
 
@@ -202,8 +215,6 @@
                 const filteTableLenght = document.querySelector(
                     '#length-table');
 
-                const filterStatusAccount = document.querySelector(
-                    '#status_account_name');
 
                 const arrangeRow = table.querySelector('[aria-sort]');
                 var data = {};
@@ -222,7 +233,7 @@
                 if (filterSearch.value != '') {
                     data.search = filterSearch.value;
                 }
-                data.status = filterStatusAccount.value;
+
                 data.per_page = filteTableLenght.value;
                 dataCustom = data;
                 datatable.ajax.reload();
@@ -248,33 +259,6 @@
 
         $(document).ready(function() {
             Datatable.init();
-        });
-
-        $('#import-file input[type="file"]').change(function(e) {
-            var file = e.target.files[0];
-            var fileName = file.name;
-            var formData = new FormData();
-
-            formData.append('csv_file', file);
-            formData.append('_token', '{{ csrf_token() }}');
-
-            $.ajax({
-                url: '#',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    mess_success('Thông báo',
-                        "Tải lên thành công")
-                        Datatable.loadData();
-                },
-                error: function(xhr, status, error) {
-                    mess_error("Cảnh báo",
-                        "{{ __('Có lỗi xảy ra bạn hãy kiểm tra lại file') }}"
-                    )
-                }
-            });
         });
     </script>
 @endpush

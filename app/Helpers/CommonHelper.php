@@ -4,6 +4,44 @@ namespace App\Helpers;
 
 
 trait CommonHelper{
+    public function importCSV($file)
+    {
+        $path = $file->getRealPath();
+
+        $file = fopen($path, 'r');
+        $row = 1;
+        $header = [];
+        $datas = [];
+        while (($data = fgetcsv($file, 9000000, ',')) !== false) {
+            if ($data !== null) {
+                $i = 0;
+                $tmpData = [];
+                while (isset($data[$i])) {
+                    if ($row == 1) {
+                        $header[] = $data[$i];
+                    } else {
+                        try {
+                            $tmpData[] = $data[$i];
+                        } catch (Exception $e) {
+                            break;
+                        }
+                    }
+                    $i++;
+                }
+                if ($row > 1) {
+                    $datas[] = $tmpData;
+                }
+                $row++;
+            } else {
+                break;
+            }
+        }
+        fclose($file);
+        $dataFile['header'] = $header;
+        $dataFile['data'] = $datas;
+
+        return $dataFile;
+    }
     public function queryPagination($request, $query, $searchName = [])
     {
         $per_page = $request->per_page ?? 10;
