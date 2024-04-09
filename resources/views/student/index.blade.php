@@ -12,8 +12,9 @@
                         <div class="d-flex flex-wrap flex-sm-nowrap">
                             <!--begin: Pic-->
                             <div class="me-7 mb-4">
-                                <div class="symbol symbol-100px symbol-lg-160px symbol-fixed">
-                                    <img src="{{ asset('assets/custom/avatar.png') }}" alt="image">
+                                <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
+                                    <img src="assets/media/avatars/300-1.jpg" alt="image">
+                                    <div class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-body h-20px w-20px"></div>
                                 </div>
                             </div>
                             <!--end::Pic-->
@@ -25,17 +26,17 @@
                                     <div class="d-flex flex-column">
                                         <!--begin::Name-->
                                         <div class="d-flex align-items-center mb-2">
-                                            <a href="#" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{ $student->full_name }}</a>
+                                            <a href="#" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{$student->full_name}}</a>
                                         </div>
                                         <!--end::Name-->
                                         <!--begin::Info-->
                                         <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
                                             <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
-                                                <i class="ki-outline ki-abstract-39 fs-4 me-1"></i>{{ $student->khoa_name }}</a>
+                                                <i class="ki-outline ki-abstract-39 fs-4 me-1"></i>{{$student->khoa_name}}</a>
                                             <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
-                                                <i class="ki-outline ki-abstract-23 fs-4 me-1"></i>{{ $student->lop_name }}</a>
+                                                <i class="ki-outline ki-abstract-23 fs-4 me-1"></i>{{$student->lop_name}}</a>
                                             <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
-                                                <i class="ki-outline ki-sms fs-4 me-1"></i>{{ $student->email }}</a>
+                                                <i class="ki-outline ki-sms fs-4 me-1"></i>{{$student->email}}</a>
                                         </div>
                                         <!--end::Info-->
                                     </div>
@@ -53,7 +54,7 @@
                                                 <!--begin::Number-->
                                                 <div class="d-flex align-items-center">
                                                     <i class="ki-outline ki-pointers fs-3 text-success me-2"></i>
-                                                    <div class="fs-2 fw-bold counted" data-kt-countup="true" data-kt-countup-value="{{ $student->sum_point }}" data-kt-countup-prefix="Đ" data-kt-initialized="1">{{ $student->sum_point }} điểm</div>
+                                                    <div class="fs-2 fw-bold counted" data-kt-countup="true" data-kt-countup-value="{{$student->sum_point}}" data-kt-countup-prefix="Đ" data-kt-initialized="1">{{$student->sum_point}} điểm</div>
                                                 </div>
                                                 <!--end::Number-->
                                                 <!--begin::Label-->
@@ -66,7 +67,7 @@
                                                 <!--begin::Number-->
                                                 <div class="d-flex align-items-center">
                                                     <i class="ki-outline ki-dollar fs-3 text-success me-2"></i>
-                                                    <div class="fs-2 fw-bold counted" data-kt-countup="true" data-kt-countup-value="{{ $student->so_tien }}" data-kt-initialized="1">{{ number_format($student->so_tien, 0, ',', '.') }} VNĐ</div>
+                                                    <div class="fs-2 fw-bold counted" data-kt-countup="true" data-kt-countup-value="{{$student->so_tien}}" data-kt-initialized="1">{{ number_format($student->so_tien, 0, ',', '.') }} VNĐ</div>
                                                 </div>
                                                 <!--end::Number-->
                                                 <!--begin::Label-->
@@ -107,7 +108,7 @@
                         </div>
                         <!--end::Card title-->
                         <!--begin::Action-->
-                        <div onclick="btnEdit()" class="btn btn-sm btn-primary align-self-center">Chỉnh sửa</div>
+                        <a href="../dist/account/settings.html" class="btn btn-sm btn-primary align-self-center">Chỉnh sửa</a>
                         <!--end::Action-->
                     </div>
                     <!--begin::Card header-->
@@ -158,8 +159,7 @@
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ date('d/m/Y', strtotime($student->date_of_birth)) }}
-                                </span>
+                                <span class="fw-bold fs-6 text-gray-800">{{ $student->date_of_birth }}</span>
                             </div>
                             <!--end::Col-->
                         </div>
@@ -297,8 +297,7 @@
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ date('d/m/Y', strtotime($student->ngay_nhap_hoc)) }}
-                                </span>
+                                <span class="fw-bold fs-6 text-gray-800">{{ $student->ngay_nhap_hoc }}</span>
                             </div>
                             <!--end::Col-->
                         </div>
@@ -358,8 +357,7 @@
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ date('d/m/Y', strtotime($student->date_range_cmnd)) }}
-                                </span>
+                                <span class="fw-bold fs-6 text-gray-800">{{ $student->date_range_cmnd }}</span>
                             </div>
                             <!--end::Col-->
                         </div>
