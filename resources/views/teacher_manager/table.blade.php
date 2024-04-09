@@ -1,5 +1,5 @@
 @push('js')
-    {{-- @include('studentManager.validate') --}}
+    {{-- @include('teacherManager.validate') --}}
     <script type="text/javascript">
         var Datatable = function() {
             // Shared variables
@@ -14,7 +14,7 @@
                     "info": false,
                     "serverSide": true,
                     "ajax": {
-                        "url": "{{ route('studentManager.getData') }}", // Thay đổi đường dẫn đến tệp xử lý AJAX
+                        "url": "{{ route('teacherManager.getData') }}", // Thay đổi đường dẫn đến tệp xử lý AJAX
                         "type": "GET",
                         "data": function(data) {
                             var name_order = document
@@ -57,67 +57,25 @@
                             data: 'full_name'
                         },
                         {
-                            data: 'student_code'
+                            data: 'khoa_name'
                         },
                         {
-                            data: 'student_id'
+                            data: 'dia_chi'
                         },
                         {
-                            data: 'date_of_birth',
-                            render: function(data, type, row) {
-                                return moment(data).format("DD/MM/YYYY");
-                            }
-                        },
-                        {
-                            data: 'phone'
+                            data: 'sdt'
                         },
                         {
                             data: 'email'
                         },
                         {
-                            data: 'school_year'
-                        },
-                        {
-                            data: 'sum_point'
-                        },
-                        {
-                            data: 'he_tuyen_sinh'
-                        },
-                        {
-                            data: 'nganh_tuyen_sinh'
-                        },
-                        {
-                            data: 'trinh_do'
-                        },
-                        {
-                            data: 'ngay_nhap_hoc'
-                        },
-                        {
-                            data: 'gv_tiep_nhan'
-                        },
-                        {
-                            data: 'gv_thu_tien'
-                        },
-                        {
-                            data: 'so_tien',
-                            render: function(data, type, row) {
-                                return data.toLocaleString("vi-VN", {
-                                    style: "currency",
-                                    currency: "VND"
-                                });
-                            }
-                        },
-                        {
-                            data: 'status_dk'
-                        },
-                        {
-                            data: 'note'
+                            data: 'chuc_danh'
                         },
                         {
                             data: 'id',
                             render: function(data, type, row) {
                                 const url =
-                                    "{{ route('studentManager.detele') }}/" +
+                                    "{{ route('teacherManager.detele') }}/" +
                                     data
                                 return `
                             <td>

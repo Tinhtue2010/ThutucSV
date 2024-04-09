@@ -38,6 +38,12 @@ if (!function_exists('Role')) {
                         return true;
                     }
                     break;
+                case "teacherManager":
+                    if ($user->role == 0 || $user->role == 3 || $user->role == 6) {
+                        return true;
+                    }
+                    break;
+                        
             }
 
             if ($user->role == $role) {

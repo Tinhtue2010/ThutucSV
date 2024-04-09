@@ -12,7 +12,7 @@
                 <form class="form" id="form_update">
                     <div class="card-body">
                         @csrf
-                        @include('student_manager.field',[
+                        @include('teacher_manager.field',[
                             'type' => '_update',
                         ])
                     </div>
@@ -54,7 +54,7 @@
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
-                        url: "{{ route('studentManager.update') }}/" +
+                        url: "{{ route('teacherManager.update') }}/" +
                             id,
                         data: form.serialize(),
                     }).then((response) => {
@@ -86,7 +86,7 @@
             modelUpdate = new bootstrap.Modal(modalEl);
             form = document.querySelector('#form_update');
             id = data;
-            axios.get("{{ route('studentManager.getDataChild') }}/" + data).then(
+            axios.get("{{ route('teacherManager.getDataChild') }}/" + data).then(
                 response => {
                     modelUpdate.show();
                     const inputElements = form.querySelectorAll('[name]');
