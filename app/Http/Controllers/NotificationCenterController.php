@@ -8,6 +8,6 @@ use Illuminate\Support\Facades\Auth;
 class NotificationCenterController extends Controller
 {
     function index()  {
-        return view('');
+        return view('notificationcenter.index');
     }
 }

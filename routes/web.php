@@ -87,7 +87,7 @@
                 Route::post('update/{id?}', [TeacherManagerController::class, 'update'])->name('update');
         });
 
-        Route::prefix('notificationCenter')->group(function () {
+        Route::name('notificationCenter.')->prefix('notif')->group(function () {
             Route::get('/', [NotificationCenterController::class, 'index'])->name('index');
         });
     });
