@@ -9,16 +9,6 @@
     use App\Http\Controllers\TeacherManagerController;
     use Illuminate\Support\Facades\Route;
 
-/*
-    |--------------------------------------------------------------------------
-    | Web Routes
-    |--------------------------------------------------------------------------
-    |
-    | Here is where you can register web routes for your application. These
-    | routes are loaded by the RouteServiceProvider within a group which
-    | contains the "web" middleware group. Now create something great!
-    |
-    */
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/check_login', [AuthController::class, 'checkLogin'])
@@ -137,31 +127,4 @@ Route::group(['middleware' => ['auth']], function () {
             });
             
     });
-
-        ->prefix('class-manager')->group(function () {
-            Route::get('/', [ClassManagerController::class, 'index'])
-                ->name('index');
-            Route::get(
-                'get-data',
-                [ClassManagerController::class, 'getData']
-            )
-                ->name('getData');
-            Route::get(
-                'get-data/{id?}',
-                [ClassManagerController::class, 'getDataChild']
-            )
-                ->name('getDataChild');
-            Route::get(
-                'detele/{id?}',
-                [ClassManagerController::class, 'detele']
-            )
-                ->name('detele');
-            Route::post('create', [ClassManagerController::class, 'create'])
-                ->name('create');
-            Route::post(
-                'update/{id?}',
-                [ClassManagerController::class, 'update']
-            )
-                ->name('update');
-        });
 });
