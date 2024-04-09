@@ -138,8 +138,8 @@
 
     <div class="menu-item">
         <!--begin::Menu link-->
-        <a class="menu-link {{ request()->routeIs('notificationCenter.index') ? 'active' : '' }}"
-            href="{{ route('notificationCenter.index') }}">
+        <a class="menu-link "
+            href="">
             <!--begin::Icon-->
             <span class="menu-icon">
                 <i class="bi bi-inbox fs-1"></i>
