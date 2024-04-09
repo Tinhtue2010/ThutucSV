@@ -7,6 +7,7 @@
     use App\Http\Controllers\StudentController;
     use App\Http\Controllers\StudentManagerController;
     use App\Http\Controllers\TeacherManagerController;
+    use App\Http\Controllers\NotificationCenterController;
     use Illuminate\Support\Facades\Route;
 
     /*
@@ -132,5 +133,7 @@
                     [TeacherManagerController::class, 'update'])
                     ->name('update');
             });
-            
+        Route::prefix('notification-center')->group(function () {
+            Route::get('/', [NotificationCenterController::class, 'index'])->name('index');
+        });
     });

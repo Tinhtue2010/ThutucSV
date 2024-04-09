@@ -80,6 +80,7 @@ class StudentManagerController extends Controller
             $user = new User();
 
             $user->name = $request->full_name;
+            $user->username = $request->student_code;
             $user->password = bcrypt($request->student_code);
             $user->student_id = $student->id;
 

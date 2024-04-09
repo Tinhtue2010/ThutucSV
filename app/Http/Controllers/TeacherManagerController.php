@@ -83,6 +83,7 @@ class TeacherManagerController extends Controller
 
             $user = new User();
             $user->name = $request->full_name;
+            $user->username = explode('@', $request->email)[0]; // get the part before @ as username
             $user->password = bcrypt($request->student_code);
             $user->teacher_id = $teacher->id;
             $user->save();
