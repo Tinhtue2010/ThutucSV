@@ -25,7 +25,7 @@
                         <!--begin::Card toolbar-->
                         <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                             <div class="w-100 mw-150px">
-                                <span>Năm</span>
+                                <label class="form-label">Năm</label>
                                 <!--begin::Select2-->
                                 <select class="form-select form-select-solid filter-select" data-name="school_year" data-control="select2" data-placeholder="Năm">
                                     @for ($year = 2000; $year <= 2100; $year++)
@@ -35,7 +35,8 @@
                                 <!--end::Select2-->
                             </div>
                             <div class="w-100 mw-150px">
-                                <span>Hệ tuyển sinh</span>
+                                <label class="form-label">Hệ tuyển sinh</label>
+
                                 <select class="form-select form-select-solid filter-select" data-name="he_tuyen_sinh" data-control="select2" data-hide-search="true"
                                     data-placeholder="Hệ đào tạo">
                                     <option></option>
@@ -47,7 +48,8 @@
                                 </select>
                             </div>
                             <div class="w-100 mw-150px">
-                                <span>Trạng thái</span>
+                                <label class="form-label">Trạng thái</label>
+
                                 <select class="form-select form-select-solid filter-select" data-name="status_dk" data-control="select2" data-hide-search="true"
                                     data-placeholder="Trạng thái">
                                     <option></option>
