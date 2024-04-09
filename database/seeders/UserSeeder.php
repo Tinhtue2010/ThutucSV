@@ -21,10 +21,6 @@ class UserSeeder extends Seeder
         $user->role = 0;
         $user->save();
 
-        $user = new User();
-        $user->name = 'Phạm Văn A';
-        $user->password = bcrypt('123456');
-        $user->student_id = 1;
-        $user->save();
+
     }
 }

@@ -9,7 +9,7 @@ class Lop extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'khoa_id','nganh'];
+    protected $fillable = ['name', 'khoa_id','nganh','teacher_id'];
 
     public function khoa()
     {

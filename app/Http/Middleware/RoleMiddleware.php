@@ -20,21 +20,10 @@ class RoleMiddleware
     {
         if (Auth::check()) {
             if (isset($role)) {
-                switch ($role) {
-                    case "studentManager" && (Role(0) || Role(4) || Role(5)):
-                    case "khoaManager" && (Role(0) || Role(3) || Role(6)):
-                    case "classManager" && (Role(0) || Role(2) || Role(4)):
-                    case Role($role):
-                        return $next($request);
-                        break;
-                    default:
-                        abort(404);
-                        break;
+                if(Role($role))
+                {
+                    return $next($request);
                 }
-            }
-
-            if (!isset($role) && !Role(1)) {
-                return $next($request);
             }
 
             abort(404);

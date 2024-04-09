@@ -21,7 +21,7 @@ class AuthController extends Controller
             return true;
         }
 
-        $student = Student::where('student_code', $credentials['username'])->first();
+        $student = Student::where('student_code', $credentials['username'])->where('status_dk',1)->first();
 
         if ($student === null) {
             abort(404);

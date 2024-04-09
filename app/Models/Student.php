@@ -28,6 +28,8 @@ class Student extends Model
         'so_tien',
         'status_dk',
         'note',
+        'cmnd',
+        'date_range_cmnd'
     ];
 
     public function lop()

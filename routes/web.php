@@ -31,7 +31,7 @@
                 return redirect()->route('student.info');
             }
             return redirect()->route('approve.index');
-        });
+        })->name('home');
         // chỉ sinh viên được vào
         Route::middleware('role:student')->group(function () {
             Route::name('student.')->group(function () {
@@ -41,7 +41,7 @@
         });
 
         //tất cả được vào trừ sinh viên
-        Route::middleware('role')->group(function () {
+        Route::middleware('role:notStudent')->group(function () {
             Route::name('approve.')->prefix('approve')->group(function () {
                 Route::get('/', [ApproveController::class, 'index'])
                     ->name('index');

@@ -8,7 +8,7 @@
                     <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
                         <!--begin::Title-->
                         <h1 class="page-heading d-flex flex-column justify-content-center text-dark fw-bold fs-3 m-0">
-                            Quản lý học sinh</h1>
+                            Quản lý sinh viên</h1>
                         <!--end::Title-->
                     </div>
                     <!--end::Page title-->

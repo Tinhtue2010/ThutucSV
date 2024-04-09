@@ -13,12 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('teacher_lop', function (Blueprint $table) {
+        Schema::table('lops', function (Blueprint $table) {
             $table->unsignedBigInteger('teacher_id')->nullable();
             $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('set null');
-
-            $table->unsignedBigInteger('lop_id')->nullable();
-            $table->foreign('lop_id')->references('id')->on('lops')->onDelete('set null');
         });
     }
 
@@ -29,6 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('teacher_lop');
+        Schema::table('lops', function (Blueprint $table) {
+            //
+        });
     }
 };

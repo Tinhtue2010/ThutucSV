@@ -81,7 +81,25 @@
                             data: 'sum_point'
                         },
                         {
-                            data: 'he_tuyen_sinh'
+                            data: 'he_tuyen_sinh',
+                            render: function(data, type, row) {
+                                switch (data) {
+                                    case 1:
+                                        return "Đại học";
+                                        break;
+                                    case 2:
+                                        return "Cao đẳng";
+                                        break;
+                                    case 3:
+                                        return "Liên thông đại học";
+                                        break;
+                                    case 4:
+                                        return "Thạc sĩ";
+                                        break;
+                                    default:
+                                        return "Chưa có thông tin"
+                                }
+                            }
                         },
                         {
                             data: 'nganh_tuyen_sinh'
@@ -108,7 +126,22 @@
                             }
                         },
                         {
-                            data: 'status_dk'
+                            data: 'status_dk',
+                            render: function(data, type, row) {
+                                switch (data) {
+                                    case 0:
+                                        return "Chưa đăng ký";
+                                        break;
+                                    case 1:
+                                        return "Đã đăng ký";
+                                        break;
+                                    case 2:
+                                        return "Rút hồ sơ";
+                                        break;
+                                    default:
+                                        return "Chưa có thông tin"
+                                }
+                            }
                         },
                         {
                             data: 'note'
