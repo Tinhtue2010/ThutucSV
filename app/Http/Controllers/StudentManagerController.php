@@ -96,7 +96,7 @@ class StudentManagerController extends Controller
     {
         $student = Student::find($id);
         if (!$student) {
-            return response()->json(['message' => 'Bot not found'], 404);
+            return abort(404);
         }
 
         return $student->update($request->only([
