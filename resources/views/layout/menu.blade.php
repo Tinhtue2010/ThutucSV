@@ -51,6 +51,22 @@
             <!--end::Menu link-->
         </div>
     @endif
+    @if (Role(0) || Role(2) || Role(4))
+        <div class="menu-item">
+            <!--begin::Menu link-->
+            <a class="menu-link" href="{{ route('teacherManager.index') }}">
+                <!--begin::Icon-->
+                <span class="menu-icon">
+                    <i class="ki-outline ki-category fs-2"></i>
+                </span>
+                <!--end::Icon-->
+                <!--begin::Title-->
+                <span class="menu-title">Quản lý Cán bộ/Giảng viên</span>
+                <!--end::Title-->
+            </a>
+            <!--end::Menu link-->
+        </div>
+    @endif
 
     @if (!Role(1))
         <!--begin::Menu Item-->

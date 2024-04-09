@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Khoa;
 use App\Models\Teacher;
 // use App\Models\Teacher;
 use App\Models\User;
@@ -12,23 +13,38 @@ class TeacherManagerController extends Controller
 {
     function index()
     {
-        $teachers = Teacher::get();
-        return view('student_manager.index', ['teachers' => $teachers]);
+        $khoas = Khoa::get();
+        return view('teacher_manager.index', ['khoas' => $khoas]);
     }
 
     public function getData(Request $request)
     {
-        $query = Teacher::query();
-        if (isset($request->school_year)) {
-            $query->where('school_year', $request->school_year);
-        }
-        if (isset($request->he_tuyen_sinh)) {
-            $query->where('he_tuyen_sinh', $request->he_tuyen_sinh);
-        } 
-        if (isset($request->status_dk)) {
-            $query->where('status_dk', $request->status_dk);
-        }
-        $data = $this->queryPagination($request, $query, ['full_name', 'student_code', 'student_id']);
+        $query = Teacher::query()
+                ->leftJoin("khoas", "teachers.khoa_id", "=", "khoas.id")
+                ->select("teachers.*", "khoas.name as khoa_name");
+
+            $query->when(
+                $request->has('status_error')
+                && $request->status_error !== 'all',
+                function ($query) use ($request) {
+                    $query->where(
+                        $request->status_error === 0 ? 'return_type' : null,
+                        $request->status_error === 0 ? null
+                            : $request->status_error
+                    );
+                }
+            );
+        // if (isset($request->school_year)) {
+        //     $query->where('school_year', $request->school_year);
+        // }
+        // if (isset($request->he_tuyen_sinh)) {
+        //     $query->where('he_tuyen_sinh', $request->he_tuyen_sinh);
+        // } 
+        // if (isset($request->status_dk)) {
+        //     $query->where('status_dk', $request->status_dk);
+        // }
+
+        $data = $this->queryPagination($request, $query);
 
         return $data;
     }

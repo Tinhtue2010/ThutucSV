@@ -11,7 +11,7 @@
                 <form class="form " id="form_create">
                     <div class="card-body">
                         @csrf
-                        @include('student_manager.field',[
+                        @include('teacher_manager.field',[
                             'type' => '_create',
                         ])
                     </div>
@@ -48,7 +48,7 @@
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
-                        url: "{{ route('studentManager.create') }}",
+                        url: "{{ route('teacherManager.create') }}",
                         data: form.serialize(),
                     }).then((response) => {
                         mess_success('Thông báo',

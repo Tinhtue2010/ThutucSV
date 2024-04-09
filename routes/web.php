@@ -6,6 +6,7 @@
     use App\Http\Controllers\KhoaManagerController;
     use App\Http\Controllers\StudentController;
     use App\Http\Controllers\StudentManagerController;
+    use App\Http\Controllers\TeacherManagerController;
     use Illuminate\Support\Facades\Route;
 
     /*
@@ -112,4 +113,24 @@
                     [ClassManagerController::class, 'update'])
                     ->name('update');
             });
+        Route::middleware('role:teacherManager')->name('teacherManager.')
+            ->prefix('teacher-manager')->group(function () {
+                Route::get('/', [TeacherManagerController::class, 'index'])
+                    ->name('index');
+                Route::get('get-data',
+                    [TeacherManagerController::class, 'getData'])
+                    ->name('getData');
+                Route::get('get-data/{id?}',
+                    [TeacherManagerController::class, 'getDataChild'])
+                    ->name('getDataChild');
+                Route::get('detele/{id?}',
+                    [TeacherManagerController::class, 'detele'])
+                    ->name('detele');
+                Route::post('create', [TeacherManagerController::class, 'create'])
+                    ->name('create');
+                Route::post('update/{id?}',
+                    [TeacherManagerController::class, 'update'])
+                    ->name('update');
+            });
+            
     });
