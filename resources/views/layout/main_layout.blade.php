@@ -5,21 +5,26 @@
 
 <head>
     <base href="../../../" />
-    <title>Metronic - The World's #1 Selling Bootstrap Admin Template by Keenthemes</title>
+    <title>UHL - CTSV</title>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.ico') }}" />
+
     <!--begin::Fonts(mandatory for all pages)-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700"/>
     <!--end::Fonts-->
+
     <!--begin::Vendor Stylesheets(used for this page only)-->
-    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
+          type="text/css"/>
     <!--end::Vendor Stylesheets-->
+
     <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
-    <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css"/>
     <!--end::Global Stylesheets Bundle-->
 </head>
 <!--end::Head-->
+
 <!--begin::Body-->
 
 <body id="kt_app_body" data-kt-app-header-fixed="true" data-kt-app-header-fixed-mobile="true"
@@ -47,6 +52,7 @@
         }
     </script>
     <!--end::Theme mode setup on page load-->
+
     <!--begin::App-->
     <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
         <!--begin::Page-->
@@ -70,6 +76,7 @@
                         <!--end::Logo image-->
                     </div>
                     <!--end::Sidebar toggle-->
+
                     <!--begin::Navbar-->
                     <div class="app-navbar flex-lg-grow-1" id="kt_app_header_navbar">
                         <div class="flex-grow-1"></div>
@@ -271,6 +278,7 @@
                         </div>
                         <!--end::Sidebar toggle-->
                     </div>
+
                     <!--begin::Navs-->
                     <div class="app-sidebar-navs flex-column-fluid py-6" id="kt_app_sidebar_navs">
                         <div id="kt_app_sidebar_navs_wrappers" class="app-sidebar-wrapper hover-scroll-y my-2"
