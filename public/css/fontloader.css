@@ -1,0 +1,28 @@
+@font-face {
+  font-family: timesVN;
+  src: url("./../font/times.ttf");
+}
+@font-face {
+    font-family: timesVN;
+    src: url("./../font/SVN-Times\ New\ Roman\ Italic.ttf");
+    font-style: italic;
+}
+@font-face {
+    font-family: timesVN;
+    src: url("./../font/SVN-Times\ New\ Roman\ Bold.ttf");
+    font-weight: bold;
+}
+@font-face {
+    font-family: timesVN;
+    src: url("./../font/SVN-Times\ New\ Roman\ Bold\ Italic.ttf");
+    font-weight: bold;
+    font-style: italic;
+}
+
+.A4{
+    font-family: timesVN;
+    font-size: 13pt;
+    height: 297mm;
+    width: 210mm;
+    padding: 20mm 18mm 20mm 30mm;
+}
