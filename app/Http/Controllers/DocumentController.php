@@ -16,5 +16,8 @@ class DocumentController extends Controller
         // $pdf = new Mpdf();
         // $pdf->WriteHTML(view('document.thoi_hoc'));
         // $pdf->Output('bao_gia.pdf', 'I');
+        
+        // @Zord: đã xử lý pdf ngay trên client, đẩy data vào view mà fill :v
+        return view('document.index');
     }
 }
