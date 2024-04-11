@@ -39,6 +39,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::middleware('role:student')->group(function () {
         Route::name('student.')->group(function () {
             Route::get('/student-info', [StudentController::class, 'index'])->name('info');
+            Route::get('get-data-info', [StudentController::class, 'getDataInfo'])->name('getDataInfo');
+            Route::post('update', [StudentController::class, 'update'])->name('update');
         });
     });
 

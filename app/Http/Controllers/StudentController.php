@@ -23,4 +23,30 @@ class StudentController extends Controller
         
         return view('student.index', ['percent'=>$percentage,'student'=>$student]);
     }
+
+    public function getDataInfo()
+    {
+        $user = Auth::user();
+        try {
+            $error = Student::findOrFail($user->student_id);
+
+            return $error;
+        } catch (QueryException $e) {
+            abort(404);
+        }
+    }
+
+    public function update(Request $request) {
+        $user = Auth::user();
+        $student = Student::find($user->student_id);
+
+        return $student->update($request->only([
+            'full_name',
+            'date_of_birth',
+            'phone',
+            'email',
+            'cmnd',
+            'date_range_cmnd'
+        ]));
+    }
 }
