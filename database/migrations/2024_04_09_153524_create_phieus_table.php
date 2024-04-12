@@ -18,7 +18,6 @@ return new class extends Migration
 
             $table->string("name");
             $table->string("key");
-            $table->string("type");
 
             $table->json('content');
 

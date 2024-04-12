@@ -9,7 +9,14 @@ class StopStudy extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['student_id', 'round', 'parent_id', 'phieu_id', 'note'];
+    protected $fillable = [
+        'student_id',
+        'round',
+        'parent_id',
+        'phieu_id',
+        'note',
+        'status'
+    ];
 
     public function student()
     {

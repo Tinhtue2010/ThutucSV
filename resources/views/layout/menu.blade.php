@@ -128,7 +128,7 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('student.info') ? 'active' : '' }}" href="{{ route('student.info') }}">
+            <a class="menu-link {{ request()->routeIs('StopStudy.index') ? 'active' : '' }}" href="{{ route('StopStudy.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
                     <i class="ki-outline ki-more-2 fs-2"></i>
@@ -151,7 +151,7 @@
 
     <div class="menu-item">
         <!--begin::Menu link-->
-        <a class="menu-link {{ request()->routeIs('notificationCenter.index') ? 'active' : '' }}" href="{{ route('notificationCenter.index') }}">
+        <a class="menu-link {{ request()->routeIs('notification.index') ? 'active' : '' }}" href="{{ route('notification.index') }}">
             <!--begin::Icon-->
             <span class="menu-icon">
                 <i class="bi bi-inbox fs-1"></i>

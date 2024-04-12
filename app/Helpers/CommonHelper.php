@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\Models\Notification;
+use Illuminate\Support\Facades\Auth;
 
 trait CommonHelper{
     public function importCSV($file)
@@ -80,5 +82,14 @@ trait CommonHelper{
         } catch (QueryException $e) {
             abort(404);
         }
+    }
+
+    public function notification($notification,$phieu = null, $type = null,$user_id = null){
+        $query = new Notification();
+        $query->notification = $notification;
+        $query->phieu_id = $phieu;
+        $query->type = $type;
+        $query->user_id = $user_id ?? Auth::user()->id;
+        $query->save();
     }
 }
