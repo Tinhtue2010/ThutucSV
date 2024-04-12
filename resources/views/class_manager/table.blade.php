@@ -41,6 +41,7 @@
                         "dataSrc": function (response) {
                             renderPagination(response.page,
                                 response.max_page);
+                                console.log('response.data :>> ', response.data);
                             return response.data;
                         },
                     },
@@ -63,18 +64,8 @@
                             data: 'khoa_name'
                         },
                         {
-                            data: 'created_at',
-                            render: function (data, type, row) {
-                                return moment(data).format("DD/MM/YYYY");
-                            }
+                            data: 'teacher_name'
                         },
-                        {
-                            data: 'updated_at',
-                            render: function (data, type, row) {
-                                return moment(data).format("DD/MM/YYYY");
-                            }
-                        },
-
                         {
                             data: 'id',
                             render: function (data, type, row) {

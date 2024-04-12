@@ -5,20 +5,24 @@
     use App\Models\Lop;
     use Illuminate\Database\QueryException;
     use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Auth;
+    use App\Models\Teacher;
+    use App\Models\Khoa;
 
     class ClassManagerController extends Controller
     {
         function index()
         {
-            return view('class_manager.index');
+            $khoas = Khoa::get();
+            $teachers = Teacher::get();
+            return view('class_manager.index', ['khoas' => $khoas, 'teachers' => $teachers]);
         }
 
         public function getData(Request $request)
         {
             $query = Lop::query()
                 ->leftJoin("khoas", "lops.khoa_id", "=", "khoas.id")
-                ->select("lops.*", "khoas.name as khoa_name");
+                ->leftJoin("teachers", "lops.teacher_id", "=", "teachers.id")
+                ->select("lops.*", "teachers.full_name as teacher_name", "khoas.name as khoa_name");
 
             $query->when(
                 $request->has('status_error')
@@ -63,7 +67,8 @@
                 Lop::create($request->only([
                     'name',
                     'nganh',
-                    'khoa_id'
+                    'khoa_id',
+                    'teacher_id'
                 ]));
 
                 return true;
@@ -85,7 +90,8 @@
             return $lop->update($request->only([
                 'name',
                 'nganh',
-                'khoa_id'
+                'khoa_id',
+                'teacher_id'
             ]));
         }
     }

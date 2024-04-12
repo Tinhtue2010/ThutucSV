@@ -12,7 +12,7 @@
                 <form class="form" id="form_update">
                     <div class="card-body">
                         @csrf
-                        @include('khoa_manager.field',[
+                        @include('class_manager.field',[
                             'type' => '_update',
                         ])
                     </div>

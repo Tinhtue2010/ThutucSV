@@ -37,9 +37,8 @@
                                 <th class="text-nowrap" data-name="id">Id</th>
                                 <th class="text-nowrap" data-name="name">{{ __('Tên lớp') }}</th>
                                 <th class="text-nowrap" data-name="nganh">{{ __('Ngành học') }}</th>
-                                <th class="text-nowrap" data-name="khoa_id">{{ __('Khoa') }}</th>
-                                <th class="text-nowrap" data-name="created_at">{{ __('Tạo lúc') }}</th>
-                                <th class="text-nowrap" data-name="updated_at">{{ __('Cập nhật lúc') }}</th>
+                                <th class="text-nowrap" data-name="khoa_name">{{ __('Khoa') }}</th>
+                                <th class="text-nowrap" data-name="teacher_name">{{ __('Giảng viên') }}</th>
 
                                 <td class="text-nowrap">{{ __('Chức năng') }}</td>
                             </tr>
