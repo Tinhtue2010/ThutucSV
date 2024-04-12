@@ -1,4 +1,7 @@
-<div id="doc_thoihoc" class="A4 d-flex flex-column">
+@extends('layout.doc_layout')
+
+@section('data')
+<div id="doc_view" class="A4 d-flex flex-column ">
     <div class="text-center">CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
     <div class="text-center fw-bold">Độc lập - Tự do - Hạnh phúc</div>
     <div
@@ -28,14 +31,11 @@
     </div>
     <div class="d-flex flex-column">
       <p>
-        Họ và tên sinh viên: Phạm Nguyên Hồng &nbsp;&nbsp; Sinh ngày: 18/08/2001
+        Họ và tên sinh viên: {{$data['full_name']}} &nbsp;&nbsp; Sinh ngày: {{$data['date_of_birth']}}
         <br />
-        Lớp: 19DH12345 &nbsp; Khoa: CNTT
+        Lớp: {{$data['lop']}} &nbsp; Khoa: {{$data['khoa']}}
         <br />
-        Lý do xin thôi học và rút hồ sơ: Lorem ipsum, dolor sit amet consectetur
-        adipisicing elit. Harum maxime iusto voluptatem, nemo qui cumque amet?
-        Laudantium quis laborum iste veniam architecto voluptas a facilis,
-        repellat blanditiis repudiandae, soluta consequuntur.
+        Lý do xin thôi học và rút hồ sơ: {{$data['data']}}
         <br />
         Em xin bồi hoàn kinh phí đào tạo theo quy định của Trường.
         <br />
@@ -43,7 +43,7 @@
       </p>
     </div>
     <div class="d-flex flex-row justify-content-end">
-      <div class="fst-italic">Quảng Ninh, ngày 15 tháng 12 năm 2023</div>
+      <div class="fst-italic">Quảng Ninh, ngày {{$data['day']}} tháng {{$data['month']}} năm {{$data['year']}}</div>
     </div>
     <div class="d-flex flex-row justify-content-between px-5 mt-3">
       <div class="d-flex flex-column justify-content-end text-center">
@@ -55,9 +55,17 @@
         ( Ký và ghi rõ họ và tên)
       </div>
     </div>
+    
+    <div
+    class="d-flex flex-row justify-content-between px-5"
+    style="margin-top: 70px"
+  >
+    <div class="text-center"></div>
+    <div class="text-center">{{$data['full_name']}}</div>
+  </div>
     <div
       class="d-flex flex-row justify-content-between px-5"
-      style="margin-top: 100px"
+      style="margin-top: 20px"
     >
       <div class="text-center">Xác nhận của phòng KH-TC</div>
       <div class="text-center">Xác nhận của lãnh đạo khoa</div>
@@ -73,4 +81,4 @@
       </div>
     </div>
   </div>
-  
+  @endsection

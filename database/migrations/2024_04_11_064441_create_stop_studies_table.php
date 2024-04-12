@@ -13,20 +13,22 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('phieus', function (Blueprint $table) {
+        Schema::create('stop_studies', function (Blueprint $table) {
             $table->id();
-
-            $table->string("name");
-            $table->string("key");
-
-            $table->json('content');
 
             $table->unsignedBigInteger('student_id')->nullable();
             $table->foreign('student_id')->references('id')->on('students')->onDelete('set null');
 
-            $table->unsignedBigInteger('teacher_id')->nullable();
-            $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('set null');
-       
+            $table->integer('round')->default(0);
+
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreign('parent_id')->references('id')->on('stop_studies')->onDelete('set null');
+
+            $table->unsignedBigInteger('phieu_id')->nullable();
+            $table->foreign('phieu_id')->references('id')->on('phieus')->onDelete('set null');
+
+            $table->string("note")->nullable();
+
             $table->timestamps();
         });
     }
@@ -38,6 +40,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('phieus');
+        Schema::dropIfExists('stop_studies');
     }
 };

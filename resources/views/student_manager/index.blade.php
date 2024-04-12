@@ -28,8 +28,10 @@
                                 <label class="form-label">Năm</label>
                                 <!--begin::Select2-->
                                 <select class="form-select form-select-solid filter-select" data-name="school_year" data-control="select2" data-placeholder="Năm">
+                                    <option></option>
+                                    <option value="all">Hiển thị tất cả</option>
                                     @for ($year = 2000; $year <= 2100; $year++)
-                                        <option @if($year == date('Y')) selected="selected" @endif value="{{ $year }}">{{ $year }}</option>
+                                        <option @if($year == date('Y')) @endif value="{{ $year }}">{{ $year }}</option>
                                     @endfor
                                 </select>
                                 <!--end::Select2-->
@@ -40,7 +42,7 @@
                                 <select class="form-select form-select-solid filter-select" data-name="he_tuyen_sinh" data-control="select2" data-hide-search="true"
                                     data-placeholder="Hệ đào tạo">
                                     <option></option>
-                                    <option value="all" selected="selected">Hiển thị tất cả</option>
+                                    <option value="all">Hiển thị tất cả</option>
                                     <option value="1">Đại học</option>
                                     <option value="2">Cao đẳng</option>
                                     <option value="3">Liên thông đại học</option>
@@ -53,7 +55,7 @@
                                 <select class="form-select form-select-solid filter-select" data-name="status_dk" data-control="select2" data-hide-search="true"
                                     data-placeholder="Trạng thái">
                                     <option></option>
-                                    <option value="all" selected="selected">Hiển thị tất cả</option>
+                                    <option value="all">Hiển thị tất cả</option>
                                     <option value="0">Chưa đăng ký</option>
                                     <option value="1">Đã đăng ký</option>
                                     <option value="2">Rút hồ sơ</option>
