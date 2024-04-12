@@ -497,7 +497,7 @@
                                         <!--begin::User-->
                                         <div class="symbol symbol-circle symbol-25px" data-bs-toggle="tooltip"
                                             data-bs-boundary="window" data-bs-placement="top" title="Alan Nilson">
-                                            <img src="{{ asset('assets/media/avatars/300-1.jpg') }}"
+                                            <img src="{{ asset('assets/custom/avatar.png') }}"
                                                 alt="img" />
                                         </div>
                                         <!--end::User-->

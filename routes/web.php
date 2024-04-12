@@ -5,10 +5,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassManagerController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\KhoaManagerController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentManagerController;
 use App\Http\Controllers\TeacherManagerController;
-use App\Http\Controllers\NotificationCenterController;
+use App\Http\Controllers\StopStudyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,6 +40,15 @@ Route::group(['middleware' => ['auth']], function () {
     Route::middleware('role:student')->group(function () {
         Route::name('student.')->group(function () {
             Route::get('/student-info', [StudentController::class, 'index'])->name('info');
+            Route::get('get-data-info', [StudentController::class, 'getDataInfo'])->name('getDataInfo');
+            Route::post('update', [StudentController::class, 'update'])->name('update');
+        });
+
+        Route::name('StopStudy.')->prefix('xin-thoi-hoc')->group(function () {
+           Route::get('/', [StopStudyController::class, 'index'])->name('index');
+           Route::post('/create_view_pdf', [StopStudyController::class,'CreateViewPdf'])->name('CreateViewPdf');
+           Route::get('/view_pdf/{id}', [StopStudyController::class,'viewPdf'])->name('viewPdf');
+           Route::get('/view_demo_pdf', [StopStudyController::class,'viewDemoPdf'])->name('viewDemoPdf');
         });
     });
 
@@ -88,8 +98,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('update/{id?}', [TeacherManagerController::class, 'update'])->name('update');
     });
 
-    Route::name('notificationCenter.')->prefix('notif')->group(function () {
-        Route::get('/', [NotificationCenterController::class, 'index'])->name('index');
+    Route::name('notification.')->prefix('notification')->group(function () {
+        Route::get('/', [NotificationController::class, 'index'])->name('index');
     });
 });
 
