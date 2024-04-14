@@ -93,7 +93,7 @@
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
-                <span class="menu-title">Duyệt hồ sơ</span>
+                <span class="menu-title">Quản lý rút hồ sơ</span>
                 <!--end::Title-->
             </a>
             <!--end::Menu link-->

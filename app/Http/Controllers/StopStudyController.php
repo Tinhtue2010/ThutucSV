@@ -17,7 +17,7 @@ class StopStudyController extends Controller
     function index()
     {
         $user = Auth::user();
-        $check = StopStudy::where('student_id', $user->student_id)->exists();
+        $check = StopStudy::where('student_id', $user->student_id)->first();
         $notification = Notification::where('type', 'RHS')->get();
         return view('stop_study.index', ['check' => $check, 'notification' => $notification]);
     }
@@ -66,6 +66,7 @@ class StopStudyController extends Controller
                 $query->round = 1;
                 $query->note = $request->data;
                 $query->phieu_id = $phieu->id;
+                $query->lop_id = $student->lop_id;
                 $query->save();
 
                 $this->notification("Đơn xin rút của bạn đã được gửi, vui lòng chờ thông báo khác", $phieu->id, "RHS");

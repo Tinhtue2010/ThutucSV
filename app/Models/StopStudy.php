@@ -15,7 +15,8 @@ class StopStudy extends Model
         'parent_id',
         'phieu_id',
         'note',
-        'status'
+        'status',
+        'lop_id'
     ];
 
     public function student()

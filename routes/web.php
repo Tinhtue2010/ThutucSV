@@ -56,6 +56,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::middleware('role:notStudent')->group(function () {
         Route::name('approve.')->prefix('approve')->group(function () {
             Route::get('/', [ApproveController::class, 'index'])->name('index');
+            Route::get('get-data', [ApproveController::class, 'getData'])->name('getData');
+            Route::get('xacnhan/{id?}', [ApproveController::class, 'xacnhan'])->name('xacnhan');
+            Route::get('khongxacnhan/{id?}', [ApproveController::class, 'khongxacnhan'])->name('khongxacnhan');
+            Route::get('/view_pdf/{id?}', [ApproveController::class,'viewPdf'])->name('viewPdf');
         });
     });
 
