@@ -25,6 +25,18 @@
                         <!--begin::Card toolbar-->
                         <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                             <div class="w-100 mw-150px">
+                                <label class="form-label">Lớp</label>
+                                <!--begin::Select2-->
+                                <select class="form-select form-select-solid filter-select" data-name="lop_id" data-control="select2" data-placeholder="Lớp">
+                                    <option></option>
+                                    <option value="all">Hiển thị tất cả</option>
+                                    @foreach ($lops as $item)
+                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                    @endforeach
+                                </select>
+                                <!--end::Select2-->
+                            </div>
+                            <div class="w-100 mw-150px">
                                 <label class="form-label">Năm</label>
                                 <!--begin::Select2-->
                                 <select class="form-select form-select-solid filter-select" data-name="school_year" data-control="select2" data-placeholder="Năm">

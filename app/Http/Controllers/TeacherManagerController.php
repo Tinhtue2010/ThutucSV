@@ -71,7 +71,7 @@ class TeacherManagerController extends Controller
 
     function create(Request $request)
     {
-        try {
+        // try {
             $teacher =  Teacher::create($request->only([
                 'full_name',
                 'khoa_id',
@@ -88,9 +88,9 @@ class TeacherManagerController extends Controller
             $user->teacher_id = $teacher->id;
             $user->save();
             return true;
-        } catch (QueryException $e) {
-            abort(404);
-        }
+        // } catch (QueryException $e) {
+        //     abort(404);
+        // }
     }
 
 

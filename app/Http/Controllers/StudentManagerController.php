@@ -18,7 +18,15 @@ class StudentManagerController extends Controller
 
     public function getData(Request $request)
     {
+        $user = Auth::user();
+        $lopIds = Lop::where('teacher_id', $user->teacher_id)->pluck('id');
+
+
         $query = Student::query();
+        if(Role(2))
+        {
+            $query = $query->whereIn('lop_id', $lopIds);
+        }
         if (isset($request->school_year)) {
             $query->where('school_year', $request->school_year);
         }
@@ -27,6 +35,9 @@ class StudentManagerController extends Controller
         }
         if (isset($request->status_dk)) {
             $query->where('status_dk', $request->status_dk);
+        }
+        if (isset($request->lop_id)) {
+            $query->where('lop_id', $request->lop_id);
         }
         $data = $this->queryPagination($request, $query, ['full_name', 'student_code', 'student_id']);
 
