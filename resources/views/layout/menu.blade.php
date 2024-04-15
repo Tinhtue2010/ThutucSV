@@ -75,7 +75,7 @@
         </div>
     @endif
     <div class="menu-item mb-2 mt-4">
-        <div class="menu-heading text-uppercase fs-7 fw-bold"> Tiếp nhận & Xử lý</div>
+        <div class="menu-heading text-uppercase fs-7 fw-bold"> Hồ sơ chủ nhiệm lớp</div>
 
         <div class="app-sidebar-separator separator"></div>
     </div>
@@ -90,7 +90,7 @@
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
-                <span class="menu-title">Hồ sơ giáo viên chủ nhiệm</span>
+                <span class="menu-title">Tiếp nhận & Xử lý đơn</span>
                 <!--end::Title-->
             </a>
             <!--end::Menu link-->
