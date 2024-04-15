@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth']], function () {
         if (Role(1)) {
             return redirect()->route('student.info');
         }
-        return redirect()->route('approve.index');
+        return redirect()->route('GiaoVien.index');
     })->name('home');
     // chỉ sinh viên được vào
     Route::middleware('role:student')->group(function () {
