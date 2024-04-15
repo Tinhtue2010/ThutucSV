@@ -96,6 +96,22 @@
             <!--end::Menu link-->
         </div>
         <!--end::Menu Item-->
+                <!--begin::Menu Item-->
+                <div class="menu-item">
+                    <!--begin::Menu link-->
+                    <a class="menu-link {{ request()->routeIs('studentManager.index') ? 'active' : '' }}" href="{{ route('studentManager.index') }}">
+                        <!--begin::Icon-->
+                        <span class="menu-icon">
+                            <i class="ki-outline ki-category fs-2"></i>
+                        </span>
+                        <!--end::Icon-->
+                        <!--begin::Title-->
+                        <span class="menu-title">Quản lý sinh viên</span>
+                        <!--end::Title-->
+                    </a>
+                    <!--end::Menu link-->
+                </div>
+                <!--end::Menu Item-->
     @endif
     {{-- @if (!Role(1))
         <!--begin::Menu Item-->

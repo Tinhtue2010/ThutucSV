@@ -30,7 +30,7 @@ if (!function_exists('Role')) {
                         }
                         break;
                 case "studentManager":
-                    if ($user->role == 0 || $user->role == 4 || $user->role == 5) {
+                    if ($user->role == 0 || $user->role == 2 || $user->role == 3) {
                         return true;
                     }
                     break;
