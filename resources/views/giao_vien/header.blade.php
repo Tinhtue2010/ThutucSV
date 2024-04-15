@@ -8,7 +8,7 @@
                     <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
                         <!--begin::Title-->
                         <h1 class="page-heading d-flex flex-column justify-content-center text-dark fw-bold fs-3 m-0">
-                            Duyệt đơn xin rút hồ sơ</h1>
+                            Thông tin xử lý đơn của sinh viên lớp chủ nhiệm</h1>
                         <!--end::Title-->
                     </div>
                     <!--end::Page title-->

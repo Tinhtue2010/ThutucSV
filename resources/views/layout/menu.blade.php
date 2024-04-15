@@ -6,7 +6,7 @@
             <div class="app-sidebar-separator separator"></div>
         </div>
     @endif
-    @if (Role(0) || Role(4) || Role(5))
+    @if (Role(0))
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
@@ -25,7 +25,7 @@
         <!--end::Menu Item-->
     @endif
 
-    @if (Role(0) || Role(3) || Role(6))
+    @if (Role(0))
         <div class="menu-item">
             <!--begin::Menu link-->
             <a class="menu-link {{ request()->routeIs('khoaManager.index') ? 'active' : '' }}" href="{{ route('khoaManager.index') }}">
@@ -42,7 +42,7 @@
         </div>
     @endif
 
-    @if (Role(0) || Role(2) || Role(4))
+    @if (Role(0))
         <div class="menu-item">
             <!--begin::Menu link-->
             <a class="menu-link {{ request()->routeIs('classManager.index') ? 'active' : '' }}" href="{{ route('classManager.index') }}">
@@ -58,7 +58,7 @@
             <!--end::Menu link-->
         </div>
     @endif
-    @if (Role(0) || Role(2) || Role(4))
+    @if (Role(0))
         <div class="menu-item">
             <!--begin::Menu link-->
             <a class="menu-link {{ request()->routeIs('teacherManager.index') ? 'active' : '' }}" href="{{ route('teacherManager.index') }}">
