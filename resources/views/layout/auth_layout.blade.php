@@ -32,7 +32,7 @@
 							TRƯỜNG ĐẠI HỌC HẠ LONG
 						</h1>
 						<div class="d-flex flex-grow-1">
-							<h1 class="text-white ps-5 m-auto text-center">HỆ THỐNG GIẢI QUYẾT THỦ TỤC VỀ LĨNH VỰC CÔNG TÁC
+							<h1 class="text-white ps-5 m-auto text-center fs-2">HỆ THỐNG GIẢI QUYẾT THỦ TỤC VỀ LĨNH VỰC CÔNG TÁC
 								HỌC SINH, SINH VIÊN</h1>
 
 						</div>
