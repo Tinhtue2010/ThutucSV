@@ -1,4 +1,7 @@
-<div id="doc_miengiamhp" class="A4 d-flex flex-column">
+@extends('layout.doc_layout')
+
+@section('data')
+<div id="doc_view" class="A4 d-flex flex-column">
     <div class="text-center">CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
     <div class="text-center fw-bold">Độc lập - Tự do - Hạnh phúc</div>
     <div
@@ -29,45 +32,43 @@
     </div>
     <div class="d-flex flex-column">
       <div>
-        Họ và tên: Phạm Nguyên Hồng &nbsp;&nbsp; SĐT: 0123456789
+        Họ và tên: {{$data['full_name']}} &nbsp;&nbsp; SĐT: {{$data['sdt']}}
         <br />
-        Ngày, tháng, năm sinh: 18/08/2001
+        Ngày, tháng, năm sinh: {{$data['date_of_birth']}}
         <br />
-        Nơi sinh: Acidalia planitia, Mars
+        Nơi sinh: {{$data['noisinh']}}
         <br />
-        Lớp: 19DH12345 &nbsp; Khóa: 2019-2023; &nbsp; Khoa: CNTT
+        Lớp: {{$data['student_code']}} &nbsp; Khóa: {{$data['khoa_hoc']}}; &nbsp; Khoa: {{$data['khoa']}}
         <br />
         Thuộc đối tượng:
         <span class="fst-italic"
           >(ghi rõ đối tượng được quy định tại Nghị định số 81/2021/NĐ-CP)</span
         >
         <div class="ms-3">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis
-          eligendi facere fugiat maiores, aliquam laboriosam odio porro quam
-          facilis excepturi natus, est, optio consequuntur beatae et! Perferendis
-          totam maxime modi?
+          {{$data['doituong']}}
         </div>
         <br />
         Đã được hưởng chế độ miễn, giảm học phí (ghi rõ tên cơ sở đã được hưởng
         chế độ miễn giảm học phí, cấp học và trình độ đào tạo):
         <div class="ms-3">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum ipsa
-          expedita ipsam accusamus beatae, ratione quo sed, eum aut nobis
-          deleniti. Nihil nulla corporis quaerat eveniet ea impedit animi iure!
+          {{$data['daduochuong']}}
         </div>
         <br />
         Căn cứ vào Nghị định số 81/2021/NĐ-CP của Chính phủ, tôi làm đơn này đề nghị được Nhà trường xem xét để được miễn, giảm học phí theo quy định hiện hành.
       </div>
     </div>
     <div class="d-flex flex-row justify-content-end mt-2">
-      <div class="fst-italic">Quảng Ninh, ngày 15 tháng 12 năm 2023</div>
+      <div class="fst-italic">Quảng Ninh, ngày {{$data['day']}} tháng {{$data['month']}} năm {{$data['year']}}</div>
     </div>
     <div class="d-flex flex-row justify-content-end px-5 mt-3">
       <div class="text-center">
         NGƯỜI VIẾT ĐƠN
         <br />
         ( Ký và ghi rõ họ và tên)
+<br><br>
+      <br>
+      {{$data['full_name']}}
       </div>
     </div>
   </div>
-  
+  @endsection

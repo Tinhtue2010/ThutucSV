@@ -74,15 +74,30 @@
             <!--end::Menu link-->
         </div>
     @endif
+    <div class="menu-item mb-2 mt-4">
+        <div class="menu-heading text-uppercase fs-7 fw-bold"> Tiếp nhận & Xử lý</div>
 
-    @if (Role(0))
-        <div class="menu-item mb-2 mt-4">
-            <div class="menu-heading text-uppercase fs-7 fw-bold"> Tiếp nhận & Xử lý</div>
-
-            <div class="app-sidebar-separator separator"></div>
+        <div class="app-sidebar-separator separator"></div>
+    </div>
+    @if (Role(2) || Role(3))
+        <!--begin::Menu Item-->
+        <div class="menu-item">
+            <!--begin::Menu link-->
+            <a class="menu-link {{ request()->routeIs('GiaoVien.index') ? 'active' : '' }}" href="{{ route('GiaoVien.index') }}">
+                <!--begin::Icon-->
+                <span class="menu-icon">
+                    <i class="ki-outline ki-document fs-2"></i>
+                </span>
+                <!--end::Icon-->
+                <!--begin::Title-->
+                <span class="menu-title">Hồ sơ giáo viên chủ nhiệm</span>
+                <!--end::Title-->
+            </a>
+            <!--end::Menu link-->
         </div>
+        <!--end::Menu Item-->
     @endif
-    @if (!Role(1))
+    {{-- @if (!Role(1))
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
@@ -93,13 +108,13 @@
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
-                <span class="menu-title">Quản lý rút hồ sơ</span>
+                <span class="menu-title">Hồ sơ khoa</span>
                 <!--end::Title-->
             </a>
             <!--end::Menu link-->
         </div>
         <!--end::Menu Item-->
-    @endif
+    @endif --}}
 
     @if (Role(1))
         <!--begin::Menu Item-->
@@ -123,8 +138,6 @@
 
             <div class="app-sidebar-separator separator"></div>
         </div>
-
-
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
@@ -141,6 +154,38 @@
             <!--end::Menu link-->
         </div>
         <!--end::Menu Item-->
+        <!--begin::Menu Item-->
+        <div class="menu-item">
+            <!--begin::Menu link-->
+            <a class="menu-link {{ request()->routeIs('MienGiamHp.index') ? 'active' : '' }}" href="{{ route('MienGiamHp.index') }}">
+                <!--begin::Icon-->
+                <span class="menu-icon">
+                    <i class="ki-outline ki-more-2 fs-2"></i>
+                </span>
+                <!--end::Icon-->
+                <!--begin::Title-->
+                <span class="menu-title">Miễn giảm học phí</span>
+                <!--end::Title-->
+            </a>
+            <!--end::Menu link-->
+        </div>
+        <!--end::Menu Item-->
+                <!--begin::Menu Item-->
+                <div class="menu-item">
+                    <!--begin::Menu link-->
+                    <a class="menu-link {{ request()->routeIs('TroCapXH.index') ? 'active' : '' }}" href="{{ route('TroCapXH.index') }}">
+                        <!--begin::Icon-->
+                        <span class="menu-icon">
+                            <i class="ki-outline ki-more-2 fs-2"></i>
+                        </span>
+                        <!--end::Icon-->
+                        <!--begin::Title-->
+                        <span class="menu-title">Trợ cấp xã hội</span>
+                        <!--end::Title-->
+                    </a>
+                    <!--end::Menu link-->
+                </div>
+                <!--end::Menu Item-->
     @endif
 
     <div class="menu-item mb-2 mt-4">

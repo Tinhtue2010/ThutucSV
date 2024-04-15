@@ -1,7 +1,7 @@
 @extends('layout.main_layout')
 
 @section('content')
-    @include('stop_study.header')
+    @include('mien_giam_hoc_phi.header')
     <div class="d-flex flex-column flex-column-fluid">
         <!--begin::Content-->
         <div id="kt_app_content" class="app-content flex-column-fluid">
@@ -43,16 +43,45 @@
                     <p class="fw-medium fs-5">Ngày sinh : {{ date('d/m/Y', strtotime($student->date_of_birth)) }}</p>
                     <p class="fw-medium fs-5">Lớp : {{ $student->lop_name }}</p>
                     <p class="fw-medium fs-5">Khoa : {{ $student->khoa_name }}</p>
+
+                    <p class="fw-medium fs-5">Mã sinh viên : {{ $student->student_code }}</p>
                     <form action="" id="form_create">
                         @csrf
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="">Lý do rút hồ sơ</span>
+                                <span class="">Số điện thoại</span>
+                            </label>
+                            <!--end::Label-->
+                            <input @if (isset($don_parent)) @if ($don_parent->status > 0)
+                                readonly @endif @endif class="form-control form-control-solid" name="sdt" value="{{$phieu['sdt'] ?? ''}}" />
+                        </div>
+                        <div class="d-flex flex-column mb-8 fv-row">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                <span class="">Nơi sinh</span>
+                            </label>
+                            <!--end::Label-->
+                            <input @if (isset($don_parent)) @if ($don_parent->status > 0)
+                                readonly @endif @endif class="form-control form-control-solid" name="noisinh" value="{{$phieu['noisinh'] ?? ''}}"/>
+                        </div>
+                        <div class="d-flex flex-column mb-8 fv-row">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                <span class="">Thuộc đối tượng: (ghi rõ đối tượng được quy định tại Nghị định số 81/2021/NĐ-CP)</span>
                             </label>
                             <!--end::Label-->
                             <textarea @if (isset($don_parent)) @if ($don_parent->status > 0)
-                                readonly @endif @endif class="form-control form-control-solid h-150px" name="data">{{ $don_parent->note ?? '' }}</textarea>
+                                readonly @endif @endif class="form-control form-control-solid h-150px" name="doituong">{{$phieu['doituong'] ?? ''}}</textarea>
+                        </div>
+                        <div class="d-flex flex-column mb-8 fv-row">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                <span class="">Đã được hưởng chế độ miễn, giảm học phí (ghi rõ tên cơ sở đã được hưởng chế độ miễn giảm học phí, cấp học và trình độ đào tạo):</span>
+                            </label>
+                            <!--end::Label-->
+                            <textarea @if (isset($don_parent)) @if ($don_parent->status > 0)
+                                readonly @endif @endif class="form-control form-control-solid h-150px" name="daduochuong">{{$phieu['daduochuong'] ?? ''}}</textarea>
                         </div>
                         <input type="hidden" id="button_clicked" name="button_clicked" value="">
                         <div class="d-flex w-100">
@@ -60,12 +89,12 @@
                             @if (isset($don_parent))
                                 @if ($don_parent->status <= 0)
                                     <button type="submit" class="btn btn-success me-2">
-                                        {{ __('Sửa đơn xin rút hồ sơ') }}
+                                        {{ __('Sửa đơn xin miễn giảm học phí') }}
                                     </button>
                                 @endif
                             @else
                                 <button type="submit" class="btn btn-success me-2">
-                                    {{ __('Gửi đơn xin rút hồ sơ') }}
+                                    {{ __('Gửi đơn xin miễn giảm học phí') }}
                                 </button>
                             @endif
 
@@ -95,7 +124,28 @@
         let validation_create = FormValidation.formValidation(
             form_create, {
                 fields: {
-                    data: {
+                    noisinh: {
+                        validators: {
+                            notEmpty: {
+                                message: '{{ __('Vui lòng không để trống mục này') }}'
+                            },
+                        }
+                    },
+                    doituong: {
+                        validators: {
+                            notEmpty: {
+                                message: '{{ __('Vui lòng không để trống mục này') }}'
+                            },
+                        }
+                    },
+                    daduochuong: {
+                        validators: {
+                            notEmpty: {
+                                message: '{{ __('Vui lòng không để trống mục này') }}'
+                            },
+                        }
+                    },
+                    sdt: {
                         validators: {
                             notEmpty: {
                                 message: '{{ __('Vui lòng không để trống mục này') }}'
@@ -127,11 +177,11 @@
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
-                        url: "{{ route('StopStudy.CreateViewPdf') }}",
+                        url: "{{ route('MienGiamHp.CreateViewPdf') }}",
                         data: form.serialize(),
                     }).then((response) => {
                         if ($('#button_clicked').val() == 'xem_truoc') {
-                            window.open("{{ route('StopStudy.viewDemoPdf') }}", "_blank");
+                            window.open("{{ route('MienGiamHp.viewDemoPdf') }}", "_blank");
                         } else {
                             mess_success('Thông báo',
                                 "Đơn của bạn đã được gửi")

@@ -12,86 +12,100 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
-class StopStudyController extends Controller
+class TroCapXHController extends Controller
 {
     function index()
     {
         $user = Auth::user();
-        $don_parent = StopStudy::where('student_id', $user->student_id)->where('type',0)->first();
-        if($don_parent)
-        {
+        $don_parent = StopStudy::where('student_id', $user->student_id)->where('type', 2)->first();
+        if ($don_parent) {
+            $phieu = Phieu::where('id', $don_parent->phieu_id)->first();
+            $phieu = json_decode($phieu->content, true);
             $don = StopStudy::where('parent_id', $don_parent->id)->orderBy('created_at', 'desc')->first();
-        }
-        else
-        {
+        } else {
+            $phieu = null;
             $don = null;
         }
 
         $user = Auth::user();
-        $student = Student::leftJoin('lops','students.lop_id','=','lops.id')
-        ->leftJoin('khoas','lops.khoa_id','=','khoas.id')
-        ->select('students.*','lops.name as lop_name','khoas.name as khoa_name')
-        ->where('students.id',$user->student_id)->first();
-        return view('stop_study.index', ['don_parent' => $don_parent,'don'=>$don,'student' => $student]);
+        $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+            ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
+            ->where('students.id', $user->student_id)->first();
+        return view('tro_cap_xh.index', ['don_parent' => $don_parent, 'don' => $don, 'phieu' => $phieu, 'student' => $student]);
     }
 
     function CreateViewPdf(Request $request)
     {
         if ($request->button_clicked == "xem_truoc") {
-            Session::put('test_stop_study', $request->data);
+            Session::put('sdt', $request->sdt);
+            Session::put('doituong', $request->doituong);
+            Session::put('hoso', $request->hoso);
+            Session::put('thuongchu', $request->thuongchu);
+            
         } else {
             $user = Auth::user();
 
             $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-                ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
-                ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
-                ->where('students.id', $user->student_id)->first();
+            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+            ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
+            ->where('students.id', $user->student_id)->first();
 
-            $studentData['full_name'] = $student->full_name;
-            $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
-            $studentData['lop'] = $student->lop_name;
-            $studentData['khoa'] = $student->khoa_name;
-            $studentData['data'] = $request->data;
-            $studentData['day'] = Carbon::now()->day;
+        $studentData['full_name'] = $student->full_name;
+        $studentData['student_code'] = $student->student_code;
+        $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
+        $studentData['lop'] = $student->lop_name;
+        $studentData['khoa'] = $student->khoa_name;
+        $studentData['khoa_hoc'] = $student->school_year;
+        $studentData['hoso'] = $request->hoso;
+        $studentData['doituong'] = $request->doituong;
+        $studentData['sdt'] = $request->sdt;
+        $studentData['thuongchu'] = $request->thuongchu;
 
-            $studentData['month'] = Carbon::now()->month;
-    
-            $studentData['year'] = Carbon::now()->year;
+        $studentData['day'] = Carbon::now()->day;
 
-            $check = StopStudy::where('student_id', $user->student_id)->where('type',0)->first();
+        $studentData['month'] = Carbon::now()->month;
+
+        $studentData['year'] = Carbon::now()->year;
+
+            $check = StopStudy::where('student_id', $user->student_id)->where('type', 2)->first();
             if ($check) {
                 $check->note = $request->data;
                 $check->update();
                 $phieu = Phieu::where('id', $check->phieu_id)->first();
                 $phieu->student_id = $user->student_id;
                 $phieu->name = "Đơn xin rút hồ sơ";
-                $phieu->key = "RHS";
+                $phieu->key = "TCXH";
                 $phieu->content = json_encode($studentData);
                 $phieu->save();
             } else {
                 $phieu = new Phieu();
                 $phieu->student_id = $user->student_id;
                 $phieu->name = "Đơn xin rút hồ sơ";
-                $phieu->key = "RHS";
+                $phieu->key = "TCXH";
                 $phieu->content = json_encode($studentData);
                 $phieu->save();
 
                 $query = new StopStudy();
                 $query->student_id = $user->student_id;
                 $query->round = 1;
+                $query->type = 2;
                 $query->note = $request->data;
                 $query->phieu_id = $phieu->id;
                 $query->lop_id = $student->lop_id;
                 $query->save();
 
-                $this->notification("Đơn xin rút hồ sơ của bạn đã được gửi, vui lòng chờ thông báo khác", $phieu->id, "RHS");
+                $this->notification("Đơn xin trợ cấp xã hội của bạn đã được gửi, vui lòng chờ thông báo khác", $phieu->id, "TCXH");
             }
         }
         return true;
     }
     function viewDemoPdf()
     {
-        $value = Session::get('test_stop_study');
+        $doituong = Session::get('doituong');
+        $hoso = Session::get('hoso');
+        $sdt = Session::get('sdt');
+        $thuongchu = Session::get('thuongchu');
 
         $user = Auth::user();
         $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
@@ -100,10 +114,15 @@ class StopStudyController extends Controller
             ->where('students.id', $user->student_id)->first();
 
         $studentData['full_name'] = $student->full_name;
+        $studentData['student_code'] = $student->student_code;
         $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
         $studentData['lop'] = $student->lop_name;
         $studentData['khoa'] = $student->khoa_name;
-        $studentData['data'] = $value;
+        $studentData['khoa_hoc'] = $student->school_year;
+        $studentData['hoso'] = $hoso;
+        $studentData['doituong'] = $doituong;
+        $studentData['sdt'] = $sdt;
+        $studentData['thuongchu'] = $thuongchu;
 
         $studentData['day'] = Carbon::now()->day;
 
@@ -111,7 +130,7 @@ class StopStudyController extends Controller
 
         $studentData['year'] = Carbon::now()->year;
 
-        return view('document.thoi_hoc', ['data' => $studentData]);
+        return view('document.trocapxahoi', ['data' => $studentData]);
     }
 
     function viewPdf($id)

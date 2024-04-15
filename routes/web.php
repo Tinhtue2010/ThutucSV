@@ -4,12 +4,16 @@ use App\Http\Controllers\ApproveController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassManagerController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\HoSo\GiaoVienController;
 use App\Http\Controllers\KhoaManagerController;
+use App\Http\Controllers\MienGiamHPController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\RutHoSo\GiaoVienRHSController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentManagerController;
 use App\Http\Controllers\TeacherManagerController;
 use App\Http\Controllers\StopStudyController;
+use App\Http\Controllers\TroCapXHController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,6 +54,20 @@ Route::group(['middleware' => ['auth']], function () {
            Route::get('/view_pdf/{id}', [StopStudyController::class,'viewPdf'])->name('viewPdf');
            Route::get('/view_demo_pdf', [StopStudyController::class,'viewDemoPdf'])->name('viewDemoPdf');
         });
+
+        Route::name('MienGiamHp.')->prefix('mien-giam-hp')->group(function () {
+            Route::get('/', [MienGiamHPController::class, 'index'])->name('index');
+            Route::post('/create_view_pdf', [MienGiamHPController::class,'CreateViewPdf'])->name('CreateViewPdf');
+            Route::get('/view_pdf/{id}', [MienGiamHPController::class,'viewPdf'])->name('viewPdf');
+            Route::get('/view_demo_pdf', [MienGiamHPController::class,'viewDemoPdf'])->name('viewDemoPdf');
+         });
+
+         Route::name('TroCapXH.')->prefix('tro-cap-xh')->group(function () {
+            Route::get('/', [TroCapXHController::class, 'index'])->name('index');
+            Route::post('/create_view_pdf', [TroCapXHController::class,'CreateViewPdf'])->name('CreateViewPdf');
+            Route::get('/view_pdf/{id}', [TroCapXHController::class,'viewPdf'])->name('viewPdf');
+            Route::get('/view_demo_pdf', [TroCapXHController::class,'viewDemoPdf'])->name('viewDemoPdf');
+         });
     });
 
     //tất cả được vào trừ sinh viên
@@ -60,6 +78,16 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('xacnhan/{id?}', [ApproveController::class, 'xacnhan'])->name('xacnhan');
             Route::get('khongxacnhan/{id?}', [ApproveController::class, 'khongxacnhan'])->name('khongxacnhan');
             Route::get('/view_pdf/{id?}', [ApproveController::class,'viewPdf'])->name('viewPdf');
+        });
+    });
+
+    Route::middleware('role:giaoVien')->group(function () {
+        Route::name('GiaoVien.')->prefix('giao-vien')->group(function () {
+            Route::get('/', [GiaoVienController::class, 'index'])->name('index');
+            Route::get('get-data', [GiaoVienController::class, 'getData'])->name('getData');
+            Route::post('xacnhan', [GiaoVienController::class, 'xacnhan'])->name('xacnhan');
+            Route::post('khongxacnhan', [GiaoVienController::class, 'khongxacnhan'])->name('khongxacnhan');
+            Route::get('/view_pdf/{id?}', [GiaoVienController::class,'viewPdf'])->name('viewPdf');
         });
     });
 
