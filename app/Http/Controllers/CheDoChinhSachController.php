@@ -11,14 +11,13 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 
-class MienGiamHPController extends Controller
+class CheDoChinhSachController extends Controller
 {
     function index()
     {
         $user = Auth::user();
-        $don_parent = StopStudy::where('student_id', $user->student_id)->where('type', 1)->first();
+        $don_parent = StopStudy::where('student_id', $user->student_id)->where('type', 3)->first();
         if ($don_parent) {
             $phieu = Phieu::where('id', $don_parent->phieu_id)->first();
             $phieu = json_decode($phieu->content, true);
@@ -33,46 +32,43 @@ class MienGiamHPController extends Controller
             ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)->first();
-        return view('mien_giam_hoc_phi.index', ['don_parent' => $don_parent, 'don' => $don, 'phieu' => $phieu, 'student' => $student]);
+        return view('che_do_chinh_sach.index', ['don_parent' => $don_parent, 'don' => $don, 'phieu' => $phieu, 'student' => $student]);
     }
 
     function CreateViewPdf(Request $request)
     {
-
-
         if ($request->button_clicked == "xem_truoc") {
-            Session::put('noisinh', $request->noisinh);
             Session::put('doituong', $request->doituong);
-            Session::put('daduochuong', $request->daduochuong);
+            Session::put('hoso', $request->hoso);
+            Session::put('thuongchu', $request->thuongchu);
+            
         } else {
             $user = Auth::user();
 
             $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-                ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
-                ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
-                ->where('students.id', $user->student_id)->first();
+            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+            ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
+            ->where('students.id', $user->student_id)->first();
 
-            $studentData['full_name'] = $student->full_name;
-            $studentData['student_code'] = $student->student_code;
-            $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
-            $studentData['lop'] = $student->lop_name;
-            $studentData['khoa'] = $student->khoa_name;
-            $studentData['khoa_hoc'] = $student->school_year;
-            $studentData['noisinh'] = $request->noisinh;
-            $studentData['doituong'] = $request->doituong;
-            $studentData['daduochuong'] = $request->daduochuong;
-            $studentData['sdt'] = $student->phone;
+        $studentData['full_name'] = $student->full_name;
+        $studentData['student_code'] = $student->student_code;
+        $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
+        $studentData['lop'] = $student->lop_name;
+        $studentData['khoa'] = $student->khoa_name;
+        $studentData['khoa_hoc'] = $student->school_year;
+        $studentData['hoso'] = $request->hoso;
+        $studentData['doituong'] = $request->doituong;
+        $studentData['sdt'] = $student->phone;
+        $studentData['thuongchu'] = $request->thuongchu;
 
-            $studentData['day'] = Carbon::now()->day;
+        $studentData['day'] = Carbon::now()->day;
 
-            $studentData['month'] = Carbon::now()->month;
+        $studentData['month'] = Carbon::now()->month;
 
-            $studentData['year'] = Carbon::now()->year;
+        $studentData['year'] = Carbon::now()->year;
 
-            $check = StopStudy::where('student_id', $user->student_id)->where('type', 1)->first();
-
+            $check = StopStudy::where('student_id', $user->student_id)->where('type', 3)->first();
             if ($check) {
-
                 if(isset($check->files))
                 {
                     $this->deleteFiles(json_decode($check->files));
@@ -83,15 +79,15 @@ class MienGiamHPController extends Controller
                 $check->update();
                 $phieu = Phieu::where('id', $check->phieu_id)->first();
                 $phieu->student_id = $user->student_id;
-                $phieu->name = "Đơn xin rút hồ sơ";
-                $phieu->key = "GHP";
+                $phieu->name = "Đơn xin chế độ chính sách";
+                $phieu->key = "CDCS";
                 $phieu->content = json_encode($studentData);
                 $phieu->save();
             } else {
                 $phieu = new Phieu();
                 $phieu->student_id = $user->student_id;
-                $phieu->name = "Đơn xin rút hồ sơ";
-                $phieu->key = "GHP";
+                $phieu->name = "Đơn xin chế độ chính sách";
+                $phieu->key = "CDCS";
                 $phieu->content = json_encode($studentData);
                 $phieu->save();
 
@@ -99,22 +95,22 @@ class MienGiamHPController extends Controller
                 $query->files = json_encode($this->uploadListFile($request,'files','mien_giam_hp'));
                 $query->student_id = $user->student_id;
                 $query->round = 1;
-                $query->type = 1;
+                $query->type = 3;
                 $query->note = $request->data;
                 $query->phieu_id = $phieu->id;
                 $query->lop_id = $student->lop_id;
                 $query->save();
 
-                $this->notification("Đơn xin miễn giảm học phí của bạn đã được gửi, vui lòng chờ thông báo khác", $phieu->id, "GHP");
+                $this->notification("Đơn xin trợ cấp xã hội của bạn đã được gửi, vui lòng chờ thông báo khác", $phieu->id, "CDCS");
             }
         }
         return true;
     }
     function viewDemoPdf()
     {
-        $noisinh = Session::get('noisinh');
         $doituong = Session::get('doituong');
-        $daduochuong = Session::get('daduochuong');
+        $hoso = Session::get('hoso');
+        $thuongchu = Session::get('thuongchu');
 
         $user = Auth::user();
         $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
@@ -128,10 +124,10 @@ class MienGiamHPController extends Controller
         $studentData['lop'] = $student->lop_name;
         $studentData['khoa'] = $student->khoa_name;
         $studentData['khoa_hoc'] = $student->school_year;
-        $studentData['noisinh'] = $noisinh;
+        $studentData['hoso'] = $hoso;
         $studentData['doituong'] = $doituong;
-        $studentData['daduochuong'] = $daduochuong;
         $studentData['sdt'] = $student->phone;
+        $studentData['thuongchu'] = $thuongchu;
 
         $studentData['day'] = Carbon::now()->day;
 
@@ -139,7 +135,7 @@ class MienGiamHPController extends Controller
 
         $studentData['year'] = Carbon::now()->year;
 
-        return view('document.miengiamhp', ['data' => $studentData]);
+        return view('document.chinhsach_qn', ['data' => $studentData]);
     }
 
     function viewPdf($id)

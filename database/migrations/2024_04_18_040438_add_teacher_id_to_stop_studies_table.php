@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('stop_studies', function (Blueprint $table) {
-            $table->text('files')->nullable();
+            $table->unsignedBigInteger('teacher_id')->nullable();
+            $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('set null');
         });
     }
 

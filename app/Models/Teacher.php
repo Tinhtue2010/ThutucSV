@@ -17,6 +17,7 @@ class Teacher extends Model
         'sdt',
         'email',
         'chuc_danh',
+        
     ];
     
     // public function teacher(){

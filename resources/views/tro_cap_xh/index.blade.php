@@ -41,28 +41,11 @@
 
                     <p class="fw-medium fs-5">Họ và tên : {{ $student->full_name }}</p>
                     <p class="fw-medium fs-5">Ngày sinh : {{ date('d/m/Y', strtotime($student->date_of_birth)) }}</p>
+                    <p class="fw-medium fs-5">Số điện thoại : {{ $student->phone }}</p>
                     <p class="fw-medium fs-5">Lớp : {{ $student->lop_name }}</p>
                     <p class="fw-medium fs-5">Khoa : {{ $student->khoa_name }}</p>
                     <form action="" id="form_create">
                         @csrf
-                        <div class="d-flex flex-column mb-8 fv-row">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="">Địa chỉ thường chú</span>
-                            </label>
-                            <!--end::Label-->
-                            <input @if (isset($don_parent)) @if ($don_parent->status > 0)
-                                readonly @endif @endif class="form-control form-control-solid" name="thuongchu" value="{{$phieu['thuongchu'] ?? ''}}" />
-                        </div>
-                        <div class="d-flex flex-column mb-8 fv-row">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="">Số điện thoại</span>
-                            </label>
-                            <!--end::Label-->
-                            <input @if (isset($don_parent)) @if ($don_parent->status > 0)
-                                readonly @endif @endif class="form-control form-control-solid" name="sdt" value="{{$phieu['sdt'] ?? ''}}" />
-                        </div>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -80,6 +63,15 @@
                             <!--end::Label-->
                             <textarea @if (isset($don_parent)) @if ($don_parent->status > 0)
                                 readonly @endif @endif class="form-control form-control-solid h-150px" name="hoso">{{$phieu['hoso'] ?? ''}}</textarea>
+                        </div>
+                        
+                        <div class="d-flex flex-column mb-8 fv-row">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                <span class="">File</span>
+                            </label>
+                            <!--end::Label-->
+                            <input type="file" class="form-control form-control-solid" name="files[]" accept="application/pdf" multiple/>
                         </div>
                         <input type="hidden" id="button_clicked" name="button_clicked" value="">
                         <div class="d-flex w-100">
@@ -136,13 +128,6 @@
                             },
                         }
                     },
-                    sdt: {
-                        validators: {
-                            notEmpty: {
-                                message: '{{ __('Vui lòng không để trống mục này') }}'
-                            },
-                        }
-                    },
                     thuongchu:{
                         validators: {
                             notEmpty: {
@@ -169,14 +154,17 @@
         });
         $('#form_create').submit(function(e) {
             e.preventDefault();
-
-            let form = $(this);
+            const form = document.querySelector("#form_create");
+            const formData = new FormData(form);
             validation_create.validate().then(function(status) {
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
                         url: "{{ route('TroCapXH.CreateViewPdf') }}",
-                        data: form.serialize(),
+                        data: formData,
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
                     }).then((response) => {
                         if ($('#button_clicked').val() == 'xem_truoc') {
                             window.open("{{ route('TroCapXH.viewDemoPdf') }}", "_blank");

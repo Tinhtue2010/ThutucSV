@@ -10,12 +10,12 @@ use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class GiaoVienController extends Controller
+class KhoaController extends Controller
 {
     function index()
     {
 
-        return view('giao_vien.index');
+        return view('khoa.index');
     }
 
     public function getData(Request $request)
@@ -35,10 +35,9 @@ class GiaoVienController extends Controller
             $query->whereYear('created_at', $request->year);
         }
         if (isset($request->status)) {
-            $query->whereYear('status', $request->status);
+            $query->where('status', $request->status);
         }
-        if(isset($request->type))
-        {
+        if (isset($request->type)) {
             $query->where('type', $request->type);
         }
         $data = $this->queryPagination($request, $query, ['students.full_name', 'students.student_code']);
@@ -50,10 +49,10 @@ class GiaoVienController extends Controller
     {
         try {
             $stopStudy =  StopStudy::find($request->id);
-            if ($stopStudy->status > 0) {
+            if ($stopStudy->status != 1) {
                 abort(404);
             }
-            $stopStudy->update(["status" => 1]);
+            $stopStudy->update(["status" => 2]);
 
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->phieu_id = null;
@@ -63,20 +62,20 @@ class GiaoVienController extends Controller
 
             if($stopStudy->type == 0)
             {
-                $this->notification("Đơn xin rút hồ sơ của bạn đã được giáo viên chủ nhiệm xác nhận", null, "RHS");
+                $this->notification("Đơn xin rút hồ sơ của bạn đã được cán bộ khoa xác nhận", null, "RHS");
             }
             if($stopStudy->type == 1)
             {
-                $this->notification("Đơn xin miễn giảm học phí của bạn đã được giáo viên chủ nhiệm xác nhận", null, "GHP");
+                $this->notification("Đơn xin miễn giảm học phí của bạn đã được cán bộ khoa xác nhận", null, "GHP");
             }
             if($stopStudy->type == 2)
             {
-                $this->notification("Đơn xin trợ cấp xã hội của bạn đã được giáo viên chủ nhiệm xác nhận", null, "TCXH");
+                $this->notification("Đơn xin trợ cấp xã hội của bạn đã được cán bộ khoa xác nhận", null, "TCXH");
             }
             
             if($stopStudy->type == 3)
             {
-                $this->notification("Đơn xin chế độ chính sách của bạn đã được giáo viên chủ nhiệm xác nhận", null, "CDCS");
+                $this->notification("Đơn xin chế độ chính sách của bạn đã được cán bộ khoa xác nhận", null, "CDCS");
             }
 
             $newStopStudy->note = $request->note;
@@ -91,10 +90,10 @@ class GiaoVienController extends Controller
     {
         try {
             $stopStudy =  StopStudy::find($request->id);
-            if ($stopStudy->status > 0) {
+            if ($stopStudy->status != 1) {
                 abort(404);
             }
-            $stopStudy->update(["status" => -1]);
+            $stopStudy->update(["status" => -2]);
 
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 0;
@@ -104,22 +103,22 @@ class GiaoVienController extends Controller
 
             if($stopStudy->type == 0)
             {
-                $this->notification("Đơn xin rút hồ sơ của bạn đã bị từ chối bởi giáo viên chủ nhiệm", null, "RHS");
+                $this->notification("Đơn xin rút hồ sơ của bạn đã bị từ chối bởi cán bộ khoa", null, "RHS");
             }
             if($stopStudy->type == 1)
             {
-                $this->notification("Đơn xin miễn giảm học phí của bạn đã bị từ chối bởi giáo viên chủ nhiệm", null, "GHP");
+                $this->notification("Đơn xin miễn giảm học phí của bạn đã bị từ chối bởi cán bộ khoa", null, "GHP");
             }
             if($stopStudy->type == 2)
             {
-                $this->notification("Đơn xin trợ cấp xã hội của bạn đã bị từ chối bởi giáo viên chủ nhiệm", null, "TCXH");
+                $this->notification("Đơn xin trợ cấp xã hội của bạn đã bị từ chối bởi cán bộ khoa", null, "TCXH");
             }
             
             if($stopStudy->type == 3)
             {
-                $this->notification("Đơn xin chế độ chính sách của bạn đã bị từ chối bởi giáo viên chủ nhiệm", null, "CDCS");
+                $this->notification("Đơn xin chế độ chính sách của bạn đã bị từ chối bởi cán bộ khoa", null, "CDCS");
             }
-            $this->notification("Đơn xin rút của bạn đã bị từ chối bởi giáo viên chủ nhiệm", null, "RHS");
+            $this->notification("Đơn xin rút của bạn đã bị từ chối bởi cán bộ khoa", null, "RHS");
             $newStopStudy->note = $request->note;
 
 
@@ -153,7 +152,6 @@ class GiaoVienController extends Controller
                     return view('document.chinhsach_qn', ['data' => json_decode($data->content, true)]);
                 }
                 abort(404);
-                
             } else {
                 abort(404);
             }

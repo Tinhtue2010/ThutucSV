@@ -1,4 +1,7 @@
-<div id="doc_csqn" class="A4 d-flex flex-column">
+@extends('layout.doc_layout')
+
+@section('data')
+<div id="doc_view" class="A4 d-flex flex-column">
     <div class="text-center">CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
     <div class="text-center fw-bold">Độc lập - Tự do - Hạnh phúc</div>
     <div
@@ -27,27 +30,21 @@
     </div>
     <div class="d-flex flex-column">
       <div>
-        Họ và tên: Phạm Nguyên Hồng &nbsp;&nbsp; Sinh ngày: 18/08/2001
+        Họ và tên: {{$data["full_name"]}} &nbsp;&nbsp; Sinh ngày: {{$data["date_of_birth"]}}
         <br />
-        Lớp: 19DH12345 &nbsp; Khoa: CNTT &nbsp; SĐT: 0123456789
+        Lớp: {{$data["lop"]}} &nbsp; Khoa: {{$data["khoa"]}} &nbsp; SĐT: {{$data["sdt"]}}
         <br />
-        Nơi thường trú: Acidalia planitia, Mars
+        Nơi thường trú: {{$data["thuongchu"]}}
         <br />
         Thuộc đối tượng:
         <div class="ms-3">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis
-          eligendi facere fugiat maiores, aliquam laboriosam odio porro quam
-          facilis excepturi natus, est, optio consequuntur beatae et! Perferendis
-          totam maxime modi?
+          {{$data["doituong"]}}
         </div>
         Xin hưởng chế độ: Tiền ăn, Tiền Hỗ trợ học phí, Miễn phí chỗ ở tại Ký túc
         xá <br />
         Hồ sơ xin hưởng chế độ gồm:
         <div class="ms-3">
-          <ol>
-            <li>Giấy ABC (gốc)</li>
-            <li>Giấy XYZ (chụp)</li>
-          </ol>
+          {{$data["hoso"]}}
         </div>
         <span class="ms-2"
           >Kính đề nghị Trường xem xét và giải quyết cho tôi được hưởng chế độ chính sách trên. </span
@@ -55,7 +52,7 @@
       </div>
     </div>
     <div class="d-flex flex-row justify-content-end mt-2">
-      <div class="fst-italic">Quảng Ninh, ngày 15 tháng 12 năm 2023</div>
+      <div class="fst-italic">Quảng Ninh, ngày {{$data['day']}} tháng {{$data['month']}} năm {{$data['year']}}</div>
     </div>
     <div class="d-flex flex-row justify-content-between px-5 mt-3">
       <div class="d-flex flex-column text-center fw-bold">
@@ -65,7 +62,10 @@
         NNGƯỜI LÀM ĐƠN
         <br />
         ( Ký và ghi rõ họ và tên)
+        <br><br>
+        <br>
+        {{$data['full_name']}}
       </div>
     </div>
   </div>
-  
+  @endsection

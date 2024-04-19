@@ -1,7 +1,7 @@
 @extends('layout.main_layout')
 
 @section('content')
-    @include('mien_giam_hoc_phi.header')
+    @include('che_do_chinh_sach.header')
     <div class="d-flex flex-column flex-column-fluid">
         <!--begin::Content-->
         <div id="kt_app_content" class="app-content flex-column-fluid">
@@ -44,38 +44,27 @@
                     <p class="fw-medium fs-5">Số điện thoại : {{ $student->phone }}</p>
                     <p class="fw-medium fs-5">Lớp : {{ $student->lop_name }}</p>
                     <p class="fw-medium fs-5">Khoa : {{ $student->khoa_name }}</p>
-
-                    <p class="fw-medium fs-5">Mã sinh viên : {{ $student->student_code }}</p>
                     <form action="" id="form_create">
                         @csrf
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="">Nơi sinh</span>
+                                <span class="">Thuộc đối tượng</span>
                             </label>
                             <!--end::Label-->
                             <input @if (isset($don_parent)) @if ($don_parent->status > 0)
-                                readonly @endif @endif class="form-control form-control-solid" name="noisinh" value="{{$phieu['noisinh'] ?? ''}}"/>
+                                readonly @endif @endif class="form-control form-control-solid" name="doituong" value="{{$phieu['doituong'] ?? ''}}" />
                         </div>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="">Thuộc đối tượng: (ghi rõ đối tượng được quy định tại Nghị định số 81/2021/NĐ-CP)</span>
+                                <span class="">Hồ sơ xin hưởng chế độ trợ cấp xã hội kèm theo giấy này gồm:</span>
                             </label>
                             <!--end::Label-->
                             <textarea @if (isset($don_parent)) @if ($don_parent->status > 0)
-                                readonly @endif @endif class="form-control form-control-solid h-150px" name="doituong">{{$phieu['doituong'] ?? ''}}</textarea>
+                                readonly @endif @endif class="form-control form-control-solid h-150px" name="hoso">{{$phieu['hoso'] ?? ''}}</textarea>
                         </div>
-                        <div class="d-flex flex-column mb-8 fv-row">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="">Đã được hưởng chế độ miễn, giảm học phí (ghi rõ tên cơ sở đã được hưởng chế độ miễn giảm học phí, cấp học và trình độ đào tạo):</span>
-                            </label>
-                            <!--end::Label-->
-                            <textarea @if (isset($don_parent)) @if ($don_parent->status > 0)
-                                readonly @endif @endif class="form-control form-control-solid h-150px" name="daduochuong">{{$phieu['daduochuong'] ?? ''}}</textarea>
-                        </div>
-
+                        
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -90,12 +79,12 @@
                             @if (isset($don_parent))
                                 @if ($don_parent->status <= 0)
                                     <button type="submit" class="btn btn-success me-2">
-                                        {{ __('Sửa đơn xin miễn giảm học phí') }}
+                                        {{ __('Sửa đơn xin chế độ chính sách') }}
                                     </button>
                                 @endif
                             @else
                                 <button type="submit" class="btn btn-success me-2">
-                                    {{ __('Gửi đơn xin miễn giảm học phí') }}
+                                    {{ __('Gửi đơn xin chế độ chính sách') }}
                                 </button>
                             @endif
 
@@ -125,7 +114,7 @@
         let validation_create = FormValidation.formValidation(
             form_create, {
                 fields: {
-                    noisinh: {
+                    hoso: {
                         validators: {
                             notEmpty: {
                                 message: '{{ __('Vui lòng không để trống mục này') }}'
@@ -133,13 +122,6 @@
                         }
                     },
                     doituong: {
-                        validators: {
-                            notEmpty: {
-                                message: '{{ __('Vui lòng không để trống mục này') }}'
-                            },
-                        }
-                    },
-                    daduochuong: {
                         validators: {
                             notEmpty: {
                                 message: '{{ __('Vui lòng không để trống mục này') }}'
@@ -165,21 +147,20 @@
         });
         $('#form_create').submit(function(e) {
             e.preventDefault();
-
             const form = document.querySelector("#form_create");
             const formData = new FormData(form);
             validation_create.validate().then(function(status) {
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
-                        url: "{{ route('MienGiamHp.CreateViewPdf') }}",
+                        url: "{{ route('CheDoChinhSach.CreateViewPdf') }}",
                         data: formData,
                         headers: {
                             "Content-Type": "multipart/form-data",
                         },
                     }).then((response) => {
                         if ($('#button_clicked').val() == 'xem_truoc') {
-                            window.open("{{ route('MienGiamHp.viewDemoPdf') }}", "_blank");
+                            window.open("{{ route('CheDoChinhSach.viewDemoPdf') }}", "_blank");
                         } else {
                             mess_success('Thông báo',
                                 "Đơn của bạn đã được gửi")

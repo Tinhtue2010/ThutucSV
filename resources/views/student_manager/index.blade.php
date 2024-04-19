@@ -89,7 +89,9 @@
                                     <th class="text-nowrap" data-name="id">Id</th>
                                     <th class="text-nowrap" data-name="full_name">{{ __('Họ và tên') }}</th>
                                     <th class="text-nowrap" data-name="student_code">{{ __('Mã sinh viên') }}</th>
-                                    <th class="text-nowrap" data-name="student_id">{{ __('Mã học sinh') }}</th>
+                                    <th class="text-nowrap" data-name="student_code">{{ __('Mã sinh viên') }}</th>
+                                    <th class="text-nowrap" data-name="khoa_name">{{ __('Khoa') }}</th>
+                                    <th class="text-nowrap" data-name="lop_name">{{ __('Lớp') }}</th>
                                     <th class="text-nowrap" data-name="date_of_birth">{{ __('Ngày sinh') }}</th>
                                     <th class="text-nowrap" data-name="phone">{{ __('Điện thoại') }}</th>
                                     <th class="text-nowrap" data-name="email">{{ __('Email') }}</th>

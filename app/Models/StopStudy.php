@@ -18,7 +18,8 @@ class StopStudy extends Model
         'status',
         'lop_id',
         'files',
-        'type'
+        'type',
+        'teacher_id'
     ];
 
     public function student()

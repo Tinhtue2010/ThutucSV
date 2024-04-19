@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="d-flex flex-column flex-column-fluid">
-        @include('giao_vien.header')
+        @include('khoa.header')
         <!--begin::Content-->
         <div id="kt_app_content" class="app-content flex-column-fluid">
             <!--begin::Content container-->
@@ -137,9 +137,9 @@
         </div>
         <!--end::Content-->
     </div>
-    @include('giao_vien.table')
-    @include('giao_vien.xacnhan',['target'=>'xacnhan'])
-    @include('giao_vien.khongxacnhan',['target'=>'khongxacnhan'])
-    @include('giao_vien.chitiet',['target'=>'chitiet'])
-    @include('giao_vien.tientrinh',['target'=>'tientrinh'])
+    @include('khoa.table')
+    @include('khoa.xacnhan',['target'=>'xacnhan'])
+    @include('khoa.khongxacnhan',['target'=>'khongxacnhan'])
+    @include('khoa.chitiet',['target'=>'chitiet'])
+    @include('khoa.tientrinh',['target'=>'tientrinh'])
 @endsection

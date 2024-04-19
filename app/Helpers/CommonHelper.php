@@ -4,8 +4,10 @@ namespace App\Helpers;
 
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
-trait CommonHelper{
+trait CommonHelper
+{
     public function importCSV($file)
     {
         $path = $file->getRealPath();
@@ -62,7 +64,7 @@ trait CommonHelper{
             if ($searchName !== [] && $search != '') {
                 $query = $query->where(function ($query) use ($searchName, $search) {
                     foreach ($searchName as $field) {
-                        $query->orWhere($field, 'like', '%'.$search.'%');
+                        $query->orWhere($field, 'like', '%' . $search . '%');
                     }
                 });
             }
@@ -84,12 +86,40 @@ trait CommonHelper{
         }
     }
 
-    public function notification($notification,$phieu = null, $type = null,$user_id = null){
+    public function notification($notification, $phieu = null, $type = null, $user_id = null)
+    {
         $query = new Notification();
         $query->notification = $notification;
         $query->phieu_id = $phieu;
         $query->type = $type;
         $query->user_id = $user_id ?? Auth::user()->id;
         $query->save();
+    }
+
+
+    public function uploadListFile($request, $name, $folder)
+    {
+        $fileNames = [];
+
+        if ($request->hasFile($name)) {
+            foreach ($request->file($name) as $file) {
+                $extension = $file->getClientOriginalExtension();
+                $originalName = $file->getClientOriginalName();
+                $newFileName = $folder . '/' . date('Y-m-d') . '-' . uniqid() .'.'. $extension;
+                Storage::putFileAs('public', $file, $newFileName);
+                $fileNames[] = [$originalName,$newFileName];
+            }
+            return $fileNames;
+        } else {
+            return [];
+        }
+    }
+
+    function deleteFiles($fileNames)
+    {
+        foreach ($fileNames as $fileName) {
+            Storage::delete('public/' . $fileName[1]);
+        }
+        return true;
     }
 }

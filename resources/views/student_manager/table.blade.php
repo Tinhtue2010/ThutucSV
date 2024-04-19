@@ -27,6 +27,8 @@
                             data.order_by = order_by;
                             data.columns = undefined;
                             data.order = undefined;
+                            {{request('gvcn') === 'true' ? 'data.gvcn = true;' : ''}}
+                            {{request('khoa') === 'true' ? 'data.khoa = true;' : ''}}
                             data.search = '';
                             $('.filter-select').each(function() {
                                 if ($(this).data('name') == undefined || $(this).val() == 'all') {
@@ -61,6 +63,12 @@
                         },
                         {
                             data: 'student_id'
+                        },
+                        {
+                            data: 'lop_name'
+                        },
+                        {
+                            data: 'khoa_name'
                         },
                         {
                             data: 'date_of_birth',

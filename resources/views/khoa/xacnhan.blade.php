@@ -20,7 +20,7 @@
                                 <span class="text-warning">Lưu ý: nội dung sẽ được thông báo cho sinh viên</span>
                             </label>
                             <!--end::Label-->
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="note">Đơn của bạn đã được giáo viên chủ nhiệm xác nhận</textarea>
+                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="note">Đơn của bạn đã được cán bộ khoa xác nhận</textarea>
                         </div>
                         
                     </div>
@@ -63,7 +63,7 @@
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
-                        url: "{{ route('GiaoVien.xacnhan') }}",
+                        url: "{{ route('Khoa.xacnhan') }}",
                         data: form.serialize(),
                     }).then((response) => {
                         mess_success('Thông báo',

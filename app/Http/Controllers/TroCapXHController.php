@@ -38,7 +38,6 @@ class TroCapXHController extends Controller
     function CreateViewPdf(Request $request)
     {
         if ($request->button_clicked == "xem_truoc") {
-            Session::put('sdt', $request->sdt);
             Session::put('doituong', $request->doituong);
             Session::put('hoso', $request->hoso);
             Session::put('thuongchu', $request->thuongchu);
@@ -59,7 +58,7 @@ class TroCapXHController extends Controller
         $studentData['khoa_hoc'] = $student->school_year;
         $studentData['hoso'] = $request->hoso;
         $studentData['doituong'] = $request->doituong;
-        $studentData['sdt'] = $request->sdt;
+        $studentData['sdt'] = $student->phone;
         $studentData['thuongchu'] = $request->thuongchu;
 
         $studentData['day'] = Carbon::now()->day;
@@ -70,6 +69,12 @@ class TroCapXHController extends Controller
 
             $check = StopStudy::where('student_id', $user->student_id)->where('type', 2)->first();
             if ($check) {
+                if(isset($check->files))
+                {
+                    $this->deleteFiles(json_decode($check->files));
+                }
+                $check->files = json_encode($this->uploadListFile($request,'files','mien_giam_hp'));
+                
                 $check->note = $request->data;
                 $check->update();
                 $phieu = Phieu::where('id', $check->phieu_id)->first();
@@ -87,6 +92,7 @@ class TroCapXHController extends Controller
                 $phieu->save();
 
                 $query = new StopStudy();
+                $query->files = json_encode($this->uploadListFile($request,'files','mien_giam_hp'));
                 $query->student_id = $user->student_id;
                 $query->round = 1;
                 $query->type = 2;
@@ -104,7 +110,6 @@ class TroCapXHController extends Controller
     {
         $doituong = Session::get('doituong');
         $hoso = Session::get('hoso');
-        $sdt = Session::get('sdt');
         $thuongchu = Session::get('thuongchu');
 
         $user = Auth::user();
@@ -121,7 +126,7 @@ class TroCapXHController extends Controller
         $studentData['khoa_hoc'] = $student->school_year;
         $studentData['hoso'] = $hoso;
         $studentData['doituong'] = $doituong;
-        $studentData['sdt'] = $sdt;
+        $studentData['sdt'] = $student->phone;
         $studentData['thuongchu'] = $thuongchu;
 
         $studentData['day'] = Carbon::now()->day;

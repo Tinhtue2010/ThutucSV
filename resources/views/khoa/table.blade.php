@@ -14,7 +14,7 @@
                     "info": false,
                     "serverSide": true,
                     "ajax": {
-                        "url": "{{ route('GiaoVien.getData') }}", // Thay đổi đường dẫn đến tệp xử lý AJAX
+                        "url": "{{ route('Khoa.getData') }}", // Thay đổi đường dẫn đến tệp xử lý AJAX
                         "type": "GET",
                         "data": function(data) {
                             var name_order = document
@@ -108,7 +108,7 @@
                             render: function(data, type, row) {
                                 role = {{ Auth::user()->role }} - 2;
                                 var dataRes = `<div class="d-flex flex-row">`;
-                                if (row['status'] == 0) {
+                                if (row['status'] == 1) {
                                     dataRes += `<div onClick="xacnhan(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
                                         <span class="path1"></span>
                                         <span class="path2"></span>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Lop;
 use App\Models\Student;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,13 +20,19 @@ class StudentManagerController extends Controller
     public function getData(Request $request)
     {
         $user = Auth::user();
+        $teacher = Teacher::where('id', $user->teacher_id)->first();
         $lopIds = Lop::where('teacher_id', $user->teacher_id)->pluck('id');
-
-
-        $query = Student::query();
-        if(Role(2))
-        {
-            $query = $query->whereIn('lop_id', $lopIds);
+        $query = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+            ->select('students.*', 'lops.khoa_id', 'lops.name as lop_name', 'khoas.name as khoa_name');
+        if (Role(2) || Role(3)) {
+            if (isset($request->khoa)) {
+                $query = $query->where('lops.khoa_id', $teacher->khoa_id);
+            } elseif (isset($request->gvcn)) {
+                $query = $query->whereIn('lop_id', $lopIds);
+            } else {
+                $query = $query->whereIn('lop_id', $lopIds);
+            }
         }
         if (isset($request->school_year)) {
             $query->where('school_year', $request->school_year);

@@ -15,8 +15,9 @@
                         <input type="text" name="id" class="d-none">
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
-                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                            <label class="d-flex align-items-start flex-column fs-6 fw-semibold mb-2">
                                 <span class="required">nội dung từ chối đơn</span>
+                                <span class="text-warning">Lưu ý: nội dung sẽ được thông báo cho sinh viên</span>
                             </label>
                             <!--end::Label-->
                             <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="note">Đơn của bạn đã bị từ chối bởi giáo viên chủ nhiệm</textarea>
