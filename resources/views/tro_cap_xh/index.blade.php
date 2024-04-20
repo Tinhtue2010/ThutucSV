@@ -79,12 +79,12 @@
                             @if (isset($don_parent))
                                 @if ($don_parent->status <= 0)
                                     <button type="submit" class="btn btn-success me-2">
-                                        {{ __('Sửa đơn xin miễn giảm học phí') }}
+                                        {{ __('Sửa đơn xin trợ cấp xã hội') }}
                                     </button>
                                 @endif
                             @else
                                 <button type="submit" class="btn btn-success me-2">
-                                    {{ __('Gửi đơn xin miễn giảm học phí') }}
+                                    {{ __('Gửi đơn xin trợ cấp xã hội') }}
                                 </button>
                             @endif
 

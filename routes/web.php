@@ -7,6 +7,7 @@ use App\Http\Controllers\ClassManagerController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\HoSo\GiaoVienController;
 use App\Http\Controllers\HoSo\KhoaController;
+use App\Http\Controllers\HoSo\PhongDaoTaoController;
 use App\Http\Controllers\KhoaManagerController;
 use App\Http\Controllers\MienGiamHPController;
 use App\Http\Controllers\NotificationController;
@@ -43,6 +44,12 @@ Route::group(['middleware' => ['auth']], function () {
         if(Role(0))
         {
             return redirect()->route('approve.index');
+        }
+        if (Role(2) || Role(3)) {
+            return redirect()->route('GiaoVien.index');
+        }
+        if (Role(4)) {
+            return redirect()->route('PhongDaoTao.index');
         }
         return redirect()->route('GiaoVien.index');
     })->name('home');
@@ -112,7 +119,16 @@ Route::group(['middleware' => ['auth']], function () {
         });
     });
 
-
+    Route::middleware('role:4')->group(function () {
+        Route::name('PhongDaoTao.')->prefix('phong-dao-tao')->group(function () {
+            Route::get('/', [PhongDaoTaoController::class, 'index'])->name('index');
+            Route::get('get-data', [PhongDaoTaoController::class, 'getData'])->name('getData');
+            Route::get('get-data/{id?}', [PhongDaoTaoController::class, 'getDataChild'])->name('getDataChild');
+            Route::post('xacnhan', [PhongDaoTaoController::class, 'xacnhan'])->name('xacnhan');
+            Route::post('khongxacnhan', [PhongDaoTaoController::class, 'khongxacnhan'])->name('khongxacnhan');
+            Route::get('/view_pdf/{id?}', [PhongDaoTaoController::class,'viewPdf'])->name('viewPdf');
+        });
+    });
     // quyền admin hoặc là quyền bên phòng đào tạo được vào
     Route::middleware('role:studentManager')->name('studentManager.')
         ->prefix('student-manager')->group(function () {

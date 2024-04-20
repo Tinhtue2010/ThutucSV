@@ -42,7 +42,7 @@
                                     <span class="path1"></span>
                                     <span class="path2"></span>
                                 </div>
-                                <p class="m-auto fw-medium">: chi tiết đơn</p>
+                                <p class="m-auto fw-medium">: Chi tiết đơn</p>
                             </div>
                         </div>
                     </div>

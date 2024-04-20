@@ -11,7 +11,7 @@ if (!function_exists('Role')) {
             "teacher" => 2, // 2 giáo viên
             "department_leader" => 3, // 3 lãnh đạo khoa
             "student_affairs_office" => 4, // 4 phòng công tác hssv
-            "financial_planning_division" => 5,// 5phòng kế hoạch tài chính
+            "financial_planning_division" => 5,// 5 phòng kế hoạch tài chính
             "student_union_leader" => 6, // 6 lãnh đạo ctsv
             "school_leader" => 7, // 7 lãnh đạo trường
         ];
