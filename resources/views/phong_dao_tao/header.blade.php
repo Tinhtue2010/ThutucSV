@@ -58,7 +58,7 @@
                                     <span class="path2"></span>
                                     <span class="path3"></span>
                                 </div>
-                                <p class="m-auto fw-medium">: Tiến trình sử lý</p>
+                                <p class="m-auto fw-medium">: Tiến trình xử lý</p>
                             </div>
                             <div class="d-flex flex-row me-3">
                                 <div class="ki-duotone ki-document fs-2x  text-dark">

@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ __('Tiến trình sử lý đơn ') }}</h5>
+                <h5 class="modal-title">{{ __('Tiến trình xử lý đơn ') }}</h5>
                 <div class="btn btn-sm btn-icon btn-active-color-primary close" data-bs-dismiss="modal">
                     <i class="ki-outline ki-cross fs-1"></i>
                 </div>
