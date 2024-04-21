@@ -6,7 +6,10 @@ use App\Http\Controllers\CheDoChinhSachController;
 use App\Http\Controllers\ClassManagerController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\HoSo\GiaoVienController;
+use App\Http\Controllers\HoSo\KeHoachTaiChinhController;
 use App\Http\Controllers\HoSo\KhoaController;
+use App\Http\Controllers\HoSo\LanhDaoPhongDaoTaoController;
+use App\Http\Controllers\HoSo\LanhDaoTruongController;
 use App\Http\Controllers\HoSo\PhongDaoTaoController;
 use App\Http\Controllers\KhoaManagerController;
 use App\Http\Controllers\MienGiamHPController;
@@ -50,6 +53,15 @@ Route::group(['middleware' => ['auth']], function () {
         }
         if (Role(4)) {
             return redirect()->route('PhongDaoTao.index');
+        }
+        if (Role(5)) {
+            return redirect()->route('KeHoachTaiChinh.index');
+        }
+        if (Role(6)) {
+            return redirect()->route('LanhDaoPhongDaoTao.index');
+        }
+        if (Role(7)) {
+            return redirect()->route('LanhDaoTruong.index');
         }
         return redirect()->route('GiaoVien.index');
     })->name('home');
@@ -116,7 +128,34 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('gettiepnhanhs/{id?}', [PhongDaoTaoController::class, 'gettiepnhanhs'])->name('gettiepnhanhs');
             Route::post('tuchoihs', [PhongDaoTaoController::class, 'tuchoihs'])->name('tuchoihs');
             Route::post('xacnhankinhphi', [PhongDaoTaoController::class, 'xacnhankinhphi'])->name('xacnhankinhphi');
+            Route::post('duyeths', [PhongDaoTaoController::class, 'duyeths'])->name('duyeths');
             Route::post('khongxacnhan', [PhongDaoTaoController::class, 'khongxacnhan'])->name('khongxacnhan');
+        });
+    });
+    Route::middleware('role:5')->group(function () {
+        Route::name('KeHoachTaiChinh.')->prefix('ke-hoach-tai-chinh')->group(function () {
+            Route::get('/', [KeHoachTaiChinhController::class, 'index'])->name('index');
+            Route::get('get-data', [KeHoachTaiChinhController::class, 'getData'])->name('getData');
+            Route::post('xacnhan', [KeHoachTaiChinhController::class, 'xacnhan'])->name('xacnhan');
+            Route::post('khongxacnhan', [KeHoachTaiChinhController::class, 'khongxacnhan'])->name('khongxacnhan');
+        });
+    });
+    Route::middleware('role:6')->group(function () {
+        Route::name('LanhDaoPhongDaoTao.')->prefix('lanh-dao-phong-dao-tao')->group(function () {
+            Route::get('/', [LanhDaoPhongDaoTaoController::class, 'index'])->name('index');
+            Route::get('get-data', [LanhDaoPhongDaoTaoController::class, 'getData'])->name('getData');
+            Route::post('xacnhan', [LanhDaoPhongDaoTaoController::class, 'xacnhan'])->name('xacnhan');
+            Route::post('khongxacnhan', [LanhDaoPhongDaoTaoController::class, 'khongxacnhan'])->name('khongxacnhan');
+            Route::post('tuchoihs', [LanhDaoPhongDaoTaoController::class, 'tuchoihs'])->name('tuchoihs');
+        });
+    });
+    Route::middleware('role:7')->group(function () {
+        Route::name('LanhDaoTruong.')->prefix('lanh-dao-truong')->group(function () {
+            Route::get('/', [LanhDaoTruongController::class, 'index'])->name('index');
+            Route::get('get-data', [LanhDaoTruongController::class, 'getData'])->name('getData');
+            Route::post('xacnhan', [LanhDaoTruongController::class, 'xacnhan'])->name('xacnhan');
+            Route::post('khongxacnhan', [LanhDaoTruongController::class, 'khongxacnhan'])->name('khongxacnhan');
+            Route::post('tuchoihs', [LanhDaoTruongController::class, 'tuchoihs'])->name('tuchoihs');
         });
     });
     //tất cả được vào trừ sinh viên

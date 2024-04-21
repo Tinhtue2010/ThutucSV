@@ -18,7 +18,7 @@
     <div class="d-flex flex-column mb-8 fv-row col-6 ps-4">
         <!--begin::Label-->
         <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-            <span class="">Mã học sinh</span>
+            <span class="">Mã sinh viên</span>
         </label>
         <!--end::Label-->
         <input type="text" class="form-control form-control-solid" name="student_id" />

@@ -26,7 +26,7 @@ class RoleMiddleware
                 }
             }
 
-            abort(404);
+            return redirect()->route('home');
         } else {
             return redirect()->route('login');
         }

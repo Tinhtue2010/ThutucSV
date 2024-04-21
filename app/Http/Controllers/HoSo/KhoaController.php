@@ -32,7 +32,7 @@ class KhoaController extends Controller
         $query = $query->whereIn('stop_studies.lop_id', $lopIds);
 
         if (isset($request->year)) {
-            $query->whereYear('created_at', $request->year);
+            $query->whereYear('stop_studies.created_at', $request->year);
         }
         if (isset($request->status)) {
             $query->where('status', $request->status);

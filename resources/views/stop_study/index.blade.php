@@ -31,7 +31,7 @@
                             </span>
                         </div>
                         @isset($don->phieu_id)
-                            <a href="" target="_blank" class="btn btn-primary">Xem phiếu</a>
+                            <a href="{{ route('phieu.index',['id'=>$don->phieu_id]) }}" target="_blank" class="btn btn-primary">Xem phiếu</a>
                         @endisset
 
                     </div>

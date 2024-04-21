@@ -34,7 +34,7 @@ class PhongDaoTaoController extends Controller
         $query = $query->whereIn('stop_studies.lop_id', $lopIds);
 
         if (isset($request->year)) {
-            $query->whereYear('created_at', $request->year);
+            $query->whereYear('stop_studies.created_at', $request->year);
         }
         if (isset($request->status)) {
             $query->where('status', $request->status);
@@ -592,13 +592,71 @@ class PhongDaoTaoController extends Controller
 
 
         $newStopStudy = $stopStudy->replicate();
-        $newStopStudy->status = 0;
+        $newStopStudy->status = 1;
         $newStopStudy->teacher_id = Auth::user()->teacher_id;
         $newStopStudy->parent_id = $request->id;
         $newStopStudy->phieu_id = null;
         $newStopStudy->note = "Đang xác nhận kinh phí";
         $newStopStudy->save();
         $stopStudy->update(["status" => 4]);
+        return true;
+
+
+        abort(404);
+    }
+
+    
+    function duyeths(Request $request)
+    {
+        $stopStudy =  StopStudy::find($request->id);
+        
+        if ($stopStudy->status != 5 && $stopStudy->status != 3 && $stopStudy->status != -4) {
+            abort(404);
+        }
+
+        if ($stopStudy->status == -4) {
+            $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
+            if ($newStopStudy) {
+                try {
+                    $phieu = Phieu::find($newStopStudy->phieu_id);
+                    if ($phieu) {
+                        $phieu->delete();
+                    }
+                    $newStopStudy->delete();
+                } catch (\Exception $e) {
+                }
+            } else {
+            }
+        }
+
+
+        if ($stopStudy->type == 0) {
+            $content_phieu['ndgiaiquyet'] = "đơn xin rút hồ sơ";
+            $this->notification("Đơn xin rút hồ sơ của bạn đang chờ cán bộ phòng CTSV xác nhận", null, "RHS");
+        }
+        if ($stopStudy->type == 1) {
+            $content_phieu['ndgiaiquyet'] = "đơn xin miễn giảm học phí";
+            $this->notification("Đơn xin miễn giảm học phí của bạn đang chờ cán bộ phòng CTSV xác nhận", null, "GHP");
+        }
+        if ($stopStudy->type == 2) {
+            $content_phieu['ndgiaiquyet'] = "đơn xin trợ cấp xã hội";
+            $this->notification("Đơn xin trợ cấp xã hội của bạn đang chờ cán bộ phòng CTSV xác nhận", null, "TCXH");
+        }
+
+        if ($stopStudy->type == 3) {
+            $content_phieu['ndgiaiquyet'] = "đơn xin chế độ chính sách";
+            $this->notification("Đơn xin chế độ chính sách của bạn đang chờ cán bộ phòng CTSV xác nhận", null, "CDCS");
+        }
+
+
+        $newStopStudy = $stopStudy->replicate();
+        $newStopStudy->status = 1;
+        $newStopStudy->teacher_id = Auth::user()->teacher_id;
+        $newStopStudy->parent_id = $request->id;
+        $newStopStudy->phieu_id = null;
+        $newStopStudy->note = "Đang chờ cán bộ phòng CTSV xác nhận";
+        $newStopStudy->save();
+        $stopStudy->update(["status" => 6]);
         return true;
 
 

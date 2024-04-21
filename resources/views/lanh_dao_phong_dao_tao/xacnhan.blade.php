@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ __('Duyệt đơn') }}</h5>
+                <h5 class="modal-title">{{ __('Xác nhận đơn') }}</h5>
                 <div class="btn btn-sm btn-icon btn-active-color-primary close" data-bs-dismiss="modal">
                     <i class="ki-outline ki-cross fs-1"></i>
                 </div>
@@ -16,17 +16,19 @@
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-start fs-6 fw-semibold mb-2 flex-column">
-                                <span class="">Bạn muốn chuyển đơn đến lãnh đạo phòng công tác sinh viên chứ</span>
+                                <span class="required">nội dung</span>
+                                <span class="text-warning">Lưu ý: nội dung sẽ được thông báo cho sinh viên</span>
                             </label>
                             <!--end::Label-->
+                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="note">Lãnh đạo phòng CTSV đã duyệt đơn</textarea>
                         </div>
                         
                     </div>
                     <div class="card-footer">
                         <button type="submit"
-                                class="btn btn-success mr-2">{{ __('Xác nhận') }}</button>
+                                class="btn btn-success mr-2">{{ __('Cập nhật') }}</button>
                         <button type="reset"
-                                class="btn btn-secondary">{{ __('Đóng') }}</button>
+                                class="btn btn-secondary">{{ __('Nhập lại') }}</button>
                     </div>
                 </form>
             </div>
@@ -36,6 +38,7 @@
 
 @push('js')
     <script type="text/javascript">
+        let id = 0;
         let model{{$target}};
 
         let form_{{$target}} = document.querySelector('#form_{{$target}}');
@@ -52,10 +55,7 @@
                 }
             }
         );
-        
-        $('#form_{{$target}} .btn-secondary').click(function(){
-            model{{$target}}.hide();
-        })
+
         $('#form_{{$target}}').submit(function (e) {
             e.preventDefault();
             let form = $(this);
@@ -63,11 +63,11 @@
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
-                        url: "{{ route('PhongDaoTao.duyeths') }}",
+                        url: "{{ route('LanhDaoPhongDaoTao.xacnhan') }}",
                         data: form.serialize(),
                     }).then((response) => {
                         mess_success('Thông báo',
-                            "Thành công")
+                            "Xác nhận đơn thành công")
                         $(this).trigger("reset");
                         model{{$target}}.hide();
                         Datatable.loadData();
@@ -85,7 +85,7 @@
         });
 
 
-        function duyethoso(data) {
+        function xacnhan(data) {
             modalEl = document.querySelector('#kt_modal_{{$target}}_target');
             if (!modalEl) {
                 return;

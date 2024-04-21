@@ -46,6 +46,10 @@ class PhieuController extends Controller
         {
             return view('document.huongdanbosung', ['data' => json_decode($phieu->content, true)]);
         }
+        if($phieu->key == "TCGQ")
+        {
+            return view('document.tuchoi', ['data' => json_decode($phieu->content, true)]);
+        }
         if($phieu->key == "TNHS")
         {
             return view('document.tiepnhan', ['data' => json_decode($phieu->content, true),'phieu'=>$phieu]);

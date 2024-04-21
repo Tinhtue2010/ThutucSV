@@ -112,9 +112,6 @@
                         targets: -1,
                         orderable: false,
                         responsivePriority: 1,
-                    }, {
-                        targets: 4,
-                        orderable: false
                     }],
                     responsive: true,
                 });

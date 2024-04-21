@@ -17,7 +17,7 @@
                             <div class="d-flex align-items-center position-relative my-1">
                                 <i class="ki-outline ki-magnifier fs-3 position-absolute ms-4"></i>
                                 <input type="text" data-kt-ecommerce-product-filter="search"
-                                       class="form-control form-control-solid w-250px ps-12" placeholder="Tên, mã học sinh"/>
+                                       class="form-control form-control-solid w-250px ps-12" placeholder="Tên, mã sinh viên"/>
                             </div>
                             <!--end::Search-->
                         </div>
@@ -49,20 +49,7 @@
                                 </select>
                                 <!--end::Select2-->
                             </div>
-                            <div class="w-100 mw-150px">
-                                <label class="form-label">Trạng thái</label>
-
-                                <select class="form-select form-select-solid filter-select" data-name="status" data-control="select2" data-hide-search="true"
-                                    data-placeholder="Trạng thái">
-                                    <option></option>
-                                    <option value="all">Hiển thị tất cả</option>
-                                    <option value="0">Chưa được xác nhận</option>
-                                    <option value="1">GV chủ nhiệm đã xác nhận</option>
-                                    <option value="2">Khoa đã xác nhận</option>
-                                    <option value="3">CTHSSV đã xác nhận</option>
-                                    <option value="4">Lãnh đạo CTHSSV đã xác nhận</option>
-                                </select>
-                            </div>
+@include('common.select_status_ho_so')
 
 
                         </div>
@@ -77,9 +64,10 @@
                             <thead>
                             <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                                 <th></th>
-                                <th class="text-nowrap" data-name="student_code">{{__('Mã học sinh')}}</th>
+                                <th class="text-nowrap" data-name="student_code">{{__('Mã sinh viên')}}</th>
                                 <th class="text-nowrap" data-name="full_name">{{ __('Họ và tên') }}</th>
-                                <th class="text-nowrap" data-name="nlop_nameame">{{ __('Lớp') }}</th>
+                                <th class="text-nowrap" data-name="lop_name">{{ __('Lớp') }}</th>
+                                <th class="text-nowrap" data-name="created_at">{{ __('Thời gian') }}</th>
                                 <th class="text-nowrap" data-name="type">{{ __('Loại') }}</th>
                                 <th class="text-nowrap" data-name="status">{{ __('Trạng thái') }}</th>
                                 <td class="text-nowrap">{{ __('Chức năng') }}</td>

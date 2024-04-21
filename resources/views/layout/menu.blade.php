@@ -194,6 +194,124 @@
         </div>
         <!--end::Menu Item-->
     @endif
+
+    @if (Role(5))
+    <div class="menu-item mb-2 mt-4">
+        <div class="menu-heading text-uppercase fs-7 fw-bold">Hồ sơ sinh viên</div>
+
+        <div class="app-sidebar-separator separator"></div>
+    </div>
+        <!--begin::Menu Item-->
+        <div class="menu-item">
+            <!--begin::Menu link-->
+            <a class="menu-link {{ request()->routeIs('KeHoachTaiChinh.index') ? 'active' : '' }}" href="{{ route('KeHoachTaiChinh.index') }}">
+                <!--begin::Icon-->
+                <span class="menu-icon">
+                    <i class="ki-outline ki-document fs-2"></i>
+                </span>
+                <!--end::Icon-->
+                <!--begin::Title-->
+                <span class="menu-title">Tiếp nhận & Xử lý đơn</span>
+                <!--end::Title-->
+            </a>
+            <!--end::Menu link-->
+        </div>
+        <!--end::Menu Item-->
+        <!--begin::Menu Item-->
+        <div class="menu-item">
+            <!--begin::Menu link-->
+            <a class="menu-link {{request()->is('student-manager') ? 'active' : '' }}" href="{{ route('studentManager.index') }}">
+                <!--begin::Icon-->
+                <span class="menu-icon">
+                    <i class="ki-outline ki-category fs-2"></i>
+                </span>
+                <!--end::Icon-->
+                <!--begin::Title-->
+                <span class="menu-title">Quản lý sinh viên</span>
+                <!--end::Title-->
+            </a>
+            <!--end::Menu link-->
+        </div>
+        <!--end::Menu Item-->
+    @endif
+    @if (Role(6))
+    <div class="menu-item mb-2 mt-4">
+        <div class="menu-heading text-uppercase fs-7 fw-bold">Hồ sơ sinh viên</div>
+
+        <div class="app-sidebar-separator separator"></div>
+    </div>
+        <!--begin::Menu Item-->
+        <div class="menu-item">
+            <!--begin::Menu link-->
+            <a class="menu-link {{ request()->routeIs('LanhDaoPhongDaoTao.index') ? 'active' : '' }}" href="{{ route('LanhDaoPhongDaoTao.index') }}">
+                <!--begin::Icon-->
+                <span class="menu-icon">
+                    <i class="ki-outline ki-document fs-2"></i>
+                </span>
+                <!--end::Icon-->
+                <!--begin::Title-->
+                <span class="menu-title">Tiếp nhận & Xử lý đơn</span>
+                <!--end::Title-->
+            </a>
+            <!--end::Menu link-->
+        </div>
+        <!--end::Menu Item-->
+        <!--begin::Menu Item-->
+        <div class="menu-item">
+            <!--begin::Menu link-->
+            <a class="menu-link {{request()->is('student-manager') ? 'active' : '' }}" href="{{ route('studentManager.index') }}">
+                <!--begin::Icon-->
+                <span class="menu-icon">
+                    <i class="ki-outline ki-category fs-2"></i>
+                </span>
+                <!--end::Icon-->
+                <!--begin::Title-->
+                <span class="menu-title">Quản lý sinh viên</span>
+                <!--end::Title-->
+            </a>
+            <!--end::Menu link-->
+        </div>
+        <!--end::Menu Item-->
+    @endif
+    @if (Role(7))
+    <div class="menu-item mb-2 mt-4">
+        <div class="menu-heading text-uppercase fs-7 fw-bold">Hồ sơ sinh viên</div>
+
+        <div class="app-sidebar-separator separator"></div>
+    </div>
+        <!--begin::Menu Item-->
+        <div class="menu-item">
+            <!--begin::Menu link-->
+            <a class="menu-link {{ request()->routeIs('LanhDaoTruong.index') ? 'active' : '' }}" href="{{ route('LanhDaoTruong.index') }}">
+                <!--begin::Icon-->
+                <span class="menu-icon">
+                    <i class="ki-outline ki-document fs-2"></i>
+                </span>
+                <!--end::Icon-->
+                <!--begin::Title-->
+                <span class="menu-title">Tiếp nhận & Xử lý đơn</span>
+                <!--end::Title-->
+            </a>
+            <!--end::Menu link-->
+        </div>
+        <!--end::Menu Item-->
+        <!--begin::Menu Item-->
+        <div class="menu-item">
+            <!--begin::Menu link-->
+            <a class="menu-link {{request()->is('student-manager') ? 'active' : '' }}" href="{{ route('studentManager.index') }}">
+                <!--begin::Icon-->
+                <span class="menu-icon">
+                    <i class="ki-outline ki-category fs-2"></i>
+                </span>
+                <!--end::Icon-->
+                <!--begin::Title-->
+                <span class="menu-title">Quản lý sinh viên</span>
+                <!--end::Title-->
+            </a>
+            <!--end::Menu link-->
+        </div>
+        <!--end::Menu Item-->
+    @endif
     {{-- @if (!Role(1))
         <!--begin::Menu Item-->
         <div class="menu-item">

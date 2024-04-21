@@ -1,4 +1,7 @@
-<div class="A4 mx-auto d-flex flex-column">
+@extends('layout.doc_layout')
+
+@section('data')
+    <div id="doc_view" class="A4 d-flex flex-column">
     <div class="d-flex flex-row justify-content-between">
         <div>
             <div class="text-center">TRƯỜNG ĐẠI HỌC HẠ LONG</div>
@@ -28,7 +31,7 @@
           ">
             </div>
             <div class="text-center fst-italic mt-1">
-                Quảng Ninh, ngày ?? tháng ?? năm ????
+                Quảng Ninh, ngày {{$data['tao_day']}} tháng {{$data['tao_month']}} năm {{$data['tao_year']}}
             </div>
         </div>
     </div>
@@ -37,34 +40,32 @@
     </div>
     <div class="d-flex flex-column mt-3">
         <p class="mb-0">
-            Hồ sơ của sinh viên: Phạm Nguyên Hồng
+            Hồ sơ của sinh viên: {{$data['sinhvien']}}
             <br />
-            Số định danh cá nhân/CMND: ......................................... Ngày
-            cấp:99/99/9999 <br />
-            SĐT: 123124123 &nbsp; Email: whoami@mail.com
+            Số định danh cá nhân/CMND: {{$data['cmnd']}}    Ngày cấp: {{$data['ngaycap']}} <br />
+            SĐT: {{$data['sdt']}} &nbsp; Email: {{$data['email']}}
             <br />
-            Nội dung yêu cầu giải quyết: Lorem ipsum, dolor sit amet consectetur
-            adipisicing elit. Harum maxime iusto voluptatem, nemo qui cumque amet?
-            Laudantium quis laborum iste veniam architecto voluptas a facilis,
-            repellat blanditiis repudiandae, soluta consequuntur.
+            Nội dung yêu cầu giải quyết: {{$data['ndgiaiquyet']}}
             <br />Qua xem xét hồ sơ, Phòng Công tác chính trị, Quản lý và Hỗ trợ sinh
             viên thông báo không tiếp nhận, giải quyết hồ sơ này với lý do, cụ thể như
             sau:
         </p>
         <p>
-            &emsp;Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo libero
-            quidem velit unde aliquid accusamus quod, quaerat accusantium ipsum
-            possimus perspiciatis, facilis earum dicta? Suscipit earum cupiditate
-            repellat perferendis voluptatibus. <br />
-            Xin thông báo đến sinh viên………………………………… được biết./
+            &emsp;{{$data['lydo']}} <br />
+            Xin thông báo đến sinh viên {{$data['sinhvien']}} được biết.
         </p>
     </div>
     <div class="d-flex flex-row justify-content-between px-5 mt-1">
         <div class="d-flex flex-column justify-content-end text-center"></div>
         <div class="text-center">
-            <div class="fst-italic">Uông Bí, ngày 15 tháng 12 năm 2023</div>
+            <div class="fst-italic">Uông Bí, ngày  {{$data['tao_day']}} tháng  {{$data['tao_month']}} năm  {{$data['tao_year']}}</div>
             <div class="fw-bold">NGƯỜI TIẾP NHẬN HỒ SƠ</div>
             <br />
+            <br />
+            <br />
+            <br />
+            {{$data['giaovien']}}
         </div>
     </div>
 </div>
+@endsection
