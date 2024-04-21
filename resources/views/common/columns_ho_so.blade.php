@@ -37,7 +37,7 @@
             return `<span class="badge badge-warning">Khoa từ chối</span>`;
         }
         if (data == -3) {
-            return `<span class="badge badge-warning">Cần bổ xung hồ sơ</span>`;
+            return `<span class="badge badge-warning">Cần bổ sung hồ sơ</span>`;
         }
         if (data == -4) {
             return `<span class="badge badge-warning">Từ chối giải quết hồ sơ</span>`;

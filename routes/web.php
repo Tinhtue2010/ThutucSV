@@ -46,7 +46,7 @@ Route::group(['middleware' => ['auth']], function () {
             return redirect()->route('student.info');
         }
         if (Role(0)) {
-            return redirect()->route('approve.index');
+            return redirect()->route('studentManager.index');
         }
         if (Role(2) || Role(3)) {
             return redirect()->route('GiaoVien.index');

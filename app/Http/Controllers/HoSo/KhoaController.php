@@ -127,6 +127,4 @@ class KhoaController extends Controller
             abort(404);
         }
     }
-
-
 }

@@ -193,20 +193,20 @@ class PhongDaoTaoController extends Controller
 
         if ($stopStudy->type == 0) {
             $content_phieu['ndgiaiquyet'] = "đơn xin rút hồ sơ";
-            $this->notification("Đơn xin rút hồ sơ của bạn cần bổ xung hồ sơ", null, "RHS");
+            $this->notification("Đơn xin rút hồ sơ của bạn cần bổ sung hồ sơ", null, "RHS");
         }
         if ($stopStudy->type == 1) {
             $content_phieu['ndgiaiquyet'] = "đơn xin miễn giảm học phí";
-            $this->notification("Đơn xin miễn giảm học phí của bạn cần bổ xung hồ sơ", null, "GHP");
+            $this->notification("Đơn xin miễn giảm học phí của bạn cần bổ sung hồ sơ", null, "GHP");
         }
         if ($stopStudy->type == 2) {
             $content_phieu['ndgiaiquyet'] = "đơn xin trợ cấp xã hội";
-            $this->notification("Đơn xin trợ cấp xã hội của bạn cần bổ xung hồ sơ", null, "TCXH");
+            $this->notification("Đơn xin trợ cấp xã hội của bạn cần bổ sung hồ sơ", null, "TCXH");
         }
 
         if ($stopStudy->type == 3) {
             $content_phieu['ndgiaiquyet'] = "đơn xin chế độ chính sách";
-            $this->notification("Đơn xin chế độ chính sách của bạn cần bổ xung hồ sơ", null, "CDCS");
+            $this->notification("Đơn xin chế độ chính sách của bạn cần bổ sung hồ sơ", null, "CDCS");
         }
 
         if ($stopStudy->status == 2) {
@@ -224,7 +224,7 @@ class PhongDaoTaoController extends Controller
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
             $newStopStudy->phieu_id = $phieu->id;
             $newStopStudy->parent_id = $request->id;
-            $newStopStudy->note = "Yêu cầu bổ xung hồ sơ";
+            $newStopStudy->note = "Yêu cầu bổ sung hồ sơ";
             $newStopStudy->save();
             $stopStudy->update(["status" => -3]);
             return $phieu->id;
@@ -232,7 +232,7 @@ class PhongDaoTaoController extends Controller
         if ($stopStudy->status == -3) {
             $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->note = "Yêu cầu bổ xung hồ sơ";
+            $newStopStudy->note = "Yêu cầu bổ sung hồ sơ";
             $newStopStudy->save();
 
             $phieu = Phieu::find($newStopStudy->phieu_id);
@@ -632,7 +632,7 @@ class PhongDaoTaoController extends Controller
 
         if ($stopStudy->type == 0) {
             $content_phieu['ndgiaiquyet'] = "đơn xin rút hồ sơ";
-            $this->notification("Đơn xin rút hồ sơ của bạn đang chờ cán bộ phòng CTSV xác nhận", null, "RHS");
+            $this->notification("Đơn xin rút hồ sơ của bạn đang chờ cán bộ phòng CTSV xác nhận", null, "RHS");         
         }
         if ($stopStudy->type == 1) {
             $content_phieu['ndgiaiquyet'] = "đơn xin miễn giảm học phí";
