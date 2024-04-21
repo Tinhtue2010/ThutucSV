@@ -16,7 +16,7 @@
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-start flex-column fs-6 fw-semibold mb-2">
-                                <span class="required">nội dung từ chối đơn</span>
+                                <span class="required">Nội dung từ chối đơn</span>
                                 <span class="text-warning">Lưu ý: nội dung sẽ được thông báo cho sinh viên</span>
                             </label>
                             <!--end::Label-->

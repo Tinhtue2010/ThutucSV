@@ -180,7 +180,7 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request('khoa') === 'true' && request()->is('student-manager') ? 'active' : '' }}" href="{{ route('studentManager.index',['khoa'=>'true']) }}">
+            <a class="menu-link {{request()->is('student-manager') ? 'active' : '' }}" href="{{ route('studentManager.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
                     <i class="ki-outline ki-category fs-2"></i>

@@ -44,72 +44,20 @@
                             return response.data;
                         },
                     },
-                    columns: [{
+                    columns: [
+                        {
                             data: 'id',
                             render: function(data, type, row) {
                                 return '';
                             }
                         },
-                        {
-                            data: 'student_code'
-                        },
-                        {
-                            data: 'full_name'
-                        },
-                        {
-                            data: 'lop_name'
-                        },
-                        {
-                            data: 'type',
-                            render: function(data, type, row) {
-                                if (data == 0)
-                                    return "Đơn xin rút hồ sơ"
-                                if (data == 1)
-                                    return "Đơn xin miễn giảm học phí"
-                                if (data == 2)
-                                    return "Đơn xin trợ cấp xã hội"
-                                if (data == 3)
-                                    return "Đơn xin chế độ chính sách"
-                                return ""
-                            }
-                        },
-                        {
-                            data: 'status',
-                            render: function(data, type, row) {
-                                if (data == -1) {
-                                    return "GV chủ nhiệm từ chối"
-                                }
-                                if (data == -2) {
-                                    return "Khoa từ chối"
-                                }
-                                if (data == 0) {
-                                    return "Chưa được xác nhận"
-                                }
-                                if (data == 1) {
-                                    return "GV chủ nhiệm đã xác nhận";
-                                }
-                                if (data == 2) {
-                                    return "Khoa đã xác nhận";
-                                }
-                                if (data == 3) {
-                                    return "CTHSSV đã xác nhận";
-                                }
-                                if (data == 4) {
-                                    return "Lãnh đạo CTHSSV đã xác nhận";
-                                }
-                                if (data == 5) {
-                                    return "Lãnh đạo trường đã xác nhận";
-                                }
-                                return '';
-                            }
-                        },
+                        @include('common.columns_ho_so')
                         {
                             data: 'id',
                             render: function(data, type, row) {
-                                role = {{ Auth::user()->role }} - 2;
                                 var dataRes = `<div class="d-flex flex-row">`;
-                                if (row['status'] == 2) {
-                                    dataRes += `<div onClick="xacnhan(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
+                                if (row['status'] == 2 || row['status'] == -3 || row['status'] == 3) {
+                                    dataRes += `<div onClick="tiepnhanhs(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                     </div>
@@ -119,7 +67,28 @@
                                         <span class="path3"></span>
                                     </div>`;
                                 }
-
+                                if ( row['status'] == 3 || row['status'] == -4 ||row['status'] == 4) {
+                                    dataRes += `<div onClick="tuchoihs(${data})" class="ki-duotone ki-minus-square fs-2x cursor-pointer text-danger">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </div>`;
+                                }
+                                if ( (row['status'] == 5 || row['status'] == 3 || row['status'] == -4)) {
+                                    dataRes += `
+                                    <div onClick="duyethoso(${data})" class="ki-duotone ki-file-added fs-2x cursor-pointer text-primary">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                    </div>`;
+                                }
+                                if ( (row['status'] == 3 || row['status'] == -4) && row['type'] == '0') {
+                                    dataRes += `
+                                    <div onClick="xacnhankinhphi(${data})" class="ki-duotone ki-tablet-ok fs-2x cursor-pointer text-primary">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                    </div>`;
+                                }
                                 dataRes += `
                                     <div onClick="tientrinh(${data})" class="ki-duotone ki-information-2 fs-2x cursor-pointer text-warning">
                                         <span class="path1"></span>

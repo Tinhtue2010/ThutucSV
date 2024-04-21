@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ __('Yêu cầu bổ sung hồ sơ') }}</h5>
+                <h5 class="modal-title">{{ __('Từ chối hồ sơ') }}</h5>
                 <div class="btn btn-sm btn-icon btn-active-color-primary close" data-bs-dismiss="modal">
                     <i class="ki-outline ki-cross fs-1"></i>
                 </div>
@@ -15,31 +15,7 @@
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-start flex-column fs-6 fw-semibold mb-2">
-                                <span>Bổ sung thêm các giấy tờ thủ tục sau</span>
-                            </label>
-                            <!--end::Label-->
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="bosunggiayto"></textarea>
-                        </div>
-                        <div class="d-flex flex-column mb-8 fv-row">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-start flex-column fs-6 fw-semibold mb-2">
-                                <span>Kê khai lại các giấy tờ thủ tục sau</span>
-                            </label>
-                            <!--end::Label-->
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="kekhailaigiayto"></textarea>
-                        </div>
-                        <div class="d-flex flex-column mb-8 fv-row">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-start flex-column fs-6 fw-semibold mb-2">
-                                <span>Hướng dẫn khác</span>
-                            </label>
-                            <!--end::Label-->
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="huongdankhac"></textarea>
-                        </div>
-                        <div class="d-flex flex-column mb-8 fv-row">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-start flex-column fs-6 fw-semibold mb-2">
-                                <span>Lý do</span>
+                                <span>Lý do không tiếp nhận</span>
                             </label>
                             <!--end::Label-->
                             <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="lydo"></textarea>
@@ -92,10 +68,10 @@
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
-                        url: "{{ route('PhongDaoTao.bosunghs') }}",
+                        url: "{{ route('PhongDaoTao.tuchoihs') }}",
                         data: form.serialize(),
                     }).then((response) => {
-                        if($('[name="button_clicked"]').val() == 'xem_truoc')
+                        if($('#kt_modal_{{ $target }}_target .button_clicked').val() == 'xem_truoc')
                         {
                             window.open("{{route('phieu.index')}}/"+response.data, '_blank');
                         }
@@ -118,7 +94,7 @@
         });
 
 
-        function bosunghs(data) {
+        function tuchoihs(data) {
             modalEl = document.querySelector('#kt_modal_{{ $target }}_target');
             if (!modalEl) {
                 return;

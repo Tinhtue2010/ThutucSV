@@ -140,7 +140,11 @@
     @include('phong_dao_tao.table')
     @include('phong_dao_tao.xacnhan',['target'=>'xacnhan'])
     @include('phong_dao_tao.khongxacnhan',['target'=>'khongxacnhan'])
-    @include('phong_dao_tao.chitiet',['target'=>'chitiet'])
-    @include('phong_dao_tao.tientrinh',['target'=>'tientrinh'])
+    @include('giao_vien.chitiet',['target'=>'chitiet'])
+    @include('giao_vien.tientrinh',['target'=>'tientrinh'])
     @include('phong_dao_tao.bosunghs',['target'=>'bosunghs'])
+    @include('phong_dao_tao.tiepnhanhs',['target'=>'tiepnhanhs'])
+    @include('phong_dao_tao.tuchoihs',['target'=>'tuchoihs'])
+    @include('phong_dao_tao.xacnhankinhphi',['target'=>'xacnhankinhphi'])
+    @include('phong_dao_tao.duyethoso',['target'=>'duyethoso'])
 @endsection

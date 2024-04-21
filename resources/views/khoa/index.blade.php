@@ -140,6 +140,6 @@
     @include('khoa.table')
     @include('khoa.xacnhan',['target'=>'xacnhan'])
     @include('khoa.khongxacnhan',['target'=>'khongxacnhan'])
-    @include('khoa.chitiet',['target'=>'chitiet'])
-    @include('khoa.tientrinh',['target'=>'tientrinh'])
+    @include('giao_vien.chitiet',['target'=>'chitiet'])
+    @include('giao_vien.tientrinh',['target'=>'tientrinh'])
 @endsection

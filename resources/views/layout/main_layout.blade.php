@@ -69,7 +69,7 @@
                             <i class="ki-outline ki-abstract-14 fs-2"></i>
                         </div>
                         <!--begin::Logo image-->
-                        <a href="../../demo38/dist/index.html">
+                        <a href="/">
                             <img alt="Logo" src="{{ asset('assets/media/logos/demo38-small.svg') }}"
                                 class="h-30px" />
                         </a>
@@ -262,7 +262,7 @@
                     <div class="app-sidebar-header d-flex flex-stack d-none d-lg-flex pt-8 pb-2"
                         id="kt_app_sidebar_header">
                         <!--begin::Logo-->
-                        <a href="../../demo38/dist/index.html" class="app-sidebar-logo m-auto">
+                        <a href="/" class="app-sidebar-logo m-auto">
                             <img alt="Logo" src="{{ asset('assets/custom/Logo.png') }}"
                                 class="h-40px d-none d-sm-inline app-sidebar-logo-default theme-light-show" />
                             <img alt="Logo" src="{{ asset('assets/custom/Logo.png') }}"

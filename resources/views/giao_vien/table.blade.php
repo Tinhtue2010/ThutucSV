@@ -50,59 +50,7 @@
                                 return '';
                             }
                         },
-                        {
-                            data: 'student_code'
-                        },
-                        {
-                            data: 'full_name'
-                        },
-                        {
-                            data: 'lop_name'
-                        },
-                        {
-                            data: 'type',
-                            render: function(data, type, row) {
-                                if (data == 0)
-                                    return "Đơn xin rút hồ sơ"
-                                if (data == 1)
-                                    return "Đơn xin miễn giảm học phí"
-                                if (data == 2)
-                                    return "Đơn xin trợ cấp xã hội"
-                                if (data == 3)
-                                    return "Đơn xin chế độ chính sách"
-                                return ""
-                            }
-                        },
-                        {
-                            data: 'status',
-                            render: function(data, type, row) {
-                                if (data == -1) {
-                                    return "GV chủ nhiệm từ chối"
-                                }
-                                if (data == -2) {
-                                    return "Khoa từ chối"
-                                }
-                                if (data == 0) {
-                                    return "Chưa được xác nhận"
-                                }
-                                if (data == 1) {
-                                    return "GV chủ nhiệm đã xác nhận";
-                                }
-                                if (data == 2) {
-                                    return "Khoa đã xác nhận";
-                                }
-                                if (data == 3) {
-                                    return "CTHSSV đã xác nhận";
-                                }
-                                if (data == 4) {
-                                    return "Lãnh đạo CTHSSV đã xác nhận";
-                                }
-                                if (data == 5) {
-                                    return "Lãnh đạo trường đã xác nhận";
-                                }
-                                return '';
-                            }
-                        },
+                        @include('common.columns_ho_so')
                         {
                             data: 'id',
                             render: function(data, type, row) {

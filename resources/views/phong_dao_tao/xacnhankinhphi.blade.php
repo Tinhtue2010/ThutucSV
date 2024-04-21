@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ __('Từ chối đơn') }}</h5>
+                <h5 class="modal-title">{{ __('Yêu cầu xác nhận kinh phí') }}</h5>
                 <div class="btn btn-sm btn-icon btn-active-color-primary close" data-bs-dismiss="modal">
                     <i class="ki-outline ki-cross fs-1"></i>
                 </div>
@@ -15,20 +15,18 @@
                         <input type="text" name="id" class="d-none">
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
-                            <label class="d-flex align-items-start flex-column fs-6 fw-semibold mb-2">
-                                <span class="required">Nội dung từ chối đơn</span>
-                                <span class="text-warning">Lưu ý: nội dung sẽ được thông báo cho sinh viên</span>
+                            <label class="d-flex align-items-start fs-6 fw-semibold mb-2 flex-column">
+                                <span class="">Bạn muốn chuyển đơn đến phòng kế hoạch tài chính để xác nhận kinh phí chứ</span>
                             </label>
                             <!--end::Label-->
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="note">Đơn của bạn đã bị từ chối bởi giáo viên chủ nhiệm</textarea>
                         </div>
                         
                     </div>
                     <div class="card-footer">
                         <button type="submit"
-                                class="btn btn-success mr-2">{{ __('Cập nhật') }}</button>
+                                class="btn btn-success mr-2">{{ __('Xác nhận kinh phí') }}</button>
                         <button type="reset"
-                                class="btn btn-secondary">{{ __('Nhập lại') }}</button>
+                                class="btn btn-secondary">{{ __('Đóng') }}</button>
                     </div>
                 </form>
             </div>
@@ -54,7 +52,10 @@
                 }
             }
         );
-
+        
+        $('#form_{{$target}} .btn-secondary').click(function(){
+            model{{$target}}.hide();
+        })
         $('#form_{{$target}}').submit(function (e) {
             e.preventDefault();
             let form = $(this);
@@ -62,11 +63,11 @@
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
-                        url: "{{ route('GiaoVien.khongxacnhan') }}",
+                        url: "{{ route('PhongDaoTao.xacnhankinhphi') }}",
                         data: form.serialize(),
                     }).then((response) => {
                         mess_success('Thông báo',
-                            "Hủy đơn thành công")
+                            "Thành công")
                         $(this).trigger("reset");
                         model{{$target}}.hide();
                         Datatable.loadData();
@@ -84,7 +85,7 @@
         });
 
 
-        function khongxacnhan(data) {
+        function xacnhankinhphi(data) {
             modalEl = document.querySelector('#kt_modal_{{$target}}_target');
             if (!modalEl) {
                 return;

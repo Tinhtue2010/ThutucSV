@@ -11,6 +11,7 @@ use App\Http\Controllers\HoSo\PhongDaoTaoController;
 use App\Http\Controllers\KhoaManagerController;
 use App\Http\Controllers\MienGiamHPController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PhieuController;
 use App\Http\Controllers\RutHoSo\GiaoVienRHSController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentManagerController;
@@ -41,8 +42,7 @@ Route::group(['middleware' => ['auth']], function () {
         if (Role(1)) {
             return redirect()->route('student.info');
         }
-        if(Role(0))
-        {
+        if (Role(0)) {
             return redirect()->route('approve.index');
         }
         if (Role(2) || Role(3)) {
@@ -62,60 +62,46 @@ Route::group(['middleware' => ['auth']], function () {
         });
 
         Route::name('StopStudy.')->prefix('xin-thoi-hoc')->group(function () {
-           Route::get('/', [StopStudyController::class, 'index'])->name('index');
-           Route::post('/create_view_pdf', [StopStudyController::class,'CreateViewPdf'])->name('CreateViewPdf');
-           Route::get('/view_pdf/{id}', [StopStudyController::class,'viewPdf'])->name('viewPdf');
-           Route::get('/view_demo_pdf', [StopStudyController::class,'viewDemoPdf'])->name('viewDemoPdf');
+            Route::get('/', [StopStudyController::class, 'index'])->name('index');
+            Route::post('/create_view_pdf', [StopStudyController::class, 'CreateViewPdf'])->name('CreateViewPdf');
+            Route::get('/view_pdf/{id}', [StopStudyController::class, 'viewPdf'])->name('viewPdf');
+            Route::get('/view_demo_pdf', [StopStudyController::class, 'viewDemoPdf'])->name('viewDemoPdf');
         });
 
         Route::name('MienGiamHp.')->prefix('mien-giam-hp')->group(function () {
             Route::get('/', [MienGiamHPController::class, 'index'])->name('index');
-            Route::post('/create_view_pdf', [MienGiamHPController::class,'CreateViewPdf'])->name('CreateViewPdf');
-            Route::get('/view_pdf/{id}', [MienGiamHPController::class,'viewPdf'])->name('viewPdf');
-            Route::get('/view_demo_pdf', [MienGiamHPController::class,'viewDemoPdf'])->name('viewDemoPdf');
-         });
+            Route::post('/create_view_pdf', [MienGiamHPController::class, 'CreateViewPdf'])->name('CreateViewPdf');
+            Route::get('/view_pdf/{id}', [MienGiamHPController::class, 'viewPdf'])->name('viewPdf');
+            Route::get('/view_demo_pdf', [MienGiamHPController::class, 'viewDemoPdf'])->name('viewDemoPdf');
+        });
 
-         Route::name('TroCapXH.')->prefix('tro-cap-xh')->group(function () {
+        Route::name('TroCapXH.')->prefix('tro-cap-xh')->group(function () {
             Route::get('/', [TroCapXHController::class, 'index'])->name('index');
-            Route::post('/create_view_pdf', [TroCapXHController::class,'CreateViewPdf'])->name('CreateViewPdf');
-            Route::get('/view_pdf/{id}', [TroCapXHController::class,'viewPdf'])->name('viewPdf');
-            Route::get('/view_demo_pdf', [TroCapXHController::class,'viewDemoPdf'])->name('viewDemoPdf');
-         });
-         Route::name('CheDoChinhSach.')->prefix('che-do-chinh-sach')->group(function () {
+            Route::post('/create_view_pdf', [TroCapXHController::class, 'CreateViewPdf'])->name('CreateViewPdf');
+            Route::get('/view_pdf/{id}', [TroCapXHController::class, 'viewPdf'])->name('viewPdf');
+            Route::get('/view_demo_pdf', [TroCapXHController::class, 'viewDemoPdf'])->name('viewDemoPdf');
+        });
+        Route::name('CheDoChinhSach.')->prefix('che-do-chinh-sach')->group(function () {
             Route::get('/', [CheDoChinhSachController::class, 'index'])->name('index');
-            Route::post('/create_view_pdf', [CheDoChinhSachController::class,'CreateViewPdf'])->name('CreateViewPdf');
-            Route::get('/view_pdf/{id}', [CheDoChinhSachController::class,'viewPdf'])->name('viewPdf');
-            Route::get('/view_demo_pdf', [CheDoChinhSachController::class,'viewDemoPdf'])->name('viewDemoPdf');
-         });
-    });
-
-    //tất cả được vào trừ sinh viên
-    Route::middleware('role:notStudent')->group(function () {
-        Route::name('approve.')->prefix('approve')->group(function () {
-            Route::get('/', [ApproveController::class, 'index'])->name('index');
-            Route::get('get-data', [ApproveController::class, 'getData'])->name('getData');
-            Route::get('xacnhan/{id?}', [ApproveController::class, 'xacnhan'])->name('xacnhan');
-            Route::get('khongxacnhan/{id?}', [ApproveController::class, 'khongxacnhan'])->name('khongxacnhan');
-            Route::get('/view_pdf/{id?}', [ApproveController::class,'viewPdf'])->name('viewPdf');
+            Route::post('/create_view_pdf', [CheDoChinhSachController::class, 'CreateViewPdf'])->name('CreateViewPdf');
+            Route::get('/view_pdf/{id}', [CheDoChinhSachController::class, 'viewPdf'])->name('viewPdf');
+            Route::get('/view_demo_pdf', [CheDoChinhSachController::class, 'viewDemoPdf'])->name('viewDemoPdf');
         });
     });
+
 
     Route::middleware('role:giaoVien')->group(function () {
         Route::name('GiaoVien.')->prefix('giao-vien')->group(function () {
             Route::get('/', [GiaoVienController::class, 'index'])->name('index');
             Route::get('get-data', [GiaoVienController::class, 'getData'])->name('getData');
-            Route::get('get-data/{id?}', [GiaoVienController::class, 'getDataChild'])->name('getDataChild');
             Route::post('xacnhan', [GiaoVienController::class, 'xacnhan'])->name('xacnhan');
             Route::post('khongxacnhan', [GiaoVienController::class, 'khongxacnhan'])->name('khongxacnhan');
-            Route::get('/view_pdf/{id?}', [GiaoVienController::class,'viewPdf'])->name('viewPdf');
         });
         Route::name('Khoa.')->prefix('khoa')->group(function () {
             Route::get('/', [KhoaController::class, 'index'])->name('index');
             Route::get('get-data', [KhoaController::class, 'getData'])->name('getData');
-            Route::get('get-data/{id?}', [KhoaController::class, 'getDataChild'])->name('getDataChild');
             Route::post('xacnhan', [KhoaController::class, 'xacnhan'])->name('xacnhan');
             Route::post('khongxacnhan', [KhoaController::class, 'khongxacnhan'])->name('khongxacnhan');
-            Route::get('/view_pdf/{id?}', [KhoaController::class,'viewPdf'])->name('viewPdf');
         });
     });
 
@@ -123,10 +109,20 @@ Route::group(['middleware' => ['auth']], function () {
         Route::name('PhongDaoTao.')->prefix('phong-dao-tao')->group(function () {
             Route::get('/', [PhongDaoTaoController::class, 'index'])->name('index');
             Route::get('get-data', [PhongDaoTaoController::class, 'getData'])->name('getData');
-            Route::get('get-data/{id?}', [PhongDaoTaoController::class, 'getDataChild'])->name('getDataChild');
             Route::post('xacnhan', [PhongDaoTaoController::class, 'xacnhan'])->name('xacnhan');
+            Route::post('bosunghs', [PhongDaoTaoController::class, 'bosunghs'])->name('bosunghs');
+            Route::get('getbosunghs/{id?}', [PhongDaoTaoController::class, 'getbosunghs'])->name('getbosunghs');
+            Route::post('tiepnhanhs', [PhongDaoTaoController::class, 'tiepnhanhs'])->name('tiepnhanhs');
+            Route::get('gettiepnhanhs/{id?}', [PhongDaoTaoController::class, 'gettiepnhanhs'])->name('gettiepnhanhs');
+            Route::post('tuchoihs', [PhongDaoTaoController::class, 'tuchoihs'])->name('tuchoihs');
+            Route::post('xacnhankinhphi', [PhongDaoTaoController::class, 'xacnhankinhphi'])->name('xacnhankinhphi');
             Route::post('khongxacnhan', [PhongDaoTaoController::class, 'khongxacnhan'])->name('khongxacnhan');
-            Route::get('/view_pdf/{id?}', [PhongDaoTaoController::class,'viewPdf'])->name('viewPdf');
+        });
+    });
+    //tất cả được vào trừ sinh viên
+    Route::middleware('role:notStudent')->group(function () {
+        Route::name('GiaoVien.')->prefix('giao-vien')->group(function () {
+            Route::get('get-data-child/{id?}', [GiaoVienController::class, 'getDataChild'])->name('getDataChild');
         });
     });
     // quyền admin hoặc là quyền bên phòng đào tạo được vào
@@ -170,6 +166,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::name('notification.')->prefix('notification')->group(function () {
         Route::get('/', [NotificationController::class, 'index'])->name('index');
+    });
+    Route::name('phieu.')->prefix('phieu')->group(function () {
+        Route::get('{id?}', [PhieuController::class, 'index'])->name('index');
+        Route::get('get-data/{id?}', [PhieuController::class, 'getData'])->name('getData');
     });
 });
 

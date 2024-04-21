@@ -129,40 +129,8 @@ class GiaoVienController extends Controller
         }
     }
 
-    function viewPdf($id)
-    {
-        try {
-            $stopStudy =  StopStudy::find($id);
-            if ($stopStudy) {
 
-                $data = Phieu::where('id', $stopStudy->phieu_id)->first();
-                if($stopStudy->type == 0)
-                {
-                    return view('document.thoi_hoc', ['data' => json_decode($data->content, true)]);
-                }
-                if($stopStudy->type == 1)
-                {
-                    return view('document.miengiamhp', ['data' => json_decode($data->content, true)]);
-                }
-                if($stopStudy->type == 2)
-                {
-                    return view('document.trocapxahoi', ['data' => json_decode($data->content, true)]);
-                }
-                if($stopStudy->type == 3)
-                {
-                    return view('document.chinhsach_qn', ['data' => json_decode($data->content, true)]);
-                }
-                abort(404);
-                
-            } else {
-                abort(404);
-            }
-        } catch (\Throwable $th) {
-            abort(404);
-        }
-    }
-
-    function getDataChild($id)
+    function getDataChild($id = null)
     {
         try {
             $don = StopStudy::where('id', $id)->first();
@@ -170,8 +138,9 @@ class GiaoVienController extends Controller
             ->leftJoin('teachers', 'teachers.id', '=', 'stop_studies.teacher_id')
             ->select('stop_studies.*','teachers.full_name','teachers.chuc_danh')
             ->orderBy('created_at', 'desc')->get();
-            $data[] = json_decode($don->files);
+            $data[] = json_decode($don->files ?? '[]');
             $data[] = $don_chill;
+            $data[] = $don->phieu_id;
             return $data;
         } catch (QueryException $e) {
             abort(404);
