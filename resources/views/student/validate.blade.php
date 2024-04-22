@@ -20,7 +20,7 @@
                     message: '{{ __('Vui lòng không để trống mục này') }}'
                 },
                 stringLength: {
-                    max: 9,
+                    min: 9,
                     max: 12,
                     message: "{{ __('Không được vượt quá 12 ký tự') }}"
                 },
