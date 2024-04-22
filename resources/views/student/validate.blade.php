@@ -45,8 +45,9 @@
                     message: '{{ __('Vui lòng không để trống mục này') }}'
                 },
                 stringLength: {
-                    max: 14,
-                    message: "{{ __('Không được vượt quá 14 ký tự') }}"
+                    min: 12,
+                    max: 12,
+                    message: "{{ __('Vui lòng nhập số thẻ căn cước hợp lệ') }}"
                 },
                 regexp: {
                     regexp: /^[0-9]+$/,
