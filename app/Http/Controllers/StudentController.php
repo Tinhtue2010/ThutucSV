@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 class StudentController extends Controller
 {
     function index() {
-        dd("oke");
         $user = Auth::user();
         $student = Student::leftJoin('lops','students.lop_id','=','lops.id')
         ->leftJoin('khoas','lops.khoa_id','=','khoas.id')
