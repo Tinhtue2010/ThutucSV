@@ -45,14 +45,6 @@
                                 <p class="m-auto fw-medium">: Lập phiếu từ chối giải quyết hồ sơ</p>
                             </div>
                             <div class="d-flex flex-row me-3">
-                                <div class="ki-duotone ki-tablet-ok fs-2x cursor-pointer text-primary">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                    <span class="path3"></span>
-                                </div>
-                                <p class="m-auto fw-medium">: Yêu cầu xác nhận kinh phí</p>
-                            </div>
-                            <div class="d-flex flex-row me-3">
                                 <div class="ki-duotone ki-information-2 fs-2x  text-warning">
                                     <span class="path1"></span>
                                     <span class="path2"></span>

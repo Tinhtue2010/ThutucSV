@@ -60,7 +60,14 @@ class StopStudyController extends Controller
 
             $check = StopStudy::where('student_id', $user->student_id)->where('type',0)->first();
             if ($check) {
+                if(isset($check->files))
+                {
+                    $this->deleteFiles(json_decode($check->files));
+                }
+                $check->files = json_encode($this->uploadListFile($request,'files','rut_ho_so'));
+                
                 $check->note = $request->data;
+                $check->is_update = 1;
                 $check->update();
                 $phieu = Phieu::where('id', $check->phieu_id)->first();
                 $phieu->student_id = $user->student_id;

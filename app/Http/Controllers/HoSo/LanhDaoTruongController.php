@@ -30,8 +30,6 @@ class LanhDaoTruongController extends Controller
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
             ->select('stop_studies.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name');
 
-        $lopIds = Lop::where('teacher_id', $user->teacher_id)->pluck('id');
-        $query = $query->whereIn('stop_studies.lop_id', $lopIds);
 
         if (isset($request->year)) {
             $query->whereYear('stop_studies.created_at', $request->year);

@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ __('Yêu cầu bổ sung hồ sơ') }}</h5>
+                <h5 class="modal-title">{{ __('Tiếp nhận hồ sơ') }}</h5>
                 <div class="btn btn-sm btn-icon btn-active-color-primary close" data-bs-dismiss="modal">
                     <i class="ki-outline ki-cross fs-1"></i>
                 </div>
@@ -238,22 +238,30 @@
             useCurrent: false
         });
 
-        //using event listeners
-        linkedPicker1Element.addEventListener(tempusDominus.Namespace.events.change, (e) => {
-            linked2.updateOptions({
-                restrictions: {
-                    minDate: e.detail.date,
-                },
-            });
-        });
+// Sử dụng event listeners
+linkedPicker1Element.addEventListener(tempusDominus.Namespace.events.change, (e) => {
+    const selectedDate = e.detail.date;
+    const maxDate = new Date(selectedDate);
+    maxDate.setDate(maxDate.getDate() + 7); // Thêm 7 ngày
+    linked2.updateOptions({
+        restrictions: {
+            minDate: selectedDate,
+            maxDate: maxDate
+        }
+    });
+});
 
-        //using subscribe method
-        const subscription = linked2.subscribe(tempusDominus.Namespace.events.change, (e) => {
-            linked1.updateOptions({
-                restrictions: {
-                    maxDate: e.date,
-                },
-            });
-        });
+// Sử dụng phương thức subscribe
+const subscription = linked2.subscribe(tempusDominus.Namespace.events.change, (e) => {
+    const selectedDate = e.date;
+    const minDate = new Date(selectedDate);
+    minDate.setDate(minDate.getDate() - 7); // Trừ 7 ngày
+    linked1.updateOptions({
+        restrictions: {
+            minDate: minDate,
+            maxDate: selectedDate
+        }
+    });
+});
     </script>
 @endpush

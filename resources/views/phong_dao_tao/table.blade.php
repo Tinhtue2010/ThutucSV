@@ -44,46 +44,39 @@
                             return response.data;
                         },
                     },
-                    columns: [
-                        {
+                    columns: [{
                             data: 'id',
                             render: function(data, type, row) {
                                 return '';
                             }
                         },
-                        @include('common.columns_ho_so')
-                        {
+                        @include('common.columns_ho_so') {
                             data: 'id',
                             render: function(data, type, row) {
                                 var dataRes = `<div class="d-flex flex-row">`;
-                                if (row['status'] == 2 || row['status'] == -3 || row['status'] == 3) {
+                                if ((row['status'] == 2 || row['status'] == -3 || row['status'] == 3) && row['is_pay'] != 2) {
                                     dataRes += `<div onClick="tiepnhanhs(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
-                                    </div>
+                                    </div>`;
+                                }
+                                if (row['status'] == 2 || row['status'] == -3 || row['status'] == 3) {
+                                    dataRes += `
                                     <div onClick="bosunghs(${data})" class="ki-duotone ki-update-folder fs-2x cursor-pointer text-danger">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                         <span class="path3"></span>
                                     </div>`;
                                 }
-                                if ( row['status'] == 3 || row['status'] == -4 ||row['status'] == 4) {
+                                if (row['status'] == 3 || row['status'] == -4 || row['status'] == 4) {
                                     dataRes += `<div onClick="tuchoihs(${data})" class="ki-duotone ki-minus-square fs-2x cursor-pointer text-danger">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                     </div>`;
                                 }
-                                if ( (row['status'] == 5 || row['status'] == 3 || row['status'] == -4)) {
+                                if ((row['status'] == 5 || row['status'] == 3 || row['status'] == -4)) {
                                     dataRes += `
                                     <div onClick="duyethoso(${data})" class="ki-duotone ki-file-added fs-2x cursor-pointer text-primary">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                    </div>`;
-                                }
-                                if ( (row['status'] == 3 || row['status'] == -4) && row['type'] == '0') {
-                                    dataRes += `
-                                    <div onClick="xacnhankinhphi(${data})" class="ki-duotone ki-tablet-ok fs-2x cursor-pointer text-primary">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                         <span class="path3"></span>

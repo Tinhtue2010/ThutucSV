@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ __('Từ chối đơn') }}</h5>
+                <h5 class="modal-title">{{ __('Yêu cầu thanh toán') }}</h5>
                 <div class="btn btn-sm btn-icon btn-active-color-primary close" data-bs-dismiss="modal">
                     <i class="ki-outline ki-cross fs-1"></i>
                 </div>
@@ -16,17 +16,17 @@
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-start flex-column fs-6 fw-semibold mb-2">
-                                <span class="required">Nội dung</span>
-                                <span class="text-warning">Lưu ý: nội dung sẽ được thông báo cho sinh viên</span>
+                                <span class="required">Nội dung yêu cầu thanh toán</span>
+                                <span class="text-warning">Lưu ý: nội dung này sẽ tự động được thêm vào phiếu hướng dẫn bổ sung hoàn thiện hồ sơ</span>
                             </label>
                             <!--end::Label-->
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="note">Phòng kế hoạch tài chính yêu cầu liên hệ thanh toán các khoản phí</textarea>
+                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="note"></textarea>
                         </div>
                         
                     </div>
                     <div class="card-footer">
                         <button type="submit"
-                                class="btn btn-success mr-2">{{ __('Cập nhật') }}</button>
+                                class="btn btn-success mr-2">{{ __('Yêu cầu thanh toán') }}</button>
                         <button type="reset"
                                 class="btn btn-secondary">{{ __('Nhập lại') }}</button>
                     </div>
@@ -62,7 +62,7 @@
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
-                        url: "{{ route('LanhDaoPhongDaoTao.khongxacnhan') }}",
+                        url: "{{ route('KeHoachTaiChinh.khongxacnhan') }}",
                         data: form.serialize(),
                     }).then((response) => {
                         mess_success('Thông báo',

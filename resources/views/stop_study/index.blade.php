@@ -17,24 +17,37 @@
                             $noti_title = 'Cảnh báo';
                         }
                     @endphp
-                    <div class="d-flex align-items-center bg-light-{{ $noti_class_name }} rounded p-5 mb-7">
-                        <i class="ki-outline ki-snapchat text-{{ $noti_class_name }} fs-1 me-5"></i>
-                        <div class="flex-grow-1 me-2">
-                            <a href="#" class=" fw-bold text-gray-800 text-hover-primary fs-4">{{ $noti_title }}</a>
-                            <span class="fs-5 fw-semibold d-block">
-                                @if ($don_parent->status == 0)
-                                    {{ __('Đơn của bạn đã được gửi đi hãy chờ thông báo tiếp theo') }}
-                                @else
-                                    {{ $don->note }}
-                                @endif
-
-                            </span>
+                    @if ($don_parent->is_update = 1)
+                        <div class="d-flex align-items-center bg-light-primary rounded p-5 mb-7">
+                            <i class="ki-outline ki-snapchat text-primary fs-1 me-5"></i>
+                            <div class="flex-grow-1 me-2">
+                                <a href="#" class=" fw-bold text-gray-800 text-hover-primary fs-4">Thông báo</a>
+                                <span class="fs-5 fw-semibold d-block">
+                                    Bạn đã bổ sung hồ sơ thành công vui lòng chờ thông báo tiếp theo
+                                </span>
+                            </div>
                         </div>
-                        @isset($don->phieu_id)
-                            <a href="{{ route('phieu.index',['id'=>$don->phieu_id]) }}" target="_blank" class="btn btn-primary">Xem phiếu</a>
-                        @endisset
+                    @else
+                        <div class="d-flex align-items-center bg-light-{{ $noti_class_name }} rounded p-5 mb-7">
+                            <i class="ki-outline ki-snapchat text-{{ $noti_class_name }} fs-1 me-5"></i>
+                            <div class="flex-grow-1 me-2">
+                                <a href="#" class=" fw-bold text-gray-800 text-hover-primary fs-4">{{ $noti_title }}</a>
+                                <span class="fs-5 fw-semibold d-block">
+                                    @if ($don_parent->status == 0)
+                                        {{ __('Đơn của bạn đã được gửi đi hãy chờ thông báo tiếp theo') }}
+                                    @else
+                                        {{ $don->note }}
+                                    @endif
 
-                    </div>
+                                </span>
+                            </div>
+                            @isset($don->phieu_id)
+                                <a href="{{ route('phieu.index', ['id' => $don->phieu_id]) }}" target="_blank" class="btn btn-primary">Xem phiếu</a>
+                            @endisset
+
+                        </div>
+                    @endif
+
                 @endisset
 
                 <div class="card card-flush p-5">
@@ -51,17 +64,32 @@
                                 <span class="">Lý do rút hồ sơ</span>
                             </label>
                             <!--end::Label-->
-                            <textarea @if (isset($don_parent)) @if ($don_parent->status > 0)
+                            <textarea @if (isset($don_parent)) @if ($don_parent->status != 0)
                                 readonly @endif @endif class="form-control form-control-solid h-150px" name="data">{{ $don_parent->note ?? '' }}</textarea>
+                        </div>
+                        <div class="d-flex flex-column mb-8 fv-row">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                <span class="">Hồ sơ minh chứng (chỉ nhận file pdf)</span>
+                            </label>
+                            <!--end::Label-->
+                            <input type="file" class="form-control form-control-solid" name="files[]" accept="application/pdf" />
                         </div>
                         <input type="hidden" id="button_clicked" name="button_clicked" value="">
                         <div class="d-flex w-100">
 
                             @if (isset($don_parent))
                                 @if ($don_parent->status <= 0)
-                                    <button type="submit" class="btn btn-success me-2">
-                                        {{ __('Sửa đơn xin rút hồ sơ') }}
-                                    </button>
+                                    @if ($don_parent->is_update == 1)
+                                        <button type="submit" class="btn btn-success me-2">
+                                            {{ __('Sửa hồ sơ bổ sung') }}
+                                        </button>
+                                    @else
+                                        <button type="submit" class="btn btn-success me-2">
+                                            {{ __('Bổ sung hồ sơ') }}
+                                        </button>
+                                    @endif
+
                                 @endif
                             @else
                                 <button type="submit" class="btn btn-success me-2">
@@ -122,13 +150,17 @@
         $('#form_create').submit(function(e) {
             e.preventDefault();
 
-            let form = $(this);
+            const form = document.querySelector("#form_create");
+            const formData = new FormData(form);
             validation_create.validate().then(function(status) {
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
                         url: "{{ route('StopStudy.CreateViewPdf') }}",
-                        data: form.serialize(),
+                        data: formData,
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
                     }).then((response) => {
                         if ($('#button_clicked').val() == 'xem_truoc') {
                             window.open("{{ route('StopStudy.viewDemoPdf') }}", "_blank");

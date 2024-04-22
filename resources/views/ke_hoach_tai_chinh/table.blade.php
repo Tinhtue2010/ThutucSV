@@ -56,18 +56,18 @@
                             render: function(data, type, row) {
                                 role = {{ Auth::user()->role }} - 2;
                                 var dataRes = `<div class="d-flex flex-row">`;
-                                if (row['status'] == 4 || row['status'] == 5) {
-                                    dataRes += `<div onClick="khongxacnhan(${data})" class="ki-duotone ki-minus-square fs-2x cursor-pointer text-danger">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                    </div>`;
-                                }
-                                if (row['status'] == 4 || row['status'] == -5) {
-                                    dataRes += `<div onClick="xacnhan(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </div>`;
+                                if (row['status'] == 2 || row['status'] == -3) {
+                                    dataRes += `
+                                        <div onClick="xacnhan(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </div>
+                                        <div onClick="khongxacnhan(${data})" class="ki-duotone ki-minus-square fs-2x cursor-pointer text-danger">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                            <span class="path3"></span>
+                                        </div>
+                                        `;
                                 }
 
                                 dataRes += `
