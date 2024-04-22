@@ -84,6 +84,7 @@ class StopStudyController extends Controller
                 $phieu->save();
 
                 $query = new StopStudy();
+                $query->files = json_encode($this->uploadListFile($request,'files','rut_ho_so'));
                 $query->student_id = $user->student_id;
                 $query->round = 1;
                 $query->note = $request->data;
