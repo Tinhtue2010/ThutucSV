@@ -22,7 +22,7 @@
                 stringLength: {
                     min: 9,
                     max: 12,
-                    message: "{{ __('Không được vượt quá 12 ký tự') }}"
+                    message: "{{ __('Số điện thoại không hợp lệ') }}"
                 },
                 regexp: {
                     regexp: /^[0-9]+$/,
