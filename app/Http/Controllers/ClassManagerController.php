@@ -68,7 +68,8 @@
                     'name',
                     'nganh',
                     'khoa_id',
-                    'teacher_id'
+                    'teacher_id',
+                    'hocphi'
                 ]));
 
                 return true;
@@ -91,7 +92,8 @@
                 'name',
                 'nganh',
                 'khoa_id',
-                'teacher_id'
+                'teacher_id',
+                'hocphi'
             ]));
         }
     }

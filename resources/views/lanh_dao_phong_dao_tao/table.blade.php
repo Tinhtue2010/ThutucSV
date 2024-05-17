@@ -55,20 +55,21 @@
                             render: function(data, type, row) {
                                 role = {{ Auth::user()->role }} - 2;
                                 var dataRes = `<div class="d-flex flex-row">`;
-                                if (row['status'] == 6 || row['status'] == -7) {
-                                    dataRes += `<div onClick="xacnhan(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
+                                if (row['type'] == 0) {
+                                    if (row['status'] == 4 || row['status'] == -5 || row['status'] == 5) {
+                                        dataRes += `<div onClick="xacnhan(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                     </div>`;
-                                }
-                                if (row['status'] == 6 || row['status'] == 7) {
-                                    dataRes += `<div onClick="tuchoihs(${data})" class="ki-duotone ki-minus-square fs-2x cursor-pointer text-danger">
+                                    }
+                                    if (row['status'] == 4 || row['status'] == -5 || row['status'] == 5) {
+                                        dataRes += `<div onClick="tuchoihs(${data})" class="ki-duotone ki-minus-square fs-2x cursor-pointer text-danger">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                         <span class="path3"></span>
                                     </div>`;
+                                    }
                                 }
-
                                 dataRes += `
                                     <div onClick="tientrinh(${data})" class="ki-duotone ki-information-2 fs-2x cursor-pointer text-warning">
                                         <span class="path1"></span>

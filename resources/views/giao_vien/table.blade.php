@@ -50,14 +50,14 @@
                                 return '';
                             }
                         },
-                        @include('common.columns_ho_so')
-                        {
+                        @include('common.columns_ho_so') {
                             data: 'id',
                             render: function(data, type, row) {
                                 role = {{ Auth::user()->role }} - 2;
                                 var dataRes = `<div class="d-flex flex-row">`;
-                                if (row['status'] == 0) {
-                                    dataRes += `<div onClick="xacnhan(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
+                                if (row['type'] == 0) {
+                                    if (row['status'] == 0 || row['status'] == 1 || row['status'] == -1) {
+                                        dataRes += `<div onClick="xacnhan(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                     </div>
@@ -66,6 +66,7 @@
                                         <span class="path2"></span>
                                         <span class="path3"></span>
                                     </div>`;
+                                    }
                                 }
 
                                 dataRes += `

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\HoSo;
 
 use App\Http\Controllers\Controller;
+use App\Http\Service\KhoaService;
 use App\Models\Lop;
 use App\Models\Phieu;
 use App\Models\StopStudy;
@@ -12,6 +13,11 @@ use Illuminate\Support\Facades\Auth;
 
 class KhoaController extends Controller
 {
+    private $khoa;
+    function __construct()
+    {
+        $this->khoa = new KhoaService();
+    }
     function index()
     {
 
@@ -51,39 +57,10 @@ class KhoaController extends Controller
     {
         try {
             $stopStudy =  StopStudy::find($request->id);
-            if ($stopStudy->status != 1) {
-                abort(404);
-            }
-            $stopStudy->update(["status" => 2]);
-
-            $newStopStudy = $stopStudy->replicate();
-            $newStopStudy->phieu_id = null;
-            $newStopStudy->status = 1;
-            $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->parent_id = $request->id;
-
             if($stopStudy->type == 0)
             {
-                $this->notification("Đơn xin rút hồ sơ của bạn đã được cán bộ khoa xác nhận", null, "RHS");
+                $this->khoa->xacnhanRHS($request,$stopStudy);
             }
-            if($stopStudy->type == 1)
-            {
-                $this->notification("Đơn xin miễn giảm học phí của bạn đã được cán bộ khoa xác nhận", null, "GHP");
-            }
-            if($stopStudy->type == 2)
-            {
-                $this->notification("Đơn xin trợ cấp xã hội của bạn đã được cán bộ khoa xác nhận", null, "TCXH");
-            }
-            
-            if($stopStudy->type == 3)
-            {
-                $this->notification("Đơn xin chế độ chính sách của bạn đã được cán bộ khoa xác nhận", null, "CDCS");
-            }
-
-            $newStopStudy->note = $request->note;
-
-
-            $newStopStudy->save();
         } catch (QueryException $e) {
             abort(404);
         }
@@ -92,39 +69,9 @@ class KhoaController extends Controller
     {
         try {
             $stopStudy =  StopStudy::find($request->id);
-            if ($stopStudy->status != 1) {
-                abort(404);
+            if ($stopStudy->type == 0) {
+                $this->khoa->khongxacnhanRHS($request,$stopStudy);
             }
-            $stopStudy->update(["status" => -2]);
-
-            $newStopStudy = $stopStudy->replicate();
-            $newStopStudy->status = 0;
-            $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = null;
-            $newStopStudy->parent_id = $request->id;
-
-            if($stopStudy->type == 0)
-            {
-                $this->notification("Đơn xin rút hồ sơ của bạn đã bị từ chối bởi cán bộ khoa", null, "RHS");
-            }
-            if($stopStudy->type == 1)
-            {
-                $this->notification("Đơn xin miễn giảm học phí của bạn đã bị từ chối bởi cán bộ khoa", null, "GHP");
-            }
-            if($stopStudy->type == 2)
-            {
-                $this->notification("Đơn xin trợ cấp xã hội của bạn đã bị từ chối bởi cán bộ khoa", null, "TCXH");
-            }
-            
-            if($stopStudy->type == 3)
-            {
-                $this->notification("Đơn xin chế độ chính sách của bạn đã bị từ chối bởi cán bộ khoa", null, "CDCS");
-            }
-            $this->notification("Đơn xin rút của bạn đã bị từ chối bởi cán bộ khoa", null, "RHS");
-            $newStopStudy->note = $request->note;
-
-
-            $newStopStudy->save();
         } catch (QueryException $e) {
             abort(404);
         }

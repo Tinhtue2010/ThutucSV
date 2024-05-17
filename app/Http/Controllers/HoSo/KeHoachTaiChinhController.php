@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\HoSo;
 
 use App\Http\Controllers\Controller;
+use App\Http\Service\KeHoachTaiChinhService;
 use App\Models\Lop;
 use App\Models\Phieu;
 use App\Models\StopStudy;
@@ -11,10 +12,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 class KeHoachTaiChinhController extends Controller
 {
+    private $khtc;
+    function __construct()
+    {
+        $this->khtc = new KeHoachTaiChinhService();
+    }
     function index()
     {
-
-        return view('ke_hoach_tai_chinh.index');
+        $tb_miengiamhp = StopStudy::where('type', 1)->whereNull('parent_id')->where('status', 4)->count();
+        return view('ke_hoach_tai_chinh.index',['miengiamhp'=>$tb_miengiamhp,'tb_miengiamhp'=>$tb_miengiamhp]);
     }
 
     public function getData(Request $request)
@@ -45,12 +51,10 @@ class KeHoachTaiChinhController extends Controller
     {
         try {
             $stopStudy =  StopStudy::find($request->id);
-            if ($stopStudy->status != 2 && $stopStudy->status != -3) {
-                abort(404);
+            if($stopStudy->type == 0)
+            {
+                $this->khtc->xacnhanRHS($stopStudy);
             }
-            $stopStudy->update(["is_pay" => 1,"note_pay"=>""]);
-
-            return true;
         } catch (QueryException $e) {
             abort(404);
         }
@@ -59,12 +63,10 @@ class KeHoachTaiChinhController extends Controller
     {
         try {
             $stopStudy =  StopStudy::find($request->id);
-            if ($stopStudy->status != 2 && $stopStudy->status != -3) {
-                abort(404);
+            if($stopStudy->type == 0)
+            {
+                $this->khtc->khongxacnhanRHS($request,$stopStudy);
             }
-            $stopStudy->update(["is_pay" => 2,"note_pay"=>$request->note]);
-
-            return true;
         } catch (QueryException $e) {
             abort(404);
         }

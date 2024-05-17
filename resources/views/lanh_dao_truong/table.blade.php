@@ -55,18 +55,20 @@
                             render: function(data, type, row) {
                                 role = {{ Auth::user()->role }} - 2;
                                 var dataRes = `<div class="d-flex flex-row">`;
-                                if (row['status'] == 7 || row['status'] == -8) {
-                                    dataRes += `<div onClick="xacnhan(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
+                                if (row['type'] == 0) {
+                                    if (row['status'] == 5 || row['status'] == -6 || row['status'] == 6) {
+                                        dataRes += `<div onClick="xacnhan(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                     </div>`;
-                                }
-                                if (row['status'] == 7 || row['status'] == 8) {
-                                    dataRes += `<div onClick="tuchoihs(${data})" class="ki-duotone ki-minus-square fs-2x cursor-pointer text-danger">
+                                    }
+                                    if (row['status'] == 5 || row['status'] == -6 || row['status'] == 6) {
+                                        dataRes += `<div onClick="tuchoihs(${data})" class="ki-duotone ki-minus-square fs-2x cursor-pointer text-danger">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                         <span class="path3"></span>
                                     </div>`;
+                                    }
                                 }
 
                                 dataRes += `

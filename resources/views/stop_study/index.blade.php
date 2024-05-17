@@ -17,7 +17,7 @@
                             $noti_title = 'Cảnh báo';
                         }
                     @endphp
-                    @if ($don_parent->is_update = 1)
+                    @if ($don_parent->is_update == 1)
                         <div class="d-flex align-items-center bg-light-primary rounded p-5 mb-7">
                             <i class="ki-outline ki-snapchat text-primary fs-1 me-5"></i>
                             <div class="flex-grow-1 me-2">

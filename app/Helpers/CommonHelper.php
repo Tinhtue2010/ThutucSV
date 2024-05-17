@@ -68,17 +68,28 @@ trait CommonHelper
                     }
                 });
             }
-            $max_page = clone $query;
-            $max_page = ceil($max_page->count() / $per_page);
-            if ($page > $max_page) {
-                $page = 1;
-                $offset = 0;
+            if($per_page == 'all')
+            {
+                $query = $query->get()->toArray();
+    
+                $data['max_page'] = 1;
+                $data['data'] = $query;
+                $data['page'] = 1;
             }
-            $query = $query->skip($offset)->take($per_page)->get()->toArray();
-
-            $data['max_page'] = $max_page;
-            $data['data'] = $query;
-            $data['page'] = $page;
+            else
+            {
+                $max_page = clone $query;
+                $max_page = ceil($max_page->count() / $per_page);
+                if ($page > $max_page) {
+                    $page = 1;
+                    $offset = 0;
+                }
+                $query = $query->skip($offset)->take($per_page)->get()->toArray();
+    
+                $data['max_page'] = $max_page;
+                $data['data'] = $query;
+                $data['page'] = $page;
+            }
 
             return $data;
         } catch (QueryException $e) {

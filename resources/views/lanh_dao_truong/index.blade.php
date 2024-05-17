@@ -127,7 +127,6 @@
     </div>
     @include('lanh_dao_truong.table')
     @include('lanh_dao_truong.xacnhan', ['target' => 'xacnhan'])
-    @include('lanh_dao_truong.khongxacnhan', ['target' => 'khongxacnhan'])
     @include('giao_vien.chitiet', ['target' => 'chitiet'])
     @include('giao_vien.tientrinh', ['target' => 'tientrinh'])
     @include('lanh_dao_truong.tuchoihs', ['target' => 'tuchoihs'])

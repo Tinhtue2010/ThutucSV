@@ -13,6 +13,27 @@
                     message: '{{ __('Vui lòng không để trống mục này') }}'
                 },
             }
+        },
+        teacher_id: {
+            validators: {
+                notEmpty: {
+                    message: '{{ __('Vui lòng không để trống mục này') }}'
+                },
+            }
+        },
+        khoa_id: {
+            validators: {
+                notEmpty: {
+                    message: '{{ __('Vui lòng không để trống mục này') }}'
+                },
+            }
+        },
+        hocphi: {
+            validators: {
+                notEmpty: {
+                    message: '{{ __('Vui lòng không để trống mục này') }}'
+                },
+            }
         }
     }
 </script>

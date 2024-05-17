@@ -76,6 +76,7 @@ class TroCapXHController extends Controller
                 $check->files = json_encode($this->uploadListFile($request,'files','mien_giam_hp'));
                 
                 $check->note = $request->data;
+                $check->is_update = 1;
                 $check->update();
                 $phieu = Phieu::where('id', $check->phieu_id)->first();
                 $phieu->student_id = $user->student_id;

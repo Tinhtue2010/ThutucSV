@@ -67,6 +67,12 @@
                             data: 'teacher_name'
                         },
                         {
+                            data: 'hocphi',
+                            render: function(data, type, row){
+                                return data.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+                            }
+                        },
+                        {
                             data: 'id',
                             render: function (data, type, row) {
                                 const url =

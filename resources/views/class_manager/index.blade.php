@@ -39,7 +39,7 @@
                                 <th class="text-nowrap" data-name="nganh">{{ __('Ngành học') }}</th>
                                 <th class="text-nowrap" data-name="khoa_name">{{ __('Khoa') }}</th>
                                 <th class="text-nowrap" data-name="teacher_name">{{ __('Giảng viên') }}</th>
-
+                                <th class="text-nowrap" data-name="hocphi">{{ __('Học phí') }}</th>
                                 <td class="text-nowrap">{{ __('Chức năng') }}</td>
                             </tr>
                             </thead>

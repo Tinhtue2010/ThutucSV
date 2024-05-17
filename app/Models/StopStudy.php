@@ -23,7 +23,9 @@ class StopStudy extends Model
         'is_update',
         'is_pay',
         'note_pay',
-        'time_receive'
+        'time_receive',
+        'type_miengiamhp',
+        'phantramgiam'
     ];
 
     public function student()

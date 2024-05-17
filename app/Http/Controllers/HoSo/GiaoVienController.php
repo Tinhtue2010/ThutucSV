@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\HoSo;
 
 use App\Http\Controllers\Controller;
+use App\Http\Service\GiaoVienService;
 use App\Models\Lop;
 use App\Models\Phieu;
 use App\Models\StopStudy;
@@ -12,6 +13,11 @@ use Illuminate\Support\Facades\Auth;
 
 class GiaoVienController extends Controller
 {
+    private $giaovien;
+    function __construct()
+    {
+        $this->giaovien = new GiaoVienService();
+    }
     function index()
     {
 
@@ -37,8 +43,7 @@ class GiaoVienController extends Controller
         if (isset($request->status)) {
             $query->whereYear('status', $request->status);
         }
-        if(isset($request->type))
-        {
+        if (isset($request->type)) {
             $query->where('type', $request->type);
         }
         $data = $this->queryPagination($request, $query, ['students.full_name', 'students.student_code']);
@@ -50,39 +55,9 @@ class GiaoVienController extends Controller
     {
         try {
             $stopStudy =  StopStudy::find($request->id);
-            if ($stopStudy->status > 0) {
-                abort(404);
+            if ($stopStudy->type == 0) {
+                $this->giaovien->xacnhanRHS($request, $stopStudy);
             }
-            $stopStudy->update(["status" => 1]);
-
-            $newStopStudy = $stopStudy->replicate();
-            $newStopStudy->phieu_id = null;
-            $newStopStudy->status = 1;
-            $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->parent_id = $request->id;
-
-            if($stopStudy->type == 0)
-            {
-                $this->notification("Đơn xin rút hồ sơ của bạn đã được giáo viên chủ nhiệm xác nhận", null, "RHS");
-            }
-            if($stopStudy->type == 1)
-            {
-                $this->notification("Đơn xin miễn giảm học phí của bạn đã được giáo viên chủ nhiệm xác nhận", null, "GHP");
-            }
-            if($stopStudy->type == 2)
-            {
-                $this->notification("Đơn xin trợ cấp xã hội của bạn đã được giáo viên chủ nhiệm xác nhận", null, "TCXH");
-            }
-            
-            if($stopStudy->type == 3)
-            {
-                $this->notification("Đơn xin chế độ chính sách của bạn đã được giáo viên chủ nhiệm xác nhận", null, "CDCS");
-            }
-
-            $newStopStudy->note = $request->note;
-
-
-            $newStopStudy->save();
         } catch (QueryException $e) {
             abort(404);
         }
@@ -91,39 +66,9 @@ class GiaoVienController extends Controller
     {
         try {
             $stopStudy =  StopStudy::find($request->id);
-            if ($stopStudy->status > 0) {
-                abort(404);
+            if ($stopStudy->type == 0) {
+                $this->giaovien->khongxacnhanRHS($request, $stopStudy);
             }
-            $stopStudy->update(["status" => -1]);
-
-            $newStopStudy = $stopStudy->replicate();
-            $newStopStudy->status = 0;
-            $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = null;
-            $newStopStudy->parent_id = $request->id;
-
-            if($stopStudy->type == 0)
-            {
-                $this->notification("Đơn xin rút hồ sơ của bạn đã bị từ chối bởi giáo viên chủ nhiệm", null, "RHS");
-            }
-            if($stopStudy->type == 1)
-            {
-                $this->notification("Đơn xin miễn giảm học phí của bạn đã bị từ chối bởi giáo viên chủ nhiệm", null, "GHP");
-            }
-            if($stopStudy->type == 2)
-            {
-                $this->notification("Đơn xin trợ cấp xã hội của bạn đã bị từ chối bởi giáo viên chủ nhiệm", null, "TCXH");
-            }
-            
-            if($stopStudy->type == 3)
-            {
-                $this->notification("Đơn xin chế độ chính sách của bạn đã bị từ chối bởi giáo viên chủ nhiệm", null, "CDCS");
-            }
-            $this->notification("Đơn xin rút của bạn đã bị từ chối bởi giáo viên chủ nhiệm", null, "RHS");
-            $newStopStudy->note = $request->note;
-
-
-            $newStopStudy->save();
         } catch (QueryException $e) {
             abort(404);
         }
@@ -135,9 +80,9 @@ class GiaoVienController extends Controller
         try {
             $don = StopStudy::where('id', $id)->first();
             $don_chill =  StopStudy::where('parent_id', $id)
-            ->leftJoin('teachers', 'teachers.id', '=', 'stop_studies.teacher_id')
-            ->select('stop_studies.*','teachers.full_name','teachers.chuc_danh')
-            ->orderBy('created_at', 'desc')->get();
+                ->leftJoin('teachers', 'teachers.id', '=', 'stop_studies.teacher_id')
+                ->select('stop_studies.*', 'teachers.full_name', 'teachers.chuc_danh')
+                ->orderBy('created_at', 'desc')->get();
             $data[] = json_decode($don->files ?? '[]');
             $data[] = $don_chill;
             $data[] = $don->phieu_id;

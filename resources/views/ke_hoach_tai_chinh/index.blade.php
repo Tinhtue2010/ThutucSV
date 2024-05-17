@@ -29,7 +29,7 @@
                                 <select class="form-select form-select-solid filter-select" data-name="type" data-control="select2" data-placeholder="Loại hồ sơ">
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>
-                                    <option value="0" selected>Đơn xin rút hồ sơ</option>
+                                    <option value="0">Đơn xin rút hồ sơ</option>
                                     <option value="1">Đơn xin miễn giảm học phí</option>
                                     <option value="2">Đơn xin trợ cấp xã hội</option>
                                     <option value="3">Đơn xin chế độ chính sách</option>
