@@ -90,7 +90,7 @@
             }
         }
 
-        if(row['type'] == 1)
+        if(row['type'] == 1 || row['type'] == 2)
         {
             if(data == -1)
             {
@@ -129,6 +129,15 @@
             if(data == -5)
             {
                 res = `<span class="mt-1 badge badge-warning">Phòng KHTC từ chối danh sách</span>`;
+            }
+
+            if(data == 6)
+            {
+                res = `<span class="mt-1 badge badge-success">Lãnh đạo trường đã xác nhận</span>`;
+            }
+            if(data == -6)
+            {
+                res = `<span class="mt-1 badge badge-warning">Lãnh đạo trường từ chối danh sách</span>`;
             }
         }
 

@@ -24,7 +24,8 @@ class LanhDaoTruongController extends Controller
     function index()
     {
         $tb_miengiamhp = StopStudy::where('type', 1)->whereNull('parent_id')->where('status', 5)->count();
-        return view('lanh_dao_truong.index',['tb_miengiamhp'=>$tb_miengiamhp]);
+        $tb_trocapxahoi = StopStudy::where('type', 2)->whereNull('parent_id')->where('status', 5)->count();
+        return view('lanh_dao_truong.index',['tb_miengiamhp'=>$tb_miengiamhp,'tb_trocapxahoi'=>$tb_trocapxahoi]);
     }
 
     public function getData(Request $request)

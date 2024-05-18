@@ -41,42 +41,56 @@ class TroCapXHController extends Controller
             Session::put('doituong', $request->doituong);
             Session::put('hoso', $request->hoso);
             Session::put('thuongchu', $request->thuongchu);
-            
         } else {
             $user = Auth::user();
 
             $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
-            ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
-            ->where('students.id', $user->student_id)->first();
+                ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+                ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
+                ->where('students.id', $user->student_id)->first();
 
-        $studentData['full_name'] = $student->full_name;
-        $studentData['student_code'] = $student->student_code;
-        $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
-        $studentData['lop'] = $student->lop_name;
-        $studentData['khoa'] = $student->khoa_name;
-        $studentData['khoa_hoc'] = $student->school_year;
-        $studentData['hoso'] = $request->hoso;
-        $studentData['doituong'] = $request->doituong;
-        $studentData['sdt'] = $student->phone;
-        $studentData['thuongchu'] = $request->thuongchu;
+            $studentData['full_name'] = $student->full_name;
+            $studentData['student_code'] = $student->student_code;
+            $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
+            $studentData['lop'] = $student->lop_name;
+            $studentData['khoa'] = $student->khoa_name;
+            $studentData['khoa_hoc'] = $student->school_year;
+            $studentData['hoso'] = $request->hoso;
+            switch ($request->doituong) {
+                case 1:
+                    $studentData['doituong'] = "Học sinh, sinh viên là người dân tộc thiểu số ở vùng cao từ 03 năm trở lên.";
+                    break;
+                case 2:
+                    $studentData['doituong'] = "Học sinh, sinh viên mồ côi cả cha lẫn mẹ không nơi nương tựa.";
+                    break;
+                case 3:
+                    $studentData['doituong'] = "Học sinh, sinh viên là người tàn tật gặp khó khăn về kinh tế.";
+                    break;
+                case 4:
+                    $studentData['doituong'] = "Học sinh, sinh viên có hoàn cảnh đặc biệt khó khăn về kinh tế, vượt khó học tập, gia đình thuộc diện xóa đói giảm nghèo.";
+                    break;
+                default:
+                    break;
+            }
+            $studentData['sdt'] = $student->phone;
+            $studentData['thuongchu'] = $request->thuongchu;
 
-        $studentData['day'] = Carbon::now()->day;
+            $studentData['day'] = Carbon::now()->day;
 
-        $studentData['month'] = Carbon::now()->month;
+            $studentData['month'] = Carbon::now()->month;
 
-        $studentData['year'] = Carbon::now()->year;
+            $studentData['year'] = Carbon::now()->year;
 
             $check = StopStudy::where('student_id', $user->student_id)->where('type', 2)->first();
             if ($check) {
-                if(isset($check->files))
-                {
+                if (isset($check->files)) {
                     $this->deleteFiles(json_decode($check->files));
                 }
-                $check->files = json_encode($this->uploadListFile($request,'files','mien_giam_hp'));
-                
+                $check->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
+
                 $check->note = $request->data;
                 $check->is_update = 1;
+                $check->type_miengiamhp = $request->doituong ?? 1;
                 $check->update();
                 $phieu = Phieu::where('id', $check->phieu_id)->first();
                 $phieu->student_id = $user->student_id;
@@ -93,8 +107,9 @@ class TroCapXHController extends Controller
                 $phieu->save();
 
                 $query = new StopStudy();
-                $query->files = json_encode($this->uploadListFile($request,'files','mien_giam_hp'));
+                $query->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
                 $query->student_id = $user->student_id;
+                $query->type_miengiamhp = $request->doituong ?? 1;
                 $query->round = 1;
                 $query->type = 2;
                 $query->note = $request->data;
@@ -112,6 +127,22 @@ class TroCapXHController extends Controller
         $doituong = Session::get('doituong');
         $hoso = Session::get('hoso');
         $thuongchu = Session::get('thuongchu');
+        switch ($doituong) {
+            case 1:
+                $doituong = "Học sinh, sinh viên là người dân tộc thiểu số ở vùng cao từ 03 năm trở lên.";
+                break;
+            case 2:
+                $doituong = "Học sinh, sinh viên mồ côi cả cha lẫn mẹ không nơi nương tựa.";
+                break;
+            case 3:
+                $doituong = "Học sinh, sinh viên là người tàn tật gặp khó khăn về kinh tế.";
+                break;
+            case 4:
+                $doituong = "Học sinh, sinh viên có hoàn cảnh đặc biệt khó khăn về kinh tế, vượt khó học tập, gia đình thuộc diện xóa đói giảm nghèo.";
+                break;
+            default:
+                break;
+        }
 
         $user = Auth::user();
         $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')

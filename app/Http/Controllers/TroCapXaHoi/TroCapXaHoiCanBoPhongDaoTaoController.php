@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\MienGiamHP;
+namespace App\Http\Controllers\TroCapXaHoi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lop;
@@ -9,17 +9,17 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class MienGiamHPCanBoPhongDaoTaoController extends Controller
+class TroCapXaHoiCanBoPhongDaoTaoController extends Controller
 {
     function index()
     {
         $lop = Lop::get();
-        return view('lanh_dao_phong_dao_tao.ds_mien_giam_hp.index', ['lop' => $lop]);
+        return view('lanh_dao_phong_dao_tao.ds_tro_cap_xa_hoi.index', ['lop' => $lop]);
     }
 
     function getData(Request $request)
     {
-        $query = StopStudy::where('type', 1)->where(function($query) {
+        $query = StopStudy::where('type', 2)->where(function($query) {
             $query->where('status', 2)
                   ->orWhere('status', 3)
                   ->orWhere('status', -3);
@@ -44,7 +44,7 @@ class MienGiamHPCanBoPhongDaoTaoController extends Controller
     }
 
     function xacnhan() {
-        $query = StopStudy::where('type', 1)->whereNull('parent_id')->where(function($query) {
+        $query = StopStudy::where('type', 2)->whereNull('parent_id')->where(function($query) {
             $query->where('status', 2)
                   ->orWhere('status', 3)
                   ->orWhere('status', -3);
@@ -67,7 +67,7 @@ class MienGiamHPCanBoPhongDaoTaoController extends Controller
     }
 
     function tuchoi() {
-        $query = StopStudy::where('type', 1)->whereNull('parent_id')->where(function($query) {
+        $query = StopStudy::where('type', 2)->whereNull('parent_id')->where(function($query) {
             $query->where('status', 2)
                   ->orWhere('status', 3)
                   ->orWhere('status', -3);

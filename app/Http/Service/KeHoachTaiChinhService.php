@@ -23,6 +23,5 @@ class KeHoachTaiChinhService  extends Controller
             abort(404);
         }
         $stopStudy->update(["is_pay" => 2,"note_pay"=>$request->note]);
-
     }
 }

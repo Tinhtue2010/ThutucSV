@@ -146,7 +146,7 @@
                             render: function(data, type, row) {
                                 role = {{ Auth::user()->role }} - 2;
                                 var dataRes = `<div class="d-flex flex-row">`;
-                                if (row['type'] == 1) {
+                                if (row['type'] == 1 || row['type'] == 2) {
                                     dataRes += `
                                     <div onClick="bosunghs(${data})" class="ki-duotone ki-update-folder fs-2x cursor-pointer text-danger">
                                         <span class="path1"></span>

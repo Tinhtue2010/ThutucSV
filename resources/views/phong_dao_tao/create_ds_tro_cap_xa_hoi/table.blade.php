@@ -14,7 +14,7 @@
                     "info": false,
                     "serverSide": true,
                     "ajax": {
-                        "url": "{{ route('LanhDaoPhongDaoTao.MienGiamHP.getData') }}", // Thay đổi đường dẫn đến tệp xử lý AJAX
+                        "url": "{{ route('PhongDaoTao.TroCapXaHoi.getData') }}", // Thay đổi đường dẫn đến tệp xử lý AJAX
                         "type": "GET",
                         "data": function(data) {
                             var name_order = document
@@ -54,6 +54,19 @@
                             data: 'id',
                         },
                         {
+                            data: 'status',
+                            render: function(data, type, row) {
+                                var res ='';
+                                if (data == 1) {
+                                    res = `<span class="mt-1 badge badge-warning">Chưa thêm</span>`;
+                                }
+                                if (data == 2) {
+                                    res = `<span class="mt-1 badge badge-success">Đã thêm</span>`;
+                                }
+                                return res;
+                            }
+                        },
+                        {
                             data: 'full_name'
                         },
                         {
@@ -63,9 +76,9 @@
                             }
                         },
                         {
-                            data: 'phantramgiam',
+                            data: 'id',
                             render: function(data, type, row) {
-                                return `<p>${data}%</p>`;
+                                return `<input value="${row['phantramgiam']}" onkeyup="updateTile(this,${data})" data-id="${data}" name="tilegiam" class="w-100 p-3" type="number" max="100" min="0">`;
                             }
                         },
                         {
@@ -93,28 +106,16 @@
                             render: function(data, type, row) {
                                 switch (data) {
                                     case 1:
-                                        return "Người có công với cách mạng";
+                                        return "Học sinh, sinh viên là người dân tộc thiểu số ở vùng cao từ 03 năm trở lên.";
                                         break;
                                     case 2:
-                                        return 'Sinh viên khuyết tật';
+                                        return 'Học sinh, sinh viên mồ côi cả cha lẫn mẹ không nơi nương tựa.';
                                         break;
                                     case 3:
-                                        return 'Sinh viên mồ côi';
+                                        return 'Học sinh, sinh viên là người tàn tật gặp khó khăn về kinh tế.';
                                         break;
                                     case 4:
-                                        return 'Hộ nghèo, cận nghèo';
-                                        break;
-                                    case 5:
-                                        return 'SV dân tộc thiểu số ít người';
-                                        break;
-                                    case 6:
-                                        return 'SV ngành múa, nhạc cụ truyền thống';
-                                        break;
-                                    case 7:
-                                        return 'SV dân tộc thiểu số(không phải dân tộc ít người)';
-                                        break;
-                                    case 8:
-                                        return 'Con của công nhân viên chức tai nạn nghề';
+                                        return 'Học sinh, sinh viên có hoàn cảnh đặc biệt khó khăn về kinh tế, vượt khó học tập, gia đình thuộc diện xóa đói giảm nghèo.';
                                         break;
                                     default:
                                         return '';
@@ -133,6 +134,18 @@
                             render: function(data, type, row) {
                                 role = {{ Auth::user()->role }} - 2;
                                 var dataRes = `<div class="d-flex flex-row">`;
+                                if (row['type'] == 2) {
+                                    dataRes += `
+                                    <div onClick="bosunghs(${data})" class="ki-duotone ki-update-folder fs-2x cursor-pointer text-danger">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                    </div>`;
+                                    dataRes += `<div onClick="tuchoihs(${data})" class="ki-duotone ki-minus-square fs-2x cursor-pointer text-danger">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </div>`;
+                                }
                                 dataRes += `
                                     <div onClick="chitiet(${data})"  class="ki-duotone ki-document fs-2x cursor-pointer text-dark">
                                         <span class="path1"></span>
@@ -243,5 +256,69 @@
             Datatable.init();
         });
 
+        $('#import-file input[type="file"]').change(function(e) {
+            var file = e.target.files[0];
+            var fileName = file.name;
+            var formData = new FormData();
+
+            formData.append('csv_file', file);
+            formData.append('_token', '{{ csrf_token() }}');
+
+            $.ajax({
+                url: '#',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    mess_success('Thông báo',
+                        "Tải lên thành công")
+                    Datatable.loadData();
+                },
+                error: function(xhr, status, error) {
+                    mess_error("Cảnh báo",
+                        "{{ __('Có lỗi xảy ra bạn hãy kiểm tra lại file') }}"
+                    )
+                }
+            });
+        });
+        let timeoutId;
+
+        function updateData(data, id) {
+            axios({
+                method: 'GET',
+                url: `{{ route('PhongDaoTao.TroCapXaHoi.updatePercent') }}?id=${id}&phantramgiam=${data}`,
+            }).then((response) => {}).catch(function(error) {
+                mess_error("Cảnh báo",
+                    "{{ __('Có lỗi xảy ra.') }}"
+                )
+            });
+        }
+
+        function debounce(func, delay) {
+            return function() {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => func.apply(context, args), delay);
+            };
+        }
+
+        function updateTile(data, id) {
+            const debouncedUpdate = debounce(updateData, 500);
+            var hocphi = $("#hocphi_" + id).data('hocphi');
+            var percent = data.value;
+            var miengiam_thang = (hocphi / 5) * (percent / 100)
+            var miengiamgiam_ky = hocphi * (percent / 100)
+            $("#miengiamgiam_ky_" + id).html(miengiamgiam_ky.toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }))
+            $("#miengiam_thang_" + id).html(miengiam_thang.toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }))
+            debouncedUpdate(percent, id);
+        }
     </script>
 @endpush

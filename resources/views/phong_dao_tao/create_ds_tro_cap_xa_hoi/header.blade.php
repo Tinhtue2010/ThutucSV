@@ -8,18 +8,20 @@
                     <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
                         <!--begin::Title-->
                         <h1 class="page-heading d-flex flex-column justify-content-center text-dark fw-bold fs-3 m-0">
-                            Thông tin xử lý đơn</h1>
+                            Danh sách sinh viên được trợ cấp xã hội
+                        </h1>
                         <!--end::Title-->
                     </div>
                     <!--end::Page title-->
                     <div class="d-flex align-items-center gap-2 gap-lg-3">
                         <div class="d-flex flex-row flex-wrap">
                             <div class="d-flex flex-row me-3">
-                                <div class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
+                                <div class="ki-duotone ki-update-folder fs-2x cursor-pointer text-danger">
                                     <span class="path1"></span>
                                     <span class="path2"></span>
+                                    <span class="path3"></span>
                                 </div>
-                                <p class="m-auto fw-medium">: Xác nhận đã hoàn thành thanh toán</p>
+                                <p class="m-auto fw-medium">: Lập phiếu bổ sung hồ sơ</p>
                             </div>
                             <div class="d-flex flex-row me-3">
                                 <div class="ki-duotone ki-minus-square fs-2x cursor-pointer text-danger">
@@ -27,15 +29,7 @@
                                     <span class="path2"></span>
                                     <span class="path3"></span>
                                 </div>
-                                <p class="m-auto fw-medium">: Yêu cầu thanh toán</p>
-                            </div>
-                            <div class="d-flex flex-row me-3">
-                                <div class="ki-duotone ki-information-2 fs-2x  text-warning">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                    <span class="path3"></span>
-                                </div>
-                                <p class="m-auto fw-medium">: Tiến trình xử lý</p>
+                                <p class="m-auto fw-medium">: Lập phiếu từ chối giải quyết hồ sơ</p>
                             </div>
                             <div class="d-flex flex-row me-3">
                                 <div class="ki-duotone ki-document fs-2x  text-dark">
@@ -59,44 +53,20 @@
                                     <div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">{{ __('Chức năng') }}</div>
                                 </div>
                                 <!--end::Heading-->
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <a href="{{ route('KeHoachTaiChinh.MienGiamHP.index') }}" target="_blank" class="menu-link px-3">Danh sách miễn giảm học phí</a>
-                                    </div>
-                                    <div class="menu-item px-3">
-                                        <a href="{{ route('KeHoachTaiChinh.TroCapXaHoi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp xã hội</a>
-                                    </div>
-                                    <!--end::Menu item-->
+
+                                <!--begin::Menu item-->
+                                <div class="menu-item px-3">
+                                    <a href="" target="_blank" class="menu-link px-3">Xem phiếu</a>
+                                    <a href="{{ route('PhongDaoTao.TroCapXaHoi.createList') }}" class="menu-link px-3">Tạo danh sách và thông báo đến cán bộ phòng đào tạo</a>
+                                    <a href="{{ route('PhongDaoTao.TroCapXaHoi.deleteList') }}" class="menu-link px-3">Xóa danh sách</a>
+                                    <a href="" class="menu-link px-3">Yêu cầu bổ xung thông tin đối với sinh viên là dân tộc thiểu số</a>
+                                </div>
+                                <!--end::Menu item-->
+
                             </div>
                             <!--end::Menu 3-->
                             <!--end::Menu-->
                         </div>
-                    </div>
-                    <div class="w-100 d-flex">
-                        @if ($tb_miengiamhp > 0)
-                            <div class="d-flex align-items-center bg-light-warning rounded p-5 mb-2 w-100">
-                                <i class="ki-outline ki-snapchat text-warning fs-1 me-5"></i>
-                                <div class="flex-grow-1 me-2">
-                                    <a href="#" class=" fw-bold text-gray-800 text-hover-warning fs-4">Thông báo</a>
-                                    <span class="fs-5 fw-semibold d-block">
-                                        Cần duyệt danh sách sinh viên miễn giảm học phí
-                                    </span>
-                                </div>
-                                <a href="{{ route('KeHoachTaiChinh.MienGiamHP.index') }}" target="_blank" class="btn btn-primary">Chi tiết</a>
-                            </div>
-                        @endif
-                        @if ($tb_trocapxahoi > 0)
-                            <div class="d-flex align-items-center bg-light-warning rounded p-5 mb-2 w-100">
-                                <i class="ki-outline ki-snapchat text-warning fs-1 me-5"></i>
-                                <div class="flex-grow-1 me-2">
-                                    <a href="#" class=" fw-bold text-gray-800 text-hover-warning fs-4">Thông báo</a>
-                                    <span class="fs-5 fw-semibold d-block">
-                                        Cần duyệt danh sách sinh viên nhận trợ cấp xã hội
-                                    </span>
-                                </div>
-                                <a href="{{ route('KeHoachTaiChinh.TroCapXaHoi.index') }}" target="_blank" class="btn btn-primary">Chi tiết</a>
-                            </div>
-                        @endif
                     </div>
                 </div>
                 <!--end::Toolbar wrapper-->

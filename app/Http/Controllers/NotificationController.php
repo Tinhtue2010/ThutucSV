@@ -11,7 +11,7 @@ class NotificationController extends Controller
     function index(Request $request)
     {
         $user = Auth::user();
-        $query = Notification::where('user_id', $user->id);
+        $query = Notification::where('user_id', $user->id)->orderBy('id', 'desc');
         $data = $this->queryPagination($request, $query, []);
         return view('notification.index', ['data' => $data]);
     }

@@ -20,7 +20,8 @@ class KeHoachTaiChinhController extends Controller
     function index()
     {
         $tb_miengiamhp = StopStudy::where('type', 1)->whereNull('parent_id')->where('status', 4)->count();
-        return view('ke_hoach_tai_chinh.index',['miengiamhp'=>$tb_miengiamhp,'tb_miengiamhp'=>$tb_miengiamhp]);
+        $tb_trocapxahoi = StopStudy::where('type', 2)->whereNull('parent_id')->where('status', 4)->count();
+        return view('ke_hoach_tai_chinh.index',['tb_trocapxahoi'=>$tb_trocapxahoi,'tb_miengiamhp'=>$tb_miengiamhp]);
     }
 
     public function getData(Request $request)

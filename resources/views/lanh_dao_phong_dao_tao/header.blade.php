@@ -59,10 +59,14 @@
                                     <div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">{{ __('Chức năng') }}</div>
                                 </div>
                                 <!--end::Heading-->
-    
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-3">
                                         <a href="{{ route('LanhDaoPhongDaoTao.MienGiamHP.index') }}" target="_blank" class="menu-link px-3">Tạo danh sách miễn giảm học phí</a>
+                                    </div>
+                                    <!--end::Menu item-->
+                                     <!--begin::Menu item-->
+                                     <div class="menu-item px-3">
+                                        <a href="{{ route('LanhDaoPhongDaoTao.TroCapXaHoi.index') }}" target="_blank" class="menu-link px-3">Tạo danh sách trợ cấp xã hội</a>
                                     </div>
                                     <!--end::Menu item-->
                             </div>
@@ -77,10 +81,22 @@
                                 <div class="flex-grow-1 me-2">
                                     <a href="#" class=" fw-bold text-gray-800 text-hover-warning fs-4">Thông báo</a>
                                     <span class="fs-5 fw-semibold d-block">
-                                        Cần duyệt danh sách sinh viên miễn giảm học phí
+                                        Cần duyệt danh sách sinh viên nhận miễn giảm học phí
                                     </span>
                                 </div>
                                 <a href="{{ route('LanhDaoPhongDaoTao.MienGiamHP.index') }}" target="_blank" class="btn btn-primary">Chi tiết</a>
+                            </div>
+                        @endif
+                        @if ($tb_trocapxahoi > 0)
+                            <div class="d-flex align-items-center bg-light-warning rounded p-5 mb-2 w-100">
+                                <i class="ki-outline ki-snapchat text-warning fs-1 me-5"></i>
+                                <div class="flex-grow-1 me-2">
+                                    <a href="#" class=" fw-bold text-gray-800 text-hover-warning fs-4">Thông báo</a>
+                                    <span class="fs-5 fw-semibold d-block">
+                                        Cần duyệt danh sách sinh viên nhận trợ cấp xã hội
+                                    </span>
+                                </div>
+                                <a href="{{ route('LanhDaoPhongDaoTao.TroCapXaHoi.index') }}" target="_blank" class="btn btn-primary">Chi tiết</a>
                             </div>
                         @endif
                     </div>

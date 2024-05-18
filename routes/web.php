@@ -24,6 +24,10 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentManagerController;
 use App\Http\Controllers\TeacherManagerController;
 use App\Http\Controllers\StopStudyController;
+use App\Http\Controllers\TroCapXaHoi\TroCapXaHoiCanBoPhongDaoTaoController;
+use App\Http\Controllers\TroCapXaHoi\TroCapXaHoiKeHoachTaiChinhController;
+use App\Http\Controllers\TroCapXaHoi\TroCapXaHoiLanhDaoTruongController;
+use App\Http\Controllers\TroCapXaHoi\TroCapXaHoiPhongDaoTaoController;
 use App\Http\Controllers\TroCapXHController;
 use Illuminate\Support\Facades\Route;
 
@@ -140,14 +144,22 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('create-list', [MienGiamHPPhongDaoTaoController::class, 'createList'])->name('createList');
                 Route::get('delete-list', [MienGiamHPPhongDaoTaoController::class, 'deleteList'])->name('deleteList');
                 Route::get('gui-tb-sv', [MienGiamHPPhongDaoTaoController::class, 'guiTBSV'])->name('guiTBSV');
+            });
 
+            Route::name('TroCapXaHoi.')->prefix('tro-cap-xa-hoi')->group(function () {
+                Route::get('/', [TroCapXaHoiPhongDaoTaoController::class, 'index'])->name('index');
+                Route::get('get-data', [TroCapXaHoiPhongDaoTaoController::class, 'getData'])->name('getData');
+                Route::get('update-percent', [TroCapXaHoiPhongDaoTaoController::class, 'updatePercent'])->name('updatePercent');
+                Route::get('create-list', [TroCapXaHoiPhongDaoTaoController::class, 'createList'])->name('createList');
+                Route::get('delete-list', [TroCapXaHoiPhongDaoTaoController::class, 'deleteList'])->name('deleteList');
+                Route::get('gui-tb-sv', [TroCapXaHoiPhongDaoTaoController::class, 'guiTBSV'])->name('guiTBSV');
             });
         });
     });
     Route::middleware('role:5')->group(function () {
         Route::name('KeHoachTaiChinh.')->prefix('ke-hoach-tai-chinh')->group(function () {
             Route::get('/', [KeHoachTaiChinhController::class, 'index'])->name('index');
-            Route::get('get-data', [KeHoachTaiChinhController::class, 'getData'])->name('getData');
+            Route::get('get-data', [KeHoachTaiChinhController::class, 'getData'])->name('getData'); 
             Route::post('xacnhan', [KeHoachTaiChinhController::class, 'xacnhan'])->name('xacnhan');
             Route::post('khongxacnhan', [KeHoachTaiChinhController::class, 'khongxacnhan'])->name('khongxacnhan');
 
@@ -156,6 +168,13 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('get-data', [MienGiamHPKeHoachTaiChinhController::class, 'getData'])->name('getData');
                 Route::get('xacnhan', [MienGiamHPKeHoachTaiChinhController::class, 'xacnhan'])->name('xacnhan');
                 Route::get('tuchoi', [MienGiamHPKeHoachTaiChinhController::class, 'tuchoi'])->name('tuchoi');
+            });
+
+            Route::name('TroCapXaHoi.')->prefix('tro-cap-xa-hoi')->group(function () {
+                Route::get('/', [TroCapXaHoiKeHoachTaiChinhController::class, 'index'])->name('index');
+                Route::get('get-data', [TroCapXaHoiKeHoachTaiChinhController::class, 'getData'])->name('getData');
+                Route::get('xacnhan', [TroCapXaHoiKeHoachTaiChinhController::class, 'xacnhan'])->name('xacnhan');
+                Route::get('tuchoi', [TroCapXaHoiKeHoachTaiChinhController::class, 'tuchoi'])->name('tuchoi');
             });
         });
     });
@@ -172,6 +191,13 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('xacnhan', [MienGiamHPCanBoPhongDaoTaoController::class, 'xacnhan'])->name('xacnhan');
                 Route::get('tuchoi', [MienGiamHPCanBoPhongDaoTaoController::class, 'tuchoi'])->name('tuchoi');
             });
+
+            Route::name('TroCapXaHoi.')->prefix('tro-cap-xa-hoi')->group(function () {
+                Route::get('/', [TroCapXaHoiCanBoPhongDaoTaoController::class, 'index'])->name('index');
+                Route::get('get-data', [TroCapXaHoiCanBoPhongDaoTaoController::class, 'getData'])->name('getData');
+                Route::get('xacnhan', [TroCapXaHoiCanBoPhongDaoTaoController::class, 'xacnhan'])->name('xacnhan');
+                Route::get('tuchoi', [TroCapXaHoiCanBoPhongDaoTaoController::class, 'tuchoi'])->name('tuchoi');
+            });
         });
     });
     Route::middleware('role:7')->group(function () {
@@ -186,6 +212,13 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('get-data', [MienGiamHPLanhDaoTruongController::class, 'getData'])->name('getData');
                 Route::get('xacnhan', [MienGiamHPLanhDaoTruongController::class, 'xacnhan'])->name('xacnhan');
                 Route::get('tuchoi', [MienGiamHPLanhDaoTruongController::class, 'tuchoi'])->name('tuchoi');
+            });
+
+            Route::name('TroCapXaHoi.')->prefix('tro-cap-xa-hoi')->group(function () {
+                Route::get('/', [TroCapXaHoiLanhDaoTruongController::class, 'index'])->name('index');
+                Route::get('get-data', [TroCapXaHoiLanhDaoTruongController::class, 'getData'])->name('getData');
+                Route::get('xacnhan', [TroCapXaHoiLanhDaoTruongController::class, 'xacnhan'])->name('xacnhan');
+                Route::get('tuchoi', [TroCapXaHoiLanhDaoTruongController::class, 'tuchoi'])->name('tuchoi');
             });
         });
     });

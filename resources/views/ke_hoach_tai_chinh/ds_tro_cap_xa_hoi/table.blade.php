@@ -14,7 +14,7 @@
                     "info": false,
                     "serverSide": true,
                     "ajax": {
-                        "url": "{{ route('LanhDaoPhongDaoTao.MienGiamHP.getData') }}", // Thay đổi đường dẫn đến tệp xử lý AJAX
+                        "url": "{{ route('KeHoachTaiChinh.TroCapXaHoi.getData') }}", // Thay đổi đường dẫn đến tệp xử lý AJAX
                         "type": "GET",
                         "data": function(data) {
                             var name_order = document
@@ -93,28 +93,16 @@
                             render: function(data, type, row) {
                                 switch (data) {
                                     case 1:
-                                        return "Người có công với cách mạng";
+                                        return "Học sinh, sinh viên là người dân tộc thiểu số ở vùng cao từ 03 năm trở lên.";
                                         break;
                                     case 2:
-                                        return 'Sinh viên khuyết tật';
+                                        return 'Học sinh, sinh viên mồ côi cả cha lẫn mẹ không nơi nương tựa.';
                                         break;
                                     case 3:
-                                        return 'Sinh viên mồ côi';
+                                        return 'Học sinh, sinh viên là người tàn tật gặp khó khăn về kinh tế.';
                                         break;
                                     case 4:
-                                        return 'Hộ nghèo, cận nghèo';
-                                        break;
-                                    case 5:
-                                        return 'SV dân tộc thiểu số ít người';
-                                        break;
-                                    case 6:
-                                        return 'SV ngành múa, nhạc cụ truyền thống';
-                                        break;
-                                    case 7:
-                                        return 'SV dân tộc thiểu số(không phải dân tộc ít người)';
-                                        break;
-                                    case 8:
-                                        return 'Con của công nhân viên chức tai nạn nghề';
+                                        return 'Học sinh, sinh viên có hoàn cảnh đặc biệt khó khăn về kinh tế, vượt khó học tập, gia đình thuộc diện xóa đói giảm nghèo.';
                                         break;
                                     default:
                                         return '';

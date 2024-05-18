@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\MienGiamHP;
+namespace App\Http\Controllers\TroCapXaHoi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lop;
@@ -9,17 +9,20 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class MienGiamHPPhongDaoTaoController extends Controller
+class TroCapXaHoiPhongDaoTaoController extends Controller
 {
     function index()
     {
         $lop = Lop::get();
-        return view('phong_dao_tao.create_ds_mien_giam_hp.index', ['lop' => $lop]);
+        return view('phong_dao_tao.create_ds_tro_cap_xa_hoi.index', ['lop' => $lop]);
     }
 
     function getData(Request $request)
     {
-        $query = StopStudy::where('type', 1)
+        $query = StopStudy::where('type', 2)->where(function($query) {
+            $query->where('status', 1)
+                  ->orWhere('status', 2);
+        })
         ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
@@ -48,7 +51,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
     }
     function createList(Request $request)
     {
-        $query = StopStudy::where('type', 1)
+        $query = StopStudy::where('type', 2)
             ->where(function ($query) {
                 $query->where('status', 1)
                     ->orWhere('status', 2);
@@ -65,7 +68,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
     }
     function deleteList(Request $request)
     {
-        $query = StopStudy::where('type', 1)
+        $query = StopStudy::where('type', 2)
         ->where(function($query) {
             $query->where('status', 1)
                   ->orWhere('status', 2);
@@ -77,7 +80,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
     }
 
     function guiTBSV() {
-        $query = StopStudy::where('type', 1)->whereNull('parent_id')->where('status', 3)->get();
+        $query = StopStudy::where('type', 2)->whereNull('parent_id')->where('status', 3)->get();
         foreach ($query as $stopStudy) {
             $stopStudy->status = 4; 
             $stopStudy->save();  

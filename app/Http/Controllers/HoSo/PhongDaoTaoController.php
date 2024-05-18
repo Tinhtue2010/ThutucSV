@@ -22,15 +22,10 @@ class PhongDaoTaoController extends Controller
     }
     function index()
     {
-        $miengiamhp = StopStudy::where('type', 1)->whereNull('parent_id')->where(function ($query) {
-            $query->where('status', 2)
-                ->orWhere('status', 1)
-                ->orWhere('status', 3)
-                ->orWhere('status', -3);
-        })->count();
         $tb_miengiamhp = StopStudy::where('type', 1)->where('status', 3)->count();
+        $tb_trocapxahoi = StopStudy::where('type', 2)->where('status', 3)->count();
         $lop = Lop::get();
-        return view('phong_dao_tao.index', ['tb_miengiamhp' => $tb_miengiamhp,'miengiamhp' => $miengiamhp, 'lop' => $lop]);
+        return view('phong_dao_tao.index', ['tb_miengiamhp' => $tb_miengiamhp,'tb_trocapxahoi' => $tb_trocapxahoi, 'lop' => $lop]);
     }
 
     public function getData(Request $request)
@@ -68,6 +63,9 @@ class PhongDaoTaoController extends Controller
             if ($stopStudy->type == 1) {
                 return $this->phongdaotao->bosunghsGHP($request, $stopStudy);
             }
+            if ($stopStudy->type == 2) {
+                return $this->phongdaotao->bosunghsTCXH($request, $stopStudy);
+            }
         } catch (\Throwable $th) {
             abort(404);
         }
@@ -103,6 +101,9 @@ class PhongDaoTaoController extends Controller
             if ($stopStudy->type == 1) {
                 return $this->phongdaotao->tiepnhanhsGHP($request, $stopStudy);
             }
+            if ($stopStudy->type == 2) {
+                return $this->phongdaotao->tiepnhanhsTCXH($request, $stopStudy);
+            }
         } catch (\Throwable $th) {
             abort(404);
         }
@@ -136,6 +137,9 @@ class PhongDaoTaoController extends Controller
         }
         if ($stopStudy->type == 1) {
             return $this->phongdaotao->tuchoihsGHP($request, $stopStudy);
+        }
+        if ($stopStudy->type == 2) {
+            return $this->phongdaotao->tuchoihsTCXH($request, $stopStudy);
         }
     }
 

@@ -52,8 +52,14 @@
                                 <span class="">Thuộc đối tượng</span>
                             </label>
                             <!--end::Label-->
-                            <input @if (isset($don_parent)) @if ($don_parent->status > 0)
-                                readonly @endif @endif class="form-control form-control-solid" name="doituong" value="{{$phieu['doituong'] ?? ''}}" />
+                            <select @if (isset($don_parent)) @if ($don_parent->status != 0)
+                                readonly @endif @endif name="doituong" class="form-select form-select-solid filter-select" data-name="year" data-control="select2" data-placeholder="Năm">
+                                <option value="1">Học sinh, sinh viên là người dân tộc thiểu số ở vùng cao từ 03 năm trở lên.</option>
+                                <option value="2">Học sinh, sinh viên mồ côi cả cha lẫn mẹ không nơi nương tựa.</option>
+                                <option value="3">Học sinh, sinh viên là người tàn tật gặp khó khăn về kinh tế.</option>
+                                <option value="4">Học sinh, sinh viên có hoàn cảnh đặc biệt khó khăn về kinh tế, vượt khó học tập, gia đình thuộc diện xóa đói giảm nghèo.</option>
+
+                            </select>
                         </div>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->

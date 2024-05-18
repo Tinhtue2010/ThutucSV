@@ -85,7 +85,7 @@
                                     }
                                 }
 
-                                if(row['type'] == 1)
+                                if(row['type'] == 1 || row['type'] == 2)
                                 {
                                     dataRes += `<div onClick="tiepnhanhs(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
                                         <span class="path1"></span>

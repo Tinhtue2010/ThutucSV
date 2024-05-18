@@ -63,7 +63,7 @@
                             }
                         },
                         {
-                            data: 'id',
+                            data: 'phantramgiam',
                             render: function(data, type, row) {
                                 return `<p>${data}%</p>`;
                             }

@@ -14,16 +14,12 @@ class MienGiamHPLanhDaoTruongController extends Controller
     function index()
     {
         $lop = Lop::get();
-        return view('ke_hoach_tai_chinh.ds_mien_giam_hp.index', ['lop' => $lop]);
+        return view('lanh_dao_truong.ds_mien_giam_hp.index', ['lop' => $lop]);
     }
 
     function getData(Request $request)
     {
-        $query = StopStudy::where('type', 1)->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
-            $query->where('status', 4)
-                  ->orWhere('status', 5)
-                  ->orWhere('status', -5);
-        })
+        $query = StopStudy::where('type', 1)->whereNull('parent_id')->whereNull('parent_id')
         ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
@@ -45,22 +41,22 @@ class MienGiamHPLanhDaoTruongController extends Controller
 
     function xacnhan() {
         $query = StopStudy::where('type', 1)->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
-            $query->where('status', 4)
-                  ->orWhere('status', 5)
-                  ->orWhere('status', -5);
+            $query->where('status', 5)
+                  ->orWhere('status', 6)
+                  ->orWhere('status', -6);
         })->get();
         foreach ($query as $stopStudy) {
-            $stopStudy->status = 5; 
+            $stopStudy->status = 6; 
             $stopStudy->save();  
             $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-            $this->notification("Danh sách miễn giảm học phí đã được phòng kết hoạch tài chính phê duyệt", null, "GHP", $user_id);
+            $this->notification("Danh sách miễn giảm học phí đã được lãnh đạo trường phê duyệt", null, "GHP", $user_id);
 
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
             $newStopStudy->phieu_id = null;
             $newStopStudy->parent_id = $stopStudy->id;
-            $newStopStudy->note = "Phòng kết hoạch tài chính đã phê duyệt danh sách";
+            $newStopStudy->note = "Lãnh đạo trường đã phê duyệt danh sách";
             $newStopStudy->save();
         }
         return redirect()->back();
@@ -68,24 +64,24 @@ class MienGiamHPLanhDaoTruongController extends Controller
 
     function tuchoi() {
         $query = StopStudy::where('type', 1)->whereNull('parent_id')->where(function($query) {
-            $query->where('status', 4)
-                  ->orWhere('status', 5)
-                  ->orWhere('status', -5);
+            $query->where('status', 5)
+                  ->orWhere('status', 6)
+                  ->orWhere('status', -6);
         })->get();
         foreach ($query as $stopStudy) {
-            $stopStudy->status = -5; 
+            $stopStudy->status = -6; 
             $stopStudy->save();  
             $users = User::where('role',4)->get();
             foreach($users as $item)
             {
-                $this->notification("Danh sách miễn giảm học phí đã bị từ chối phòng kết hoạch tài chính", null, "GHP", $item->id);
+                $this->notification("Danh sách miễn giảm học phí đã bị từ chối lãnh đạo trường", null, "GHP", $item->id);
             }
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 0;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
             $newStopStudy->phieu_id = null;
             $newStopStudy->parent_id = $stopStudy->id;
-            $newStopStudy->note = "Phòng kết hoạch tài chính từ chối danh sách";
+            $newStopStudy->note = "Lãnh đạo trường từ chối danh sách";
             $newStopStudy->save();
         }
         return redirect()->back();

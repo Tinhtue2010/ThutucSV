@@ -23,13 +23,8 @@ class LanhDaoPhongDaoTaoController extends Controller
     function index()
     {
         $tb_miengiamhp = StopStudy::where('type', 1)->whereNull('parent_id')->where('status', 2)->count();
-        $miengiamhp = StopStudy::where('type', 1)->whereNotNull('parent_id')->where(function ($query) {
-            $query->where('status', 2)
-                ->orWhere('status', 1)
-                ->orWhere('status', 3)
-                ->orWhere('status', -3);
-        })->count();
-        return view('lanh_dao_phong_dao_tao.index',['miengiamhp'=>$miengiamhp,'tb_miengiamhp'=>$tb_miengiamhp]);
+        $tb_trocapxahoi = StopStudy::where('type', 2)->whereNull('parent_id')->where('status', 2)->count();
+        return view('lanh_dao_phong_dao_tao.index',['tb_trocapxahoi'=>$tb_trocapxahoi,'tb_miengiamhp'=>$tb_miengiamhp]);
     }
 
     public function getData(Request $request)
