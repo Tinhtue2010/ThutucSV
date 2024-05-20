@@ -153,11 +153,23 @@
         <span class="required">Trạng thái</span>
     </label>
     <!--end::Label-->
-    <select data-dropdown-parent="#select-parent-{{$type}}-3" class="form-select form-select-solid" name="status_dk" data-control="select2" data-hide-search="true"
+    <select data-dropdown-parent="#select-parent-{{$type}}-3" class="form-select form-select-solid" name="status" data-control="select2" data-hide-search="true"
         data-placeholder="Trạng thái">
-        <option value="0">Chưa đăng ký</option>
-        <option value="1" selected="selected">Đã đăng ký</option>
-        <option value="2">Rút hồ sơ</option>
+        <option value="0">Đang học</option>
+        <option value="1">Rút hồ sơ</option>
+        <option value="2">Đã tốt nghiệp</option>
+    </select>
+</div>
+<div class="d-flex flex-column mb-8 fv-row" id="select-parent-{{$type}}-4">
+    <!--begin::Label-->
+    <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+        <span class="required">Giới tính</span>
+    </label>
+    <!--end::Label-->
+    <select data-dropdown-parent="#select-parent-{{$type}}-4" class="form-select form-select-solid" name="gioitinh" data-control="select2" data-hide-search="true"
+        data-placeholder="Giới tính">
+        <option value="0">Nữ</option>
+        <option value="1">Nam</option>
     </select>
 </div>
 

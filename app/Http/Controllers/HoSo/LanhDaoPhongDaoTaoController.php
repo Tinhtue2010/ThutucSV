@@ -24,7 +24,7 @@ class LanhDaoPhongDaoTaoController extends Controller
     {
         $tb_miengiamhp = StopStudy::where('type', 1)->whereNull('parent_id')->where('status', 2)->count();
         $tb_trocapxahoi = StopStudy::where('type', 2)->whereNull('parent_id')->where('status', 2)->count();
-        return view('lanh_dao_phong_dao_tao.index',['tb_trocapxahoi'=>$tb_trocapxahoi,'tb_miengiamhp'=>$tb_miengiamhp]);
+        return view('lanh_dao_phong_dao_tao.index', ['tb_trocapxahoi' => $tb_trocapxahoi, 'tb_miengiamhp' => $tb_miengiamhp]);
     }
 
     public function getData(Request $request)
@@ -32,6 +32,7 @@ class LanhDaoPhongDaoTaoController extends Controller
         $user = Auth::user();
 
         $query = StopStudy::query()
+->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')

@@ -33,7 +33,7 @@ class LanhDaoTruongService  extends Controller
                 } else {
                 }
             }
-
+            Student::where('id',$stopStudy->student_id)->update(['status'=>1]);
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->phieu_id = null;
             $newStopStudy->status = 1;

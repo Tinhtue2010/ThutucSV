@@ -19,7 +19,9 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
 
     function getData(Request $request)
     {
-        $query = StopStudy::where('type', 2)->where(function($query) {
+        $query = StopStudy::where('type', 2)
+        ->studentActive()
+        ->where(function($query) {
             $query->where('status', 1)
                   ->orWhere('status', 2);
         })
@@ -52,6 +54,7 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
     function createList(Request $request)
     {
         $query = StopStudy::where('type', 2)
+        ->studentActive()
             ->where(function ($query) {
                 $query->where('status', 1)
                     ->orWhere('status', 2);
@@ -69,6 +72,7 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
     function deleteList(Request $request)
     {
         $query = StopStudy::where('type', 2)
+        ->studentActive()
         ->where(function($query) {
             $query->where('status', 1)
                   ->orWhere('status', 2);
@@ -80,7 +84,9 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
     }
 
     function guiTBSV() {
-        $query = StopStudy::where('type', 2)->whereNull('parent_id')->where('status', 3)->get();
+        $query = StopStudy::where('type', 2)
+        ->studentActive()
+        ->whereNull('parent_id')->where('status', 3)->get();
         foreach ($query as $stopStudy) {
             $stopStudy->status = 4; 
             $stopStudy->save();  

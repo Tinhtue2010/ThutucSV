@@ -28,6 +28,7 @@ class StopStudy extends Model
         'phantramgiam'
     ];
 
+
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id');
@@ -41,5 +42,18 @@ class StopStudy extends Model
     public function phieu()
     {
         return $this->belongsTo(Phieu::class, 'phieu_id');
+    }
+
+    public  function scopeStudentActive($query) {
+        return $query->where(function ($query) {
+            $query->where(function ($query) {
+                $query->where('stop_studies.type', '!=', 0)
+                    ->where('students.status', 0);
+            })
+                ->orWhere(function ($query) {
+                    $query->where('stop_studies.type', 0)
+                        ->where('students.status', '!=', 2);
+                });
+        });
     }
 }

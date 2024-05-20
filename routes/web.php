@@ -238,6 +238,8 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('create', [StudentManagerController::class, 'create'])->name('create');
             Route::post('update/{id?}', [StudentManagerController::class, 'update'])->name('update');
             Route::post('import-file', [StudentManagerController::class, 'importFile'])->name('importFile');
+
+            Route::post('status', [StudentManagerController::class, 'status'])->name('status');
         });
 
     Route::middleware('role:khoaManager')->name('khoaManager.')->prefix('khoa-manager')->group(function () {

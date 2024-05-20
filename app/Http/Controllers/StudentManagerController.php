@@ -91,8 +91,9 @@ class StudentManagerController extends Controller
                 'gv_tiep_nhan',
                 'gv_thu_tien',
                 'so_tien',
-                'status_dk',
+                'status',
                 'note',
+                'gioitinh'
             ]));
 
             $user = new User();
@@ -134,8 +135,9 @@ class StudentManagerController extends Controller
             'gv_tiep_nhan',
             'gv_thu_tien',
             'so_tien',
-            'status_dk',
+            'status',
             'note',
+            'gioitinh'
         ]));
     }
 
@@ -147,5 +149,9 @@ class StudentManagerController extends Controller
             }
         }
         return true;
+    }
+    function status(Request $request) {
+        Student::whereIn('id',$request->student)->update(["status"=>$request->status]);
+        return 1;
     }
 }

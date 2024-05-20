@@ -68,7 +68,7 @@
                             </label>
                             <!--end::Label-->
                             <input @if (isset($don_parent)) @if ($don_parent->status != 0)
-                            readonly @endif @endif class="form-control form-control-solid" name="noisinh" value="{{$phieu['noisinh'] ?? ''}}"/>
+                            readonly @endif @endif class="form-control form-control-solid" name="noisinh" value="{{ $phieu['noisinh'] ?? '' }}"/>
                         </div>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
@@ -77,28 +77,10 @@
                             </label>
                             <select @if (isset($don_parent)) @if ($don_parent->status != 0)
                                 readonly @endif @endif name="doituong" class="form-select form-select-solid filter-select" data-name="year" data-control="select2" data-placeholder="Năm">
-                                <option value="1"> Người có công với cách mạng và thân nhân của người có công với cách mạng theo Pháp lệnh số
-                                    02/2020/UBTVQH14 về ưu đãi người có công với cách mạng: Thân nhân của người có công với cách mạng bao gồm: Cha đẻ, 
-                                    mẹ đẻ, vợ hoặc chồng, con (con đẻ, con nuôi), người có công nuôi liệt sĩ.</option>
-                                    <option value="2">Sinh viên bị khuyết tật.</option>
-                                    <option value="3">Học sinh, sinh viên mồ côi cả cha lẫn mẹ; mồ côi cha hoặc mẹ, người còn lại rơi vào hoàn cảnh đặc biệt, cha mẹ
-                                    mất tích, … thời điểm mồ côi dưới 16 tuổi (Quy định tại Khoản 1 và Khoản 2 Điều 5, Nghị định 20/2021/NĐ-CP).
-                                    </option>
-                                    <option value="4">Học sinh, sinh viên học tại các cơ sở giáo dục nghề nghiệp và giáo dục đại học là người dân tộc thiểu số thuộc hộ
-                                    nghèo và hộ cận nghèo theo quy định của Thủ tướng Chính phủ (Sinh viên có số hộ nghèo và cận nghèo).
-                                    </option>
-                                    <option value="5">
-                                    Học sinh, sinh viên người dân tộc thiểu số rất ít người (La hủ, La ha, Pà thẻn, Lự, Ngái, Chứt, Lô lô, Mảng, Cống, 
-                                    Cờ lao, Bố y, Si la, Pu péo, Rơ măm, Brâu, Ơ đu) ở vùng có điều kiện kinh tế – xã hội khó khăn và đặc biệt khó khăn.</option>
-                                    <option value="6"> Học sinh, sinh viên các chuyên ngành Múa, Biểu diễn nhạc cụ truyền thống.</option>
-                                    <option value="7">Học sinh, sinh viên là người dân tộc thiểu số (không phải là dân tộc thiểu số rất ít người) ở thôn, bản đặc biệt khó
-                                    khăn, xã khu vực III vùng dân tộc miền núi, xã đặc biệt khó khăn vùng bãi ngang ven biển hải đảo theo quy định của cơ quan 
-                                    có thẩm quyền (Quy định tại QĐ 433/QĐ-UBMT ngày 18/6/2021; QĐ số 861/QĐ-TTg ngày 04/6/2021; 353/QĐ-TTg ngày 
-                                    15/3/2022).</option>
-                                    <option value="8">Học sinh, sinh viên là con cán bộ, công nhân, viên chức mà cha hoặc mẹ bị tai nạn lao động hoặc mắc bệnh nghề
-                                    nghiệp được hưởng trợ cấp thường xuyên (Có QĐ và Giấy chứng nhận trợ cấp TNLĐ-BNN của Bảo hiểm xã hội cấp).</option>
+                                @foreach (config('doituong.miengiamhp') as $index => $item)
+                                    <option value="{{ $index }}">{{ $item[2] }}</option>
+                                @endforeach
                             </select>
-
                         </div>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
@@ -107,16 +89,36 @@
                             </label>
                             <!--end::Label-->
                             <textarea @if (isset($don_parent)) @if ($don_parent->status != 0)
-                                readonly @endif @endif class="form-control form-control-solid h-150px" name="daduochuong">{{$phieu['daduochuong'] ?? ''}}</textarea>
+                                readonly @endif @endif class="form-control form-control-solid h-150px" name="daduochuong">{{ $phieu['daduochuong'] ?? '' }}</textarea>
                         </div>
-
+                        <div class="fs-6 fw-semibol d-flex flex-column">
+                            <p class="100"><b>Hồ sơ minh chứng cần thiết</b> 
+                                <br>
+                                1- Bản phô tô công chứng Giấy chứng nhận thương binh, bệnh binh của cha hoặc mẹ sinh viên; giấy khai sinh của sinh viên. <br>
+                                2- Bản phô tô công chứng Giấy chứng nhận của cơ quan y tế về tình trạng bị khuyết tật, tàn tật đối với những sinh viên khuyết tật, tàn
+                                tật. <br>
+                                3- Bản phô tô công chứng Giấy chứng tử của bố, mẹ hoặc Giấy chứng tử của bố (mẹ), người còn lại mất tích, bị bệnh tâm thần, …; giấy
+                                khai sinh đối với những sinh viên mồ côi cha mẹ khi chưa đủ 16 tuổi. <br>
+                                4- Bản phô tô công chứng Sổ hộ nghèo hoặc hộ cận nghèo <br>
+                                5- Bản phô tô công chứng Giấy khai sinh, giấy tờ minh chứng về chỗ ở đối với SV thuộc dân tộc thiểu số rất ít người. <br>
+                            </p>
+                            <p class="70" style="display: none"><b>Hồ sơ minh chứng cần thiết</b> 
+                                <br>
+                                - Giấy tờ minh chứng về chỗ ở đối với sinh viên ở thôn, bản đặc biệt khó khăn, xã khu vực III vùng dân tộc miền núi, xã đặc biệt khó
+khăn vùng bãi ngang ven biển hải đảo theo quy định của cơ quan có thẩm quyền (Theo QĐ 433/QĐ-UBMT ngày 18/6/2021; QĐ số 861/QĐ-TTg ngày 04/6/2021; 353/QĐ-TTg ngày 15/3/2022)
+                            </p>
+                            <p class="50" style="display: none"><b>Hồ sơ minh chứng cần thiết</b> 
+                                <br>
+                               - Bản phô tô công chứng Quyết định và Giấy chứng nhận trợ cấp TNLĐ-BNN của Bảo hiểm xã hội cấp; giấy khai sinh của sinh viên.
+                            </p>
+                        </div>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
                                 <span class="">Hồ sơ minh chứng (chỉ nhận file pdf)</span>
                             </label>
                             <!--end::Label-->
-                            <input type="file" class="form-control form-control-solid" name="files[]" accept="application/pdf"/>
+                            <input type="file" class="form-control form-control-solid" name="files[]" accept="application/pdf" />
                         </div>
                         <input type="hidden" id="button_clicked" name="button_clicked" value="">
                         <div class="d-flex w-100">
@@ -237,5 +239,26 @@
                 }
             });
         });
+
+        $('[name="doituong"]').on('change', function() {
+            if(this.value < 5)
+            {
+                $(".100").show();
+                $(".70").hide();
+                $(".50").hide();
+            }
+            else if(this.value == 7)
+            {
+                $(".100").hide();
+                $(".70").hide();
+                $(".50").show();
+            }
+            else
+            {
+                $(".100").hide();
+                $(".70").show();
+                $(".50").hide();
+            }
+        })
     </script>
 @endpush

@@ -29,6 +29,7 @@ class KhoaController extends Controller
         $user = Auth::user();
 
         $query = StopStudy::query()
+->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
@@ -36,7 +37,7 @@ class KhoaController extends Controller
 
         $teacher = Teacher::find($user->teacher_id);
         $lopIds = Lop::where('khoa_id', $teacher->khoa_id)->pluck('id');
-        
+
         $query = $query->whereIn('stop_studies.lop_id', $lopIds);
 
         if (isset($request->year)) {
@@ -57,9 +58,8 @@ class KhoaController extends Controller
     {
         try {
             $stopStudy =  StopStudy::find($request->id);
-            if($stopStudy->type == 0)
-            {
-                $this->khoa->xacnhanRHS($request,$stopStudy);
+            if ($stopStudy->type == 0) {
+                $this->khoa->xacnhanRHS($request, $stopStudy);
             }
         } catch (QueryException $e) {
             abort(404);
@@ -70,7 +70,7 @@ class KhoaController extends Controller
         try {
             $stopStudy =  StopStudy::find($request->id);
             if ($stopStudy->type == 0) {
-                $this->khoa->khongxacnhanRHS($request,$stopStudy);
+                $this->khoa->khongxacnhanRHS($request, $stopStudy);
             }
         } catch (QueryException $e) {
             abort(404);

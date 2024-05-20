@@ -25,7 +25,7 @@ class LanhDaoTruongController extends Controller
     {
         $tb_miengiamhp = StopStudy::where('type', 1)->whereNull('parent_id')->where('status', 5)->count();
         $tb_trocapxahoi = StopStudy::where('type', 2)->whereNull('parent_id')->where('status', 5)->count();
-        return view('lanh_dao_truong.index',['tb_miengiamhp'=>$tb_miengiamhp,'tb_trocapxahoi'=>$tb_trocapxahoi]);
+        return view('lanh_dao_truong.index', ['tb_miengiamhp' => $tb_miengiamhp, 'tb_trocapxahoi' => $tb_trocapxahoi]);
     }
 
     public function getData(Request $request)
@@ -33,6 +33,7 @@ class LanhDaoTruongController extends Controller
         $user = Auth::user();
 
         $query = StopStudy::query()
+->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
@@ -56,18 +57,16 @@ class LanhDaoTruongController extends Controller
     function xacnhan(Request $request)
     {
         $stopStudy =  StopStudy::find($request->id);
-        if($stopStudy->type == 0)
-        {
-            return $this->lanhdaotruong->xacnhanRHS($request,$stopStudy);
+        if ($stopStudy->type == 0) {
+            return $this->lanhdaotruong->xacnhanRHS($request, $stopStudy);
         }
     }
 
     function tuchoihs(Request $request)
     {
         $stopStudy =  StopStudy::find($request->id);
-        if($stopStudy->type == 0)
-        {
-            return $this->lanhdaotruong->tuchoihsRHS($request,$stopStudy);
+        if ($stopStudy->type == 0) {
+            return $this->lanhdaotruong->tuchoihsRHS($request, $stopStudy);
         }
     }
 }

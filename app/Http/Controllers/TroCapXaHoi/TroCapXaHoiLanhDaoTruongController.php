@@ -19,7 +19,9 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
 
     function getData(Request $request)
     {
-        $query = StopStudy::where('type', 2)->whereNull('parent_id')->whereNull('parent_id')
+        $query = StopStudy::where('type', 2)
+        ->studentActive()
+        ->whereNull('parent_id')->whereNull('parent_id')
         ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
@@ -40,7 +42,9 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
     }
 
     function xacnhan() {
-        $query = StopStudy::where('type', 2)->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
+        $query = StopStudy::where('type', 2)
+        ->studentActive()
+        ->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
             $query->where('status', 5)
                   ->orWhere('status', 6)
                   ->orWhere('status', -6);
@@ -63,7 +67,9 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
     }
 
     function tuchoi() {
-        $query = StopStudy::where('type', 2)->whereNull('parent_id')->where(function($query) {
+        $query = StopStudy::where('type', 2)
+        ->studentActive()
+        ->whereNull('parent_id')->where(function($query) {
             $query->where('status', 5)
                   ->orWhere('status', 6)
                   ->orWhere('status', -6);

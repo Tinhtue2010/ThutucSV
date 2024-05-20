@@ -19,7 +19,9 @@ class MienGiamHPKeHoachTaiChinhController extends Controller
 
     function getData(Request $request)
     {
-        $query = StopStudy::where('type', 1)->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
+        $query = StopStudy::where('type', 1)
+        ->studentActive()
+        ->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
             $query->where('status', 4)
                   ->orWhere('status', 5)
                   ->orWhere('status', -5);
@@ -44,7 +46,9 @@ class MienGiamHPKeHoachTaiChinhController extends Controller
     }
 
     function xacnhan() {
-        $query = StopStudy::where('type', 1)->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
+        $query = StopStudy::where('type', 1)
+        ->studentActive()
+        ->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
             $query->where('status', 4)
                   ->orWhere('status', 5)
                   ->orWhere('status', -5);
@@ -67,7 +71,9 @@ class MienGiamHPKeHoachTaiChinhController extends Controller
     }
 
     function tuchoi() {
-        $query = StopStudy::where('type', 1)->whereNull('parent_id')->where(function($query) {
+        $query = StopStudy::where('type', 1)
+        ->studentActive()
+        ->whereNull('parent_id')->where(function($query) {
             $query->where('status', 4)
                   ->orWhere('status', 5)
                   ->orWhere('status', -5);

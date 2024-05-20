@@ -34,7 +34,6 @@ return new class extends Migration
             $table->string('gv_tiep_nhan')->nullable();
             $table->string('gv_thu_tien')->nullable();
             $table->bigInteger('so_tien')->nullable();
-            $table->boolean('status_dk')->default(1);
             $table->text('note')->nullable();
 
             $table->timestamps();

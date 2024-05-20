@@ -20,6 +20,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
     function getData(Request $request)
     {
         $query = StopStudy::where('type', 1)
+        ->studentActive()
         ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
@@ -49,6 +50,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
     function createList(Request $request)
     {
         $query = StopStudy::where('type', 1)
+        ->studentActive()
             ->where(function ($query) {
                 $query->where('status', 1)
                     ->orWhere('status', 2);
@@ -66,6 +68,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
     function deleteList(Request $request)
     {
         $query = StopStudy::where('type', 1)
+        ->studentActive()
         ->where(function($query) {
             $query->where('status', 1)
                   ->orWhere('status', 2);
@@ -77,7 +80,9 @@ class MienGiamHPPhongDaoTaoController extends Controller
     }
 
     function guiTBSV() {
-        $query = StopStudy::where('type', 1)->whereNull('parent_id')->where('status', 3)->get();
+        $query = StopStudy::where('type', 1)
+        ->studentActive()
+        ->whereNull('parent_id')->where('status', 3)->get();
         foreach ($query as $stopStudy) {
             $stopStudy->status = 4; 
             $stopStudy->save();  

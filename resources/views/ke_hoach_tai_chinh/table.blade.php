@@ -56,7 +56,7 @@
                                 role = {{ Auth::user()->role }} - 2;
                                 var dataRes = `<div class="d-flex flex-row">`;
                                 if (row['type'] == 0) {
-                                    if (row['status'] == 2 || row['status'] == -3) {
+                                    if (row['status'] == 2 || row['status'] == 3 || row['status'] == -3) {
                                         dataRes += `
                                         <div onClick="xacnhan(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
                                             <span class="path1"></span>

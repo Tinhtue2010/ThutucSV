@@ -86,10 +86,13 @@
                             <thead>
                                 <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                                     <th></th>
+                                    <th><input type="checkbox" onchange="selectAll(this)"/></th>
                                     <th class="text-nowrap" data-name="id">Id</th>
                                     <th class="text-nowrap" data-name="full_name">{{ __('Họ và tên') }}</th>
+                                    <th class="text-nowrap" data-name="gioitinh">{{ __('Giới tính') }}</th>
+                                    <th class="text-nowrap" data-name="status">{{ __('Trạng thái') }}</th>
                                     <th class="text-nowrap" data-name="student_code">{{ __('Mã sinh viên') }}</th>
-                                    <th class="text-nowrap" data-name="student_code">{{ __('Mã sinh viên') }}</th>
+                                    <th class="text-nowrap" data-name="student_id">{{ __('Mã học sinh') }}</th>
                                     <th class="text-nowrap" data-name="khoa_name">{{ __('Khoa') }}</th>
                                     <th class="text-nowrap" data-name="lop_name">{{ __('Lớp') }}</th>
                                     <th class="text-nowrap" data-name="date_of_birth">{{ __('Ngày sinh') }}</th>
@@ -104,7 +107,6 @@
                                     <th class="text-nowrap" data-name="gv_tiep_nhan">{{ __('GV tiếp nhận') }}</th>
                                     <th class="text-nowrap" data-name="gv_thu_tien">{{ __('GV thu tiền') }}</th>
                                     <th class="text-nowrap" data-name="so_tien">{{ __('Số tiền') }}</th>
-                                    <th class="text-nowrap" data-name="status_dk">{{ __('Trạng thái') }}</th>
                                     <th class="text-nowrap" data-name="note">{{ __('Ghi chú') }}</th>
                                     <td class="text-nowrap">{{ __('Chức năng') }}</td>
                                 </tr>

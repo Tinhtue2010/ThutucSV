@@ -10,7 +10,7 @@ class KeHoachTaiChinhService  extends Controller
 {
     function xacnhanRHS($stopStudy)
     {
-        if ($stopStudy->status != 2 && $stopStudy->status != -3) {
+        if ($stopStudy->status != 2 && $stopStudy->status != 3 && $stopStudy->status != -3) {
             abort(404);
         }
         $stopStudy->update(["is_pay" => 1,"note_pay"=>""]);
@@ -19,7 +19,7 @@ class KeHoachTaiChinhService  extends Controller
     }
     function khongxacnhanRHS($request, $stopStudy)
     {
-        if ($stopStudy->status != 2 && $stopStudy->status != -3) {
+        if ($stopStudy->status != 2 && $stopStudy->status != -3 && $stopStudy->status != 3) {
             abort(404);
         }
         $stopStudy->update(["is_pay" => 2,"note_pay"=>$request->note]);

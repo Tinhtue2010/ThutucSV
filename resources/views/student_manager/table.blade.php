@@ -27,8 +27,8 @@
                             data.order_by = order_by;
                             data.columns = undefined;
                             data.order = undefined;
-                            {{request('gvcn') === 'true' ? 'data.gvcn = true;' : ''}}
-                            {{request('khoa') === 'true' ? 'data.khoa = true;' : ''}}
+                            {{ request('gvcn') === 'true' ? 'data.gvcn = true;' : '' }}
+                            {{ request('khoa') === 'true' ? 'data.khoa = true;' : '' }}
                             data.search = '';
                             $('.filter-select').each(function() {
                                 if ($(this).data('name') == undefined || $(this).val() == 'all') {
@@ -53,10 +53,34 @@
                             }
                         },
                         {
+                            data: 'id',
+                            render: function(data, type, row) {
+                                return `<input value="${data}" type="checkbox" class="select-row-table"/>`;
+                            }
+                        },
+                        {
                             data: 'id'
                         },
                         {
                             data: 'full_name'
+                        },
+                        {
+                            data: 'gioitinh',
+                            render: function(data, type, row) {
+                                if (data == 0)
+                                    return "Nữ";
+                                else return "Nam";
+                            }
+                        },
+                        {
+                            data: 'status',
+                            render: function(data, type, row) {
+                                if (data == 0)
+                                    return "Đang học";
+                                else if (data == 1)
+                                    return "Rút hồ sơ"
+                                else return "Đã ra trường"
+                            }
                         },
                         {
                             data: 'student_code'
@@ -65,10 +89,10 @@
                             data: 'student_id'
                         },
                         {
-                            data: 'lop_name'
+                            data: 'khoa_name'
                         },
                         {
-                            data: 'khoa_name'
+                            data: 'lop_name'
                         },
                         {
                             data: 'date_of_birth',
@@ -134,24 +158,6 @@
                             }
                         },
                         {
-                            data: 'status_dk',
-                            render: function(data, type, row) {
-                                switch (data) {
-                                    case 0:
-                                        return "Chưa đăng ký";
-                                        break;
-                                    case 1:
-                                        return "Đã đăng ký";
-                                        break;
-                                    case 2:
-                                        return "Rút hồ sơ";
-                                        break;
-                                    default:
-                                        return "Chưa có thông tin"
-                                }
-                            }
-                        },
-                        {
                             data: 'note'
                         },
                         {
@@ -188,10 +194,14 @@
                     ],
                     paging: false,
                     searching: false,
-                    order: [1, 'asc'],
+                    order: [2, 'asc'],
                     columnDefs: [{
                         orderable: false,
                         targets: 0,
+                        responsivePriority: 1
+                    }, {
+                        orderable: false,
+                        targets: 1,
                         responsivePriority: 1
                     }, {
                         targets: -1,
@@ -298,5 +308,92 @@
         $(document).ready(function() {
             Datatable.init();
         });
+
+        function selectAll(e) {
+            if (e.checked == true) {
+                $('.select-row-table').prop('checked', true);
+            } else
+                $('.select-row-table').prop('checked', false);
+        }
+        $('#btn-totnghiep').click(function() {
+            var selectedValues = [];
+
+            $('.select-row-table:checked').each(function() {
+                selectedValues.push($(this).val());
+            });
+            Swal.fire({
+                text: "Bạn có chắc chắn muốn chuyển tất cả sinh viên đã chọn thành đã tốt nghiệp?",
+                icon: "warning",
+                buttons: ["Hủy", "Đồng ý"],
+                dangerMode: true,
+                buttonsStyling: false,
+                confirmButtonText: "Đồng ý",
+                cancelButtonText: "Hủy",
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-secondary ml-2"
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var data = {};
+                    data.student = selectedValues;
+                    data._token = "{{ csrf_token() }}"
+                    data.status = 2
+                    axios({
+                        method: 'POST',
+                        url: "{{ route('studentManager.status') }}/",
+                        data: data,
+                    }).then((response) => {
+                        mess_success('Thông báo',
+                            "Thành công")
+                        Datatable.loadData();
+                    }).catch(function(error) {
+                        mess_error("Cảnh báo",
+                            "{{ __('Đã có lỗi xảy ra') }}"
+                        )
+                    });
+                }
+            });
+        })
+        $('#btn-chuatotnghiep').click(function() {
+            var selectedValues = [];
+
+            $('.select-row-table:checked').each(function() {
+                selectedValues.push($(this).val());
+            });
+            Swal.fire({
+                text: "Bạn có chắc chắn muốn chuyển tất cả sinh viên đã chọn thành đang học?",
+                icon: "warning",
+                buttons: ["Hủy", "Đồng ý"],
+                dangerMode: true,
+                buttonsStyling: false,
+                confirmButtonText: "Đồng ý",
+                cancelButtonText: "Hủy",
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-secondary ml-2"
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var data = {};
+                    data.student = selectedValues;
+                    data._token = "{{ csrf_token() }}"
+                    data.status = 0
+                    axios({
+                        method: 'POST',
+                        url: "{{ route('studentManager.status') }}/",
+                        data: data,
+                    }).then((response) => {
+                        mess_success('Thông báo',
+                            "Thành công")
+                        Datatable.loadData();
+                    }).catch(function(error) {
+                        mess_error("Cảnh báo",
+                            "{{ __('Đã có lỗi xảy ra') }}"
+                        )
+                    });
+                }
+            });
+        })
     </script>
 @endpush

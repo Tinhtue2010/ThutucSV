@@ -26,10 +26,11 @@ class Student extends Model
         'gv_tiep_nhan',
         'gv_thu_tien',
         'so_tien',
-        'status_dk',
         'note',
         'cmnd',
-        'date_range_cmnd'
+        'date_range_cmnd',
+        'gioitinh',
+        'status'
     ];
 
     public function lop()

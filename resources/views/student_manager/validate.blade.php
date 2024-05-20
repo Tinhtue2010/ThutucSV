@@ -131,7 +131,7 @@
                 }
             }
         },
-        status_dk: {
+        status: {
             validators: {
                 notEmpty: {
                     message: '{{ __('Vui lòng không để trống mục này') }}'

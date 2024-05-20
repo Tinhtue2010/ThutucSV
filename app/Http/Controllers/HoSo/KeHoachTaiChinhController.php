@@ -10,6 +10,7 @@ use App\Models\StopStudy;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 class KeHoachTaiChinhController extends Controller
 {
     private $khtc;
@@ -21,7 +22,7 @@ class KeHoachTaiChinhController extends Controller
     {
         $tb_miengiamhp = StopStudy::where('type', 1)->whereNull('parent_id')->where('status', 4)->count();
         $tb_trocapxahoi = StopStudy::where('type', 2)->whereNull('parent_id')->where('status', 4)->count();
-        return view('ke_hoach_tai_chinh.index',['tb_trocapxahoi'=>$tb_trocapxahoi,'tb_miengiamhp'=>$tb_miengiamhp]);
+        return view('ke_hoach_tai_chinh.index', ['tb_trocapxahoi' => $tb_trocapxahoi, 'tb_miengiamhp' => $tb_miengiamhp]);
     }
 
     public function getData(Request $request)
@@ -29,6 +30,7 @@ class KeHoachTaiChinhController extends Controller
         $user = Auth::user();
 
         $query = StopStudy::query()
+->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
@@ -52,8 +54,7 @@ class KeHoachTaiChinhController extends Controller
     {
         try {
             $stopStudy =  StopStudy::find($request->id);
-            if($stopStudy->type == 0)
-            {
+            if ($stopStudy->type == 0) {
                 $this->khtc->xacnhanRHS($stopStudy);
             }
         } catch (QueryException $e) {
@@ -64,13 +65,11 @@ class KeHoachTaiChinhController extends Controller
     {
         try {
             $stopStudy =  StopStudy::find($request->id);
-            if($stopStudy->type == 0)
-            {
-                $this->khtc->khongxacnhanRHS($request,$stopStudy);
+            if ($stopStudy->type == 0) {
+                $this->khtc->khongxacnhanRHS($request, $stopStudy);
             }
         } catch (QueryException $e) {
             abort(404);
         }
     }
-
 }
