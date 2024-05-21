@@ -41,7 +41,7 @@ class MienGiamHPLanhDaoTruongController extends Controller
     }
 
     function xacnhan() {
-        $query = StopStudy::where('type', 1)->studentActive()
+        $query = StopStudy::where('type', 1)
         ->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
             $query->where('status', 5)
                   ->orWhere('status', 6)
@@ -66,7 +66,6 @@ class MienGiamHPLanhDaoTruongController extends Controller
 
     function tuchoi() {
         $query = StopStudy::where('type', 1)
-        ->studentActive()
         ->whereNull('parent_id')->where(function($query) {
             $query->where('status', 5)
                   ->orWhere('status', 6)

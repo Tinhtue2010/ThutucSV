@@ -17,23 +17,19 @@ return new class extends Migration
             $table->id();
             $table->string('full_name')->nullable();
             $table->string('student_code')->nullable()->unique();
-            $table->string('student_id')->nullable()->unique();
+            $table->string('student_id')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->string('phone')->nullable();
-            $table->string('email')->nullable()->unique();
+            $table->string('email')->nullable();
 
             $table->unsignedBigInteger('lop_id')->nullable();
             $table->foreign('lop_id')->references('id')->on('lops')->onDelete('set null');
 
             $table->year('school_year')->nullable();
-            $table->integer('sum_point')->default(0);
-            $table->boolean('he_tuyen_sinh')->nullable();
+            $table->string('he_tuyen_sinh')->nullable();
             $table->string('nganh_tuyen_sinh')->nullable();
             $table->string('trinh_do')->nullable();
             $table->date('ngay_nhap_hoc')->nullable();
-            $table->string('gv_tiep_nhan')->nullable();
-            $table->string('gv_thu_tien')->nullable();
-            $table->bigInteger('so_tien')->nullable();
             $table->text('note')->nullable();
 
             $table->timestamps();

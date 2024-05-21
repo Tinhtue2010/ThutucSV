@@ -99,14 +99,10 @@
                                     <th class="text-nowrap" data-name="phone">{{ __('Điện thoại') }}</th>
                                     <th class="text-nowrap" data-name="email">{{ __('Email') }}</th>
                                     <th class="text-nowrap" data-name="school_year">{{ __('Khóa') }}</th>
-                                    <th class="text-nowrap" data-name="sum_point">{{ __('Tổng điểm') }}</th>
                                     <th class="text-nowrap" data-name="he_tuyen_sinh">{{ __('Hệ tuyển sinh') }}</th>
                                     <th class="text-nowrap" data-name="nganh_tuyen_sinh">{{ __('Ngành tuyển sinh') }}</th>
                                     <th class="text-nowrap" data-name="trinh_do">{{ __('Trình độ') }}</th>
                                     <th class="text-nowrap" data-name="ngay_nhap_hoc">{{ __('Ngày nhập học') }}</th>
-                                    <th class="text-nowrap" data-name="gv_tiep_nhan">{{ __('GV tiếp nhận') }}</th>
-                                    <th class="text-nowrap" data-name="gv_thu_tien">{{ __('GV thu tiền') }}</th>
-                                    <th class="text-nowrap" data-name="so_tien">{{ __('Số tiền') }}</th>
                                     <th class="text-nowrap" data-name="note">{{ __('Ghi chú') }}</th>
                                     <td class="text-nowrap">{{ __('Chức năng') }}</td>
                                 </tr>

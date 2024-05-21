@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Khoa;
 use App\Models\Lop;
 use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class StudentManagerController extends Controller
 {
@@ -65,6 +68,7 @@ class StudentManagerController extends Controller
     function detele($id)
     {
         try {
+            User::where('student_id',$id)->delete();
             return Student::findOrFail($id)->delete();
         } catch (QueryException $e) {
             abort(404);
@@ -83,14 +87,10 @@ class StudentManagerController extends Controller
                 'email',
                 'lop_id',
                 'school_year',
-                'sum_point',
                 'he_tuyen_sinh',
                 'nganh_tuyen_sinh',
                 'trinh_do',
                 'ngay_nhap_hoc',
-                'gv_tiep_nhan',
-                'gv_thu_tien',
-                'so_tien',
                 'status',
                 'note',
                 'gioitinh'
@@ -127,14 +127,10 @@ class StudentManagerController extends Controller
             'email',
             'lop_id',
             'school_year',
-            'sum_point',
             'he_tuyen_sinh',
             'nganh_tuyen_sinh',
             'trinh_do',
             'ngay_nhap_hoc',
-            'gv_tiep_nhan',
-            'gv_thu_tien',
-            'so_tien',
             'status',
             'note',
             'gioitinh'
@@ -143,15 +139,93 @@ class StudentManagerController extends Controller
 
     function importFile(Request $request)
     {
+        set_time_limit(900);
         if ($request->hasFile('csv_file')) {
             $data = $this->importCSV($request->file('csv_file'));
-            foreach ($data['data'] as $item) {
+            $header = [
+                "ma_hs" => "student_id",
+                "ma_sinh_vien" => "student_code",
+                "ho_ten" => "full_name",
+                "ngay_sinh" => "date_of_birth",
+                "gioi_tinh" => "gioitinh",
+                "so_dt_ca_nhan" => "phone",
+                "email" => "email",
+                "ten_lop" => "lop_id",
+                "he_tuyen_sinh" => "he_tuyen_sinh",
+                "nganh_tuyen_sinh" => "nganh_tuyen_sinh",
+                "trinh_do_van_hoa" => "trinh_do",
+                "ngay_nhap_hoc" => "ngay_nhap_hoc",
+                "ghi_chu_ho_so" => "note",
+                "can_cuoc" => "cmnd",
+                "ngay_cap_can_cuoc" => "date_range_cmnd",
+                "lien_khoa" => "school_year" //
+            ];
+            DB::beginTransaction();
+            try {
+            foreach ($data['data'] as $index => $item) {
+                $student = new Student();
+                foreach ($data['header'] as $index_header => $item_header) {
+                    if (!isset($header[$data['header'][$index_header]])) {
+                        continue;
+                    }
+                    $columnName = $header[$data['header'][$index_header]];
+                    if ($data['header'][$index_header] == 'ten_lop') {
+                        $lop = Lop::where('name', 'like', '%' . $item[$index_header] . '%')->first();
+                        if ($lop) {
+                            $student->lop_id = $lop->id;
+                        } else {
+                            throw new \Exception("Không tìm thấy lớp với tên: " . $item[$index_header]);
+                        }
+                    } else {
+                        if ($columnName == "phone") {
+                            $student->$columnName = '0' . $item[$index_header];
+                        }
+                        else if($columnName == "date_of_birth" || $columnName == "ngay_nhap_hoc" || $columnName == "date_range_cmnd")
+                        {
+                            $student->$columnName = $this->convertDate('m/d/Y',$item[$index_header]);
+                        }
+                        else if($columnName == "gioitinh")
+                        {
+                            if($this->convertVietnamese('$item[$index_header]') == 'nu'){
+                                $student->$columnName = 0;
+                            }
+                            if($this->convertVietnamese('$item[$index_header]') == 'nam'){
+                                $student->$columnName = 1;
+                            }
+                        }
+                        else if($columnName == "email" && filter_var($item[$index_header], FILTER_VALIDATE_EMAIL))
+                        {                                
+                            $student->email = $item[$index_header];
+                        }
+                        else {
+                            $student->$columnName = $item[$index_header];
+                        }
+                    }
+                }
+                $student->save();
+
+                $user = new User();
+
+                $user->name = $student->full_name;
+                $user->username = $student->student_code;
+                $user->password = bcrypt($student->student_code);
+                $user->student_id = $student->id;
+    
+                $user->save();
             }
+            } catch (\Throwable $th) {
+                DB::rollback();
+                abort(404);
+            }
+            DB::commit();
+            return true;
         }
+        abort(404);
         return true;
     }
-    function status(Request $request) {
-        Student::whereIn('id',$request->student)->update(["status"=>$request->status]);
+    function status(Request $request)
+    {
+        Student::whereIn('id', $request->student)->update(["status" => $request->status]);
         return 1;
     }
 }

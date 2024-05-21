@@ -111,7 +111,7 @@
                     getData();
                 });
                 const filteTableLenght = document.querySelector(
-                    '#length-table');
+                    '#length-table select');
                 filteTableLenght.addEventListener('change', function(e) {
                     getData();
                 })
@@ -153,7 +153,7 @@
                 const filterSearch = document.querySelector(
                     '[data-kt-ecommerce-product-filter="search"]');
                 const filteTableLenght = document.querySelector(
-                    '#length-table');
+                    '#length-table select');
 
 
                 const arrangeRow = table.querySelector('[aria-sort]');

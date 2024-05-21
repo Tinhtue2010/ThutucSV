@@ -84,24 +84,6 @@
                                     </div>`;
                                     }
                                 }
-
-                                if(row['type'] == 1 || row['type'] == 2)
-                                {
-                                    dataRes += `<div onClick="tiepnhanhs(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </div>`;
-                                    dataRes += `
-                                    <div onClick="bosunghs(${data})" class="ki-duotone ki-update-folder fs-2x cursor-pointer text-danger">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                    </div>`;
-                                    dataRes += `<div onClick="tuchoihs(${data})" class="ki-duotone ki-minus-square fs-2x cursor-pointer text-danger">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </div>`;
-                                }
                                 dataRes += `
                                     <div onClick="tientrinh(${data})" class="ki-duotone ki-information-2 fs-2x cursor-pointer text-warning">
                                         <span class="path1"></span>
@@ -142,7 +124,7 @@
                     getData();
                 });
                 const filteTableLenght = document.querySelector(
-                    '#length-table');
+                    '#length-table select');
                 filteTableLenght.addEventListener('change', function(e) {
                     getData();
                 })
@@ -184,7 +166,7 @@
                 const filterSearch = document.querySelector(
                     '[data-kt-ecommerce-product-filter="search"]');
                 const filteTableLenght = document.querySelector(
-                    '#length-table');
+                    '#length-table select');
 
 
                 const arrangeRow = table.querySelector('[aria-sort]');

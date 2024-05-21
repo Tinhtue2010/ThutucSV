@@ -25,8 +25,8 @@ class SQLSeeder extends Seeder
         $sql = file_get_contents(database_path('seeders/sql/lops.sql'));
         DB::unprepared($sql);
         
-        $sql = file_get_contents(database_path('seeders/sql/students.sql'));
-        DB::unprepared($sql);
+        // $sql = file_get_contents(database_path('seeders/sql/students.sql'));
+        // DB::unprepared($sql);
 
 
         $sql = file_get_contents(database_path('seeders/sql/users.sql'));

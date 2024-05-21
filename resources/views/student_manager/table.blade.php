@@ -110,27 +110,9 @@
                             data: 'school_year'
                         },
                         {
-                            data: 'sum_point'
-                        },
-                        {
                             data: 'he_tuyen_sinh',
                             render: function(data, type, row) {
-                                switch (data) {
-                                    case 1:
-                                        return "Đại học";
-                                        break;
-                                    case 2:
-                                        return "Cao đẳng";
-                                        break;
-                                    case 3:
-                                        return "Liên thông đại học";
-                                        break;
-                                    case 4:
-                                        return "Thạc sĩ";
-                                        break;
-                                    default:
-                                        return "Chưa có thông tin"
-                                }
+                                return data;
                             }
                         },
                         {
@@ -141,21 +123,6 @@
                         },
                         {
                             data: 'ngay_nhap_hoc'
-                        },
-                        {
-                            data: 'gv_tiep_nhan'
-                        },
-                        {
-                            data: 'gv_thu_tien'
-                        },
-                        {
-                            data: 'so_tien',
-                            render: function(data, type, row) {
-                                return data.toLocaleString("vi-VN", {
-                                    style: "currency",
-                                    currency: "VND"
-                                });
-                            }
                         },
                         {
                             data: 'note'
@@ -219,7 +186,7 @@
                     getData();
                 });
                 const filteTableLenght = document.querySelector(
-                    '#length-table');
+                    '#length-table select');
                 filteTableLenght.addEventListener('change', function(e) {
                     getData();
                 })
@@ -261,7 +228,7 @@
                 const filterSearch = document.querySelector(
                     '[data-kt-ecommerce-product-filter="search"]');
                 const filteTableLenght = document.querySelector(
-                    '#length-table');
+                    '#length-table select');
 
 
                 const arrangeRow = table.querySelector('[aria-sort]');

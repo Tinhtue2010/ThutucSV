@@ -249,6 +249,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('detele/{id?}', [KhoaManagerController::class, 'detele'])->name('detele');
         Route::post('create', [KhoaManagerController::class, 'create'])->name('create');
         Route::post('update/{id?}', [KhoaManagerController::class, 'update'])->name('update');
+        Route::post('import-file', [KhoaManagerController::class, 'importFile'])->name('importFile');
     });
 
     Route::middleware('role:classManager')->name('classManager.')->prefix('class-manager')->group(function () {
@@ -258,6 +259,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('detele/{id?}', [ClassManagerController::class, 'detele'])->name('detele');
         Route::post('create', [ClassManagerController::class, 'create'])->name('create');
         Route::post('update/{id?}', [ClassManagerController::class, 'update'])->name('update');
+        Route::post('import-file', [ClassManagerController::class, 'importFile'])->name('importFile');
     });
 
     Route::middleware('role:teacherManager')->name('teacherManager.')->prefix('teacher-manager')->group(function () {

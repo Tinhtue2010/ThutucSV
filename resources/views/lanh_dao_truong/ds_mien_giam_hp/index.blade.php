@@ -32,16 +32,19 @@
                             <thead>
                             <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                                 <th></th>
-                                <th class="text-nowrap" data-name="id">{{__('id')}}</th>
-                                <th class="text-nowrap" data-name="id">{{__('Họ và tên')}}</th>
-                                <th class="text-nowrap" data-name="id">{!!__('Mức học <br/>phí/tháng')!!}</th>
-                                <th class="text-nowrap" data-name="id">{!!__('Tỉ lệ <br/> miễn, giảm(%)')!!}</th>
-                                <th class="text-nowrap" data-name="id">{!!__('Số tiền miễn,<br/> giảm/tháng')!!}</th>
-                                <th class="text-nowrap" data-name="id">{!!__('Số tháng <br/>miễn, giảm')!!}</th>
-                                <th class="text-nowrap" data-name="id">{!!__('Số tiền được <br/> miễn, giảm/kỳ')!!}</th>
-                                <th class="text-nowrap" data-name="id">{{__('Đối tượng')}}</th>
-                                <th class="text-nowrap" data-name="id">{{__('Ngày sinh')}}</th>
-                                <td class="text-nowrap">{{ __('Chi tiết') }}</td>
+                                <th class="text-nowrap" data-name="id">{{ __('id') }}</th>
+                                <th class="text-nowrap" data-name="status">{{ __('Trạng thái') }}</th>
+                                <th class="text-nowrap" data-name="full_name">{{ __('Họ và tên') }}</th>
+                                <th class="text-nowrap" data-name="hocphi">{!! __('Mức học <br/>phí/tháng') !!}</th>
+                                <th class="text-nowrap" data-name="tilegiam">{!! __('Tỉ lệ giảm') !!}</th>
+                                <th class="text-nowrap">{!! __('Số tiền miễn,<br/> giảm/tháng') !!}</th>
+                                <th class="text-nowrap">{!! __('Số tháng <br/>miễn, giảm') !!}</th>
+                                <th class="text-nowrap">{!! __('Số tiền được <br/> miễn, giảm/kỳ') !!}</th>
+                                <th class="text-nowrap" data-name="type_miengiamhp">{{ __('Đối tượng') }}</th>
+                                <th class="text-nowrap" data-name="date_of_birth">{{ __('Ngày sinh') }}</th>
+                                <th class="text-nowrap" data-name="full_name">{{ __('Lớp') }}</th>
+                                <th class="text-nowrap" data-name="full_name">{{ __('Mã sinh viên') }}</th>
+                                <td class="text-nowrap">{{ __('Chức năng') }}</td>
                             </tr>
                             </thead>
                             <tbody class="fw-semibold text-gray-600">

@@ -52,5 +52,18 @@ return [
             "Học sinh, sinh viên là con cán bộ, công nhân, viên chức mà cha hoặc mẹ bị tai nạn lao động hoặc mắc bệnh nghề nghiệp được hưởng 
         trợ cấp thường xuyên (Có QĐ và Giấy chứng nhận trợ cấp TNLĐ-BNN của Bảo hiểm xã hội cấp)"
         ],
+    ],
+    "statusmiengiamhp" => [
+        ["-1", "Phòng CTSV yêu cầu bổ sung hồ sơ"],
+        ["1", "Phòng CTSV đã tiếp nhận đơn"],
+        ["2", "Chờ lãnh đạo phòng CTSV xác nhận"],
+        ["-2", "Phòng CTSV từ chối"],
+        ["3", "Lãnh đạo phòng CTSV đã xác nhận"],
+        ["-3", "Lãnh đạo phòng CTSV từ chối danh sách"],
+        ["4", "Đã gửi thông báo đến khoa"],
+        ["5", "Phòng KHTC đã xác nhận"],
+        ["-5", "Phòng KHTC từ chối danh sách"],
+        ["6", "Lãnh đạo trường đã xác nhận"],
+        ["-6", "Lãnh đạo trường từ chối DS"]
     ]
 ];

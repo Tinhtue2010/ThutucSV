@@ -81,6 +81,18 @@ class MienGiamHPController extends Controller
 
                 $check->note = $request->data;
                 $check->is_update = 1;
+                if($request->doituong < 5)
+                {
+                    $check->phantramgiam = 100;
+                }
+                else if($request->doituong == 7)
+                {
+                    $check->phantramgiam = 50;
+                }
+                else
+                {
+                    $check->phantramgiam = 70;
+                }
                 $check->type_miengiamhp = $request->doituong ?? 1;
                 $check->update();
                 $phieu = Phieu::where('id', $check->phieu_id)->first();
@@ -103,6 +115,18 @@ class MienGiamHPController extends Controller
                 $query->type_miengiamhp = $request->doituong ?? 1;
                 $query->round = 1;
                 $query->type = 1;
+                if($request->doituong < 5)
+                {
+                    $query->phantramgiam = 100;
+                }
+                else if($request->doituong == 7)
+                {
+                    $query->phantramgiam = 50;
+                }
+                else
+                {
+                    $query->phantramgiam = 70;
+                }
                 $query->note = $request->data;
                 $query->phieu_id = $phieu->id;
                 $query->lop_id = $student->lop_id;

@@ -92,53 +92,13 @@
 
         if(row['type'] == 1 || row['type'] == 2)
         {
-            if(data == -1)
+            @foreach (config('doituong.statusmiengiamhp') as $index => $item)
+            if(data == {{$item[0]}})
             {
-                res = `<span class="mt-1 badge badge-warning">Phòng CTSV yêu cầu bổ sung hồ sơ</span>`;
+                res = `<span class="mt-1 badge badge-<?php if($item[0] < 0) echo "warning"; if($item[0] == 0) echo "secondary";  if($item[0] > 0) echo "success"; ?>">{{$item[1]}}</span>`;
                 
             }
-            if(data == 1)
-            {
-                res = `<span class="mt-1 badge badge-success">Phòng CTSV đã tiếp nhận đơn</span>`;
-            }
-            if(data == 2)
-            {
-                res = `<span class="mt-1 badge badge-success">Chờ lãnh đạo phòng CTSV xác nhận</span>`;
-            }
-            if(data == -2)
-            {
-                res = `<span class="mt-1 badge badge-warning">Phòng CTSV từ chối</span>`;
-            }
-
-            if(data == 3)
-            {
-                res = `<span class="mt-1 badge badge-success">Lãnh đạo phòng CTSV đã xác nhận</span>`;
-            }
-            if(data == -3)
-            {
-                res = `<span class="mt-1 badge badge-warning">Lãnh đạo phòng CTSV từ chối danh sách</span>`;
-            }
-            if(data == 4)
-            {
-                res = `<span class="mt-1 badge badge-success">Đã gửi thông báo đến khoa</span>`;
-            }
-            if(data == 5)
-            {
-                res = `<span class="mt-1 badge badge-success">Phòng KHTC đã xác nhận</span>`;
-            }
-            if(data == -5)
-            {
-                res = `<span class="mt-1 badge badge-warning">Phòng KHTC từ chối danh sách</span>`;
-            }
-
-            if(data == 6)
-            {
-                res = `<span class="mt-1 badge badge-success">Lãnh đạo trường đã xác nhận</span>`;
-            }
-            if(data == -6)
-            {
-                res = `<span class="mt-1 badge badge-warning">Lãnh đạo trường từ chối danh sách</span>`;
-            }
+            @endforeach
         }
 
         if(data < 0 && row['is_update'] == 1 && data != -4)

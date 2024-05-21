@@ -21,11 +21,6 @@ class MienGiamHPCanBoPhongDaoTaoController extends Controller
     {
         $query = StopStudy::where('type', 1)
         ->studentActive()
-        ->where(function($query) {
-            $query->where('status', 2)
-                  ->orWhere('status', 3)
-                  ->orWhere('status', -3);
-        })
         ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
@@ -47,7 +42,6 @@ class MienGiamHPCanBoPhongDaoTaoController extends Controller
 
     function xacnhan() {
         $query = StopStudy::where('type', 1)
-        ->studentActive()
         ->whereNull('parent_id')
         ->where(function($query) {
             $query->where('status', 2)
@@ -73,7 +67,6 @@ class MienGiamHPCanBoPhongDaoTaoController extends Controller
 
     function tuchoi() {
         $query = StopStudy::where('type', 1)
-        ->studentActive()
         ->whereNull('parent_id')
         ->where(function($query) {
             $query->where('status', 2)

@@ -92,10 +92,14 @@
                     modelUpdate.show();
                     const inputElements = form.querySelectorAll('[name]');
                     inputElements.forEach(e => {
-                        if (e.name != '_token') {
+                        if (e.name != '_token' && e.name != 'teacher_id') {
                             e.value = response.data[e.name] == null ? '' : response.data[e.name];
                             var event = new Event('change');
                             e.dispatchEvent(event);
+                        }
+                        if(e.name == 'teacher_id' && response.data[e.name] != null)
+                        {
+                            $(e).val(response.data[e.name]).trigger('change');
                         }
                     });
                 })

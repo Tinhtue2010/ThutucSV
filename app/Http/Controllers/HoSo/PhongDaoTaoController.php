@@ -144,13 +144,14 @@ class PhongDaoTaoController extends Controller
         }
     }
 
-
-
     function duyeths(Request $request)
     {
         $stopStudy =  StopStudy::find($request->id);
         if ($stopStudy->type == 0) {
             return $this->phongdaotao->duyethsRHS($request, $stopStudy);
+        }
+        if ($stopStudy->type == 1) {
+            return $this->phongdaotao->duyethsGHP($request, $stopStudy);
         }
     }
 }

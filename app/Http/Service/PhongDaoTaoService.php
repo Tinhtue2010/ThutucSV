@@ -1204,4 +1204,23 @@ class PhongDaoTaoService extends Controller
 
         abort(404);
     }
+    function duyethsGHP($request, $stopStudy)
+    {
+        if ($stopStudy->status != 1) {
+            abort(404);
+        }
+
+        $newStopStudy = $stopStudy->replicate();
+        $newStopStudy->status = 1;
+        $newStopStudy->teacher_id = Auth::user()->teacher_id;
+        $newStopStudy->parent_id = $request->id;
+        $newStopStudy->phieu_id = null;
+        $newStopStudy->note = "Đang chờ cán bộ phòng CTSV xác nhận";
+        $newStopStudy->save();
+        $stopStudy->update(["status" => 2]);
+        return true;
+
+
+        abort(404);
+    }
 }
