@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('dia_chi')->nullable();
 
             $table->string('sdt')->nullable();
-            $table->string('email')->unique()->nullable();
+            $table->string('email')->nullable();
 
             $table->string('chuc_danh')->nullable();
 

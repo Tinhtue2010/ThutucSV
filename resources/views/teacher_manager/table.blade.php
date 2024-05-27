@@ -54,6 +54,9 @@
                             data: 'id'
                         },
                         {
+                            data: 'username'
+                        },
+                        {
                             data: 'full_name'
                         },
                         {
@@ -97,6 +100,12 @@
                                                 <path d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" fill="#000000" opacity="0.3"/>
                                             </g>
                                         </svg>
+                                    </div>
+                                    <div onClick="btnChangePass(${ data })" class="ml-2 btn btn-icon btn-bg-light btn-active-color-primary btn-sm svg-icon bg-hover-secondary">
+                                        <i class="fs-2 ki-duotone ki-key-square">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </i>
                                     </div>
                                 </div>
                             </td>`;

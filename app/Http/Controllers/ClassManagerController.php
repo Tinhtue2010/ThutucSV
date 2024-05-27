@@ -128,11 +128,9 @@ class ClassManagerController extends Controller
                             $lop->$columnName = $item[$index_header];
                         }
                     }
-                    $lop->name = $item[0];
                     $lop->save();
                 }
             } catch (\Throwable $th) {
-                dd($th);
                 DB::rollback();
                 abort(404);
             }
@@ -140,6 +138,5 @@ class ClassManagerController extends Controller
             return true;
         }
         abort(404);
-        return true;
     }
 }

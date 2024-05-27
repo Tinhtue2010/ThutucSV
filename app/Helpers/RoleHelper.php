@@ -35,17 +35,17 @@ if (!function_exists('Role')) {
                     }
                     break;
                 case "khoaManager":
-                    if ($user->role == 0 || $user->role == 3 || $user->role == 6) {
+                    if ($user->role == 0 || $user->role == 4 || $user->role == 6) {
                         return true;
                     }
                     break;
                 case "classManager":
-                    if ($user->role == 0 || $user->role == 2 || $user->role == 4) {
+                    if ($user->role == 0 || $user->role == 6 || $user->role == 4) {
                         return true;
                     }
                     break;
                 case "teacherManager":
-                    if ($user->role == 0 || $user->role == 3 || $user->role == 6) {
+                    if ($user->role == 0 || $user->role == 4 || $user->role == 6) {
                         return true;
                     }
                     break;

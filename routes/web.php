@@ -228,7 +228,6 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('get-data-child/{id?}', [GiaoVienController::class, 'getDataChild'])->name('getDataChild');
         });
     });
-    // quyền admin hoặc là quyền bên phòng đào tạo được vào
     Route::middleware('role:studentManager')->name('studentManager.')
         ->prefix('student-manager')->group(function () {
             Route::get('/', [StudentManagerController::class, 'index'])->name('index');
@@ -237,7 +236,9 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('detele/{id?}', [StudentManagerController::class, 'detele'])->name('detele');
             Route::post('create', [StudentManagerController::class, 'create'])->name('create');
             Route::post('update/{id?}', [StudentManagerController::class, 'update'])->name('update');
-            Route::post('import-file', [StudentManagerController::class, 'importFile'])->name('importFile');
+            Route::post('import-file', [StudentManagerController::class, 'imp   ortFile'])->name('importFile');
+
+            Route::get('reset-pass/{id?}', [StudentManagerController::class, 'resetPass'])->name('resetPass');
 
             Route::post('status', [StudentManagerController::class, 'status'])->name('status');
         });
@@ -269,6 +270,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('detele/{id?}', [TeacherManagerController::class, 'detele'])->name('detele');
         Route::post('create', [TeacherManagerController::class, 'create'])->name('create');
         Route::post('update/{id?}', [TeacherManagerController::class, 'update'])->name('update');
+        Route::post('import-file', [TeacherManagerController::class, 'importFile'])->name('importFile');
+
+        Route::get('reset-pass/{id?}', [TeacherManagerController::class, 'resetPass'])->name('resetPass');
     });
 
     Route::name('notification.')->prefix('notification')->group(function () {

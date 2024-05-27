@@ -154,6 +154,12 @@
                                             </g>
                                         </svg>
                                     </div>
+                                    <div onClick="btnChangePass(${ data })" class="ml-2 btn btn-icon btn-bg-light btn-active-color-primary btn-sm svg-icon bg-hover-secondary">
+                                        <i class="fs-2 ki-duotone ki-key-square">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </i>
+                                    </div>
                                 </div>
                             </td>`;
                             }

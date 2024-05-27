@@ -36,6 +36,7 @@
                                 <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                                     <th></th>
                                     <th class="text-nowrap" data-name="id">Id</th>
+                                    <th class="text-nowrap" data-name="username">{{ __('Tài khoản') }}</th>
                                     <th class="text-nowrap" data-name="full_name">{{ __('Họ tên') }}</th>
                                     <th class="text-nowrap" data-name="teacher_code">{{ __('Khoa') }}</th>
                                     <th class="text-nowrap" data-name="teacher_id">{{ __('Địa chỉ') }}</th>
@@ -100,4 +101,5 @@
     @include('teacher_manager.table')
     @include('teacher_manager.create')
     @include('teacher_manager.update')
+    @include('teacher_manager.change_pass')
 @endsection

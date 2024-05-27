@@ -53,11 +53,11 @@
                                                 <!--begin::Number-->
                                                 <div class="d-flex align-items-center">
                                                     <i class="ki-outline ki-pointers fs-3 text-success me-2"></i>
-                                                    <div class="fs-2 fw-bold counted" data-kt-countup="true" data-kt-countup-value="{{ $student->sum_point }}" data-kt-countup-prefix="Đ" data-kt-initialized="1">{{ $student->sum_point }} điểm</div>
+                                                    <div class="fs-2 fw-bold counted" data-kt-countup="true" data-kt-countup-value="{{ $student->sum_point }}" data-kt-countup-prefix="Đ" data-kt-initialized="1">Mã sinh viên</div>
                                                 </div>
                                                 <!--end::Number-->
                                                 <!--begin::Label-->
-                                                <div class="fw-semibold fs-6 text-gray-400">Tổng điểm</div>
+                                                <div class="fw-semibold fs-6 text-gray-400">{{ $student->student_code }}</div>
                                                 <!--end::Label-->
                                             </div>
                                             <!--end::Stat-->
@@ -65,12 +65,12 @@
                                             <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                                 <!--begin::Number-->
                                                 <div class="d-flex align-items-center">
-                                                    <i class="ki-outline ki-dollar fs-3 text-success me-2"></i>
-                                                    <div class="fs-2 fw-bold counted" data-kt-countup="true" data-kt-countup-value="{{ $student->so_tien }}" data-kt-initialized="1">{{ number_format($student->so_tien, 0, ',', '.') }} VNĐ</div>
+                                                    <i class="ki-outline ki-archive-tick fs-3 text-success me-2"></i>
+                                                    <div class="fs-2 fw-bold counted" data-kt-countup="true" data-kt-countup-value="{{ $student->so_tien }}" data-kt-initialized="1">Ngành</div>
                                                 </div>
                                                 <!--end::Number-->
                                                 <!--begin::Label-->
-                                                <div class="fw-semibold fs-6 text-gray-400">Số tiền đã đóng</div>
+                                                <div class="fw-semibold fs-6 text-gray-400">{{$student->nganh_tuyen_sinh}}</div>
                                                 <!--end::Label-->
                                             </div>
                                             <!--end::Stat-->
@@ -215,52 +215,12 @@
                         <!--begin::Row-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Khóa</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ $student->school_year }}</span>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Row-->
-                        <!--begin::Row-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Tổng điểm</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ $student->sum_point }}</span>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Row-->
-                        <!--begin::Row-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
                             <label class="col-lg-4 fw-semibold text-muted">Hệ đào tạo</label>
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8">
                                 <span class="fw-bold fs-6 text-gray-800">
-                                    @switch($student->he_tuyen_sinh)
-                                        @case(1)
-                                            Đại học
-                                        @break
-
-                                        @case(2)
-                                            Cao đẳng
-                                        @break
-
-                                        @case(3)
-                                            Liên thông đại học
-                                        @break
-
-                                        @case(4)
-                                            Thạc sĩ
-                                        @break
-                                    @endswitch
+                                    {{$student->he_tuyen_sinh}}
                                 </span>
                             </div>
                             <!--end::Col-->
@@ -299,42 +259,6 @@
                             <div class="col-lg-8">
                                 <span class="fw-bold fs-6 text-gray-800">{{ date('d/m/Y', strtotime($student->ngay_nhap_hoc)) }}
                                 </span>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Row-->
-                        <!--begin::Row-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Giáo viên tiếp nhận</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ $student->gv_tiep_nhan }}</span>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Row-->
-                        <!--begin::Row-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Giáo viên thu tiền</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ $student->gv_thu_tien }}</span>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Row-->
-                        <!--begin::Row-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Số tiền đã đóng</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ number_format($student->so_tien, 0, ',', '.') }} VNĐ</span>
                             </div>
                             <!--end::Col-->
                         </div>

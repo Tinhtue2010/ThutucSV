@@ -158,7 +158,6 @@ class StudentManagerController extends Controller
                 "ghi_chu_ho_so" => "note",
                 "can_cuoc" => "cmnd",
                 "ngay_cap_can_cuoc" => "date_range_cmnd",
-                "lien_khoa" => "school_year" //
             ];
             DB::beginTransaction();
             try {
@@ -186,10 +185,10 @@ class StudentManagerController extends Controller
                         }
                         else if($columnName == "gioitinh")
                         {
-                            if($this->convertVietnamese('$item[$index_header]') == 'nu'){
+                            if($this->convertVietnamese($item[$index_header]) == 'nu'){
                                 $student->$columnName = 0;
                             }
-                            if($this->convertVietnamese('$item[$index_header]') == 'nam'){
+                            if($this->convertVietnamese($item[$index_header]) == 'nam'){
                                 $student->$columnName = 1;
                             }
                         }
@@ -210,7 +209,7 @@ class StudentManagerController extends Controller
                 $user->username = $student->student_code;
                 $user->password = bcrypt($student->student_code);
                 $user->student_id = $student->id;
-    
+                
                 $user->save();
             }
             } catch (\Throwable $th) {
@@ -227,5 +226,17 @@ class StudentManagerController extends Controller
     {
         Student::whereIn('id', $request->student)->update(["status" => $request->status]);
         return 1;
+    }
+
+    function resetPass($id)
+    {
+        try {
+            $student = Student::find($id);
+            
+            User::where('student_id',$id)->update(["password"=>bcrypt($student->student_code)]);
+            return true;
+        } catch (QueryException $e) {
+            abort(404);
+        }
     }
 }
