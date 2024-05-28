@@ -57,6 +57,7 @@ class LanhDaoTruongController extends Controller
     function xacnhan(Request $request)
     {
         $stopStudy =  StopStudy::find($request->id);
+        $this->giaiQuyetCongViec($request->ykientiepnhan ?? '',$stopStudy,4);
         if ($stopStudy->type == 0) {
             return $this->lanhdaotruong->xacnhanRHS($request, $stopStudy);
         }

@@ -101,5 +101,6 @@
         <!--end::Content-->
     </div>
     @include('lanh_dao_truong.ds_mien_giam_hp.table')
+    @include('lanh_dao_truong.xacnhanDS',['target'=>'xacnhanDS'])
     @include('giao_vien.chitiet',['target'=>'chitiet'])
 @endsection

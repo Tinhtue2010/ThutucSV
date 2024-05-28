@@ -17,6 +17,7 @@
                         "url": "{{ route('PhongDaoTao.MienGiamHP.getData') }}", // Thay đổi đường dẫn đến tệp xử lý AJAX
                         "type": "GET",
                         "data": function(data) {
+                            tinhTong();
                             var name_order = document
                                 .querySelectorAll(
                                     'table thead tr th')[data
@@ -166,8 +167,7 @@
                                 role = {{ Auth::user()->role }} - 2;
                                 var dataRes = `<div class="d-flex flex-row">`;
                                 if (row['type'] == 1 || row['type'] == 2) {
-                                    if(row['status'] == 0 || row['status'] == -1 || row['status'] == 2 || row['status'] == -2)
-                                    {
+                                    if (row['status'] == 0 || row['status'] == -1 || row['status'] == 2 || row['status'] == -2) {
                                         dataRes += `<div onClick="tiepnhanhs(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
@@ -271,6 +271,7 @@
             };
 
             function getData(propsPage) {
+                tinhTong();
                 const filterSearch = document.querySelector(
                     '[data-kt-ecommerce-product-filter="search"]');
                 const filteTableLenght = document.querySelector('#length-table select');
@@ -298,6 +299,21 @@
                 datatable.ajax.reload();
             }
 
+            function tinhTong() {
+                $.ajax({
+                    url: '{{ route('MienGiamHP.tinhSoLuong') }}',
+                    type: 'GET',
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        var hocphi =Number(response[0].hocphi).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+                        $('#tinhtong').html(`
+                        <h5>Tổng số lượng sinh viên : ${response[0].tong}</h5>
+                        <h5>Tổng số tiền : ${hocphi}</h5>
+                        `);
+                    }
+                });
+            }
             @include('layout.render_pagination')
         }();
 

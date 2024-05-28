@@ -68,6 +68,8 @@
                             <!--end::Menu-->
                         </div>
                     </div>
+                    <div id="tinhtong">
+                    </div>
                 </div>
                 <!--end::Toolbar wrapper-->
             </div>

@@ -40,7 +40,7 @@ class MienGiamHPLanhDaoTruongController extends Controller
         return $data;
     }
 
-    function xacnhan() {
+    function xacnhan(Request $request) {
         $query = StopStudy::where('type', 1)
         ->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
             $query->where('status', 5)
@@ -48,6 +48,7 @@ class MienGiamHPLanhDaoTruongController extends Controller
                   ->orWhere('status', -6);
         })->get();
         foreach ($query as $stopStudy) {
+            $this->giaiQuyetCongViec($request->ykientiepnhan, $stopStudy,4);
             $stopStudy->status = 6; 
             $stopStudy->save();  
             $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;

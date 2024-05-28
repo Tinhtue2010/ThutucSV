@@ -20,8 +20,7 @@ class RoleMiddleware
     {
         if (Auth::check()) {
             if (isset($role)) {
-                if(Role($role))
-                {
+                if (Role($role)) {
                     return $next($request);
                 }
             }

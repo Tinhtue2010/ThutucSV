@@ -1172,25 +1172,6 @@ class PhongDaoTaoService extends Controller
         $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
         $this->notification("Đơn xin rút hồ sơ của bạn đang chờ cán bộ phòng CTSV xác nhận", null, "RHS",$stopStudy->student_id,$user_id);
 
-        // if ($stopStudy->type == 0) {
-        //     $content_phieu['ndgiaiquyet'] = "đơn xin rút hồ sơ";
-        //     $this->notification("Đơn xin rút hồ sơ của bạn đang chờ cán bộ phòng CTSV xác nhận", null, "RHS");
-        // }
-        // if ($stopStudy->type == 1) {
-        //     $content_phieu['ndgiaiquyet'] = "đơn xin miễn giảm học phí";
-        //     $this->notification("Đơn xin miễn giảm học phí của bạn đang chờ cán bộ phòng CTSV xác nhận", null, "GHP");
-        // }
-        // if ($stopStudy->type == 2) {
-        //     $content_phieu['ndgiaiquyet'] = "đơn xin trợ cấp xã hội";
-        //     $this->notification("Đơn xin trợ cấp xã hội của bạn đang chờ cán bộ phòng CTSV xác nhận", null, "TCXH");
-        // }
-
-        // if ($stopStudy->type == 3) {
-        //     $content_phieu['ndgiaiquyet'] = "đơn xin chế độ chính sách";
-        //     $this->notification("Đơn xin chế độ chính sách của bạn đang chờ cán bộ phòng CTSV xác nhận", null, "CDCS");
-        // }
-
-
         $newStopStudy = $stopStudy->replicate();
         $newStopStudy->status = 1;
         $newStopStudy->teacher_id = Auth::user()->teacher_id;

@@ -54,6 +54,7 @@ return [
         ],
     ],
     "statusmiengiamhp" => [
+        ["0", "Sinh viên gửi hồ sơ"],
         ["-1", "Phòng CTSV yêu cầu bổ sung hồ sơ"],
         ["1", "Phòng CTSV đã tiếp nhận đơn"],
         ["2", "Chờ lãnh đạo phòng CTSV xác nhận"],

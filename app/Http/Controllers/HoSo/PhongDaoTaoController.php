@@ -39,7 +39,6 @@ class PhongDaoTaoController extends Controller
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
             ->select('stop_studies.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name');
 
-
         if (isset($request->year)) {
             $query->whereYear('stop_studies.created_at', $request->year);
         }
@@ -96,6 +95,9 @@ class PhongDaoTaoController extends Controller
     {
         try {
             $stopStudy =  StopStudy::find($request->id);
+
+            $this->giaiQuyetCongViec($request->ykientiepnhan ?? '',$stopStudy,1);
+            
             if ($stopStudy->type == 0) {
                 return $this->phongdaotao->tiepnhanhsRHS($request, $stopStudy);
             }
@@ -147,6 +149,7 @@ class PhongDaoTaoController extends Controller
     function duyeths(Request $request)
     {
         $stopStudy =  StopStudy::find($request->id);
+        $this->giaiQuyetCongViec($request->ykientiepnhan ?? '',$stopStudy,2);
         if ($stopStudy->type == 0) {
             return $this->phongdaotao->duyethsRHS($request, $stopStudy);
         }

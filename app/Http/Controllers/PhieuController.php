@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Phieu;
+use App\Models\StopStudy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -75,5 +76,23 @@ class PhieuController extends Controller
             }
         }
         return json_decode($phieu->content);
+    }
+
+    function giaQuyetCongViec($id) {
+        if($id == null)
+        {
+            abort(404);
+        }
+        $don = StopStudy::where('id', $id)->first();
+        if(!$don)
+        {
+            abort(404);
+        }
+        $phieu = [];
+        $phieu['tiepnhan'] = json_decode($don->tiepnhan);
+        $phieu['ykien'] =json_decode($don->ykien);
+        $phieu['lanhdaophong'] =json_decode($don->lanhdaophong);
+        $phieu['lanhdaotruong'] =json_decode($don->lanhdaotruong);
+        return view('document.theodoithongke.theodoicongviec',['phieu'=>$phieu,'type'=>$don->type]);
     }
 }

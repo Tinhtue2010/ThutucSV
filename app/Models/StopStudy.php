@@ -25,7 +25,11 @@ class StopStudy extends Model
         'note_pay',
         'time_receive',
         'type_miengiamhp',
-        'phantramgiam'
+        'phantramgiam',
+        'tiepnhan',
+        'ykien',
+        'lanhdaophong',
+        'lanhdaotruong'
     ];
 
 

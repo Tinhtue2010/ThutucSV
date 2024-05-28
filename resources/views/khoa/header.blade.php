@@ -44,6 +44,13 @@
                                 </div>
                                 <p class="m-auto fw-medium">: Chi tiết đơn</p>
                             </div>
+                            <div class="d-flex flex-row me-3">
+                                <div class="ki-duotone ki-abstract-4 fs-2x  text-dark">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </div>
+                                <p class="m-auto fw-medium">: Phiếu theo dõi giải quyết công việc</p>
+                            </div>
                         </div>
                     </div>
                 </div>

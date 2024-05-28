@@ -44,6 +44,13 @@
                                 </div>
                                 <p class="m-auto fw-medium">: Chi tiết đơn</p>
                             </div>
+                            <div class="d-flex flex-row me-3">
+                                <div class="ki-duotone ki-abstract-4 fs-2x  text-dark">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </div>
+                                <p class="m-auto fw-medium">: Phiếu theo dõi giải quyết công việc</p>
+                            </div>
                         </div>
                     </div>
                     <div class="w-100 justify-content-end flex-wrap d-flex">
@@ -62,7 +69,7 @@
     
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="{{ route('LanhDaoTruong.MienGiamHP.index') }}" target="_blank" class="menu-link px-3">Tạo danh sách miễn giảm học phí</a>
+                                        <a href="{{ route('LanhDaoTruong.MienGiamHP.index') }}" target="_blank" class="menu-link px-3">Danh sách miễn giảm học phí</a>
                                     </div>
                                     <div class="menu-item px-3">
                                         <a href="{{ route('LanhDaoTruong.TroCapXaHoi.index') }}" target="_blank" class="menu-link px-3">Tạo danh sách trợ cấp xã hội</a>

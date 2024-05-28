@@ -19,22 +19,12 @@
                             <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="ykientiepnhan"></textarea>
                         </div>
                         <br>
-                        <div class="d-flex flex-column mb-8 fv-row">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-start fs-6 fw-semibold mb-2 flex-column">
-                                <span class="required">Nội dung</span>
-                                <span class="text-warning">Lưu ý: nội dung sẽ được thông báo cho sinh viên</span>
-                            </label>
-                            <!--end::Label-->
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="note">Lãnh đạo phòng CTSV đã duyệt đơn</textarea>
-                        </div>
-                        
                     </div>
                     <div class="card-footer">
                         <button type="submit"
-                                class="btn btn-success mr-2">{{ __('Cập nhật') }}</button>
+                                class="btn btn-success mr-2">{{ __('Xác nhận') }}</button>
                         <button type="reset"
-                                class="btn btn-secondary">{{ __('Nhập lại') }}</button>
+                                class="btn btn-secondary">{{ __('Hủy') }}</button>
                     </div>
                 </form>
             </div>
@@ -69,11 +59,11 @@
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
-                        url: "{{ route('LanhDaoPhongDaoTao.xacnhan') }}",
+                        url: "{{route('LanhDaoPhongDaoTao.MienGiamHP.xacnhan')}}",
                         data: form.serialize(),
                     }).then((response) => {
                         mess_success('Thông báo',
-                            "Xác nhận đơn thành công")
+                            "Duyệt danh sách thành công")
                         $(this).trigger("reset");
                         model{{$target}}.hide();
                         Datatable.loadData();
@@ -91,7 +81,8 @@
         });
 
 
-        function xacnhan(data) {
+        function xacnhanDS() {
+            data = 0;
             modalEl = document.querySelector('#kt_modal_{{$target}}_target');
             if (!modalEl) {
                 return;

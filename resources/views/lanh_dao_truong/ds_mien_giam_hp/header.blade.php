@@ -1,7 +1,7 @@
         <!--begin::Toolbar-->
         <div id="kt_app_toolbar" class="app-toolbar pt-7 pt-lg-10">
             <!--begin::Toolbar container-->
-            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex align-items-stretch">
+            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex align-items-stretch d-flex flex-column">
                 <!--begin::Toolbar wrapper-->
                 <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
                     <!--begin::Page title-->
@@ -16,12 +16,14 @@
                     <!--end::Page title-->
                     <div class="d-flex align-items-center gap-2 gap-lg-3">
                         <div class="d-flex flex-row flex-wrap">
-                            <a href="{{ route('LanhDaoTruong.MienGiamHP.xacnhan') }}" class="btn btn-primary me-2">Phê duyệt danh sách</a>
+                            <div onclick="xacnhanDS()" class="btn btn-primary me-2">Phê duyệt danh sách</div>
                             <a href="{{ route('LanhDaoTruong.MienGiamHP.tuchoi') }}" class="btn btn-warning">Từ chối danh sách</a>
                         </div>
                     </div>
                 </div>
                 <!--end::Toolbar wrapper-->
+                <div id="tinhtong" class="w-100">
+                </div>
             </div>
             <!--end::Toolbar container-->
         </div>

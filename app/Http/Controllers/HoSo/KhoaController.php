@@ -29,14 +29,14 @@ class KhoaController extends Controller
         $user = Auth::user();
 
         $query = StopStudy::query()
-->studentActive()
+        ->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
             ->select('stop_studies.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name');
 
         $teacher = Teacher::find($user->teacher_id);
-        $lopIds = Lop::where('khoa_id', $teacher->khoa_id)->pluck('id');
+        $lopIds = Lop::where('khoa_id', $teacher->khoa_id ?? 0)->pluck('id') ?? [];
 
         $query = $query->whereIn('stop_studies.lop_id', $lopIds);
 

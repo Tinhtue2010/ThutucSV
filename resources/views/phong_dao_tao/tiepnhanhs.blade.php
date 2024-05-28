@@ -32,6 +32,12 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-12">
+                            <label for="kt_td_picker_linked_2_input" class="form-label">Ý kiến giải quyết công việc</label><br>
+                            <label for="kt_td_picker_linked_2_input" class="form-label text-warning">Lưu ý: Nội dung sẽ được lưu vào phiếu theo dõi giải quyết công việc</label>
+                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="ykientiepnhan"></textarea>
+                        </div>
+                        <br>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-start flex-column fs-6 fw-semibold mb-2">

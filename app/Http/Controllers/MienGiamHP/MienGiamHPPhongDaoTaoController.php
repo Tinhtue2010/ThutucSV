@@ -20,8 +20,8 @@ class MienGiamHPPhongDaoTaoController extends Controller
     function getData(Request $request)
     {
         $query = StopStudy::where('type', 1)
-        ->studentActive()
-        ->whereNull('parent_id')
+            ->studentActive()
+            ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
             ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'lops.hocphi');
@@ -50,7 +50,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
     function createList(Request $request)
     {
         $query = StopStudy::where('type', 1)
-        ->studentActive()
+            ->studentActive()
             ->where(function ($query) {
                 $query->where('stop_studies.status', 1)
                     ->orWhere('stop_studies.status', 2);
@@ -59,48 +59,47 @@ class MienGiamHPPhongDaoTaoController extends Controller
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->update(['status' => 2]);
         $username = Auth::user()->name;
-        $users = User::where('role',6)->get();
-        foreach($users as $item)
-        {
-            $this->notification("Danh sách miễn giảm học phí đã được tạo bởi ".$username, null, "GHP", $item->id);
+        $users = User::where('role', 6)->get();
+        foreach ($users as $item) {
+            $this->notification("Danh sách miễn giảm học phí đã được tạo bởi " . $username, null, "GHP", $item->id);
         }
         return redirect()->back();
     }
     function deleteList(Request $request)
     {
         $query = StopStudy::where('type', 1)
-        ->studentActive()
-        ->where(function($query) {
-            $query->where('stop_studies.status', 1)
-                  ->orWhere('stop_studies.status', 2);
-        })
-        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-        ->whereNull('parent_id')
-        ->update(['status' => 1]);
+            ->studentActive()
+            ->where(function ($query) {
+                $query->where('stop_studies.status', 1)
+                    ->orWhere('stop_studies.status', 2);
+            })
+            ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+            ->whereNull('parent_id')
+            ->update(['status' => 1]);
 
         return redirect()->back();
     }
 
-    function guiTBSV() {
+    function guiTBSV()
+    {
         $query = StopStudy::where('type', 1)
-        ->studentActive()
-        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-        ->whereNull('parent_id')
-        ->where('stop_studies.status', 3)
-        ->select('stop_studies.*')
-        ->get();
+            ->studentActive()
+            ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+            ->whereNull('parent_id')
+            ->where('stop_studies.status', 3)
+            ->select('stop_studies.*')
+            ->get();
         foreach ($query as $stopStudy) {
-            $stopStudy->status = 4; 
-            $stopStudy->save();  
-            $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
+            $stopStudy->status = 4;
+            $stopStudy->save();
+            $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
             $this->notification("Cần kiểm tra lại thông tin trong danh sách miễn giảm học phí", null, "GHP", $user_id);
-            
-            $users = User::where(function($query) {
+
+            $users = User::where(function ($query) {
                 $query->where('role', 2)
-                      ->orWhere('role', 3);
+                    ->orWhere('role', 3);
             })->get();
-            foreach($users as $item)
-            {
+            foreach ($users as $item) {
                 $this->notification("Danh sách miễn giảm học phí đã bị từ chối bởi lãnh đạo phòng đào tạo ", null, "GHP", $item->id);
             }
             $newStopStudy = $stopStudy->replicate();
@@ -112,5 +111,18 @@ class MienGiamHPPhongDaoTaoController extends Controller
             $newStopStudy->save();
         }
         return redirect()->back();
+    }
+
+    function tinhSoLuong()
+    {
+        $miengiamHP = StopStudy::where('type', 1)->where('stop_studies.status', '>', 0)
+            ->studentActive()
+            ->studentActive()
+            ->whereNull('parent_id')
+            ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+            ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            ->selectRaw('ROUND(SUM(stop_studies.phantramgiam / 100 * lops.hocphi)) as hocphi, COUNT(*) as tong')
+            ->get()->toArray();
+        return $miengiamHP;
     }
 }

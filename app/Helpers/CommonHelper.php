@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Notification;
+use App\Models\Teacher;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -109,6 +110,33 @@ trait CommonHelper
             return Carbon::createFromFormat($format, $date)->format('Y-m-d');
         } catch (\Throwable $th) {
             return null;
+        }
+    }
+    function getDateNow()
+    {
+        $currentDate = Carbon::now();
+        $day = $currentDate->day;
+        $month = $currentDate->month;
+        $year = $currentDate->year;
+        return "$day/$month/$year";
+    }
+    function giaiQuyetCongViec($ykien, $stopStudy, $type = 1)
+    {
+        $teacher = Teacher::find(Auth::user()->teacher_id);
+        $data['thoigian'] = $this->getDateNow();
+        $data['hoten'] = $teacher->full_name;
+        $data['data'] = $ykien;
+        if ($type == 1) {
+            $stopStudy->update(['tiepnhan' => json_encode($data)]);
+        }
+        if ($type == 2) {
+            $stopStudy->update(['ykien' => json_encode($data)]);
+        }
+        if ($type == 3) {
+            $stopStudy->update(['lanhdaophong' => json_encode($data)]);
+        }
+        if ($type == 4) {
+            $stopStudy->update(['lanhdaotruong' => json_encode($data)]);
         }
     }
     public function queryPagination($request, $query, $searchName = [])

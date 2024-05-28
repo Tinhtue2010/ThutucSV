@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ApproveController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheDoChinhSachController;
 use App\Http\Controllers\ClassManagerController;
@@ -125,6 +124,11 @@ Route::group(['middleware' => ['auth']], function () {
         });
     });
 
+    Route::middleware('role:notStudent')->group(function () {
+        Route::name('MienGiamHP.')->prefix('mien-giam-hp')->group(function () {
+            Route::get('tinh-so-luong', [MienGiamHPPhongDaoTaoController::class, 'tinhSoLuong'])->name('tinhSoLuong');
+        });
+    });
     Route::middleware('role:4')->group(function () {
         Route::name('PhongDaoTao.')->prefix('phong-dao-tao')->group(function () {
             Route::get('/', [PhongDaoTaoController::class, 'index'])->name('index');
@@ -159,7 +163,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::middleware('role:5')->group(function () {
         Route::name('KeHoachTaiChinh.')->prefix('ke-hoach-tai-chinh')->group(function () {
             Route::get('/', [KeHoachTaiChinhController::class, 'index'])->name('index');
-            Route::get('get-data', [KeHoachTaiChinhController::class, 'getData'])->name('getData'); 
+            Route::get('get-data', [KeHoachTaiChinhController::class, 'getData'])->name('getData');
             Route::post('xacnhan', [KeHoachTaiChinhController::class, 'xacnhan'])->name('xacnhan');
             Route::post('khongxacnhan', [KeHoachTaiChinhController::class, 'khongxacnhan'])->name('khongxacnhan');
 
@@ -184,11 +188,11 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('get-data', [LanhDaoPhongDaoTaoController::class, 'getData'])->name('getData');
             Route::post('xacnhan', [LanhDaoPhongDaoTaoController::class, 'xacnhan'])->name('xacnhan');
             Route::post('tuchoihs', [LanhDaoPhongDaoTaoController::class, 'tuchoihs'])->name('tuchoihs');
-            
+
             Route::name('MienGiamHP.')->prefix('mien-giam-hp')->group(function () {
                 Route::get('/', [MienGiamHPCanBoPhongDaoTaoController::class, 'index'])->name('index');
                 Route::get('get-data', [MienGiamHPCanBoPhongDaoTaoController::class, 'getData'])->name('getData');
-                Route::get('xacnhan', [MienGiamHPCanBoPhongDaoTaoController::class, 'xacnhan'])->name('xacnhan');
+                Route::post('xacnhan', [MienGiamHPCanBoPhongDaoTaoController::class, 'xacnhan'])->name('xacnhan');
                 Route::get('tuchoi', [MienGiamHPCanBoPhongDaoTaoController::class, 'tuchoi'])->name('tuchoi');
             });
 
@@ -210,7 +214,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::name('MienGiamHP.')->prefix('mien-giam-hp')->group(function () {
                 Route::get('/', [MienGiamHPLanhDaoTruongController::class, 'index'])->name('index');
                 Route::get('get-data', [MienGiamHPLanhDaoTruongController::class, 'getData'])->name('getData');
-                Route::get('xacnhan', [MienGiamHPLanhDaoTruongController::class, 'xacnhan'])->name('xacnhan');
+                Route::post('xacnhan', [MienGiamHPLanhDaoTruongController::class, 'xacnhan'])->name('xacnhan');
                 Route::get('tuchoi', [MienGiamHPLanhDaoTruongController::class, 'tuchoi'])->name('tuchoi');
             });
 
@@ -236,7 +240,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('detele/{id?}', [StudentManagerController::class, 'detele'])->name('detele');
             Route::post('create', [StudentManagerController::class, 'create'])->name('create');
             Route::post('update/{id?}', [StudentManagerController::class, 'update'])->name('update');
-            Route::post('import-file', [StudentManagerController::class, 'imp   ortFile'])->name('importFile');
+            Route::post('import-file', [StudentManagerController::class, 'importFile'])->name('importFile');
 
             Route::get('reset-pass/{id?}', [StudentManagerController::class, 'resetPass'])->name('resetPass');
 
@@ -281,8 +285,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/{type}', [NotificationController::class, 'viewNotifi'])->name('viewNotifi');
     });
     Route::name('phieu.')->prefix('phieu')->group(function () {
-        Route::get('{id?}', [PhieuController::class, 'index'])->name('index');
+        Route::get('giai-quyet-cong-viec/{id?}', [PhieuController::class, 'giaQuyetCongViec'])->name('giaQuyetCongViec');
         Route::get('get-data/{id?}', [PhieuController::class, 'getData'])->name('getData');
+        Route::get('{id?}', [PhieuController::class, 'index'])->name('index');
     });
 });
 
