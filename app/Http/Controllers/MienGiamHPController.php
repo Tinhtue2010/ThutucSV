@@ -59,7 +59,7 @@ class MienGiamHPController extends Controller
             $studentData['noisinh'] = $request->noisinh;
 
             $doituong = config('doituong.miengiamhp');
-            $studentData['doituong'] = $doituong[$request->doituong];
+            $studentData['doituong'] = $doituong[$request->doituong][2];
 
             $studentData['daduochuong'] = $request->daduochuong;
             $studentData['sdt'] = $student->phone;

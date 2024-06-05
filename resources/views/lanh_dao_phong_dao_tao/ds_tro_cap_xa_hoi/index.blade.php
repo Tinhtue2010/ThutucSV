@@ -33,15 +33,16 @@
                             <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                                 <th></th>
                                 <th class="text-nowrap" data-name="id">{{__('id')}}</th>
+                                <th class="text-nowrap" data-name="id">{{__('Trạng thái')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Họ và tên')}}</th>
-                                <th class="text-nowrap" data-name="id">{!!__('Mức học <br/>phí/tháng')!!}</th>
-                                <th class="text-nowrap" data-name="id">{!!__('Tỉ lệ <br/> miễn, giảm(%)')!!}</th>
-                                <th class="text-nowrap" data-name="id">{!!__('Số tiền miễn,<br/> giảm/tháng')!!}</th>
+                                <th class="text-nowrap" data-name="id">{!!__('Số tiền miễn &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,<br/> giảm/tháng')!!}</th>
                                 <th class="text-nowrap" data-name="id">{!!__('Số tháng <br/>miễn, giảm')!!}</th>
                                 <th class="text-nowrap" data-name="id">{!!__('Số tiền được <br/> miễn, giảm/kỳ')!!}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Đối tượng')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Ngày sinh')}}</th>
-                                <td class="text-nowrap">{{ __('Chi tiết') }}</td>
+                                <th class="text-nowrap" data-name="lop_name">{{__('Lớp')}}</th>
+                                <th class="text-nowrap" data-name="student_code">{{__('Mã sinh viên')}}</th>
+                                <td class="text-nowrap">{{ __('Chức năng') }}</td>
                             </tr>
                             </thead>
                             <tbody class="fw-semibold text-gray-600">
@@ -97,6 +98,9 @@
         </div>
         <!--end::Content-->
     </div>
+
     @include('lanh_dao_phong_dao_tao.ds_tro_cap_xa_hoi.table')
+    @include('lanh_dao_phong_dao_tao.ds_tro_cap_xa_hoi.xacnhanDS',['target'=>'xacnhanDS'])
     @include('giao_vien.chitiet',['target'=>'chitiet'])
+    @include('giao_vien.tientrinh',['target'=>'tientrinh'])
 @endsection

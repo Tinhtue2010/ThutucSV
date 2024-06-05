@@ -56,22 +56,10 @@ class TroCapXHController extends Controller
             $studentData['khoa'] = $student->khoa_name;
             $studentData['khoa_hoc'] = $student->school_year;
             $studentData['hoso'] = $request->hoso;
-            switch ($request->doituong) {
-                case 1:
-                    $studentData['doituong'] = "Học sinh, sinh viên là người dân tộc thiểu số ở vùng cao từ 03 năm trở lên.";
-                    break;
-                case 2:
-                    $studentData['doituong'] = "Học sinh, sinh viên mồ côi cả cha lẫn mẹ không nơi nương tựa.";
-                    break;
-                case 3:
-                    $studentData['doituong'] = "Học sinh, sinh viên là người tàn tật gặp khó khăn về kinh tế.";
-                    break;
-                case 4:
-                    $studentData['doituong'] = "Học sinh, sinh viên có hoàn cảnh đặc biệt khó khăn về kinh tế, vượt khó học tập, gia đình thuộc diện xóa đói giảm nghèo.";
-                    break;
-                default:
-                    break;
-            }
+
+            $doituong = config('doituong.trocapxahoi');
+            $studentData['doituong'] = $doituong[$request->doituong][2];
+
             $studentData['sdt'] = $student->phone;
             $studentData['thuongchu'] = $request->thuongchu;
 
@@ -81,43 +69,11 @@ class TroCapXHController extends Controller
 
             $studentData['year'] = Carbon::now()->year;
 
-            $check = StopStudy::where('student_id', $user->student_id)->where('type', 2)->first();
-            if ($check) {
-                if (isset($check->files)) {
-                    $this->deleteFiles(json_decode($check->files));
-                }
-                $check->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
-
-                $check->note = $request->data;
-                $check->is_update = 1;
-                $check->type_miengiamhp = $request->doituong ?? 1;
-                $check->update();
-                $phieu = Phieu::where('id', $check->phieu_id)->first();
-                $phieu->student_id = $user->student_id;
-                $phieu->name = "Đơn xin rút hồ sơ";
-                $phieu->key = "TCXH";
-                $phieu->content = json_encode($studentData);
-                $phieu->save();
-            } else {
-                $phieu = new Phieu();
-                $phieu->student_id = $user->student_id;
-                $phieu->name = "Đơn xin rút hồ sơ";
-                $phieu->key = "TCXH";
-                $phieu->content = json_encode($studentData);
-                $phieu->save();
-
-                $query = new StopStudy();
-                $query->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
-                $query->student_id = $user->student_id;
-                $query->type_miengiamhp = $request->doituong ?? 1;
-                $query->round = 1;
-                $query->type = 2;
-                $query->note = $request->data;
-                $query->phieu_id = $phieu->id;
-                $query->lop_id = $student->lop_id;
-                $query->save();
-
-                $this->notification("Đơn xin trợ cấp xã hội của bạn đã được gửi, vui lòng chờ thông báo khác", $phieu->id, "TCXH");
+            if (isset($request->trocapxh)) {
+                $this->createPhieu($user,$request, $studentData,$student,2);
+            }
+            if(isset($request->hocphi)){
+                $this->createPhieu($user,$request, $studentData,$student,3);
             }
         }
         return true;
@@ -184,6 +140,69 @@ class TroCapXHController extends Controller
             }
         } catch (\Throwable $th) {
             abort(404);
+        }
+    }
+
+    function createPhieu($user, $request, $studentData, $student, $type = 2)
+    {
+        if ($type == 2) {
+            $namePhieu = "Đơn xin trợ cấp xã hội";
+            $keyPhieu = "TCXH";
+            $check = StopStudy::where('student_id', $user->student_id)->where('type', 2)->first();
+        } else {
+            $namePhieu = "Đơn xin trợ cấp học phí";
+            $keyPhieu = "TCHP";
+            $check = StopStudy::where('student_id', $user->student_id)->where('type', 3)->first();
+        }
+
+        if ($check) {
+            if (isset($check->files)) {
+                $this->deleteFiles(json_decode($check->files));
+            }
+            $check->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
+
+            $check->note = $request->data;
+            $check->is_update = 1;
+            $check->type_miengiamhp = $request->doituong ?? 1;
+            if ($type == 2) {
+                $check->muctrocapxh = isset($request->doituong) ? 140000 : 100000;
+                
+            } else {
+                $check->muchotrohp = config('doituong.muctrocaphp');
+            }
+            $check->update();
+            $phieu = Phieu::where('id', $check->phieu_id)->first();
+            $phieu->student_id = $user->student_id;
+            $phieu->name = $namePhieu;
+            $phieu->key = $keyPhieu;
+            $phieu->content = json_encode($studentData);
+            $phieu->save();
+        } else {
+            $phieu = new Phieu();
+            $phieu->student_id = $user->student_id;
+            $phieu->name = $namePhieu;
+            $phieu->key = $keyPhieu;
+            $phieu->content = json_encode($studentData);
+            $phieu->save();
+
+            $query = new StopStudy();
+            $query->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
+            $query->student_id = $user->student_id;
+            $query->type_miengiamhp = $request->doituong ?? 1;
+            $query->round = 1;
+            $query->type = $type;
+            $query->note = $request->data;
+            $query->phieu_id = $phieu->id;
+            $query->lop_id = $student->lop_id;
+            if ($type == 2) {
+                $query->muctrocapxh = isset($request->doituong) ? 140000 : 100000;
+                
+            } else {
+                $query->muchotrohp = config('doituong.muctrocaphp');
+            }
+            $query->save();
+
+            $this->notification("Đơn xin trợ cấp xã hội của bạn đã được gửi, vui lòng chờ thông báo khác", $phieu->id, "TCXH");
         }
     }
 }

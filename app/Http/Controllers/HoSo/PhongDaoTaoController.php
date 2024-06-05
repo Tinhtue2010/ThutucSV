@@ -156,5 +156,8 @@ class PhongDaoTaoController extends Controller
         if ($stopStudy->type == 1) {
             return $this->phongdaotao->duyethsGHP($request, $stopStudy);
         }
+        if ($stopStudy->type == 2) {
+            return $this->phongdaotao->duyethsTCXH($request, $stopStudy);
+        }
     }
 }

@@ -22,9 +22,9 @@ class TroCapXaHoiKeHoachTaiChinhController extends Controller
         $query = StopStudy::where('type', 2)
         ->studentActive()
         ->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
-            $query->where('status', 4)
-                  ->orWhere('status', 5)
-                  ->orWhere('status', -5);
+            $query->where('stop_studies.status', 4)
+                  ->orWhere('stop_studies.status', 5)
+                  ->orWhere('stop_studies.status', -5);
         })
         ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
@@ -48,16 +48,20 @@ class TroCapXaHoiKeHoachTaiChinhController extends Controller
     function xacnhan() {
         $query = StopStudy::where('type', 2)
         ->studentActive()
+        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
         ->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
-            $query->where('status', 4)
-                  ->orWhere('status', 5)
-                  ->orWhere('status', -5);
-        })->get();
+            $query->where('stop_studies.status', 4)
+                  ->orWhere('stop_studies.status', 5)
+                  ->orWhere('stop_studies.status', -5);
+        })
+        ->select('stop_studies.*')
+        ->get();
+
         foreach ($query as $stopStudy) {
             $stopStudy->status = 5; 
             $stopStudy->save();  
-            $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-            $this->notification("Danh sách miễn giảm học phí đã được phòng kết hoạch tài chính phê duyệt", null, "GHP", $user_id);
+            $user_id = User::where('student_id',$stopStudy->id)->first()->id;
+            $this->notification("Danh sách trợ cấp xã hội đã được phòng kết hoạch tài chính phê duyệt", null, "GHP", $user_id);
 
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
@@ -73,18 +77,21 @@ class TroCapXaHoiKeHoachTaiChinhController extends Controller
     function tuchoi() {
         $query = StopStudy::where('type', 2)
         ->studentActive()
+        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
         ->whereNull('parent_id')->where(function($query) {
-            $query->where('status', 4)
-                  ->orWhere('status', 5)
-                  ->orWhere('status', -5);
-        })->get();
+            $query->where('stop_studies.status', 4)
+                  ->orWhere('stop_studies.status', 5)
+                  ->orWhere('stop_studies.status', -5);
+        })
+        ->select('stop_studies.*')
+        ->get();
         foreach ($query as $stopStudy) {
             $stopStudy->status = -5; 
             $stopStudy->save();  
             $users = User::where('role',4)->get();
             foreach($users as $item)
             {
-                $this->notification("Danh sách miễn giảm học phí đã bị từ chối phòng kết hoạch tài chính", null, "GHP", $item->id);
+                $this->notification("Danh sách trợ cấp xã hội đã bị từ chối phòng kết hoạch tài chính", null, "GHP", $item->id);
             }
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 0;

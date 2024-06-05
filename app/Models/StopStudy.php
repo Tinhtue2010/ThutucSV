@@ -29,7 +29,9 @@ class StopStudy extends Model
         'tiepnhan',
         'ykien',
         'lanhdaophong',
-        'lanhdaotruong'
+        'lanhdaotruong',
+        'muchotrohp',
+        'muctrocapxh'
     ];
 
 
@@ -48,7 +50,7 @@ class StopStudy extends Model
         return $this->belongsTo(Phieu::class, 'phieu_id');
     }
 
-    public  function scopeStudentActive($query) {
+    public function scopeStudentActive($query) {
         return $query->where(function ($query) {
             $query->where(function ($query) {
                 $query->where('stop_studies.type', '!=', 0)

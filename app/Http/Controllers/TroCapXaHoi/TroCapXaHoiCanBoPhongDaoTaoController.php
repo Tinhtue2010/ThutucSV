@@ -21,11 +21,6 @@ class TroCapXaHoiCanBoPhongDaoTaoController extends Controller
     {
         $query = StopStudy::where('type', 2)
         ->studentActive()
-        ->where(function($query) {
-            $query->where('status', 2)
-                  ->orWhere('status', 3)
-                  ->orWhere('status', -3);
-        })
         ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
@@ -45,18 +40,21 @@ class TroCapXaHoiCanBoPhongDaoTaoController extends Controller
         return $data;
     }
 
-    function xacnhan() {
+    function xacnhan(Request $request) {
         $query = StopStudy::where('type', 2)
         ->studentActive()
+        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
         ->whereNull('parent_id')->where(function($query) {
-            $query->where('status', 2)
-                  ->orWhere('status', 3)
-                  ->orWhere('status', -3);
-        })->get();
+            $query->where('stop_studies.status', 2)
+                  ->orWhere('stop_studies.status', 3)
+                  ->orWhere('stop_studies.status', -3);
+        })->select('stop_studies.*')->get();
         foreach ($query as $stopStudy) {
+            $this->giaiQuyetCongViec($request->ykientiepnhan, $stopStudy,3);
             $stopStudy->status = 3; 
             $stopStudy->save();  
-            $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
+            
+            $user_id = User::where('student_id',$stopStudy->id)->first()->id;
             $this->notification("Danh sách miễn giảm học phí đã được cán bộ phòng đào tạo phê duyệt", null, "GHP", $user_id);
 
             $newStopStudy = $stopStudy->replicate();
@@ -73,10 +71,11 @@ class TroCapXaHoiCanBoPhongDaoTaoController extends Controller
     function tuchoi() {
         $query = StopStudy::where('type', 2)
         ->studentActive()
+        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
         ->whereNull('parent_id')->where(function($query) {
-            $query->where('status', 2)
-                  ->orWhere('status', 3)
-                  ->orWhere('status', -3);
+            $query->where('stop_studies.status', 2)
+                  ->orWhere('stop_studies.status', 3)
+                  ->orWhere('stop_studies.status', -3);
         })->get();
         foreach ($query as $stopStudy) {
             $stopStudy->status = -3; 

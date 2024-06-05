@@ -31,7 +31,7 @@
                             </span>
                         </div>
                         @isset($don->phieu_id)
-                            <a href="{{ route('phieu.index',['id'=>$don->phieu_id]) }}" target="_blank" class="btn btn-primary">Xem phiếu</a>
+                            <a href="{{ route('phieu.index', ['id' => $don->phieu_id]) }}" target="_blank" class="btn btn-primary">Xem phiếu</a>
                         @endisset
 
                     </div>
@@ -58,9 +58,28 @@
                                 <option value="2">Học sinh, sinh viên mồ côi cả cha lẫn mẹ không nơi nương tựa.</option>
                                 <option value="3">Học sinh, sinh viên là người tàn tật gặp khó khăn về kinh tế.</option>
                                 <option value="4">Học sinh, sinh viên có hoàn cảnh đặc biệt khó khăn về kinh tế, vượt khó học tập, gia đình thuộc diện xóa đói giảm nghèo.</option>
-
                             </select>
                         </div>
+                        <div class="d-flex flex-column mb-2 fv-row">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                <span class="">Chế độ hỗ trợ</span>
+                            </label>
+                            <div class="form-check form-check-custom form-check-solid mb-2">
+                                <input name="trocapxh" class="form-check-input" type="checkbox" value="1"checked />
+                                <label class="form-check-label">
+                                    Trợ cấp xã hội
+                                </label>
+                            </div>
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input name="hocphi" class="form-check-input" type="checkbox" value="1" />
+                                <label class="form-check-label">
+                                    Trợ cấp học phí
+                                </label>
+                            </div>
+                        </div>
+                        <p class="text-warning fs-5">Lưu ý: Trợ cấp học phí chỉ áp dụng cho học sinh, sinh viên là người dân tộc thiểu số thuộc hộ nghèo,
+                            cận nghèo theo quy định</p>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -68,16 +87,29 @@
                             </label>
                             <!--end::Label-->
                             <textarea @if (isset($don_parent)) @if ($don_parent->status > 0)
-                                readonly @endif @endif class="form-control form-control-solid h-150px" name="hoso">{{$phieu['hoso'] ?? ''}}</textarea>
+                                readonly @endif @endif class="form-control form-control-solid h-150px" name="hoso">{{ $phieu['hoso'] ?? '' }}</textarea>
                         </div>
-                        
+                        <div class="fs-6 fw-semibol d-flex flex-column">
+                            <p class="100">
+                                <b>Hồ sơ minh chứng cần thiết</b> <br>
+                                <b>* Với chế độ Trợ cấp xã hội</b> <br>
+                                1- Giấy tờ minh chứng về nơi cư trú đối với SV ở vùng cao từ 3 năm trở lên. <br>
+                                2- Bản phô tô công chứng Giấy chứng tử của bố mẹ.  <br>
+                                3- Bản phô tô công chứng Giấy khai sinh đối với những học sinh, sinh viên là mồ côi cha mẹ. <br>
+                                4- Bản phô tô công chứng Giấy chứng nhận của cơ quan y tế về tình trạng bị khuyết tật, tàn tật đối với những SV khuyết tật, tàn tật. <br>
+                                5- Bản phô tô công chứng sổ hộ nghèo hoặc hộ cận ghèo đói với những sinh viên có hoàn cảnh đặc biệt khó khăn <br>
+                                <b>* Với chế độ Hỗ trợ chi phí học tập</b> <br>
+                                1- Bản phô tô công chứng Giấy khai sinh <br>
+                                2- Bản phô tô công chứng Sổ hộ nghèo hoặc hộ cận nghèo.
+                            </p>
+                        </div>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
                                 <span class="">File</span>
                             </label>
                             <!--end::Label-->
-                            <input type="file" class="form-control form-control-solid" name="files[]" accept="application/pdf" multiple/>
+                            <input type="file" class="form-control form-control-solid" name="files[]" accept="application/pdf" multiple />
                         </div>
                         <input type="hidden" id="button_clicked" name="button_clicked" value="">
                         <div class="d-flex w-100">
@@ -134,7 +166,7 @@
                             },
                         }
                     },
-                    thuongchu:{
+                    thuongchu: {
                         validators: {
                             notEmpty: {
                                 message: '{{ __('Vui lòng không để trống mục này') }}'

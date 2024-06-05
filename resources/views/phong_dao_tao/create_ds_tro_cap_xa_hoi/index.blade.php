@@ -33,15 +33,15 @@
                             <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                                 <th></th>
                                 <th class="text-nowrap" data-name="id">{{__('id')}}</th>
-                                <th class="text-nowrap" data-name="id">{{__('Danh sách')}}</th>
+                                <th class="text-nowrap" data-name="id">{{__('Trạng thái')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Họ và tên')}}</th>
-                                <th class="text-nowrap" data-name="id">{!!__('Mức học <br/>phí/tháng')!!}</th>
-                                <th class="text-nowrap" data-name="id">{!!__('Tỉ lệ <br/> miễn, giảm(%)')!!}</th>
-                                <th class="text-nowrap" data-name="id">{!!__('Số tiền miễn,<br/> giảm/tháng')!!}</th>
+                                <th class="text-nowrap" data-name="id">{!!__('Số tiền miễn &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,<br/> giảm/tháng')!!}</th>
                                 <th class="text-nowrap" data-name="id">{!!__('Số tháng <br/>miễn, giảm')!!}</th>
                                 <th class="text-nowrap" data-name="id">{!!__('Số tiền được <br/> miễn, giảm/kỳ')!!}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Đối tượng')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Ngày sinh')}}</th>
+                                <th class="text-nowrap" data-name="lop_name">{{__('Lớp')}}</th>
+                                <th class="text-nowrap" data-name="student_code">{{__('Mã sinh viên')}}</th>
                                 <td class="text-nowrap">{{ __('Chức năng') }}</td>
                             </tr>
                             </thead>
@@ -98,9 +98,13 @@
         </div>
         <!--end::Content-->
     </div>
+
     @include('phong_dao_tao.create_ds_tro_cap_xa_hoi.table')
-    @include('phong_dao_tao.cauhinhmiengiamhp',['target'=>'cauhinhmiengiamhp'])
-    @include('giao_vien.chitiet',['target'=>'chitiet'])
-    @include('phong_dao_tao.bosunghs',['target'=>'bosunghs'])
-    @include('phong_dao_tao.tuchoihs',['target'=>'tuchoihs'])
+    @include('phong_dao_tao.cauhinhmiengiamhp', ['target' => 'cauhinhmiengiamhp'])
+    @include('giao_vien.chitiet', ['target' => 'chitiet'])
+    @include('giao_vien.tientrinh',['target'=>'tientrinh'])
+    @include('phong_dao_tao.tiepnhanhs', ['target' => 'tiepnhanhs'])
+    @include('phong_dao_tao.bosunghs', ['target' => 'bosunghs'])
+    @include('phong_dao_tao.tuchoihs', ['target' => 'tuchoihs'])
+    @include('phong_dao_tao.duyethoso',['target'=>'duyethoso'])
 @endsection

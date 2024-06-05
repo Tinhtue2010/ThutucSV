@@ -23,6 +23,8 @@
         if (data == 2)
             return "Đơn xin trợ cấp xã hội"
         if (data == 3)
+            return "Đơn xin trợ cấp học phí"
+        if (data == 4)
             return "Đơn xin chế độ chính sách"
         return ""
     }

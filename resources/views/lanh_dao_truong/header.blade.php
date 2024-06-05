@@ -72,7 +72,7 @@
                                         <a href="{{ route('LanhDaoTruong.MienGiamHP.index') }}" target="_blank" class="menu-link px-3">Danh sách miễn giảm học phí</a>
                                     </div>
                                     <div class="menu-item px-3">
-                                        <a href="{{ route('LanhDaoTruong.TroCapXaHoi.index') }}" target="_blank" class="menu-link px-3">Tạo danh sách trợ cấp xã hội</a>
+                                        <a href="{{ route('LanhDaoTruong.TroCapXaHoi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp xã hội</a>
                                     </div>
                                     <!--end::Menu item-->
                             </div>

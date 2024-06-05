@@ -87,7 +87,7 @@
                                     <a href="{{ route('PhongDaoTao.MienGiamHP.index') }}" target="_blank" class="menu-link px-3">Danh sách miễn giảm học phí</a>
                                 </div>
                                 <div class="menu-item px-3">
-                                    <a href="{{ route('PhongDaoTao.TroCapXaHoi.index') }}" target="_blank" class="menu-link px-3">Tạo danh sách trợ cấp xã hội</a>
+                                    <a href="{{ route('PhongDaoTao.TroCapXaHoi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp xã hội</a>
                                 </div>
                                 <!--end::Menu item-->
                             </div>

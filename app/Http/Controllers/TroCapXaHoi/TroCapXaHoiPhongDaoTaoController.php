@@ -52,10 +52,12 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
     {
         $query = StopStudy::where('type', 2)
         ->studentActive()
+        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->where(function ($query) {
-                $query->where('status', 1)
-                    ->orWhere('status', 2);
+                $query->where('stop_studies.status', 1)
+                    ->orWhere('stop_studies.status', 2);
             })
+            ->select('stop_studies.*')
             ->whereNull('parent_id')
             ->update(['status' => 2]);
         $username = Auth::user()->name;
@@ -70,10 +72,12 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
     {
         $query = StopStudy::where('type', 2)
         ->studentActive()
+        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
         ->where(function($query) {
-            $query->where('status', 1)
-                  ->orWhere('status', 2);
+            $query->where('stop_studies.status', 1)
+                  ->orWhere('stop_studies.status', 2);
         })
+        ->select('stop_studies.*')
         ->whereNull('parent_id')
         ->update(['status' => 1]);
 
@@ -83,7 +87,11 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
     function guiTBSV() {
         $query = StopStudy::where('type', 2)
         ->studentActive()
-        ->whereNull('parent_id')->where('status', 3)->get();
+        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+        ->whereNull('parent_id')
+        ->where('stop_studies.status', 3)
+        ->select('stop_studies.*')
+        ->get();
         foreach ($query as $stopStudy) {
             $stopStudy->status = 4; 
             $stopStudy->save();  

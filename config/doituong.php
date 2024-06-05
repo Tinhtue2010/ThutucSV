@@ -66,5 +66,28 @@ return [
         ["-5", "Phòng KHTC từ chối danh sách"],
         ["6", "Lãnh đạo trường đã xác nhận"],
         ["-6", "Lãnh đạo trường từ chối DS"]
+    ],
+    "muctrocaphp" => 894000,
+    "trocapxahoi" => [
+        [
+            "140000",
+            "Dân tộc thiểu số vùng cao 3 năm trở lên",
+            "Học sinh, sinh viên là người dân tộc thiểu số ở vùng cao từ 03 năm trở lên."
+        ],
+        [
+            "100000",
+            "Mồ côi cha mẹ không nơi nương tựa",
+            "Học sinh, sinh viên mồ côi cả cha lẫn mẹ không nơi nương tựa."
+        ],
+        [
+            "100000",
+            "Là người tàn tật khó khăn về kinh tế",
+            "Học sinh, sinh viên là người tàn tật gặp khó khăn về kinh tế."
+        ],
+        [
+            "100000",
+            "Học sinh sinh viên hoàn cảnh đặc biệt khó khăn",
+            "Học sinh, sinh viên có hoàn cảnh đặc biệt khó khăn về kinh tế, vượt khó học tập, gia đình thuộc diện xóa đói giảm nghèo."
+        ]
     ]
 ];

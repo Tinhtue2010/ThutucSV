@@ -73,7 +73,7 @@
                                     <!--end::Menu item-->
                                      <!--begin::Menu item-->
                                      <div class="menu-item px-3">
-                                        <a href="{{ route('LanhDaoPhongDaoTao.TroCapXaHoi.index') }}" target="_blank" class="menu-link px-3">Tạo danh sách trợ cấp xã hội</a>
+                                        <a href="{{ route('LanhDaoPhongDaoTao.TroCapXaHoi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp xã hội</a>
                                     </div>
                                     <!--end::Menu item-->
                             </div>

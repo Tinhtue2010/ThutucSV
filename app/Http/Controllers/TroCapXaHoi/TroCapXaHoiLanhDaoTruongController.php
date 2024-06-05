@@ -41,18 +41,22 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
         return $data;
     }
 
-    function xacnhan() {
+    function xacnhan(Request $request) {
         $query = StopStudy::where('type', 2)
         ->studentActive()
+        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
         ->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
-            $query->where('status', 5)
-                  ->orWhere('status', 6)
-                  ->orWhere('status', -6);
-        })->get();
+            $query->where('stop_studies.status', 5)
+                  ->orWhere('stop_studies.status', 6)
+                  ->orWhere('stop_studies.status', -6);
+        })
+        ->select('stop_studies.*')
+        ->get();
         foreach ($query as $stopStudy) {
+            $this->giaiQuyetCongViec($request->ykientiepnhan ?? '',$stopStudy,4);
             $stopStudy->status = 6; 
             $stopStudy->save();  
-            $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
+            $user_id = User::where('student_id',$stopStudy->id)->first()->id;
             $this->notification("Danh sách miễn giảm học phí đã được lãnh đạo trường phê duyệt", null, "GHP", $user_id);
 
             $newStopStudy = $stopStudy->replicate();
@@ -69,11 +73,14 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
     function tuchoi() {
         $query = StopStudy::where('type', 2)
         ->studentActive()
+        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
         ->whereNull('parent_id')->where(function($query) {
-            $query->where('status', 5)
-                  ->orWhere('status', 6)
-                  ->orWhere('status', -6);
-        })->get();
+            $query->where('stop_studies.status', 5)
+                  ->orWhere('stop_studies.status', 6)
+                  ->orWhere('stop_studies.status', -6);
+        })
+        ->select('stop_studies.*')
+        ->get();
         foreach ($query as $stopStudy) {
             $stopStudy->status = -6; 
             $stopStudy->save();  

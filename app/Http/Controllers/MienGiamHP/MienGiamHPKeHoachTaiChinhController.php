@@ -51,7 +51,7 @@ class MienGiamHPKeHoachTaiChinhController extends Controller
         foreach ($query as $stopStudy) {
             $stopStudy->status = 5; 
             $stopStudy->save();  
-            $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
+            $user_id = User::where('student_id',$stopStudy->id)->first()->id;
             $this->notification("Danh sách miễn giảm học phí đã được phòng kết hoạch tài chính phê duyệt", null, "GHP", $user_id);
 
             $newStopStudy = $stopStudy->replicate();

@@ -47,12 +47,14 @@ class MienGiamHPCanBoPhongDaoTaoController extends Controller
             $query->where('status', 2)
                   ->orWhere('status', 3)
                   ->orWhere('status', -3);
-        })->get();
+        })
+        ->select('stop_studies.*')
+        ->get();
         foreach ($query as $stopStudy) {
             $this->giaiQuyetCongViec($request->ykientiepnhan, $stopStudy,3);
             $stopStudy->status = 3; 
             $stopStudy->save();  
-            $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
+            $user_id = User::where('student_id',$stopStudy->id)->first()->id;
             $this->notification("Danh sách miễn giảm học phí đã được cán bộ phòng đào tạo phê duyệt", null, "GHP", $user_id);
 
             $newStopStudy = $stopStudy->replicate();

@@ -54,25 +54,33 @@
                             data: 'id',
                         },
                         {
+                            data: 'status',
+                            render: function(data, type, row) {
+                                var res = '';
+                                @foreach (config('doituong.statusmiengiamhp') as $index => $item)
+                                    if (data == {{ $item[0] }}) {
+                                        res = `<span class="text-wrap lh-sm mt-1 badge badge-<?php if ($item[0] < 0) {
+                                            echo 'warning';
+                                        }
+                                        if ($item[0] == 0) {
+                                            echo 'secondary';
+                                        }
+                                        if ($item[0] > 0) {
+                                            echo 'success';
+                                        } ?>">{{ $item[1] }}</span>`;
+
+                                    }
+                                @endforeach
+                                return res;
+                            }
+                        },
+                        {
                             data: 'full_name'
-                        },
-                        {
-                            data: 'hocphi',
-                            render: function(data, type, row) {
-                                return `<p id="hocphi_${row['id']}" data-hocphi="${data}">${data.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>`;;
-                            }
-                        },
-                        {
-                            data: 'phantramgiam',
-                            render: function(data, type, row) {
-                                return `<p>${data}%</p>`;
-                            }
                         },
                         {
                             data: 'id',
                             render: function(data, type, row) {
-                                var miengiam_thang = (row['hocphi'] / 5) * (row['phantramgiam'] / 100)
-                                return `<p id="miengiam_thang_${data}">${miengiam_thang.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>`;
+                                return row['muctrocapxh'] == 140000 ? "140.000 đ" : "100.000 đ"
                             }
                         },
                         {
@@ -84,26 +92,19 @@
                         {
                             data: 'id',
                             render: function(data, type, row) {
-                                var miengiamgiam_ky = row['hocphi'] * (row['phantramgiam'] / 100)
-                                return `<p id="miengiamgiam_ky_${data}">${miengiamgiam_ky.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>`;
+                                var miengiam_thang = row['muchotrohp'] * 5;
+                                return `<p id="miengiam_thang_${data}">${miengiam_thang.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>`;
                             }
                         },
                         {
                             data: 'type_miengiamhp',
                             render: function(data, type, row) {
                                 switch (data) {
-                                    case 1:
-                                        return "Học sinh, sinh viên là người dân tộc thiểu số ở vùng cao từ 03 năm trở lên.";
+                                    @foreach (config('doituong.trocapxahoi') as $index => $item)
+                                        case {{ $index }}:
+                                            return "{{ $item[1] }}";
                                         break;
-                                    case 2:
-                                        return 'Học sinh, sinh viên mồ côi cả cha lẫn mẹ không nơi nương tựa.';
-                                        break;
-                                    case 3:
-                                        return 'Học sinh, sinh viên là người tàn tật gặp khó khăn về kinh tế.';
-                                        break;
-                                    case 4:
-                                        return 'Học sinh, sinh viên có hoàn cảnh đặc biệt khó khăn về kinh tế, vượt khó học tập, gia đình thuộc diện xóa đói giảm nghèo.';
-                                        break;
+                                    @endforeach
                                     default:
                                         return '';
                                         break;
@@ -117,11 +118,22 @@
                             }
                         },
                         {
+                            data: 'lop_name',
+                        },
+                        {
+                            data: 'student_code',
+                        },
+                        {
                             data: 'id',
                             render: function(data, type, row) {
                                 role = {{ Auth::user()->role }} - 2;
                                 var dataRes = `<div class="d-flex flex-row">`;
                                 dataRes += `
+                                    <div onClick="tientrinh(${data})" class="ki-duotone ki-information-2 fs-2x cursor-pointer text-warning">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                    </div>
                                     <div onClick="chitiet(${data})"  class="ki-duotone ki-document fs-2x cursor-pointer text-dark">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
@@ -230,5 +242,70 @@
         $(document).ready(function() {
             Datatable.init();
         });
+
+        $('#import-file input[type="file"]').change(function(e) {
+            var file = e.target.files[0];
+            var fileName = file.name;
+            var formData = new FormData();
+
+            formData.append('csv_file', file);
+            formData.append('_token', '{{ csrf_token() }}');
+
+            $.ajax({
+                url: '#',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    mess_success('Thông báo',
+                        "Tải lên thành công")
+                    Datatable.loadData();
+                },
+                error: function(xhr, status, error) {
+                    mess_error("Cảnh báo",
+                        "{{ __('Có lỗi xảy ra bạn hãy kiểm tra lại file') }}"
+                    )
+                }
+            });
+        });
+        let timeoutId;
+
+        function updateData(data, id) {
+            axios({
+                method: 'GET',
+                url: `{{ route('PhongDaoTao.MienGiamHP.updatePercent') }}?id=${id}&muctrocapxh=${data}`,
+            }).then((response) => {}).catch(function(error) {
+                mess_error("Cảnh báo",
+                    "{{ __('Có lỗi xảy ra.') }}"
+                )
+            });
+        }
+
+        function debounce(func, delay) {
+            return function() {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => func.apply(context, args), delay);
+            };
+        }
+
+        function updateTile(data, id) {
+            const debouncedUpdate = debounce(updateData, 500);
+            var hocphi = $("#hocphi_" + id).data('hocphi');
+            var percent = data.value;
+            var miengiam_thang = (hocphi / 5) * (percent / 100)
+            var miengiamgiam_ky = hocphi * (percent / 100)
+            $("#miengiamgiam_ky_" + id).html(miengiamgiam_ky.toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }))
+            $("#miengiam_thang_" + id).html(miengiam_thang.toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }))
+            debouncedUpdate(percent, id);
+        }
     </script>
 @endpush
