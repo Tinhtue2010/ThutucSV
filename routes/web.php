@@ -111,6 +111,11 @@ Route::group(['middleware' => ['auth']], function () {
         });
     });
 
+    Route::name('Profile.GiaoVien')->group(function () {
+        // thêm code ở đây
+        // controller  này ProfileGiaoVienController
+        // code mẫu student-info
+    });
 
     Route::middleware('role:giaoVien')->group(function () {
         Route::name('GiaoVien.')->prefix('giao-vien')->group(function () {
