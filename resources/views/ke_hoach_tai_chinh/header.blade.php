@@ -66,6 +66,9 @@
                                     <div class="menu-item px-3">
                                         <a href="{{ route('KeHoachTaiChinh.TroCapXaHoi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp xã hội</a>
                                     </div>
+                                    <div class="menu-item px-3">
+                                        <a href="{{ route('KeHoachTaiChinh.TroCapHocPhi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp học phí</a>
+                                    </div>
                                     <!--end::Menu item-->
                             </div>
                             <!--end::Menu 3-->

@@ -24,8 +24,9 @@ class PhongDaoTaoController extends Controller
     {
         $tb_miengiamhp = StopStudy::where('type', 1)->where('status', 3)->count();
         $tb_trocapxahoi = StopStudy::where('type', 2)->where('status', 3)->count();
+        $tb_trocaphocphi = StopStudy::where('type', 3)->where('status', 3)->count();
         $lop = Lop::get();
-        return view('phong_dao_tao.index', ['tb_miengiamhp' => $tb_miengiamhp, 'tb_trocapxahoi' => $tb_trocapxahoi, 'lop' => $lop]);
+        return view('phong_dao_tao.index', ['tb_miengiamhp' => $tb_miengiamhp, 'tb_trocapxahoi' => $tb_trocapxahoi, 'lop' => $lop,'tb_trocaphocphi'=>$tb_trocaphocphi]);
     }
 
     public function getData(Request $request)
@@ -107,6 +108,9 @@ class PhongDaoTaoController extends Controller
             if ($stopStudy->type == 2) {
                 return $this->phongdaotao->tiepnhanhsTCXH($request, $stopStudy);
             }
+            if ($stopStudy->type == 3) {
+                return $this->phongdaotao->tiepnhanhsTCHP($request, $stopStudy);
+            }
         } catch (\Throwable $th) {
             abort(404);
         }
@@ -144,6 +148,9 @@ class PhongDaoTaoController extends Controller
         if ($stopStudy->type == 2) {
             return $this->phongdaotao->tuchoihsTCXH($request, $stopStudy);
         }
+        if ($stopStudy->type == 3) {
+            return $this->phongdaotao->tuchoihsTCHP($request, $stopStudy);
+        }
     }
 
     function duyeths(Request $request)
@@ -157,6 +164,9 @@ class PhongDaoTaoController extends Controller
             return $this->phongdaotao->duyethsGHP($request, $stopStudy);
         }
         if ($stopStudy->type == 2) {
+            return $this->phongdaotao->duyethsTCXH($request, $stopStudy);
+        }
+        if ($stopStudy->type == 3) {
             return $this->phongdaotao->duyethsTCXH($request, $stopStudy);
         }
     }

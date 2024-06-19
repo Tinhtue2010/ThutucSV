@@ -89,6 +89,9 @@
                                 <div class="menu-item px-3">
                                     <a href="{{ route('PhongDaoTao.TroCapXaHoi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp xã hội</a>
                                 </div>
+                                <div class="menu-item px-3">
+                                    <a href="{{ route('PhongDaoTao.TroCapHocPhi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp học phí</a>
+                                </div>
                                 <!--end::Menu item-->
                             </div>
                             <!--end::Menu 3-->
@@ -118,6 +121,19 @@
                                     </span>
                                 </div>
                                 <a href="{{ route('PhongDaoTao.TroCapXaHoi.guiTBSV') }}" class="btn btn-primary">Gửi</a>
+                            </div>
+                        @endif
+
+                        @if ($tb_trocaphocphi > 0)
+                            <div class="d-flex align-items-center bg-light-warning rounded p-5 mb-2 w-100">
+                                <i class="ki-outline ki-snapchat text-warning fs-1 me-5"></i>
+                                <div class="flex-grow-1 me-2">
+                                    <a href="#" class=" fw-bold text-gray-800 text-hover-warning fs-4">Thông báo</a>
+                                    <span class="fs-5 fw-semibold d-block">
+                                        Cần gửi danh sách trợ cấp học phí đến khoa và sinh viên
+                                    </span>
+                                </div>
+                                <a href="{{ route('PhongDaoTao.TroCapHocPhi.guiTBSV') }}" class="btn btn-primary">Gửi</a>
                             </div>
                         @endif
                     </div>

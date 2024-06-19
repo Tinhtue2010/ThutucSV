@@ -66,16 +66,21 @@
                                     <div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">{{ __('Chức năng') }}</div>
                                 </div>
                                 <!--end::Heading-->
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <a href="{{ route('LanhDaoPhongDaoTao.MienGiamHP.index') }}" target="_blank" class="menu-link px-3">Danh sách miễn giảm học phí</a>
-                                    </div>
-                                    <!--end::Menu item-->
-                                     <!--begin::Menu item-->
-                                     <div class="menu-item px-3">
-                                        <a href="{{ route('LanhDaoPhongDaoTao.TroCapXaHoi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp xã hội</a>
-                                    </div>
-                                    <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                <div class="menu-item px-3">
+                                    <a href="{{ route('LanhDaoPhongDaoTao.MienGiamHP.index') }}" target="_blank" class="menu-link px-3">Danh sách miễn giảm học phí</a>
+                                </div>
+                                <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                <div class="menu-item px-3">
+                                    <a href="{{ route('LanhDaoPhongDaoTao.TroCapXaHoi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp học phí</a>
+                                </div>
+                                <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                <div class="menu-item px-3">
+                                    <a href="{{ route('LanhDaoPhongDaoTao.TroCapHocPhi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp xã hội</a>
+                                </div>
+                                <!--end::Menu item-->
                             </div>
                             <!--end::Menu 3-->
                             <!--end::Menu-->

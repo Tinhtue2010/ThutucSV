@@ -92,7 +92,7 @@
             }
         }
 
-        if(row['type'] == 1 || row['type'] == 2)
+        if(row['type'] == 1 || row['type'] == 2 || row['type'] == 3)
         {
             @foreach (config('doituong.statusmiengiamhp') as $index => $item)
             if(data == {{$item[0]}})
