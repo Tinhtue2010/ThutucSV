@@ -37,12 +37,18 @@ class ProfileGiaoVienController extends Controller
     public function update(Request $request) {
         $user = Auth::user();
         $teacher = Teacher::find($user->teacher_id);
+        if($request->hasFile('chu_ky')){
+            $file = $request->file('chu_ky');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('signatures', $fileName, 'public');
+            $teacher->chu_ky = $filePath;
+        }
 
-        return $teacher->update($request->only([
-            'full_name',
-            'dia_chi',
-            'sdt',
-            'email'
-        ]));
+        $teacher->full_name = $request->input('full_name');
+        $teacher->dia_chi = $request->input('dia_chi');
+        $teacher->sdt = $request->input('sdt');
+        $teacher->email = $request->input('email');
+
+        $teacher->safe();
     }
 }
