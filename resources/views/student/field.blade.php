@@ -53,3 +53,11 @@
     <!--end::Label-->
     <input type="email" class="form-control form-control-solid" name="email" />
 </div>
+<div class="d-flex flex-column mb-8 fv-row">
+    <!--begin::Label-->
+    <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+        <span class="required">Chữ ký</span>
+    </label>
+    <!--end::Label-->
+    <input type="file" class="form-control form-control-solid" name="chu_ky" accept="image/jpg" />
+</div>

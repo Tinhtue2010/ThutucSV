@@ -39,14 +39,21 @@ class StudentController extends Controller
     public function update(Request $request) {
         $user = Auth::user();
         $student = Student::find($user->student_id);
-
-        return $student->update($request->only([
-            'full_name',
-            'date_of_birth',
-            'phone',
-            'email',
-            'cmnd',
-            'date_range_cmnd'
-        ]));
+    
+        if ($request->hasFile('chu_ky')) {
+            $file = $request->file('chu_ky');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('signatures', $fileName, 'public');
+            $student->chu_ky = $filePath;
+        }
+    
+        $student->full_name = $request->input('full_name');
+        $student->date_of_birth = $request->input('date_of_birth');
+        $student->phone = $request->input('phone');
+        $student->email = $request->input('email');
+        $student->cmnd = $request->input('cmnd');
+        $student->date_range_cmnd = $request->input('date_range_cmnd');
+    
+        $student->save();
     }
 }

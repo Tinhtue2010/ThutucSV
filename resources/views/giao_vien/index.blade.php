@@ -170,7 +170,7 @@
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ $teacher->chu_ky }}</span>
+                                <img src="{{ asset('path/to/images/' . $teacher->chu_ky) }}" alt="Chữ ký" class="fw-bold fs-6 text-gray-800" />
                             </div>
                             <!--end::Col-->
                         </div>

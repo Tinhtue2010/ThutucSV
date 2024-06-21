@@ -41,5 +41,5 @@
         <span class="required">Chữ ký</span>
     </label>
     <!--end::Label-->
-    <input type="file" class="form-control form-control-solid" name="chu_ky" accept="image/png" />
+    <input type="file" class="form-control form-control-solid" name="chu_ky" accept="image/jpg" />
 </div>

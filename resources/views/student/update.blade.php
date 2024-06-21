@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div class="modal-body">
-                <form class="form" id="form_update">
+                <form class="form" id="form_update" enctype="multipart/form-data">
                     <div class="card-body">
                         @csrf
                         @include('student.field',[
@@ -52,21 +52,23 @@
             let form = $(this);
             validation_update.validate().then(function(status) {
                 if (status === 'Valid') {
-                    axios({
-                        method: 'POST',
-                        url: "{{ route('student.update') }}/",
-                        data: form.serialize(),
-                    }).then((response) => {
-                        mess_success('Thông báo',
-                            "Chỉnh sửa thành công")
-                        $(this).trigger("reset");
-                        modelUpdate.hide();
-                        location.reload();
-                    }).catch(function(error) {
-                        mess_error("Cảnh báo",
-                            "{{ __('An error has occurred.') }}"
-                        )
-                    });
+                    let formData = new FormData(form[0]);
+                    axios.post("{{ route('student.update') }}", formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then((response) => {
+                    mess_success('Thông báo', 
+                        "Chỉnh sửa thành công"
+                    );
+                    form.trigger("reset");
+                    modelUpdate.hide();
+                    location.reload();
+                }).catch(function(error) {
+                    mess_error("Cảnh báo", 
+                        "{{ __('An error has occurred.') }}"
+                    );
+                });
                 } else {
                     mess_error("Cảnh báo",
                             "{{ __('Có lỗi xảy ra bạn cần kiểm tra lại thông tin.') }}"
