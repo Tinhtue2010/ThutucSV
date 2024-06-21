@@ -15,6 +15,7 @@
                         @include('student.field',[
                             'type' => '_update',
                         ])
+                        {{ route('student.info') }}
                     </div>
                     <div class="card-footer">
                         <button type="submit"

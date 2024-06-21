@@ -33,6 +33,7 @@ use App\Http\Controllers\TroCapXaHoi\TroCapXaHoiKeHoachTaiChinhController;
 use App\Http\Controllers\TroCapXaHoi\TroCapXaHoiLanhDaoTruongController;
 use App\Http\Controllers\TroCapXaHoi\TroCapXaHoiPhongDaoTaoController;
 use App\Http\Controllers\TroCapXHController;
+use App\Mail\SendMail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -81,8 +82,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::middleware('role:student')->group(function () {
         Route::name('student.')->group(function () {
             Route::get('/student-info', [StudentController::class, 'index'])->name('info');
-            Route::get('get-data-info', [StudentController::class, 'getDataInfo'])->name('getDataInfo');
-            Route::post('update', [StudentController::class, 'update'])->name('update');
+            Route::get('/get-data-info', [StudentController::class, 'getDataInfo'])->name('getDataInfo');
+            Route::post('/update', [StudentController::class, 'update'])->name('update');
         });
 
         Route::name('StopStudy.')->prefix('xin-thoi-hoc')->group(function () {
@@ -113,7 +114,7 @@ Route::group(['middleware' => ['auth']], function () {
         });
     });
 
-    Route::name('Profile.GiaoVien.')->group(function () {
+    Route::name('Profile.GiaoVien.')->prefix('giao-vien')->group(function () {
         Route::get('/teacher-info', [ProfileGiaoVienController::class, 'index'])->name('info');
         Route::get('get-data-info',[ProfileGiaoVienController::class,'getDataInfo'])->name('getDataInfo');
         Route::post('update',[ProfileGiaoVienController::class,'update'])->name('update');
@@ -332,3 +333,7 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 Route::get('pdf', [DocumentController::class, 'index']);
+Route::get('test',function () {
+    Mail::to('hongichik321@gmail.com')->send(new SendMail("gửi thư thử nghiệm từ hồng",'mail.test',[]));
+    return 'Email sent successfully!';
+});
