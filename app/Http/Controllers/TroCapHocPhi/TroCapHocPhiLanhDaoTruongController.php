@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\TroCapXaHoi;
+namespace App\Http\Controllers\TroCapHocPhi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lop;
@@ -9,17 +9,17 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class TroCapXaHoiLanhDaoTruongController extends Controller
+class TroCapHocPhiLanhDaoTruongController extends Controller
 {
     function index()
     {
         $lop = Lop::get();
-        return view('lanh_dao_truong.ds_tro_cap_xa_hoi.index', ['lop' => $lop]);
+        return view('lanh_dao_truong.ds_tro_cap_hoc_phi.index', ['lop' => $lop]);
     }
 
     function getData(Request $request)
     {
-        $query = StopStudy::where('type', 2)
+        $query = StopStudy::where('type', 3)
         ->studentActive()
         ->whereNull('parent_id')->whereNull('parent_id')
         ->whereNull('parent_id')
@@ -42,7 +42,7 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
     }
 
     function xacnhan(Request $request) {
-        $query = StopStudy::where('type', 2)
+        $query = StopStudy::where('type', 3)
         ->studentActive()
         ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
         ->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
@@ -57,7 +57,7 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
             $stopStudy->status = 6; 
             $stopStudy->save();  
             $user_id = User::where('student_id',$stopStudy->id)->first()->id;
-            $this->notification("Danh sách trợ cấp xã hội đã được lãnh đạo trường phê duyệt", null, "GHP", $user_id);
+            $this->notification("Danh sách trợ cấp học phí đã được lãnh đạo trường phê duyệt", null, "GHP", $user_id);
 
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
@@ -71,7 +71,7 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
     }
 
     function tuchoi() {
-        $query = StopStudy::where('type', 2)
+        $query = StopStudy::where('type', 3)
         ->studentActive()
         ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
         ->whereNull('parent_id')->where(function($query) {
@@ -87,7 +87,7 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
             $users = User::where('role',4)->get();
             foreach($users as $item)
             {
-                $this->notification("Danh sách trợ cấp xã hội đã bị từ chối lãnh đạo trường", null, "GHP", $item->id);
+                $this->notification("Danh sách trợ cấp học phí đã bị từ chối lãnh đạo trường", null, "GHP", $item->id);
             }
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 0;

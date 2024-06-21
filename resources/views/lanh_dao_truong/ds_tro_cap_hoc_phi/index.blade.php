@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="d-flex flex-column flex-column-fluid">
-        @include('ke_hoach_tai_chinh.ds_tro_cap_hoc_phi.header')
+        @include('lanh_dao_truong.ds_tro_cap_hoc_phi.header')
         <!--begin::Content-->
         <div id="kt_app_content" class="app-content flex-column-fluid">
             <!--begin::Content container-->
@@ -99,7 +99,8 @@
         <!--end::Content-->
     </div>
 
-    @include('ke_hoach_tai_chinh.ds_tro_cap_hoc_phi.table')
+    @include('lanh_dao_truong.ds_tro_cap_hoc_phi.table')
     @include('giao_vien.chitiet',['target'=>'chitiet'])
     @include('giao_vien.tientrinh',['target'=>'tientrinh'])
+    @include('lanh_dao_truong.ds_tro_cap_hoc_phi.xacnhanDS',['target'=>'xacnhanDS'])
 @endsection

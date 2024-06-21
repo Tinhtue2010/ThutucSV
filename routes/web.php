@@ -25,6 +25,7 @@ use App\Http\Controllers\TeacherManagerController;
 use App\Http\Controllers\StopStudyController;
 use App\Http\Controllers\TroCapHocPhi\TroCapHocPhiKeHoachTaiChinhController;
 use App\Http\Controllers\TroCapHocPhi\TroCapHocPhiLanhDaoPhongDaoTaoController;
+use App\Http\Controllers\TroCapHocPhi\TroCapHocPhiLanhDaoTruongController;
 use App\Http\Controllers\TroCapHocPhi\TroCapHocPhiPhongDaoTaoController;
 use App\Http\Controllers\TroCapXaHoi\TroCapXaHoiCanBoPhongDaoTaoController;
 use App\Http\Controllers\TroCapXaHoi\TroCapXaHoiKeHoachTaiChinhController;
@@ -251,6 +252,13 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('get-data', [TroCapXaHoiLanhDaoTruongController::class, 'getData'])->name('getData');
                 Route::post('xacnhan', [TroCapXaHoiLanhDaoTruongController::class, 'xacnhan'])->name('xacnhan');
                 Route::get('tuchoi', [TroCapXaHoiLanhDaoTruongController::class, 'tuchoi'])->name('tuchoi');
+            });
+
+            Route::name('TroCapHocPhi.')->prefix('tro-cap-hoc-phi')->group(function () {
+                Route::get('/', [TroCapHocPhiLanhDaoTruongController::class, 'index'])->name('index');
+                Route::get('get-data', [TroCapHocPhiLanhDaoTruongController::class, 'getData'])->name('getData');
+                Route::post('xacnhan', [TroCapHocPhiLanhDaoTruongController::class, 'xacnhan'])->name('xacnhan');
+                Route::get('tuchoi', [TroCapHocPhiLanhDaoTruongController::class, 'tuchoi'])->name('tuchoi');
             });
         });
     });

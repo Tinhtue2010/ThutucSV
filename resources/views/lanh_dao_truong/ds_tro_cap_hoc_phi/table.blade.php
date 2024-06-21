@@ -14,7 +14,7 @@
                     "info": false,
                     "serverSide": true,
                     "ajax": {
-                        "url": "{{ route('KeHoachTaiChinh.TroCapHocPhi.getData') }}", // Thay đổi đường dẫn đến tệp xử lý AJAX
+                        "url": "{{ route('LanhDaoTruong.TroCapHocPhi.getData') }}", // Thay đổi đường dẫn đến tệp xử lý AJAX
                         "type": "GET",
                         "data": function(data) {
                             var name_order = document
