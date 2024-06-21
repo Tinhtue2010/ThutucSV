@@ -19,6 +19,7 @@ use App\Http\Controllers\MienGiamHPController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PhieuController;
 use App\Http\Controllers\RutHoSo\GiaoVienRHSController;
+use App\Http\Controllers\ProfileGiaoVienController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentManagerController;
 use App\Http\Controllers\TeacherManagerController;
@@ -112,7 +113,10 @@ Route::group(['middleware' => ['auth']], function () {
         });
     });
 
-    Route::name('Profile.GiaoVien')->group(function () {
+    Route::name('Profile.GiaoVien.')->group(function () {
+        Route::get('/teacher-info', [ProfileGiaoVienController::class, 'index'])->name('info');
+        Route::get('get-data-info',[ProfileGiaoVienController::class,'getDataInfo'])->name('getDataInfo');
+        Route::post('update',[ProfileGiaoVienController::class,'update'])->name('update');
         // thêm code ở đây
         // controller  này ProfileGiaoVienController
         // code mẫu student-info
