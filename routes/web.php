@@ -334,6 +334,6 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::get('pdf', [DocumentController::class, 'index']);
 Route::get('test',function () {
-    Mail::to('hongichik321@gmail.com')->send(new SendMail("gửi thư thử nghiệm từ hồng",'mail.test',[]));
+    Mail::to('hongichik321@gmail.com')->send(new SendMail("Thông báo xác nhận",'mail.test',[]));
     return 'Email sent successfully!';
 });

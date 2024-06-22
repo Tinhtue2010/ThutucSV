@@ -2,11 +2,16 @@
 
 namespace App\Helpers;
 
+use App\Mail\SendMail;
 use App\Models\Notification;
+use App\Models\otps;
+use App\Models\Student;
 use App\Models\Teacher;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 trait CommonHelper
 {
@@ -224,4 +229,52 @@ trait CommonHelper
         }
         return true;
     }
+
+    function sendOTP() {
+        $user = Auth::user();
+        if($user->teacher_id != null)
+        {
+            $email = Teacher::find($user->teacher_id)->email;
+        }
+        else
+        {
+            $email = Student::find($user->student_id)->email;
+        }
+        if($email == null)
+        {
+            return false;
+        }
+        $randomString = Str::random(6);
+        $data = [
+            "otp" => $randomString,
+            "email" => $email
+        ];
+        Mail::to($email)->send(new SendMail("Thông báo xác nhận chữ ký",'mail.otp', $data));
+
+        otps::updateOrCreate(
+            ['user_id' => $user->id], 
+            ['otp' => $randomString]
+        );
+        return true;
+    }
+
+    public function checkOtp($otp)
+    {
+        $user = Auth::user();
+        $otpRecord = Otps::where('user_id', $user->id)->first();
+        if (!$otpRecord) {
+            return false; 
+        }
+        $createdAt = Carbon::parse($otpRecord->updated_at);
+        $expirationTime = $createdAt->addSeconds(30); 
+        if (Carbon::now()->gt($expirationTime)) {
+            return false;
+        }
+        if ($otpRecord->otp === $otp) {
+            return true;
+        }
+        return false;
+    }
+
+
 }

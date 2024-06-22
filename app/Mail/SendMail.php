@@ -20,7 +20,7 @@ class SendMail extends Mailable
      */
     protected $view_blade;
     public $subject;
-    protected $data;
+    public $data;
     public function __construct($subject,$view,$data)
     {
         $this->view_blade = $view;
@@ -59,6 +59,6 @@ class SendMail extends Mailable
      */
     public function attachments()
     {
-        return $this->data;
+        return [];
     }
 }

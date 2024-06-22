@@ -295,7 +295,7 @@
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8">
-                                <img src="{{ asset('path/to/images/' . $student->chu_ky) }}" alt="Chữ ký" class="fw-bold fs-6 text-gray-800" />
+                                <img src="{{ asset('storage/' . $student->chu_ky) }}" alt="Chữ ký" class="fw-bold fs-6 text-gray-800 w-50px" />
                             </div>
                             <!--end::Col-->
                         </div>
