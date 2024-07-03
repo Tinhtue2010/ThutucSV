@@ -65,8 +65,9 @@
         NGƯỜI VIẾT ĐƠN
         <br />
         ( Ký và ghi rõ họ và tên)
-<br><br>
-      <br>
+        <br>
+        <img style="height: 50px" src="{{ asset('storage/'.$data['url_chuky']) }}" alt="">
+        <br>
       {{$data['full_name']}}
       </div>
     </div>

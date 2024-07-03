@@ -94,7 +94,7 @@
                                 <b>Hồ sơ minh chứng cần thiết</b> <br>
                                 <b>* Với chế độ Trợ cấp xã hội</b> <br>
                                 1- Giấy tờ minh chứng về nơi cư trú đối với SV ở vùng cao từ 3 năm trở lên. <br>
-                                2- Bản phô tô công chứng Giấy chứng tử của bố mẹ.  <br>
+                                2- Bản phô tô công chứng Giấy chứng tử của bố mẹ. <br>
                                 3- Bản phô tô công chứng Giấy khai sinh đối với những học sinh, sinh viên là mồ côi cha mẹ. <br>
                                 4- Bản phô tô công chứng Giấy chứng nhận của cơ quan y tế về tình trạng bị khuyết tật, tàn tật đối với những SV khuyết tật, tàn tật. <br>
                                 5- Bản phô tô công chứng sổ hộ nghèo hoặc hộ cận ghèo đói với những sinh viên có hoàn cảnh đặc biệt khó khăn <br>
@@ -117,17 +117,22 @@
                             @if (isset($don_parent))
                                 @if ($don_parent->status <= 0)
                                     <button type="submit" class="btn btn-success me-2">
-                                        {{ __('Sửa đơn xin trợ cấp xã hội') }}
+                                        {{ __('Sửa đơn xin trợ cấp') }}
                                     </button>
                                 @endif
                             @else
                                 <button type="submit" class="btn btn-success me-2">
-                                    {{ __('Gửi đơn xin trợ cấp xã hội') }}
+                                    {{ __('Gửi đơn xin trợ cấp') }}
                                 </button>
                             @endif
 
 
-                            <button type="submit" class="btn btn-warning me-2">{{ __('Xem đơn') }}</button>
+                            @isset($don_parent_tcxh)
+                                <a href="{{ route('phieu.index', ['id' => $don_parent_tcxh->phieu_id]) }}" target="_blank" class="btn btn-warning me-2">Xem đơn trợ cấp xã hội</a>
+                            @endisset
+                            @isset($don_parent_mghp)
+                            <a href="{{ route('phieu.index', ['id' => $don_parent_mghp->phieu_id]) }}" target="_blank" class="btn btn-warning me-2">Xem đơn trợ cấp học phí</a>
+                        @endisset
                             @if (isset($don_parent))
                                 @if ($don_parent->status <= 0)
                                     <button type="reset" class="btn btn-secondary">{{ __('Nhập lại') }}</button>
@@ -194,8 +199,15 @@
             e.preventDefault();
             const form = document.querySelector("#form_create");
             const formData = new FormData(form);
-            validation_create.validate().then(function(status) {
+            validation_create.validate().then(async function(status) {
                 if (status === 'Valid') {
+                    await checkMaXacNhan().then(function(result) {
+                        if (false) {
+                            return;
+                        } else {
+                            formData.append('otp', result);
+                        }
+                    });
                     axios({
                         method: 'POST',
                         url: "{{ route('TroCapXH.CreateViewPdf') }}",

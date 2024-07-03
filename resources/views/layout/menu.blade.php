@@ -444,21 +444,24 @@
             <!--end::Menu link-->
         </div>
         <!--end::Menu Item-->
-        <!--begin::Menu Item-->
-        <div class="menu-item">
-            <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('CheDoChinhSach.index') ? 'active' : '' }}" href="{{ route('CheDoChinhSach.index') }}">
-                <!--begin::Icon-->
-                <span class="menu-icon">
-                    <i class="ki-outline ki-more-2 fs-2"></i>
-                </span>
-                <!--end::Icon-->
-                <!--begin::Title-->
-                <span class="menu-title">Chế độ chính sách</span>
-                <!--end::Title-->
-            </a>
-            <!--end::Menu link-->
-        </div>
+        @if (Auth::user()->checkNganhCheDoChinhSach())
+            <!--begin::Menu Item-->
+            <div class="menu-item">
+                <!--begin::Menu link-->
+                <a class="menu-link {{ request()->routeIs('CheDoChinhSach.index') ? 'active' : '' }}" href="{{ route('CheDoChinhSach.index') }}">
+                    <!--begin::Icon-->
+                    <span class="menu-icon">
+                        <i class="ki-outline ki-more-2 fs-2"></i>
+                    </span>
+                    <!--end::Icon-->
+                    <!--begin::Title-->
+                    <span class="menu-title">Chế độ chính sách</span>
+                    <!--end::Title-->
+                </a>
+                <!--end::Menu link-->
+            </div>
+        @endif
+
         <!--end::Menu Item-->
     @endif
 
@@ -466,6 +469,23 @@
         <div class="menu-heading text-uppercase fs-7 fw-bold"> Khác</div>
         <div class="app-sidebar-separator separator"></div>
     </div>
+
+    @if (!Role(1))
+        <div class="menu-item">
+            <!--begin::Menu link-->
+            <a class="menu-link {{ request()->routeIs('Profile.GiaoVien.info') ? 'active' : '' }}" href="{{ route('Profile.GiaoVien.info') }}">
+                <!--begin::Icon-->
+                <span class="menu-icon">
+                    <i class="ki-outline ki-gear fs-2x"></i>
+                </span>
+                <!--end::Icon-->
+                <!--begin::Title-->
+                <span class="menu-title">Cài đặt</span>
+                <!--end::Title-->
+            </a>
+            <!--end::Menu link-->
+        </div>
+    @endif
 
     <div class="menu-item">
         <!--begin::Menu link-->

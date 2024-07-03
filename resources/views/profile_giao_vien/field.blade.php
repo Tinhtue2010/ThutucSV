@@ -15,7 +15,7 @@
             <span class="required">Địa chỉ</span>
         </label>
         <!--end::Label-->
-        <input type="date" class="form-control form-control-solid" name="dia_chi" />
+        <input type="text" class="form-control form-control-solid" name="dia_chi" />
     </div>
     <div class="d-flex flex-column mb-8 fv-row col-6 ps-4">
         <!--begin::Label-->

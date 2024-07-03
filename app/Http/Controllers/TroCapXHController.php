@@ -17,7 +17,9 @@ class TroCapXHController extends Controller
     function index()
     {
         $user = Auth::user();
-        $don_parent = StopStudy::where('student_id', $user->student_id)->where('type', 2)->first();
+        $don_parent = StopStudy::where('student_id', $user->student_id)->where('type', 2)->orWhere('type', 3)->first();
+        $don_parent_tcxh = StopStudy::where('student_id', $user->student_id)->where('type', 2)->first();
+        $don_parent_mghp = StopStudy::where('student_id', $user->student_id)->where('type', 3)->first();
         if ($don_parent) {
             $phieu = Phieu::where('id', $don_parent->phieu_id)->first();
             $phieu = json_decode($phieu->content, true);
@@ -32,11 +34,15 @@ class TroCapXHController extends Controller
             ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)->first();
-        return view('tro_cap_xh.index', ['don_parent' => $don_parent, 'don' => $don, 'phieu' => $phieu, 'student' => $student]);
+        return view('tro_cap_xh.index', ['don_parent' => $don_parent, 'don_parent_tcxh' => $don_parent_tcxh, 'don_parent_mghp' => $don_parent_mghp, 'don' => $don, 'phieu' => $phieu, 'student' => $student]);
     }
 
     function CreateViewPdf(Request $request)
     {
+        if(!$this->checkOtpApi($request->otp ?? ''))
+        {
+            abort(404);
+        }
         if ($request->button_clicked == "xem_truoc") {
             Session::put('doituong', $request->doituong);
             Session::put('hoso', $request->hoso);
@@ -69,11 +75,13 @@ class TroCapXHController extends Controller
 
             $studentData['year'] = Carbon::now()->year;
 
+            $studentData['url_chuky'] = Auth::user()->getUrlChuKy();
+
             if (isset($request->trocapxh)) {
-                $this->createPhieu($user,$request, $studentData,$student,2);
+                $this->createPhieu($user, $request, $studentData, $student, 2);
             }
-            if(isset($request->hocphi)){
-                $this->createPhieu($user,$request, $studentData,$student,3);
+            if (isset($request->hocphi)) {
+                $this->createPhieu($user, $request, $studentData, $student, 3);
             }
         }
         return true;
@@ -166,7 +174,6 @@ class TroCapXHController extends Controller
             $check->type_miengiamhp = $request->doituong ?? 1;
             if ($type == 2) {
                 $check->muctrocapxh = isset($request->doituong) ? 140000 : 100000;
-                
             } else {
                 $check->muchotrohp = config('doituong.muctrocaphp');
             }
@@ -196,7 +203,6 @@ class TroCapXHController extends Controller
             $query->lop_id = $student->lop_id;
             if ($type == 2) {
                 $query->muctrocapxh = isset($request->doituong) ? 140000 : 100000;
-                
             } else {
                 $query->muchotrohp = config('doituong.muctrocaphp');
             }

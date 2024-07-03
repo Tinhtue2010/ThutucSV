@@ -60,9 +60,8 @@
       <div class="text-center">
         NNGƯỜI LÀM ĐƠN
         <br />
-        ( Ký và ghi rõ họ và tên)
-        <br><br>
-        <br>
+        <img style="height: 50px; margin-top: 10px; margin-bottom: 10px" src="{{ asset('storage/'.$data['url_chuky']) }}" alt="">
+        <br/>
         {{$data['full_name']}}
               </div>
       </div>

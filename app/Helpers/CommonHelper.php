@@ -230,18 +230,15 @@ trait CommonHelper
         return true;
     }
 
-    function sendOTP() {
+    function sendOTP()
+    {
         $user = Auth::user();
-        if($user->teacher_id != null)
-        {
+        if ($user->teacher_id != null) {
             $email = Teacher::find($user->teacher_id)->email;
-        }
-        else
-        {
+        } else {
             $email = Student::find($user->student_id)->email;
         }
-        if($email == null)
-        {
+        if ($email == null) {
             return false;
         }
         $randomString = Str::random(6);
@@ -249,11 +246,12 @@ trait CommonHelper
             "otp" => $randomString,
             "email" => $email
         ];
-        Mail::to($email)->send(new SendMail("Thông báo xác nhận chữ ký",'mail.otp', $data));
+        Mail::to($email)->send(new SendMail("Thông báo xác nhận chữ ký", 'mail.otp', $data));
 
         otps::updateOrCreate(
-            ['user_id' => $user->id], 
-            ['otp' => $randomString]
+            ['user_id' => $user->id],
+            ['otp' => $randomString],
+            ['status' => 0]
         );
         return true;
     }
@@ -263,10 +261,29 @@ trait CommonHelper
         $user = Auth::user();
         $otpRecord = Otps::where('user_id', $user->id)->first();
         if (!$otpRecord) {
-            return false; 
+            return false;
         }
         $createdAt = Carbon::parse($otpRecord->updated_at);
-        $expirationTime = $createdAt->addSeconds(30); 
+        $expirationTime = $createdAt->addSeconds(30);
+        if (Carbon::now()->gt($expirationTime)) {
+            return false;
+        }
+        if ($otpRecord->otp === $otp) {
+            $otpRecord->status = 1;
+            $otpRecord->save();
+            return true;
+        }
+        return false;
+    }
+    public function checkOtpApi($otp)
+    {
+        $user = Auth::user();
+        $otpRecord = Otps::where('user_id', $user->id)->where('status',1)->first();
+        if (!$otpRecord) {
+            return false;
+        }
+        $createdAt = Carbon::parse($otpRecord->updated_at);
+        $expirationTime = $createdAt->addSeconds(60);
         if (Carbon::now()->gt($expirationTime)) {
             return false;
         }
@@ -275,6 +292,4 @@ trait CommonHelper
         }
         return false;
     }
-
-
 }

@@ -23,26 +23,26 @@
         </div>
         <div class="d-flex flex-column">
             <div>
-                Họ và tên: {{$data["full_name"]}} &nbsp;&nbsp;
-                Sinh ngày: {{$data["date_of_birth"]}}
+                Họ và tên: {{ $data['full_name'] }} &nbsp;&nbsp;
+                Sinh ngày: {{ $data['date_of_birth'] }}
                 <br />
-                Lớp: {{$data["lop"]}} &nbsp; Khoa: {{$data["khoa"]}} &nbsp; SĐT: {{$data["sdt"]}}
+                Lớp: {{ $data['lop'] }} &nbsp; Khoa: {{ $data['khoa'] }} &nbsp; SĐT: {{ $data['sdt'] }}
                 <br />
-                Nơi thường trú: {{$data["thuongchu"]}}
+                Nơi thường trú: {{ $data['thuongchu'] }}
                 <br />
                 Thuộc đối tượng:
                 <div class="ms-3">
-                  {{$data["doituong"]}}
+                    {{ $data['doituong'] }}
                 </div>
                 Hồ sơ xin hưởng chế độ trợ cấp xã hội kèm theo giấy này gồm:
                 <div class="ms-3">
-                  {{$data["hoso"]}}
+                    {{ $data['hoso'] }}
                 </div>
                 <span class="ms-3">Kính đề nghị Trường xem xét và giải quyết cho tôi được hưởng trợ cấp xã hội theo qui định hiện hành.</span>
             </div>
         </div>
         <div class="d-flex flex-row justify-content-end mt-2">
-          <div class="fst-italic">Quảng Ninh, ngày {{$data['day']}} tháng {{$data['month']}} năm {{$data['year']}}</div>
+            <div class="fst-italic">Quảng Ninh, ngày {{ $data['day'] }} tháng {{ $data['month'] }} năm {{ $data['year'] }}</div>
         </div>
         <div class="d-flex flex-row justify-content-between px-5 mt-3">
             <div class="d-flex flex-column text-center fw-bold">
@@ -51,11 +51,10 @@
             <div class="text-center">
                 NNGƯỜI LÀM ĐƠN
                 <br />
-                
-                ( Ký và ghi rõ họ và tên)
-                <br><br>
-      <br>
-      {{$data['full_name']}}
+
+                <img style="height: 50px; margin-top: 10px; margin-bottom: 10px" src="{{ asset('storage/' . $data['url_chuky']) }}" alt="">
+                <br>
+                {{ $data['full_name'] }}
             </div>
         </div>
     </div>

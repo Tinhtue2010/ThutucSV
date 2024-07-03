@@ -92,7 +92,7 @@
                                 readonly @endif @endif class="form-control form-control-solid h-150px" name="daduochuong">{{ $phieu['daduochuong'] ?? '' }}</textarea>
                         </div>
                         <div class="fs-6 fw-semibol d-flex flex-column">
-                            <p class="100"><b>Hồ sơ minh chứng cần thiết</b> 
+                            <p class="100"><b>Hồ sơ minh chứng cần thiết</b>
                                 <br>
                                 1- Bản phô tô công chứng Giấy chứng nhận thương binh, bệnh binh của cha hoặc mẹ sinh viên; giấy khai sinh của sinh viên. <br>
                                 2- Bản phô tô công chứng Giấy chứng nhận của cơ quan y tế về tình trạng bị khuyết tật, tàn tật đối với những sinh viên khuyết tật, tàn
@@ -102,14 +102,14 @@
                                 4- Bản phô tô công chứng Sổ hộ nghèo hoặc hộ cận nghèo <br>
                                 5- Bản phô tô công chứng Giấy khai sinh, giấy tờ minh chứng về chỗ ở đối với SV thuộc dân tộc thiểu số rất ít người. <br>
                             </p>
-                            <p class="70" style="display: none"><b>Hồ sơ minh chứng cần thiết</b> 
+                            <p class="70" style="display: none"><b>Hồ sơ minh chứng cần thiết</b>
                                 <br>
                                 - Giấy tờ minh chứng về chỗ ở đối với sinh viên ở thôn, bản đặc biệt khó khăn, xã khu vực III vùng dân tộc miền núi, xã đặc biệt khó
-khăn vùng bãi ngang ven biển hải đảo theo quy định của cơ quan có thẩm quyền (Theo QĐ 433/QĐ-UBMT ngày 18/6/2021; QĐ số 861/QĐ-TTg ngày 04/6/2021; 353/QĐ-TTg ngày 15/3/2022)
+                                khăn vùng bãi ngang ven biển hải đảo theo quy định của cơ quan có thẩm quyền (Theo QĐ 433/QĐ-UBMT ngày 18/6/2021; QĐ số 861/QĐ-TTg ngày 04/6/2021; 353/QĐ-TTg ngày 15/3/2022)
                             </p>
-                            <p class="50" style="display: none"><b>Hồ sơ minh chứng cần thiết</b> 
+                            <p class="50" style="display: none"><b>Hồ sơ minh chứng cần thiết</b>
                                 <br>
-                               - Bản phô tô công chứng Quyết định và Giấy chứng nhận trợ cấp TNLĐ-BNN của Bảo hiểm xã hội cấp; giấy khai sinh của sinh viên.
+                                - Bản phô tô công chứng Quyết định và Giấy chứng nhận trợ cấp TNLĐ-BNN của Bảo hiểm xã hội cấp; giấy khai sinh của sinh viên.
                             </p>
                         </div>
                         <div class="d-flex flex-column mb-8 fv-row">
@@ -143,7 +143,9 @@ khăn vùng bãi ngang ven biển hải đảo theo quy định của cơ quan
                             @endif
 
 
-                            <button type="submit" class="btn btn-warning me-2">{{ __('Xem đơn') }}</button>
+                            @isset($don_parent)
+                                <a href="{{ route('phieu.index', ['id' => $don_parent->phieu_id]) }}" target="_blank" class="btn btn-warning me-2">Xem đơn</a>
+                            @endisset
                             @if (isset($don_parent))
                                 @if ($don_parent->status <= 0)
                                     <button type="reset" class="btn btn-secondary">{{ __('Nhập lại') }}</button>
@@ -211,8 +213,15 @@ khăn vùng bãi ngang ven biển hải đảo theo quy định của cơ quan
 
             const form = document.querySelector("#form_create");
             const formData = new FormData(form);
-            validation_create.validate().then(function(status) {
+            validation_create.validate().then(async function(status) {
                 if (status === 'Valid') {
+                    await checkMaXacNhan().then(function(result) {
+                        if (false) {
+                            return;
+                        } else {
+                            formData.append('otp', result);
+                        }
+                    });
                     axios({
                         method: 'POST',
                         url: "{{ route('MienGiamHp.CreateViewPdf') }}",
@@ -241,20 +250,15 @@ khăn vùng bãi ngang ven biển hải đảo theo quy định của cơ quan
         });
 
         $('[name="doituong"]').on('change', function() {
-            if(this.value < 5)
-            {
+            if (this.value < 5) {
                 $(".100").show();
                 $(".70").hide();
                 $(".50").hide();
-            }
-            else if(this.value == 7)
-            {
+            } else if (this.value == 7) {
                 $(".100").hide();
                 $(".70").hide();
                 $(".50").show();
-            }
-            else
-            {
+            } else {
                 $(".100").hide();
                 $(".70").show();
                 $(".50").hide();

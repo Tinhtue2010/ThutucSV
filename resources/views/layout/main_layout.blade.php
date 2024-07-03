@@ -916,6 +916,7 @@
         </div>
     </div>
     <!--end::Activities drawer-->
+    @include('common.xac_nhan_chu_ky')
     <!--end::Modals-->
     <!--begin::Javascript-->
     <script>

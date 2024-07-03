@@ -15,14 +15,7 @@ class ProfileGiaoVienController extends Controller
         $teacher = Teacher::leftJoin('khoas', 'teachers.khoa_id', '=', 'khoas.id')
             ->select('teachers.*', 'khoas.name as khoa_name')
             ->where('teachers.id', $user->teacher_id)->first();
-        $teacherArray = $teacher->toArray();
-        $totalFields = count($teacherArray);
-        $nonNullFields = count(array_filter($teacherArray));
-
-        $percentage = intval(($nonNullFields / $totalFields) * 100);
-
-        //?? a bảo là cái này dùng view khác mà
-        return view('profile_giao_vien.index', ['percent' => $percentage, 'teacher' => $teacher]);
+        return view('profile_giao_vien.index', ['teacher' => $teacher]);
     }
 
     public function getDataInfo()

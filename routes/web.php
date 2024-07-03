@@ -17,6 +17,7 @@ use App\Http\Controllers\MienGiamHP\MienGiamHPLanhDaoTruongController;
 use App\Http\Controllers\MienGiamHP\MienGiamHPPhongDaoTaoController;
 use App\Http\Controllers\MienGiamHPController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\OtpController;
 use App\Http\Controllers\PhieuController;
 use App\Http\Controllers\RutHoSo\GiaoVienRHSController;
 use App\Http\Controllers\ProfileGiaoVienController;
@@ -118,9 +119,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/teacher-info', [ProfileGiaoVienController::class, 'index'])->name('info');
         Route::get('get-data-info',[ProfileGiaoVienController::class,'getDataInfo'])->name('getDataInfo');
         Route::post('update',[ProfileGiaoVienController::class,'update'])->name('update');
-        // thêm code ở đây
-        // controller  này ProfileGiaoVienController
-        // code mẫu student-info
     });
 
     Route::middleware('role:giaoVien')->group(function () {
@@ -330,10 +328,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('get-data/{id?}', [PhieuController::class, 'getData'])->name('getData');
         Route::get('{id?}', [PhieuController::class, 'index'])->name('index');
     });
+    Route::name('otp.')->prefix('otp')->group(function () {
+        Route::get('chu-ky', [OtpController::class, 'createOtpChuKy'])->name('createOtpChuKy');
+        Route::get('check-chu-ky/{otp?}', [OtpController::class, 'checkOtpChuKy'])->name('checkOtpChuKy');
+    });
 });
 
 Route::get('pdf', [DocumentController::class, 'index']);
-Route::get('test',function () {
-    Mail::to('hongichik321@gmail.com')->send(new SendMail("Thông báo xác nhận",'mail.test',[]));
-    return 'Email sent successfully!';
-});

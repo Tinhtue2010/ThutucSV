@@ -66,7 +66,7 @@
                                                 <!--begin::Number-->
                                                 <div class="d-flex align-items-center">
                                                     <i class="ki-outline ki-archive-tick fs-3 text-success me-2"></i>
-                                                    <div class="fs-2 fw-bold counted" data-kt-countup="true" data-kt-countup-value="{{ $student->so_tien }}" data-kt-initialized="1">Ngành</div>
+                                                    <div class="fs-2 fw-bold counted" data-kt-countup="true" data-kt-initialized="1">Ngành</div>
                                                 </div>
                                                 <!--end::Number-->
                                                 <!--begin::Label-->

@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Otps extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id','otp'];
+    protected $fillable = ['user_id','otp','status'];
     
 }

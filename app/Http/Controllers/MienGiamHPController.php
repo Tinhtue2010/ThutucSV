@@ -38,6 +38,10 @@ class MienGiamHPController extends Controller
 
     function CreateViewPdf(Request $request)
     {
+        if(!$this->checkOtpApi($request->otp ?? ''))
+        {
+            abort(404);
+        }
         if ($request->button_clicked == "xem_truoc") {
             Session::put('noisinh', $request->noisinh);
             Session::put('doituong', $request->doituong);
@@ -69,6 +73,8 @@ class MienGiamHPController extends Controller
             $studentData['month'] = Carbon::now()->month;
 
             $studentData['year'] = Carbon::now()->year;
+            
+            $studentData['url_chuky'] = Auth::user()->getUrlChuKy();
 
             $check = StopStudy::where('student_id', $user->student_id)->where('type', 1)->first();
 

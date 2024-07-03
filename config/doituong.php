@@ -89,5 +89,5 @@ return [
             "Học sinh sinh viên hoàn cảnh đặc biệt khó khăn",
             "Học sinh, sinh viên có hoàn cảnh đặc biệt khó khăn về kinh tế, vượt khó học tập, gia đình thuộc diện xóa đói giảm nghèo."
         ]
-    ]
+    ],
 ];

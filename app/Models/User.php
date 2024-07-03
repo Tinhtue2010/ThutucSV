@@ -45,4 +45,54 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    function gmail() {
+        $email = "";
+        if($this->teacher_id != null)
+        {
+            $email = Teacher::find($this->teacher_id)->email;
+        }
+        else
+        {
+            $email = Student::find($this->student_id)->email;
+        }
+        return $email;
+    }
+
+    function getUrlChuKy() {
+        $url = "";
+        if($this->teacher_id != null)
+        {
+            $url = Teacher::find($this->teacher_id)->chu_ky;
+        }
+        else
+        {
+            $url = Student::find($this->student_id)->chu_ky;
+        }
+        return $url;
+    }
+    function checkNganhCheDoChinhSach(){
+        if($this->teacher_id != null)
+        {
+            return false;
+        }
+        else
+        {
+            $lop_id = Student::find($this->student_id)->lop_id;
+            $nganh = Lop::find($lop_id)->nganh;
+            $list_nganh = [
+                "Quản trị dịch vụ du lịch và lữ hành",
+                "Quản trị Khách sạn",
+                "Quản trị Nhà hàng và Dịch vụ ăn uống",
+                "Ngôn ngữ Nhật",
+                "Ngôn ngữ Hàn Quốc",
+                "Ngôn ngữ Trung Quốc",
+                "Nuôi trồng thủy sản",
+            ];
+            if (in_array($nganh, $list_nganh)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

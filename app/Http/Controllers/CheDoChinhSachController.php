@@ -37,44 +37,46 @@ class CheDoChinhSachController extends Controller
 
     function CreateViewPdf(Request $request)
     {
+        if (!$this->checkOtpApi($request->otp ?? '')) {
+            abort(404);
+        }
         if ($request->button_clicked == "xem_truoc") {
             Session::put('doituong', $request->doituong);
             Session::put('hoso', $request->hoso);
             Session::put('thuongchu', $request->thuongchu);
-            
         } else {
             $user = Auth::user();
 
             $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
-            ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
-            ->where('students.id', $user->student_id)->first();
+                ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+                ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
+                ->where('students.id', $user->student_id)->first();
 
-        $studentData['full_name'] = $student->full_name;
-        $studentData['student_code'] = $student->student_code;
-        $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
-        $studentData['lop'] = $student->lop_name;
-        $studentData['khoa'] = $student->khoa_name;
-        $studentData['khoa_hoc'] = $student->school_year;
-        $studentData['hoso'] = $request->hoso;
-        $studentData['doituong'] = $request->doituong;
-        $studentData['sdt'] = $student->phone;
-        $studentData['thuongchu'] = $request->thuongchu;
+            $studentData['full_name'] = $student->full_name;
+            $studentData['student_code'] = $student->student_code;
+            $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
+            $studentData['lop'] = $student->lop_name;
+            $studentData['khoa'] = $student->khoa_name;
+            $studentData['khoa_hoc'] = $student->school_year;
+            $studentData['hoso'] = $request->hoso;
+            $studentData['doituong'] = $request->doituong;
+            $studentData['sdt'] = $student->phone;
+            $studentData['thuongchu'] = $request->thuongchu;
 
-        $studentData['day'] = Carbon::now()->day;
+            $studentData['day'] = Carbon::now()->day;
 
-        $studentData['month'] = Carbon::now()->month;
+            $studentData['month'] = Carbon::now()->month;
 
-        $studentData['year'] = Carbon::now()->year;
+            $studentData['year'] = Carbon::now()->year;
+            $studentData['url_chuky'] = Auth::user()->getUrlChuKy();
 
             $check = StopStudy::where('student_id', $user->student_id)->where('type', 3)->first();
             if ($check) {
-                if(isset($check->files))
-                {
+                if (isset($check->files)) {
                     $this->deleteFiles(json_decode($check->files));
                 }
-                $check->files = json_encode($this->uploadListFile($request,'files','mien_giam_hp'));
-                
+                $check->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
+
                 $check->note = $request->data;
                 $check->update();
                 $phieu = Phieu::where('id', $check->phieu_id)->first();
@@ -92,7 +94,7 @@ class CheDoChinhSachController extends Controller
                 $phieu->save();
 
                 $query = new StopStudy();
-                $query->files = json_encode($this->uploadListFile($request,'files','mien_giam_hp'));
+                $query->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
                 $query->student_id = $user->student_id;
                 $query->round = 1;
                 $query->type = 3;

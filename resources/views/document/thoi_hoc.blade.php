@@ -58,10 +58,15 @@
     
     <div
     class="d-flex flex-row justify-content-between px-5"
-    style="margin-top: 70px"
+    style="margin-top:20px"
   >
     <div class="text-center"></div>
-    <div class="text-center">{{$data['full_name']}}</div>
+    <div class="text-center">
+      <img style="height: 50px" src="{{ asset('storage/'.$data['url_chuky']) }}" alt="">
+      <br>
+      {{$data['full_name']}}
+    
+    </div>
   </div>
     <div
       class="d-flex flex-row justify-content-between px-5"

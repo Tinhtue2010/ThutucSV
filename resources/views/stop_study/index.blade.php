@@ -97,8 +97,9 @@
                                 </button>
                             @endif
 
-
-                            <button type="submit" class="btn btn-warning me-2">{{ __('Xem đơn') }}</button>
+                            @isset($don_parent)
+                            <a href="{{ route('phieu.index', ['id' => $don_parent->phieu_id]) }}" target="_blank" class="btn btn-warning me-2">Xem đơn</a>
+                            @endisset
                             @if (isset($don_parent))
                                 @if ($don_parent->status <= 0)
                                     <button type="reset" class="btn btn-secondary">{{ __('Nhập lại') }}</button>
@@ -117,6 +118,10 @@
     </div>
 @endsection
 
+
+@push('js')
+    scr
+@endpush
 @push('js')
     <script>
         let form_create = document.querySelector('#form_create');
@@ -147,13 +152,20 @@
         $('button.btn-warning').click(function() {
             $('#button_clicked').val('xem_truoc');
         });
-        $('#form_create').submit(function(e) {
+        $('#form_create').submit(async function(e) {
             e.preventDefault();
 
             const form = document.querySelector("#form_create");
             const formData = new FormData(form);
-            validation_create.validate().then(function(status) {
+            validation_create.validate().then(async function(status) {
                 if (status === 'Valid') {
+                    await checkMaXacNhan().then(function(result) {
+                        if (false) {
+                            return;
+                        } else {
+                            formData.append('otp', result);
+                        }
+                    });
                     axios({
                         method: 'POST',
                         url: "{{ route('StopStudy.CreateViewPdf') }}",
@@ -167,7 +179,10 @@
                         } else {
                             mess_success('Thông báo',
                                 "Đơn của bạn đã được gửi")
-                            location.reload();
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+
                         }
 
                     }).catch(function(error) {
