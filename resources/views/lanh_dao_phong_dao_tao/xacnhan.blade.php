@@ -1,5 +1,4 @@
-<div class="modal fade" id="kt_modal_{{$target}}_target" tabindex="-1" role="dialog"
-     aria-hidden="true">
+<div class="modal fade" id="kt_modal_{{ $target }}_target" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,7 +8,7 @@
                 </div>
             </div>
             <div class="modal-body">
-                <form class="form" id="form_{{$target}}">
+                <form class="form" id="form_{{ $target }}">
                     <div class="card-body">
                         @csrf
                         <input type="text" name="id" class="d-none">
@@ -28,13 +27,11 @@
                             <!--end::Label-->
                             <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="note">Lãnh đạo phòng CTSV đã duyệt đơn</textarea>
                         </div>
-                        
+
                     </div>
                     <div class="card-footer">
-                        <button type="submit"
-                                class="btn btn-success mr-2">{{ __('Cập nhật') }}</button>
-                        <button type="reset"
-                                class="btn btn-secondary">{{ __('Nhập lại') }}</button>
+                        <button type="submit" class="btn btn-success mr-2">{{ __('Cập nhật') }}</button>
+                        <button type="reset" class="btn btn-secondary">{{ __('Nhập lại') }}</button>
                     </div>
                 </form>
             </div>
@@ -45,11 +42,11 @@
 @push('js')
     <script type="text/javascript">
         let id = 0;
-        let model{{$target}};
+        let model{{ $target }};
 
-        let form_{{$target}} = document.querySelector('#form_{{$target}}');
-        let validation_{{$target}} = FormValidation.formValidation(
-            form_{{$target}}, {
+        let form_{{ $target }} = document.querySelector('#form_{{ $target }}');
+        let validation_{{ $target }} = FormValidation.formValidation(
+            form_{{ $target }}, {
                 fields: {},
                 plugins: {
                     trigger: new FormValidation.plugins.Trigger(),
@@ -62,11 +59,18 @@
             }
         );
 
-        $('#form_{{$target}}').submit(function (e) {
+        $('#form_{{ $target }}').submit(function(e) {
             e.preventDefault();
             let form = $(this);
-            validation_{{$target}}.validate().then(function (status) {
+            validation_{{ $target }}.validate().then(async function(status) {
                 if (status === 'Valid') {
+                    await checkMaXacNhan().then(function(result) {
+                        if (false) {
+                            return;
+                        } else {
+                            form.append('otp', result);
+                        }
+                    });
                     axios({
                         method: 'POST',
                         url: "{{ route('LanhDaoPhongDaoTao.xacnhan') }}",
@@ -75,9 +79,9 @@
                         mess_success('Thông báo',
                             "Xác nhận đơn thành công")
                         $(this).trigger("reset");
-                        model{{$target}}.hide();
+                        model{{ $target }}.hide();
                         Datatable.loadData();
-                    }).catch(function (error) {
+                    }).catch(function(error) {
                         mess_error("Cảnh báo",
                             "{{ __('Có lỗi xảy ra.') }}"
                         )
@@ -92,12 +96,12 @@
 
 
         function xacnhan(data) {
-            modalEl = document.querySelector('#kt_modal_{{$target}}_target');
+            modalEl = document.querySelector('#kt_modal_{{ $target }}_target');
             if (!modalEl) {
                 return;
             }
-            model{{$target}} = new bootstrap.Modal(modalEl);
-            model{{$target}}.show();
+            model{{ $target }} = new bootstrap.Modal(modalEl);
+            model{{ $target }}.show();
             $('[name="id"]').val(data);
         }
     </script>

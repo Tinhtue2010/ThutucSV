@@ -230,7 +230,7 @@ trait CommonHelper
         return true;
     }
 
-    function sendOTP()
+    function sendOTP($loai = null)
     {
         $user = Auth::user();
         if ($user->teacher_id != null) {
@@ -244,7 +244,8 @@ trait CommonHelper
         $randomString = Str::random(6);
         $data = [
             "otp" => $randomString,
-            "email" => $email
+            "email" => $email,
+            'loai' => $loai
         ];
         Mail::to($email)->send(new SendMail("Thông báo xác nhận chữ ký", 'mail.otp', $data));
 

@@ -77,29 +77,34 @@
 </head>
 
 <body>
-    
+
     <div class="container">
         <div class="header">
             <img src="https://ehmugbi.stripocdn.email/content/guids/CABINET_028791cf4ec5985133c5f43b294a60a3454c5d1c65bd05d1bf317024eab320a7/images/logo.png" alt="Logo Đại học Hạ Long">
             <h1>Trường Đại học Hạ Long</h1>
         </div>
         <div class="content">
-            <h2>Xác nhận xác nhận chữ ký của bạn</h2>
+            @if (isset($data['loai']))
+                <h2>Xác nhận xác nhận chữ ký cho {{$data['loai']}}</h2>
+            @else
+                <h2>Xác nhận xác nhận chữ ký của bạn</h2>
+            @endif
             <div style="text-align: left">
                 <p>Chào bạn,</p>
-                <p>Chúng tôi đã nhận được yêu cầu xác nhận chữ ký của bạn cho tài khoản {{$data['email']}}
+                <p>Chúng tôi đã nhận được yêu cầu xác nhận chữ ký của bạn cho tài khoản {{ $data['email'] }}
                     <br>Vui lòng sử dụng mã xác nhận dưới đây để hoàn tất quá trình:
                 </p>
             </div>
-            <div class="code">{{$data['otp']}}</div>
+            <div class="code">{{ $data['otp'] }}</div>
             <p>Nếu bạn không yêu cầu xác nhận này, vui lòng bỏ qua email này.</p>
         </div>
         <div class="footer">
             <p>Liên hệ
                 <br>Cơ sở 1: Số 258, đường Bạch Đằng, phường Nam Khê - thành phố Uông Bí - tỉnh Quảng Ninh
-            <br>Cơ sở 2: Số 58 - đường Nguyễn Văn Cừ - thành phố Hạ Long - tỉnh Quảng Ninh</p>
-            <p>Email: tonghop@daihochalong.edu.vn | Điện thoại:  (84 - 0203).3850304</p>
-            
+                <br>Cơ sở 2: Số 58 - đường Nguyễn Văn Cừ - thành phố Hạ Long - tỉnh Quảng Ninh
+            </p>
+            <p>Email: tonghop@daihochalong.edu.vn | Điện thoại: (84 - 0203).3850304</p>
+
         </div>
     </div>
 </body>

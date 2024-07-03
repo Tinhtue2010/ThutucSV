@@ -7,6 +7,7 @@ use App\Models\Lop;
 use App\Models\StopStudy;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TroCapHocPhiPhongDaoTaoController extends Controller
 {

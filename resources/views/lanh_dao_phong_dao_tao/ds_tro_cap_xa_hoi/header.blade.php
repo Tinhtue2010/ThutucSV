@@ -16,7 +16,7 @@
                     <!--end::Page title-->
                     <div class="d-flex align-items-center gap-2 gap-lg-3">
                         <div class="d-flex flex-row flex-wrap">
-                            <a href="{{ route('LanhDaoPhongDaoTao.TroCapXaHoi.xacnhan') }}" class="btn btn-primary me-2">Phê duyệt danh sách</a>
+                            <div onclick="xacnhanDS()" class="btn btn-primary me-2">Phê duyệt danh sách</div>
                             <a href="{{ route('LanhDaoPhongDaoTao.TroCapXaHoi.tuchoi') }}" class="btn btn-warning">Từ chối danh sách</a>
                         </div>
                     </div>
