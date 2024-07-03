@@ -46,38 +46,42 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    function gmail() {
+    function gmail()
+    {
         $email = "";
-        if($this->teacher_id != null)
-        {
-            $email = Teacher::find($this->teacher_id)->email;
+        try {
+            if ($this->teacher_id != null) {
+                $email = Teacher::find($this->teacher_id)->email;
+            } else {
+                $email = Student::find($this->student_id)->email;
+            }
+        } catch (\Throwable $th) {
+            return $email;
         }
-        else
-        {
-            $email = Student::find($this->student_id)->email;
-        }
+
         return $email;
     }
 
-    function getUrlChuKy() {
+    function getUrlChuKy()
+    {
         $url = "";
-        if($this->teacher_id != null)
-        {
-            $url = Teacher::find($this->teacher_id)->chu_ky;
+        try {
+            if ($this->teacher_id != null) {
+                $url = Teacher::find($this->teacher_id)->chu_ky;
+            } else {
+                $url = Student::find($this->student_id)->chu_ky;
+            }
+        } catch (\Throwable $th) {
+            return $url;
         }
-        else
-        {
-            $url = Student::find($this->student_id)->chu_ky;
-        }
+
         return $url;
     }
-    function checkNganhCheDoChinhSach(){
-        if($this->teacher_id != null)
-        {
+    function checkNganhCheDoChinhSach()
+    {
+        if ($this->teacher_id != null) {
             return false;
-        }
-        else
-        {
+        } else {
             $lop_id = Student::find($this->student_id)->lop_id;
             $nganh = Lop::find($lop_id)->nganh;
             $list_nganh = [
