@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CheDoChinhSach\CheDoChinhSachPhongDaoTaoController;
 use App\Http\Controllers\CheDoChinhSachController;
 use App\Http\Controllers\ClassManagerController;
 use App\Http\Controllers\DocumentController;
@@ -177,6 +178,16 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('create-list', [TroCapHocPhiPhongDaoTaoController::class, 'createList'])->name('createList');
                 Route::get('delete-list', [TroCapHocPhiPhongDaoTaoController::class, 'deleteList'])->name('deleteList');
                 Route::get('gui-tb-sv', [TroCapHocPhiPhongDaoTaoController::class, 'guiTBSV'])->name('guiTBSV');
+            });
+            Route::name('CheDoChinhSach.')->prefix('che-do-chinh-sach')->group(function () {
+                Route::get('/', [CheDoChinhSachPhongDaoTaoController::class, 'index'])->name('index');
+                Route::get('get-data', [CheDoChinhSachPhongDaoTaoController::class, 'getData'])->name('getData');
+                Route::get('update-percent', [CheDoChinhSachPhongDaoTaoController::class, 'updatePercent'])->name('updatePercent');
+                Route::get('create-list', [CheDoChinhSachPhongDaoTaoController::class, 'createList'])->name('createList');
+                Route::get('delete-list', [CheDoChinhSachPhongDaoTaoController::class, 'deleteList'])->name('deleteList');
+                Route::get('gui-tb-sv', [CheDoChinhSachPhongDaoTaoController::class, 'guiTBSV'])->name('guiTBSV');
+                Route::post('import-file-ktx', [CheDoChinhSachPhongDaoTaoController::class, 'importFileKTX'])->name('importFileKTX');
+
             });
         });
     });

@@ -58,7 +58,7 @@
         BAN GIÁM HIỆU DUYỆT
       </div>
       <div class="text-center">
-        NNGƯỜI LÀM ĐƠN
+        NGƯỜI LÀM ĐƠN
         <br />
         <img style="height: 50px; margin-top: 10px; margin-bottom: 10px" src="{{ asset('storage/'.$data['url_chuky']) }}" alt="">
         <br/>

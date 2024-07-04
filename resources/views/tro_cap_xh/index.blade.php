@@ -131,8 +131,8 @@
                                 <a href="{{ route('phieu.index', ['id' => $don_parent_tcxh->phieu_id]) }}" target="_blank" class="btn btn-warning me-2">Xem đơn trợ cấp xã hội</a>
                             @endisset
                             @isset($don_parent_mghp)
-                            <a href="{{ route('phieu.index', ['id' => $don_parent_mghp->phieu_id]) }}" target="_blank" class="btn btn-warning me-2">Xem đơn trợ cấp học phí</a>
-                        @endisset
+                                <a href="{{ route('phieu.index', ['id' => $don_parent_mghp->phieu_id]) }}" target="_blank" class="btn btn-warning me-2">Xem đơn trợ cấp học phí</a>
+                            @endisset
                             @if (isset($don_parent))
                                 @if ($don_parent->status <= 0)
                                     <button type="reset" class="btn btn-secondary">{{ __('Nhập lại') }}</button>

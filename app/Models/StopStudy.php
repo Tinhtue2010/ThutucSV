@@ -31,7 +31,8 @@ class StopStudy extends Model
         'lanhdaophong',
         'lanhdaotruong',
         'muchotrohp',
-        'muctrocapxh'
+        'muctrocapxh',
+        'doi_tuong_chinh_sach'
     ];
 
 

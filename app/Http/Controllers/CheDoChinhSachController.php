@@ -17,7 +17,7 @@ class CheDoChinhSachController extends Controller
     function index()
     {
         $user = Auth::user();
-        $don_parent = StopStudy::where('student_id', $user->student_id)->where('type', 3)->first();
+        $don_parent = StopStudy::where('student_id', $user->student_id)->where('type', 4)->first();
         if ($don_parent) {
             $phieu = Phieu::where('id', $don_parent->phieu_id)->first();
             $phieu = json_decode($phieu->content, true);
@@ -59,7 +59,10 @@ class CheDoChinhSachController extends Controller
             $studentData['khoa'] = $student->khoa_name;
             $studentData['khoa_hoc'] = $student->school_year;
             $studentData['hoso'] = $request->hoso;
-            $studentData['doituong'] = $request->doituong;
+
+            $doituong = config('doituong.chedochinhsach');
+            $studentData['doituong'] = $doituong[$request->doituong][1];
+
             $studentData['sdt'] = $student->phone;
             $studentData['thuongchu'] = $request->thuongchu;
 
@@ -70,7 +73,7 @@ class CheDoChinhSachController extends Controller
             $studentData['year'] = Carbon::now()->year;
             $studentData['url_chuky'] = Auth::user()->getUrlChuKy();
 
-            $check = StopStudy::where('student_id', $user->student_id)->where('type', 3)->first();
+            $check = StopStudy::where('student_id', $user->student_id)->where('type', 4)->first();
             if ($check) {
                 if (isset($check->files)) {
                     $this->deleteFiles(json_decode($check->files));
@@ -78,6 +81,7 @@ class CheDoChinhSachController extends Controller
                 $check->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
 
                 $check->note = $request->data;
+                $check->doi_tuong_chinh_sach = json_encode([$request->doituong]);
                 $check->update();
                 $phieu = Phieu::where('id', $check->phieu_id)->first();
                 $phieu->student_id = $user->student_id;
@@ -97,10 +101,11 @@ class CheDoChinhSachController extends Controller
                 $query->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
                 $query->student_id = $user->student_id;
                 $query->round = 1;
-                $query->type = 3;
+                $query->type = 4;
                 $query->note = $request->data;
                 $query->phieu_id = $phieu->id;
                 $query->lop_id = $student->lop_id;
+                $query->doi_tuong_chinh_sach = json_encode([$request->doituong]);
                 $query->save();
 
                 $this->notification("Đơn xin trợ cấp xã hội của bạn đã được gửi, vui lòng chờ thông báo khác", $phieu->id, "CDCS");

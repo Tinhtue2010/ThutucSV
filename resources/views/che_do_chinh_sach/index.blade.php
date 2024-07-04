@@ -31,7 +31,7 @@
                             </span>
                         </div>
                         @isset($don->phieu_id)
-                            <a href="{{ route('phieu.index',['id'=>$don->phieu_id]) }}" target="_blank" class="btn btn-primary">Xem phiếu</a>
+                            <a href="{{ route('phieu.index', ['id' => $don->phieu_id]) }}" target="_blank" class="btn btn-primary">Xem phiếu</a>
                         @endisset
 
                     </div>
@@ -46,14 +46,30 @@
                     <p class="fw-medium fs-5">Khoa : {{ $student->khoa_name }}</p>
                     <form action="" id="form_create">
                         @csrf
-                        <div class="d-flex flex-column mb-8 fv-row">
+                        <div class="d-flex flex-column mb-2 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="">Thuộc đối tượng</span>
+                                <span class="mt-3">Thuộc đối tượng</span>
                             </label>
-                            <!--end::Label-->
-                            <input @if (isset($don_parent)) @if ($don_parent->status > 0)
-                                readonly @endif @endif class="form-control form-control-solid" name="doituong" value="{{$phieu['doituong'] ?? ''}}" />
+                            <div class="form-check form-check-custom form-check-solid mb-2">
+                                <input name="doituong" class="form-check-input" type="radio" value="1" id="doituong1" checked />
+                                <label class="ms-3" for="doituong1">
+                                    <b>* Đối tượng 1: Đối tượng được hưởng chế độ hỗ trợ tiền ăn, hỗ trợ học phí và hỗ trợ chỗ ở phải là sinh viên có hộ khẩu thường trú lại tỉnh Quảng Ninh thuộc diện: </b> <br>
+                                    - Sinh viên có gia cảnh thuộc hộ nghèo <br>
+                                    - Sinh viên có gia cảnh thuộc hộ cận nghèo <br>
+                                    - Sinh viên có gia cảnh thuộc các xã khu vực I vùng đồng bào dân tộc thiểu số theo quy định cua Thủ tướng Chính phủ <br>
+                                    - Sinh viên tốt nghiệp các trường phổ thông dân tộc nội trú trên địa bàn tỉnh Quảng Ninh <br>
+                                    - Sinh viên đã hoàn thành nghĩa vụ quân sự, nghĩa vụ công an.
+                                    <br>
+                                </label>
+                            </div>
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input name="doituong" class="form-check-input" type="radio" value="2" id="doituong2" />
+                                <label class="ms-3" for="doituong2">
+                                    <b>* Đối tượng 2: Đối tượng được hưởng chế độ hỗ trợ chỗ ở là sinh viên một trong 7 ngành quy định trên có điểm trung bình chung học tập, điểm rèn luyện trong học kỳ xếp loại từ Khá trở lên (thang 10, điểm trung bình chung học tập lớn hơn hoặc bằng 7.0 và điểm rèn luyện từ 65 điểm trở lên) và khoảng cách từ trường đến nhà từ 15 km trở lên. </b>
+                                </label>
+                            </div>
+                            
                         </div>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
@@ -62,16 +78,16 @@
                             </label>
                             <!--end::Label-->
                             <textarea @if (isset($don_parent)) @if ($don_parent->status > 0)
-                                readonly @endif @endif class="form-control form-control-solid h-150px" name="hoso">{{$phieu['hoso'] ?? ''}}</textarea>
+                                readonly @endif @endif class="form-control form-control-solid h-150px" name="hoso">{{ $phieu['hoso'] ?? '' }}</textarea>
                         </div>
-                        
+
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
                                 <span class="">File</span>
                             </label>
                             <!--end::Label-->
-                            <input type="file" class="form-control form-control-solid" name="files[]" accept="application/pdf" multiple/>
+                            <input type="file" class="form-control form-control-solid" name="files[]" accept="application/pdf" multiple />
                         </div>
                         <input type="hidden" id="button_clicked" name="button_clicked" value="">
                         <div class="d-flex w-100">
@@ -89,7 +105,9 @@
                             @endif
 
 
-                            <button type="submit" class="btn btn-warning me-2">{{ __('Xem đơn') }}</button>
+                            @isset($don_parent)
+                                <a href="{{ route('phieu.index', ['id' => $don_parent->phieu_id]) }}" target="_blank" class="btn btn-warning me-2">Xem đơn</a>
+                            @endisset
                             @if (isset($don_parent))
                                 @if ($don_parent->status <= 0)
                                     <button type="reset" class="btn btn-secondary">{{ __('Nhập lại') }}</button>
@@ -149,8 +167,15 @@
             e.preventDefault();
             const form = document.querySelector("#form_create");
             const formData = new FormData(form);
-            validation_create.validate().then(function(status) {
+            validation_create.validate().then(async function(status) {
                 if (status === 'Valid') {
+                    await checkMaXacNhan().then(function(result) {
+                        if (false) {
+                            return;
+                        } else {
+                            formData.append('otp', result);
+                        }
+                    });
                     axios({
                         method: 'POST',
                         url: "{{ route('CheDoChinhSach.CreateViewPdf') }}",

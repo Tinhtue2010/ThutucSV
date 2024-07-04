@@ -65,6 +65,7 @@ class TroCapXHController extends Controller
 
             $doituong = config('doituong.trocapxahoi');
             $studentData['doituong'] = $doituong[$request->doituong][2];
+            
 
             $studentData['sdt'] = $student->phone;
             $studentData['thuongchu'] = $request->thuongchu;

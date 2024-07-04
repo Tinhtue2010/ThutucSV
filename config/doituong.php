@@ -90,4 +90,14 @@ return [
             "Học sinh, sinh viên có hoàn cảnh đặc biệt khó khăn về kinh tế, vượt khó học tập, gia đình thuộc diện xóa đói giảm nghèo."
         ]
     ],
+    "chedochinhsach" => [
+        "1" => [
+            "Đối tượng được hưởng chế độ hỗ trợ tiền ăn, học phí, chỗ ở",
+            "Đối tượng được hưởng chế độ hỗ trợ tiền ăn, hỗ trợ học phí và hỗ trợ chỗ ở là sinh viên có hộ khẩu thường trú lại tỉnh Quảng Ninh"
+        ],
+        "2" => [
+            "Đối tượng sv 7 ngành, điểm > 7.0, rèn luyện > 65, nhà cách trường ít nhất 15km",
+            "Đối tượng được hưởng chế độ hỗ trợ chỗ ở là sinh viên một trong 7 ngành quy định trên có điểm trung bình chung học tập, điểm rèn luyện trong học kỳ xếp loại từ Khá trở lên (thang 10, điểm trung bình chung học tập lớn hơn hoặc bằng 7.0 và điểm rèn luyện từ 65 điểm trở lên) và khoảng cách từ trường đến nhà từ 15 km trở lên."
+        ],
+    ]
 ];

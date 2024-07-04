@@ -92,6 +92,9 @@
                                 <div class="menu-item px-3">
                                     <a href="{{ route('PhongDaoTao.TroCapHocPhi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp học phí</a>
                                 </div>
+                                <div class="menu-item px-3">
+                                    <a href="{{ route('PhongDaoTao.CheDoChinhSach.index') }}" target="_blank" class="menu-link px-3">Danh sách chế độ chính sách</a>
+                                </div>
                                 <!--end::Menu item-->
                             </div>
                             <!--end::Menu 3-->
