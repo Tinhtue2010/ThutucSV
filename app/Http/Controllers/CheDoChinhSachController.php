@@ -62,6 +62,11 @@ class CheDoChinhSachController extends Controller
 
             $doituong = config('doituong.chedochinhsach');
             $studentData['doituong'] = $doituong[$request->doituong][1];
+            $doituong_key = 1;
+            if($request->doituong == 2)
+            {
+                $doituong_key = 4;
+            }
 
             $studentData['sdt'] = $student->phone;
             $studentData['thuongchu'] = $request->thuongchu;
@@ -81,7 +86,7 @@ class CheDoChinhSachController extends Controller
                 $check->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
 
                 $check->note = $request->data;
-                $check->doi_tuong_chinh_sach = json_encode([$request->doituong]);
+                $check->doi_tuong_chinh_sach = json_encode([$doituong_key]);
                 $check->update();
                 $phieu = Phieu::where('id', $check->phieu_id)->first();
                 $phieu->student_id = $user->student_id;
@@ -105,7 +110,7 @@ class CheDoChinhSachController extends Controller
                 $query->note = $request->data;
                 $query->phieu_id = $phieu->id;
                 $query->lop_id = $student->lop_id;
-                $query->doi_tuong_chinh_sach = json_encode([$request->doituong]);
+                $query->doi_tuong_chinh_sach = json_encode([$doituong_key]);
                 $query->save();
 
                 $this->notification("Đơn xin trợ cấp xã hội của bạn đã được gửi, vui lòng chờ thông báo khác", $phieu->id, "CDCS");

@@ -187,7 +187,6 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('delete-list', [CheDoChinhSachPhongDaoTaoController::class, 'deleteList'])->name('deleteList');
                 Route::get('gui-tb-sv', [CheDoChinhSachPhongDaoTaoController::class, 'guiTBSV'])->name('guiTBSV');
                 Route::post('import-file-ktx', [CheDoChinhSachPhongDaoTaoController::class, 'importFileKTX'])->name('importFileKTX');
-
             });
         });
     });

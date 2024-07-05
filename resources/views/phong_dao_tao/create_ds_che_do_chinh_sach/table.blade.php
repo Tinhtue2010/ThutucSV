@@ -44,8 +44,7 @@
                             return response.data;
                         },
                     },
-                    columns: [
-                        {
+                    columns: [{
                             data: 'id',
                             render: function(data, type, row) {
                                 return '';
@@ -76,87 +75,95 @@
                             }
                         },
                         {
-                            data: 'full_name'
+                            data: 'full_name',
+                            render: function(data, type, row)
+                            {
+                                return `
+                                    Họ tên: ${data} <br/>
+                                    Lớp: ${row['lop_name']} <br/>
+                                    Mã SV: ${row['student_code']}  <br/>
+                                    Ngày sinh: ${moment(row['date_of_birth']).format('DD/MM/YYYY')}  <br/>
+                                `;
+                            }
                         },
                         {
-                            data: 'id',
+                            data: 'doi_tuong_chinh_sach',
                             render: function(data, type, row) {
-                                var muctrocaphp = {{config('doituong.muctrocaphp')}};
-                                return  muctrocaphp.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+                                let array = JSON.parse(data);
+                                let result = '<div class="d-flex flex-column">';
+                                array.forEach(function($item, $index) {
+                                    switch ($item) {
+                                        case "1":
+                                            result += `<span onclick="doituong1()" class="cursor-pointer ms-0 me-auto text-wrap lh-sm mt-1 badge badge-primary">Đối tượng 1</span>`;
+                                            break;
+                                        case "2":
+                                            result += `<span onclick="doituong2()" class="cursor-pointer ms-0 me-auto text-wrap lh-sm mt-1 badge badge-success">Đối tượng 2</span>`;
+                                            break;
+                                        case "3":
+                                            result += `<span onclick="doituong3()" class="cursor-pointer ms-0 me-auto text-wrap lh-sm mt-1 badge badge-info">Đối tượng 3</span>`;
+                                            break;
+                                        case "4":
+                                            result += `<span onclick="doituong4()" class="cursor-pointer ms-0 me-auto text-wrap lh-sm mt-1 badge badge-warning">Đối tượng 4</span>`;
+                                            break;
+                                        default:
+                                            return '';
+                                            break;
+                                    }
+                                });
+                                result += '</div>'
+                                return result;
+                            }
+                        },
+                        {
+                            data: "id",
+                            render: function(data, type, row){
+                                return 'ktx'
+                            }
+                        },
+                        {
+                            data: "id",
+                            render: function(data, type, row){
+                                return 'miễn giảm học phí'
+                            }
+                        },
+                        {
+                            data: "id",
+                            render: function(data, type, row){
+                                return 'hỗ trợ tiền ăn'
                             }
                         },
                         {
                             data: 'id',
                             render: function(data, type, row) {
-                                return `5 Tháng`;
-                            }
-                        },
-                        {
-                            data: 'id',
-                            render: function(data, type, row) {
-                                var muctrocaphp = {{config('doituong.muctrocaphp')}};
-                                var miengiam_thang = muctrocaphp * 5;
-                                return `<p id="miengiam_thang_${data}">${miengiam_thang.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>`;
-                            }
-                        },
-                        {
-                            data: 'type_miengiamhp',
-                            render: function(data, type, row) {
-                                switch (data) {
-                                    @foreach (config('doituong.trocapxahoi') as $index => $item)
-                                        case {{ $index }}:
-                                            return "{{ $item[1] }}";
-                                        break;
-                                    @endforeach
-                                    default:
-                                        return '';
-                                        break;
-                                }
-                            }
-                        },
-                        {
-                            data: 'date_of_birth',
-                            render: function(data, type, row) {
-                                return moment(data).format('DD/MM/YYYY');
-                            }
-                        },
-                        {
-                            data: 'lop_name',
-                        },
-                        {
-                            data: 'student_code',
-                        },
-                        {
-                            data: 'id',
-                            render: function(data, type, row) {
-                                role = {{ Auth::user()->role }} - 2;
+                                let array = JSON.parse(row['doi_tuong_chinh_sach']);
                                 var dataRes = `<div class="d-flex flex-row">`;
-                                if (row['type'] == 3) {
+                                if (row['type'] == 4) {
                                     if (row['status'] == 0 || row['status'] == -1 || row['status'] == 2 || row['status'] == -2) {
                                         dataRes += `<div onClick="tiepnhanhs(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                     </div>`;
                                     }
-
-                                    if (row['status'] == 1) {
+                                    if (array.includes("1") || array.includes("4")) {
+                                        if (row['status'] == 1) {
+                                            dataRes += `
+                                            <div onClick="duyethoso(${data})" class="ki-duotone ki-file-added fs-2x cursor-pointer text-primary">
+                                                <span class="path1"></span>
+                                                <span class="path2"></span>
+                                                <span class="path3"></span>
+                                            </div>`;
+                                        }
                                         dataRes += `
-                                    <div onClick="duyethoso(${data})" class="ki-duotone ki-file-added fs-2x cursor-pointer text-primary">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                    </div>`;
+                                            <div onClick="bosunghs(${data})" class="ki-duotone ki-update-folder fs-2x cursor-pointer text-danger">
+                                                <span class="path1"></span>
+                                                <span class="path2"></span>
+                                                <span class="path3"></span>
+                                            </div>`;
+                                        dataRes += `<div onClick="tuchoihs(${data})" class="ki-duotone ki-minus-square fs-2x cursor-pointer text-danger">
+                                                <span class="path1"></span>
+                                                <span class="path2"></span>
+                                            </div>`;
                                     }
-                                    dataRes += `
-                                    <div onClick="bosunghs(${data})" class="ki-duotone ki-update-folder fs-2x cursor-pointer text-danger">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                    </div>`;
-                                    dataRes += `<div onClick="tuchoihs(${data})" class="ki-duotone ki-minus-square fs-2x cursor-pointer text-danger">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </div>`;
                                 }
                                 dataRes += `
                                     <div onClick="tientrinh(${data})" class="ki-duotone ki-information-2 fs-2x cursor-pointer text-warning">
@@ -319,23 +326,6 @@
                 clearTimeout(timeoutId);
                 timeoutId = setTimeout(() => func.apply(context, args), delay);
             };
-        }
-
-        function updateTile(data, id) {
-            const debouncedUpdate = debounce(updateData, 500);
-            var hocphi = $("#hocphi_" + id).data('hocphi');
-            var percent = data.value;
-            var miengiam_thang = (hocphi / 5) * (percent / 100)
-            var miengiamgiam_ky = hocphi * (percent / 100)
-            $("#miengiamgiam_ky_" + id).html(miengiamgiam_ky.toLocaleString('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-            }))
-            $("#miengiam_thang_" + id).html(miengiam_thang.toLocaleString('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-            }))
-            debouncedUpdate(percent, id);
         }
     </script>
 @endpush

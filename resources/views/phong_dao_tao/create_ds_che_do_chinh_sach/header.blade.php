@@ -52,9 +52,6 @@
                             <input class="cursor-pointer m-0 p-0 top-0 left-0 w-100 h-100 position-absolute" style="opacity: 0" type="file" id="avatar" name="avatar" accept=".csv" />
                             {{ __('Import danh điểm sinh viên thuộc 20%') }}
                         </div>
-                        <div id="btn_doituong" class="btn btn-flex btn-outline h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
-                            Đối tượng
-                        </div>
                     </div>
                     <div class="w-100 justify-content-end flex-wrap d-flex">
                         <div class="card-toolbar">

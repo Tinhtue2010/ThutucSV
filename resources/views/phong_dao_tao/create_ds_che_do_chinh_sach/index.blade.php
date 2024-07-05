@@ -34,14 +34,11 @@
                                 <th></th>
                                 <th class="text-nowrap" data-name="id">{{__('id')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Trạng thái')}}</th>
-                                <th class="text-nowrap" data-name="id">{{__('Họ và tên')}}</th>
-                                <th class="text-nowrap" data-name="id">{!!__('Số tiền miễn &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,<br/> giảm/tháng')!!}</th>
-                                <th class="text-nowrap" data-name="id">{!!__('Số tháng <br/>miễn, giảm')!!}</th>
-                                <th class="text-nowrap" data-name="id">{!!__('Số tiền được <br/> miễn, giảm/kỳ')!!}</th>
+                                <th class="text-nowrap" data-name="student_code">{{__('Sinh viên')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Đối tượng')}}</th>
-                                <th class="text-nowrap" data-name="id">{{__('Ngày sinh')}}</th>
-                                <th class="text-nowrap" data-name="lop_name">{{__('Lớp')}}</th>
-                                <th class="text-nowrap" data-name="student_code">{{__('Mã sinh viên')}}</th>
+                                <th class="text-nowrap">{{__('Ký túc xá')}}</th>
+                                <th class="text-nowrap">{!!__('Miễn giảm học phí')!!}</th>
+                                <th class="text-nowrap">{!!__('Hỗ trợ tiền ăn')!!}</th>
                                 <td class="text-nowrap">{{ __('Chức năng') }}</td>
                             </tr>
                             </thead>
