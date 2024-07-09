@@ -65,7 +65,8 @@ return [
         ["5", "Phòng KHTC đã xác nhận"],
         ["-5", "Phòng KHTC từ chối danh sách"],
         ["6", "Lãnh đạo trường đã xác nhận"],
-        ["-6", "Lãnh đạo trường từ chối DS"]
+        ["-6", "Lãnh đạo trường từ chối DS"],
+        ["-99", "Đã khóa và lưu trữ"]
     ],
     "muctrocaphp" => 894000,
     "trocapxahoi" => [
@@ -99,5 +100,6 @@ return [
             "Đối tượng sv 7 ngành, điểm > 7.0, rèn luyện > 65, nhà cách trường ít nhất 15km",
             "Đối tượng được hưởng chế độ hỗ trợ chỗ ở là sinh viên một trong 7 ngành quy định trên có điểm trung bình chung học tập, điểm rèn luyện trong học kỳ xếp loại từ Khá trở lên (thang 10, điểm trung bình chung học tập lớn hơn hoặc bằng 7.0 và điểm rèn luyện từ 65 điểm trở lên) và khoảng cách từ trường đến nhà từ 15 km trở lên."
         ],
-    ]
+    ],
+    "tien_ktx" => 40000,
 ];

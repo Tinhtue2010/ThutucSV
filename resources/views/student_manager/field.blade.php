@@ -4,7 +4,7 @@
         <span class="required">Tên sinh viên</span>
     </label>
     <!--end::Label-->
-    <input type="text" class="form-control form-control-solid" name="full_name" />
+    <input type="text" class="form-control" name="full_name" />
 </div>
 <div class="d-flex flex-row">
     <div class="d-flex flex-column mb-8 fv-row col-6 pe-4">
@@ -13,7 +13,7 @@
             <span class="required">Mã sinh viên</span>
         </label>
         <!--end::Label-->
-        <input type="text" class="form-control form-control-solid" name="student_code" />
+        <input type="text" class="form-control" name="student_code" />
     </div>
     <div class="d-flex flex-column mb-8 fv-row col-6 ps-4">
         <!--begin::Label-->
@@ -21,7 +21,7 @@
             <span class="">Mã sinh viên</span>
         </label>
         <!--end::Label-->
-        <input type="text" class="form-control form-control-solid" name="student_id" />
+        <input type="text" class="form-control" name="student_id" />
     </div>
 </div>
 
@@ -32,7 +32,7 @@
             <span class="required">Ngày sinh</span>
         </label>
         <!--end::Label-->
-        <input type="date" class="form-control form-control-solid" name="date_of_birth" />
+        <input type="date" class="form-control" name="date_of_birth" />
     </div>
     <div class="d-flex flex-column mb-8 fv-row col-6 ps-4">
         <!--begin::Label-->
@@ -40,7 +40,7 @@
             <span class="required">Số điện thoại</span>
         </label>
         <!--end::Label-->
-        <input type="text" class="form-control form-control-solid" name="phone" />
+        <input type="text" class="form-control" name="phone" />
     </div>
 </div>
 
@@ -63,7 +63,7 @@
             <span class="required">Năm đăng ký</span>
         </label>
         <!--end::Label-->
-        <input type="text" value="{{ date('Y') }}" class="form-control form-control-solid" name="school_year" />
+        <input type="text" value="{{ date('Y') }}" class="form-control" name="school_year" />
     </div>
 </div>
 <div class="d-flex flex-row">
@@ -86,7 +86,7 @@
             <span class="required">Ngày nhập học</span>
         </label>
         <!--end::Label-->
-        <input type="date" class="form-control form-control-solid" name="ngay_nhap_hoc" />
+        <input type="date" class="form-control" name="ngay_nhap_hoc" />
     </div>
 </div>
 
@@ -97,7 +97,7 @@
             <span class="required">Ngành tuyển sinh</span>
         </label>
         <!--end::Label-->
-        <input type="text" class="form-control form-control-solid" name="nganh_tuyen_sinh" />
+        <input type="text" class="form-control" name="nganh_tuyen_sinh" />
     </div>
     <div class="d-flex flex-column mb-8 fv-row col-6 ps-4">
         <!--begin::Label-->
@@ -105,7 +105,7 @@
             <span class="required">Trình độ</span>
         </label>
         <!--end::Label-->
-        <input type="text" class="form-control form-control-solid" name="trinh_do" />
+        <input type="text" class="form-control" name="trinh_do" />
     </div>
 </div>
 
@@ -141,5 +141,5 @@
         <span>Ghi chú</span>
     </label>
     <!--end::Label-->
-    <textarea class="form-control form-control-solid" name="note"></textarea>
+    <textarea class="form-control" name="note"></textarea>
 </div>

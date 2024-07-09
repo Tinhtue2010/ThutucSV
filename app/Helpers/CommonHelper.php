@@ -109,6 +109,7 @@ trait CommonHelper
 
         return $str;
     }
+    
     public function convertDate($format, $date)
     {
         try {
@@ -130,6 +131,7 @@ trait CommonHelper
         $teacher = Teacher::find(Auth::user()->teacher_id);
         $data['thoigian'] = $this->getDateNow();
         $data['hoten'] = $teacher->full_name;
+        $data['chu_ky'] = $teacher->chu_ky;
         $data['data'] = $ykien;
         if ($type == 1) {
             $stopStudy->update(['tiepnhan' => json_encode($data)]);

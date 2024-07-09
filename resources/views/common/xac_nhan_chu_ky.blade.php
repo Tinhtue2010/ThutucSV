@@ -17,7 +17,7 @@
                                 <span class="required">Mã xác nhận</span>
                             </label>
                             <!--end::Label-->
-                            <input type="text" class="form-control form-control-solid" name="verification_code" />
+                            <input type="text" class="form-control" name="verification_code" />
                         </div>
                     </div>
                     <div class="card-footer">

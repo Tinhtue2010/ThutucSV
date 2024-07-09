@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Helpers\CommonHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,7 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, CommonHelper;
 
     /**
      * The attributes that are mass assignable.
@@ -85,15 +87,15 @@ class User extends Authenticatable
             $lop_id = Student::find($this->student_id)->lop_id;
             $nganh = Lop::find($lop_id)->nganh;
             $list_nganh = [
-                "Quản trị dịch vụ du lịch và lữ hành",
-                "Quản trị Khách sạn",
-                "Quản trị Nhà hàng và Dịch vụ ăn uống",
-                "Ngôn ngữ Nhật",
-                "Ngôn ngữ Hàn Quốc",
-                "Ngôn ngữ Trung Quốc",
-                "Nuôi trồng thủy sản",
-            ];
-            if (in_array($nganh, $list_nganh)) {
+                "quan_tri_dich_vu_du_lich_va_lu_hanh",
+                "quan_tri_khach_san",
+                "quan_tri_nha_hang_va_dich_vu_an_uong",
+                "ngon_ngu_nhat",
+                "ngon_ngu_han_quoc",
+                "ngon_ngu_trung_quoc",
+                "nuoi_trong_thuy_san",
+            ];            
+            if (in_array($this->convertVietnamese($nganh), $list_nganh)) {
                 return true;
             }
         }

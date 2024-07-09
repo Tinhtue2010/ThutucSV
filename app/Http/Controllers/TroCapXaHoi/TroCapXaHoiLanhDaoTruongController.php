@@ -4,7 +4,9 @@ namespace App\Http\Controllers\TroCapXaHoi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lop;
+use App\Models\Phieu;
 use App\Models\StopStudy;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,9 +22,9 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
     function getData(Request $request)
     {
         $query = StopStudy::where('type', 2)
-        ->studentActive()
-        ->whereNull('parent_id')->whereNull('parent_id')
-        ->whereNull('parent_id')
+            ->studentActive()
+            ->whereNull('parent_id')->whereNull('parent_id')
+            ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
             ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'lops.hocphi');
@@ -41,22 +43,45 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
         return $data;
     }
 
-    function xacnhan(Request $request) {
+    function xacnhan(Request $request)
+    {
         $query = StopStudy::where('type', 2)
-        ->studentActive()
-        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-        ->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
-            $query->where('stop_studies.status', 5)
-                  ->orWhere('stop_studies.status', 6)
-                  ->orWhere('stop_studies.status', -6);
-        })
-        ->select('stop_studies.*')
-        ->get();
+            ->studentActive()
+            ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+            ->whereNull('parent_id')->whereNull('parent_id')->where(function ($query) {
+                $query->where('stop_studies.status', 5)
+                    ->orWhere('stop_studies.status', 6)
+                    ->orWhere('stop_studies.status', -6);
+            })
+            ->select('stop_studies.*')
+            ->get();
+
+
+        $phieu = Phieu::where('key', 'QDTCXH')->where('status', 0)->first();
+
+        $content = json_decode($phieu->content, true);
+        $teacher = Teacher::find(Auth::user()->teacher_id);
+
+        $content[0]['canbo_truong'] = $teacher->full_name;;
+        $content[0]['canbo_truong_chu_ky'] = $teacher->chu_ky;
+        $phieu->content = json_encode($content, true);
+        $phieu->save();
+
+        $phieu = Phieu::where('key', 'PTTCXH')->where('status', 0)->first();
+
+
+        $content[0]['canbo_truong'] = $teacher->full_name;;
+        $content[0]['canbo_truong_chu_ky'] = $teacher->chu_ky;
+        $phieu->content = json_encode($content, true);
+        $phieu->save();
+
+
+
         foreach ($query as $stopStudy) {
-            $this->giaiQuyetCongViec($request->ykientiepnhan ?? '',$stopStudy,4);
-            $stopStudy->status = 6; 
-            $stopStudy->save();  
-            $user_id = User::where('student_id',$stopStudy->id)->first()->id;
+            $this->giaiQuyetCongViec($request->ykientiepnhan ?? '', $stopStudy, 4);
+            $stopStudy->status = 6;
+            $stopStudy->save();
+            $user_id = User::where('student_id', $stopStudy->id)->first()->id;
             $this->notification("Danh sách trợ cấp xã hội đã được lãnh đạo trường phê duyệt", null, "GHP", $user_id);
 
             $newStopStudy = $stopStudy->replicate();
@@ -70,23 +95,23 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
         return redirect()->back();
     }
 
-    function tuchoi() {
+    function tuchoi()
+    {
         $query = StopStudy::where('type', 2)
-        ->studentActive()
-        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-        ->whereNull('parent_id')->where(function($query) {
-            $query->where('stop_studies.status', 5)
-                  ->orWhere('stop_studies.status', 6)
-                  ->orWhere('stop_studies.status', -6);
-        })
-        ->select('stop_studies.*')
-        ->get();
+            ->studentActive()
+            ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+            ->whereNull('parent_id')->where(function ($query) {
+                $query->where('stop_studies.status', 5)
+                    ->orWhere('stop_studies.status', 6)
+                    ->orWhere('stop_studies.status', -6);
+            })
+            ->select('stop_studies.*')
+            ->get();
         foreach ($query as $stopStudy) {
-            $stopStudy->status = -6; 
-            $stopStudy->save();  
-            $users = User::where('role',4)->get();
-            foreach($users as $item)
-            {
+            $stopStudy->status = -6;
+            $stopStudy->save();
+            $users = User::where('role', 4)->get();
+            foreach ($users as $item) {
                 $this->notification("Danh sách trợ cấp xã hội đã bị từ chối lãnh đạo trường", null, "GHP", $item->id);
             }
             $newStopStudy = $stopStudy->replicate();

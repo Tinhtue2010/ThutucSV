@@ -70,7 +70,7 @@
                                                 </div>
                                                 <!--end::Number-->
                                                 <!--begin::Label-->
-                                                <div class="fw-semibold fs-6 text-gray-400">{{$student->nganh_tuyen_sinh}}</div>
+                                                <div class="fw-semibold fs-6 text-gray-400">{{ $student->nganh_tuyen_sinh }}</div>
                                                 <!--end::Label-->
                                             </div>
                                             <!--end::Stat-->
@@ -106,9 +106,12 @@
                             <h3 class="fw-bold m-0">Thông tin cá nhân</h3>
                         </div>
                         <!--end::Card title-->
-                        <!--begin::Action-->
-                        <div onclick="btnEdit()" class="btn btn-sm btn-primary align-self-center">Chỉnh sửa</div>
-                        <!--end::Action-->
+                        @if (Role('studentActive'))
+                            <!--begin::Action-->
+                            <div onclick="btnEdit()" class="btn btn-sm btn-primary align-self-center">Chỉnh sửa</div>
+                            <!--end::Action-->
+                        @endif
+
                     </div>
                     <!--begin::Card header-->
                     <!--begin::Card body-->
@@ -220,7 +223,7 @@
                             <!--begin::Col-->
                             <div class="col-lg-8">
                                 <span class="fw-bold fs-6 text-gray-800">
-                                    {{$student->he_tuyen_sinh}}
+                                    {{ $student->he_tuyen_sinh }}
                                 </span>
                             </div>
                             <!--end::Col-->

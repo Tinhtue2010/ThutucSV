@@ -68,7 +68,7 @@
                             </label>
                             <!--end::Label-->
                             <input @if (isset($don_parent)) @if ($don_parent->status != 0)
-                            readonly @endif @endif class="form-control form-control-solid" name="noisinh" value="{{ $phieu['noisinh'] ?? '' }}"/>
+                            readonly @endif @endif class="form-control" name="noisinh" value="{{ $phieu['noisinh'] ?? '' }}"/>
                         </div>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
@@ -89,7 +89,7 @@
                             </label>
                             <!--end::Label-->
                             <textarea @if (isset($don_parent)) @if ($don_parent->status != 0)
-                                readonly @endif @endif class="form-control form-control-solid h-150px" name="daduochuong">{{ $phieu['daduochuong'] ?? '' }}</textarea>
+                                readonly @endif @endif class="form-control h-150px" name="daduochuong">{{ $phieu['daduochuong'] ?? '' }}</textarea>
                         </div>
                         <div class="fs-6 fw-semibol d-flex flex-column">
                             <p class="100"><b>Hồ sơ minh chứng cần thiết</b>
@@ -118,7 +118,7 @@
                                 <span class="">Hồ sơ minh chứng (chỉ nhận file pdf)</span>
                             </label>
                             <!--end::Label-->
-                            <input type="file" class="form-control form-control-solid" name="files[]" accept="application/pdf" />
+                            <input type="file" class="form-control" name="files[]" accept="application/pdf" />
                         </div>
                         <input type="hidden" id="button_clicked" name="button_clicked" value="">
                         <div class="d-flex w-100">

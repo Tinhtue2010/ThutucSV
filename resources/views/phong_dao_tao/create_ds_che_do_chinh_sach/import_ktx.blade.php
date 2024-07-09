@@ -1,20 +1,5 @@
 @push('js')
     <script>
-        $('#import-file-ktx input[type="file"]').click(function(e) {
-            e.preventDefault();
-            Swal.fire({
-                title: "Thông báo",
-                text: "Bạn cần phải cập nhật tất cả các sinh viên thuộc diện chế độ chính sách trước. Nếu đã cập nhật, hãy bỏ qua thông báo này.",
-                showCancelButton: true,
-                confirmButtonText: 'Đã cập nhật tất cả thông tin',
-                cancelButtonText: 'Chưa cập nhật đủ',
-                dangerMode: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $(this).off('click').click();
-                }
-            });
-        })
         $('#import-file-ktx input[type="file"]').change(function(e) {
 
             var file = e.target.files[0];

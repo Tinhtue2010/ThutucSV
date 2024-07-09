@@ -17,7 +17,7 @@
                             <div class="d-flex align-items-center position-relative my-1">
                                 <i class="ki-outline ki-magnifier fs-3 position-absolute ms-4"></i>
                                 <input type="text" data-kt-ecommerce-product-filter="search"
-                                    class="form-control form-control-solid w-250px ps-12" placeholder="Mã sv, mã HS, Họ Tên" />
+                                    class="form-control w-250px ps-12" placeholder="Mã sv, mã HS, Họ Tên" />
                             </div>
                             <!--end::Search-->
                         </div>
@@ -49,28 +49,15 @@
                                 <!--end::Select2-->
                             </div>
                             <div class="w-100 mw-150px">
-                                <label class="form-label">Hệ tuyển sinh</label>
-
-                                <select class="form-select form-select-solid filter-select" data-name="he_tuyen_sinh" data-control="select2" data-hide-search="true"
-                                    data-placeholder="Hệ đào tạo">
-                                    <option></option>
-                                    <option value="all">Hiển thị tất cả</option>
-                                    <option value="1">Đại học</option>
-                                    <option value="2">Cao đẳng</option>
-                                    <option value="3">Liên thông đại học</option>
-                                    <option value="4">Thạc sĩ</option>
-                                </select>
-                            </div>
-                            <div class="w-100 mw-150px">
                                 <label class="form-label">Trạng thái</label>
 
-                                <select class="form-select form-select-solid filter-select" data-name="status_dk" data-control="select2" data-hide-search="true"
+                                <select class="form-select form-select-solid filter-select" data-name="status" data-control="select2" data-hide-search="true"
                                     data-placeholder="Trạng thái">
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>
-                                    <option value="0">Chưa đăng ký</option>
-                                    <option value="1">Đã đăng ký</option>
-                                    <option value="2">Rút hồ sơ</option>
+                                    <option value="0">Đang học</option>
+                                    <option value="2">Đã ra trường</option>
+                                    <option value="1">Rút hồ sơ</option>
                                 </select>
                             </div>
 

@@ -20,7 +20,7 @@
                                 <span class="text-warning">Lưu ý: nội dung này sẽ tự động được thêm vào phiếu hướng dẫn bổ sung hoàn thiện hồ sơ</span>
                             </label>
                             <!--end::Label-->
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="note"></textarea>
+                            <textarea type="text" class="form-control" cols="5" rows="3" name="note"></textarea>
                         </div>
                         
                     </div>

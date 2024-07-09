@@ -34,31 +34,26 @@ class LanhDaoPhongDaoTaoService  extends Controller
                 }
             }
 
+            $teacher = Teacher::find(Auth::user()->teacher_id);
+
+            $phieu = Phieu::find($stopStudy->phieu_id);
+            $phieu_content = json_decode($phieu->content,true);
+            $phieu_content['lanh_dao_CTSV'] = [
+                "full_name" => $teacher->full_name,
+                "url_chuky" => $teacher->chu_ky,
+            ];
+            $phieu->content = json_encode($phieu_content,true);
+            $phieu->save();
+
+
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->phieu_id = null;
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
             $newStopStudy->parent_id = $request->id;
             $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
+
             $this->notification("Đơn xin rút hồ sơ của bạn đã được lãnh đạo phòng CTSV xác nhận", null, "RHS",$user_id);
-            // if($stopStudy->type == 0)
-            // {
-            //     $this->notification("Đơn xin rút hồ sơ của bạn đã được lãnh đạo phòng CTSV xác nhận", null, "RHS");
-            // }
-            // if($stopStudy->type == 1)
-            // {
-            //     $this->notification("Đơn xin miễn giảm học phí của bạn đã được lãnh đạo phòng CTSV xác nhận", null, "GHP");
-            // }
-            // if($stopStudy->type == 2)
-            // {
-            //     $this->notification("Đơn xin trợ cấp xã hội của bạn đã được lãnh đạo phòng CTSV xác nhận", null, "TCXH");
-            // }
-
-            // if($stopStudy->type == 3)
-            // {
-            //     $this->notification("Đơn xin chế độ chính sách của bạn đã được lãnh đạo phòng CTSV xác nhận", null, "CDCS");
-            // }
-
             $newStopStudy->note = $request->note;
 
 
@@ -126,23 +121,12 @@ class LanhDaoPhongDaoTaoService  extends Controller
             $content_phieu['ndgiaiquyet'] = "đơn xin rút hồ sơ";
             $this->notification("Đơn xin rút hồ sơ của bạn bị từ chối bởi lãnh đạo phòng CTSV ", null, "RHS",$stopStudy->student_id);
 
-            // if ($stopStudy->type == 0) {
-            //     $content_phieu['ndgiaiquyet'] = "đơn xin rút hồ sơ";
-            //     $this->notification("Đơn xin rút hồ sơ của bạn bị từ chối bởi lãnh đạo phòng đào tạo ", null, "RHS");
-            // }
-            // if ($stopStudy->type == 1) {
-            //     $content_phieu['ndgiaiquyet'] = "đơn xin miễn giảm học phí";
-            //     $this->notification("Đơn xin miễn giảm học phí của bạn bị từ chối bởi lãnh đạo phòng đào tạo ", null, "GHP");
-            // }
-            // if ($stopStudy->type == 2) {
-            //     $content_phieu['ndgiaiquyet'] = "đơn xin trợ cấp xã hội";
-            //     $this->notification("Đơn xin trợ cấp xã hội của bạn bị từ chối bởi lãnh đạo phòng đào tạo ", null, "TCXH");
-            // }
+            $phieu = Phieu::find($stopStudy->phieu_id);
+            $phieu_content = json_decode($phieu->content,true);
+            $phieu_content['lanh_dao_CTSV'] = "";
+            $phieu->content = json_encode($phieu_content,true);
+            $phieu->save();
 
-            // if ($stopStudy->type == 3) {
-            //     $content_phieu['ndgiaiquyet'] = "đơn xin chế độ chính sách";
-            //     $this->notification("Đơn xin chế độ chính sách của bạn bị từ chối bởi lãnh đạo phòng đào tạo ", null, "CDCS");
-            // }
 
             if ($stopStudy->status == 4  || $stopStudy->status == 5) {
 

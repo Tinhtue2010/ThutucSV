@@ -412,57 +412,60 @@
             <!--end::Menu link-->
         </div>
         <!--end::Menu Item-->
-        <!--begin::Menu Item-->
-        <div class="menu-item">
-            <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('MienGiamHp.index') ? 'active' : '' }}" href="{{ route('MienGiamHp.index') }}">
-                <!--begin::Icon-->
-                <span class="menu-icon">
-                    <i class="ki-outline ki-more-2 fs-2"></i>
-                </span>
-                <!--end::Icon-->
-                <!--begin::Title-->
-                <span class="menu-title">Miễn giảm học phí</span>
-                <!--end::Title-->
-            </a>
-            <!--end::Menu link-->
-        </div>
-        <!--end::Menu Item-->
-        <!--begin::Menu Item-->
-        <div class="menu-item">
-            <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('TroCapXH.index') ? 'active' : '' }}" href="{{ route('TroCapXH.index') }}">
-                <!--begin::Icon-->
-                <span class="menu-icon">
-                    <i class="ki-outline ki-more-2 fs-2"></i>
-                </span>
-                <!--end::Icon-->
-                <!--begin::Title-->
-                <span class="menu-title">Trợ cấp xã hội</span>
-                <!--end::Title-->
-            </a>
-            <!--end::Menu link-->
-        </div>
-        <!--end::Menu Item-->
-        @if (Auth::user()->checkNganhCheDoChinhSach())
+        @if (Role('studentActive'))
             <!--begin::Menu Item-->
             <div class="menu-item">
                 <!--begin::Menu link-->
-                <a class="menu-link {{ request()->routeIs('CheDoChinhSach.index') ? 'active' : '' }}" href="{{ route('CheDoChinhSach.index') }}">
+                <a class="menu-link {{ request()->routeIs('MienGiamHp.index') ? 'active' : '' }}" href="{{ route('MienGiamHp.index') }}">
                     <!--begin::Icon-->
                     <span class="menu-icon">
                         <i class="ki-outline ki-more-2 fs-2"></i>
                     </span>
                     <!--end::Icon-->
                     <!--begin::Title-->
-                    <span class="menu-title">Chế độ chính sách</span>
+                    <span class="menu-title">Miễn giảm học phí</span>
                     <!--end::Title-->
                 </a>
                 <!--end::Menu link-->
             </div>
+            <!--end::Menu Item-->
+            <!--begin::Menu Item-->
+            <div class="menu-item">
+                <!--begin::Menu link-->
+                <a class="menu-link {{ request()->routeIs('TroCapXH.index') ? 'active' : '' }}" href="{{ route('TroCapXH.index') }}">
+                    <!--begin::Icon-->
+                    <span class="menu-icon">
+                        <i class="ki-outline ki-more-2 fs-2"></i>
+                    </span>
+                    <!--end::Icon-->
+                    <!--begin::Title-->
+                    <span class="menu-title">Trợ cấp xã hội</span>
+                    <!--end::Title-->
+                </a>
+                <!--end::Menu link-->
+            </div>
+            <!--end::Menu Item-->
+            @if (Auth::user()->checkNganhCheDoChinhSach())
+                <!--begin::Menu Item-->
+                <div class="menu-item">
+                    <!--begin::Menu link-->
+                    <a class="menu-link {{ request()->routeIs('CheDoChinhSach.index') ? 'active' : '' }}" href="{{ route('CheDoChinhSach.index') }}">
+                        <!--begin::Icon-->
+                        <span class="menu-icon">
+                            <i class="ki-outline ki-more-2 fs-2"></i>
+                        </span>
+                        <!--end::Icon-->
+                        <!--begin::Title-->
+                        <span class="menu-title">Chế độ chính sách</span>
+                        <!--end::Title-->
+                    </a>
+                    <!--end::Menu link-->
+                </div>
+            @endif
+
+            <!--end::Menu Item-->
         @endif
 
-        <!--end::Menu Item-->
     @endif
 
     <div class="menu-item mb-2 mt-4">

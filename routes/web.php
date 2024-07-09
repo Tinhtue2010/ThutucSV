@@ -158,18 +158,28 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('/', [MienGiamHPPhongDaoTaoController::class, 'index'])->name('index');
                 Route::get('get-data', [MienGiamHPPhongDaoTaoController::class, 'getData'])->name('getData');
                 Route::get('update-percent', [MienGiamHPPhongDaoTaoController::class, 'updatePercent'])->name('updatePercent');
+                Route::post('create-quyet-dinh', [MienGiamHPPhongDaoTaoController::class, 'createQuyetDinh'])->name('createQuyetDinh');
+                Route::get('get-quyet-dinh', [MienGiamHPPhongDaoTaoController::class, 'getQuyetDinh'])->name('getQuyetDinh');
+                Route::get('xoa-quyet-dinh', [MienGiamHPPhongDaoTaoController::class, 'xoaQuyetDinh'])->name('xoaQuyetDinh');
                 Route::get('create-list', [MienGiamHPPhongDaoTaoController::class, 'createList'])->name('createList');
                 Route::get('delete-list', [MienGiamHPPhongDaoTaoController::class, 'deleteList'])->name('deleteList');
                 Route::get('gui-tb-sv', [MienGiamHPPhongDaoTaoController::class, 'guiTBSV'])->name('guiTBSV');
+                Route::get('gui-tb-all', [MienGiamHPPhongDaoTaoController::class, 'guiTBSALL'])->name('guiTBSALL');
             });
 
             Route::name('TroCapXaHoi.')->prefix('tro-cap-xa-hoi')->group(function () {
                 Route::get('/', [TroCapXaHoiPhongDaoTaoController::class, 'index'])->name('index');
                 Route::get('get-data', [TroCapXaHoiPhongDaoTaoController::class, 'getData'])->name('getData');
-                Route::get('update-percent', [TroCapXaHoiPhongDaoTaoController::class, 'updatePercent'])->name('updatePercent');
+                Route::get('update-trocap', [TroCapXaHoiPhongDaoTaoController::class, 'updateTroCap'])->name('updateTroCap');
                 Route::get('create-list', [TroCapXaHoiPhongDaoTaoController::class, 'createList'])->name('createList');
                 Route::get('delete-list', [TroCapXaHoiPhongDaoTaoController::class, 'deleteList'])->name('deleteList');
                 Route::get('gui-tb-sv', [TroCapXaHoiPhongDaoTaoController::class, 'guiTBSV'])->name('guiTBSV');
+                Route::get('gui-tb-all', [TroCapXaHoiPhongDaoTaoController::class, 'guiTBSALL'])->name('guiTBSALL');
+
+                Route::post('create-quyet-dinh', [TroCapXaHoiPhongDaoTaoController::class, 'createQuyetDinh'])->name('createQuyetDinh');
+                Route::get('get-quyet-dinh', [TroCapXaHoiPhongDaoTaoController::class, 'getQuyetDinh'])->name('getQuyetDinh');
+                Route::get('xoa-quyet-dinh', [TroCapXaHoiPhongDaoTaoController::class, 'xoaQuyetDinh'])->name('xoaQuyetDinh');
+               
             });
             Route::name('TroCapHocPhi.')->prefix('tro-cap-hoc-phi')->group(function () {
                 Route::get('/', [TroCapHocPhiPhongDaoTaoController::class, 'index'])->name('index');
@@ -178,6 +188,12 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('create-list', [TroCapHocPhiPhongDaoTaoController::class, 'createList'])->name('createList');
                 Route::get('delete-list', [TroCapHocPhiPhongDaoTaoController::class, 'deleteList'])->name('deleteList');
                 Route::get('gui-tb-sv', [TroCapHocPhiPhongDaoTaoController::class, 'guiTBSV'])->name('guiTBSV');
+
+                Route::get('gui-tb-all', [TroCapHocPhiPhongDaoTaoController::class, 'guiTBSALL'])->name('guiTBSALL');
+
+                Route::post('create-quyet-dinh', [TroCapHocPhiPhongDaoTaoController::class, 'createQuyetDinh'])->name('createQuyetDinh');
+                Route::get('get-quyet-dinh', [TroCapHocPhiPhongDaoTaoController::class, 'getQuyetDinh'])->name('getQuyetDinh');
+                Route::get('xoa-quyet-dinh', [TroCapHocPhiPhongDaoTaoController::class, 'xoaQuyetDinh'])->name('xoaQuyetDinh');
             });
             Route::name('CheDoChinhSach.')->prefix('che-do-chinh-sach')->group(function () {
                 Route::get('/', [CheDoChinhSachPhongDaoTaoController::class, 'index'])->name('index');
@@ -200,20 +216,20 @@ Route::group(['middleware' => ['auth']], function () {
             Route::name('MienGiamHP.')->prefix('mien-giam-hp')->group(function () {
                 Route::get('/', [MienGiamHPKeHoachTaiChinhController::class, 'index'])->name('index');
                 Route::get('get-data', [MienGiamHPKeHoachTaiChinhController::class, 'getData'])->name('getData');
-                Route::get('xacnhan', [MienGiamHPKeHoachTaiChinhController::class, 'xacnhan'])->name('xacnhan');
+                Route::post('xacnhan', [MienGiamHPKeHoachTaiChinhController::class, 'xacnhan'])->name('xacnhan');
                 Route::get('tuchoi', [MienGiamHPKeHoachTaiChinhController::class, 'tuchoi'])->name('tuchoi');
             });
 
             Route::name('TroCapXaHoi.')->prefix('tro-cap-xa-hoi')->group(function () {
                 Route::get('/', [TroCapXaHoiKeHoachTaiChinhController::class, 'index'])->name('index');
                 Route::get('get-data', [TroCapXaHoiKeHoachTaiChinhController::class, 'getData'])->name('getData');
-                Route::get('xacnhan', [TroCapXaHoiKeHoachTaiChinhController::class, 'xacnhan'])->name('xacnhan');
+                Route::post('xacnhan', [TroCapXaHoiKeHoachTaiChinhController::class, 'xacnhan'])->name('xacnhan');
                 Route::get('tuchoi', [TroCapXaHoiKeHoachTaiChinhController::class, 'tuchoi'])->name('tuchoi');
             });
             Route::name('TroCapHocPhi.')->prefix('tro-cap-hoc-phi')->group(function () {
                 Route::get('/', [TroCapHocPhiKeHoachTaiChinhController::class, 'index'])->name('index');
                 Route::get('get-data', [TroCapHocPhiKeHoachTaiChinhController::class, 'getData'])->name('getData');
-                Route::get('xacnhan', [TroCapHocPhiKeHoachTaiChinhController::class, 'xacnhan'])->name('xacnhan');
+                Route::post('xacnhan', [TroCapHocPhiKeHoachTaiChinhController::class, 'xacnhan'])->name('xacnhan');
                 Route::get('tuchoi', [TroCapHocPhiKeHoachTaiChinhController::class, 'tuchoi'])->name('tuchoi');
             });
         });

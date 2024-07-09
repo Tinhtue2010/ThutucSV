@@ -16,7 +16,7 @@
                             <!--begin::Search-->
                             <div class="d-flex align-items-center position-relative my-1">
                                 <i class="ki-outline ki-magnifier fs-3 position-absolute ms-4"></i>
-                                <input type="text" data-kt-ecommerce-product-filter="search" class="form-control form-control-solid w-250px ps-12" placeholder="Tên, mã sinh viên" />
+                                <input type="text" data-kt-ecommerce-product-filter="search" class="form-control w-250px ps-12" placeholder="Tên, mã sinh viên" />
                             </div>
                             <!--end::Search-->
                         </div>
@@ -26,19 +26,18 @@
                             <div class="w-100 mw-250px">
                                 <label class="form-label">Loại hồ sơ</label>
                                 <!--begin::Select2-->
-                                <select class="form-select form-select-solid filter-select" data-name="type" data-control="select2" data-placeholder="Loại hồ sơ">
+                                <select class="form-select form-select-solid filter-select" data-name="type_miengiamhp" data-control="select2" data-placeholder="Loại hồ sơ">
                                     <option value="all">Hiển thị tất cả</option>
                                     @foreach (config('doituong.miengiamhp') as $index => $item)
                                         <option value="{{ $index }}">{{ $item[1] }}</option>
                                     @endforeach
-
                                 </select>
                                 <!--end::Select2-->
                             </div>
                             <div class="w-100 mw-200px">
                                 <label class="form-label">Trạng thái</label>
                                 <!--begin::Select2-->
-                                <select class="form-select form-select-solid filter-select" data-name="type" data-control="select2" data-placeholder="Loại hồ sơ">
+                                <select class="form-select form-select-solid filter-select" data-name="status" data-control="select2" data-placeholder="Loại hồ sơ">
                                     <option value="all">Hiển thị tất cả</option>
                                     @foreach (config('doituong.statusmiengiamhp') as $index => $item)
                                         <option value="{{ $item[0] }}" style="color: red">{{ $item[1] }}<div class="ki-duotone ki-update-folder fs-2x cursor-pointer text-danger">
@@ -128,4 +127,5 @@
     @include('phong_dao_tao.bosunghs', ['target' => 'bosunghs'])
     @include('phong_dao_tao.tuchoihs', ['target' => 'tuchoihs'])
     @include('phong_dao_tao.duyethoso',['target'=>'duyethoso'])
+    @include('phong_dao_tao.create_ds_mien_giam_hp.quyet_dinh_mien_giam_hp',['target'=>'quyet_dinh_mien_giam_hp'])
 @endsection

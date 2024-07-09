@@ -17,7 +17,11 @@ class TroCapXHController extends Controller
     function index()
     {
         $user = Auth::user();
-        $don_parent = StopStudy::where('student_id', $user->student_id)->where('type', 2)->orWhere('type', 3)->first();
+        $don_parent = StopStudy::where('student_id', $user->student_id)
+            ->where(function ($query) {
+                $query->where('type', 2)
+                    ->orWhere('type', 3);
+            })->first();
         $don_parent_tcxh = StopStudy::where('student_id', $user->student_id)->where('type', 2)->first();
         $don_parent_mghp = StopStudy::where('student_id', $user->student_id)->where('type', 3)->first();
         if ($don_parent) {
@@ -39,8 +43,7 @@ class TroCapXHController extends Controller
 
     function CreateViewPdf(Request $request)
     {
-        if(!$this->checkOtpApi($request->otp ?? ''))
-        {
+        if (!$this->checkOtpApi($request->otp ?? '')) {
             abort(404);
         }
         if ($request->button_clicked == "xem_truoc") {
@@ -65,7 +68,7 @@ class TroCapXHController extends Controller
 
             $doituong = config('doituong.trocapxahoi');
             $studentData['doituong'] = $doituong[$request->doituong][2];
-            
+
 
             $studentData['sdt'] = $student->phone;
             $studentData['thuongchu'] = $request->thuongchu;
@@ -173,6 +176,15 @@ class TroCapXHController extends Controller
             $check->note = $request->data;
             $check->is_update = 1;
             $check->type_miengiamhp = $request->doituong ?? 1;
+            $check->type_miengiamhp = $request->doituong ?? 1;
+            if($check->type_miengiamhp == 0)
+            {
+                $check->muctrocapxh = 140000;
+            }
+            else
+            {
+                $check->muctrocapxh = 100000;
+            }
             if ($type == 2) {
                 $check->muctrocapxh = isset($request->doituong) ? 140000 : 100000;
             } else {

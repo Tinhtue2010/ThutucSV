@@ -5,7 +5,7 @@
             <span class="required">Tên lớp</span>
         </label>
         <!--end::Label-->
-        <input type="text" class="form-control form-control-solid" name="name" />
+        <input type="text" class="form-control" name="name" />
     </div>
 
     <div class="d-flex flex-column mb-8 fv-row col-6 pe-4">
@@ -15,7 +15,7 @@
             <span class="required">Ngành học</span>
         </label>
         <!--end::Label-->
-        <input type="text" class="form-control form-control-solid" name="nganh" />
+        <input type="text" class="form-control" name="nganh" />
     </div>
 </div>
 <div class="d-flex flex-row">
@@ -52,5 +52,5 @@
         <span class="required">{{__('Học phí')}}</span>
     </label>
     <!--end::Label-->
-    <input type="number" class="form-control form-control-solid" name="hocphi" />
+    <input type="number" class="form-control" name="hocphi" />
 </div>

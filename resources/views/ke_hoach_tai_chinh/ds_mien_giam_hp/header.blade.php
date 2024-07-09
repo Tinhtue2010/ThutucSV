@@ -16,9 +16,14 @@
                     <!--end::Page title-->
                     <div class="d-flex align-items-center gap-2 gap-lg-3">
                         <div class="d-flex flex-row flex-wrap">
-                            <a href="{{ route('KeHoachTaiChinh.MienGiamHP.xacnhan') }}" class="btn btn-primary me-2">Phê duyệt danh sách</a>
+                            <div onclick="xacnhanDS()" class="btn btn-primary me-2 cursor-pointer">Phê duyệt danh sách</div>
                             <a href="{{ route('KeHoachTaiChinh.MienGiamHP.tuchoi') }}" class="btn btn-warning">Từ chối danh sách</a>
                         </div>
+                    </div>
+                    <div class="d-flex w-100 flex-wrap mt-5">
+                        <a target="_bank"  href="{{ route('phieu.index',['id'=>"DSMGHP0"]) }}" class="btn btn-secondary ms-3">Xem danh sách</a>
+                        <a target="_bank"  href="{{ route('phieu.index',['id'=>"QDGHP0"]) }}" class="btn btn-secondary ms-3">Xem quyết định</a>
+                        <a target="_bank"  href="{{ route('phieu.index',['id'=>"PTGHP0"]) }}"  class="btn btn-secondary ms-3">Xem phiếu trình</a>
                     </div>
                 </div>
                 <!--end::Toolbar wrapper-->

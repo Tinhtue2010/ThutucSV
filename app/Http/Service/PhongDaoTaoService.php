@@ -421,6 +421,7 @@ class PhongDaoTaoService extends Controller
         $teacher = Teacher::find(Auth::user()->teacher_id);
 
         $content_phieu['giaovien'] = $teacher->full_name ?? '';
+        $content_phieu['chuky'] = $teacher->chu_ky ?? '';
         $content_phieu['sinhvien'] = $student->full_name ?? '';
         $content_phieu['cmnd'] = $student->cmnd ?? '';
         $content_phieu['ngaycap'] = $student->date_range_cmnd ?? '';
@@ -561,6 +562,7 @@ class PhongDaoTaoService extends Controller
 
         $content_phieu['giaovien'] = $teacher->full_name ?? '';
         $content_phieu['sinhvien'] = $student->full_name ?? '';
+        $content_phieu['chuky'] = $teacher->chu_ky ?? '';
         $content_phieu['cmnd'] = $student->cmnd ?? '';
         $content_phieu['ngaycap'] = $student->date_range_cmnd ?? '';
         $content_phieu['sdt'] = $student->phone ?? '';
@@ -700,6 +702,7 @@ class PhongDaoTaoService extends Controller
 
         $content_phieu['giaovien'] = $teacher->full_name ?? '';
         $content_phieu['sinhvien'] = $student->full_name ?? '';
+        $content_phieu['chuky'] = $teacher->chu_ky ?? '';
         $content_phieu['cmnd'] = $student->cmnd ?? '';
         $content_phieu['ngaycap'] = $student->date_range_cmnd ?? '';
         $content_phieu['sdt'] = $student->phone ?? '';
@@ -839,6 +842,7 @@ class PhongDaoTaoService extends Controller
 
         $content_phieu['giaovien'] = $teacher->full_name ?? '';
         $content_phieu['sinhvien'] = $student->full_name ?? '';
+        $content_phieu['chuky'] = $teacher->chu_ky ?? '';
         $content_phieu['cmnd'] = $student->cmnd ?? '';
         $content_phieu['ngaycap'] = $student->date_range_cmnd ?? '';
         $content_phieu['sdt'] = $student->phone ?? '';
@@ -972,6 +976,7 @@ class PhongDaoTaoService extends Controller
 
         $content_phieu['giaovien'] = $teacher->full_name ?? '';
         $content_phieu['sinhvien'] = $student->full_name ?? '';
+        $content_phieu['chuky'] = $teacher->chu_ky ?? '';
         $content_phieu['cmnd'] = $student->cmnd ?? '';
         $content_phieu['ngaycap'] = $student->date_range_cmnd ?? '';
         $content_phieu['sdt'] = $student->phone ?? '';
@@ -1106,6 +1111,7 @@ class PhongDaoTaoService extends Controller
 
         $content_phieu['giaovien'] = $teacher->full_name ?? '';
         $content_phieu['sinhvien'] = $student->full_name ?? '';
+        $content_phieu['chuky'] = $teacher->chu_ky ?? '';
         $content_phieu['cmnd'] = $student->cmnd ?? '';
         $content_phieu['ngaycap'] = $student->date_range_cmnd ?? '';
         $content_phieu['sdt'] = $student->phone ?? '';
@@ -1220,6 +1226,7 @@ class PhongDaoTaoService extends Controller
 
         $content_phieu['giaovien'] = $teacher->full_name ?? '';
         $content_phieu['sinhvien'] = $student->full_name ?? '';
+        $content_phieu['chuky'] = $teacher->chu_ky ?? '';
         $content_phieu['cmnd'] = $student->cmnd ?? '';
         $content_phieu['ngaycap'] = $student->date_range_cmnd ?? '';
         $content_phieu['sdt'] = $student->phone ?? '';
@@ -1334,6 +1341,7 @@ class PhongDaoTaoService extends Controller
 
         $content_phieu['giaovien'] = $teacher->full_name ?? '';
         $content_phieu['sinhvien'] = $student->full_name ?? '';
+        $content_phieu['chuky'] = $teacher->chu_ky ?? '';
         $content_phieu['cmnd'] = $student->cmnd ?? '';
         $content_phieu['ngaycap'] = $student->date_range_cmnd ?? '';
         $content_phieu['sdt'] = $student->phone ?? '';
@@ -1421,9 +1429,6 @@ class PhongDaoTaoService extends Controller
         }
 
         $content_phieu['ndgiaiquyet'] = "đơn xin rút hồ sơ";
-
-        $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-        $this->notification("Đơn xin rút hồ sơ của bạn đang chờ cán bộ phòng CTSV xác nhận", null, "RHS",$stopStudy->student_id,$user_id);
 
         $newStopStudy = $stopStudy->replicate();
         $newStopStudy->status = 1;

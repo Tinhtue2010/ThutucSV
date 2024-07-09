@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('stop_studies', function (Blueprint $table) {
-            //
+            $table->json("che_do_chinh_sach_data")->nullable();
         });
     }
 

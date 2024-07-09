@@ -18,7 +18,7 @@
                                 <span>Số tháng miễn giảm học phí</span>
                             </label>
                             <!--end::Label-->
-                            <input type="number" class="form-control form-control-solid" name="month">
+                            <input type="number" class="form-control" name="month">
                         </div>
                         <span class="fw-bold fs-5 pb-2">Mức học phí/tháng</span>
                         @foreach ($lop as $item)
@@ -28,7 +28,7 @@
                                     <span>Lớp {{ $item->name}}, ngành {{ $item->nganh}}</span>
                                 </label>
                                 <!--end::Label-->
-                                <input type="number" class="form-control form-control-solid" name="hp_{{ $item->id}}">
+                                <input type="number" class="form-control" name="hp_{{ $item->id}}">
                             </div>
                         @endforeach
                     </div>

@@ -4,7 +4,7 @@
         <span class="required">Tên sinh viên</span>
     </label>
     <!--end::Label-->
-    <input type="text" class="form-control form-control-solid" name="full_name" />
+    <input type="text" class="form-control" name="full_name" />
 </div>
 
 
@@ -15,7 +15,7 @@
             <span class="required">Ngày sinh</span>
         </label>
         <!--end::Label-->
-        <input type="date" class="form-control form-control-solid" name="date_of_birth" />
+        <input type="date" class="form-control" name="date_of_birth" />
     </div>
     <div class="d-flex flex-column mb-8 fv-row col-6 ps-4">
         <!--begin::Label-->
@@ -23,7 +23,7 @@
             <span class="required">Số điện thoại</span>
         </label>
         <!--end::Label-->
-        <input type="text" class="form-control form-control-solid" name="phone" />
+        <input type="text" class="form-control" name="phone" />
     </div>
 </div>
 
@@ -34,7 +34,7 @@
             <span class="required">Số định danh cá nhân/CMND</span>
         </label>
         <!--end::Label-->
-        <input type="text" class="form-control form-control-solid" name="cmnd" />
+        <input type="text" class="form-control" name="cmnd" />
     </div>
     <div class="d-flex flex-column mb-8 fv-row col-6 ps-4">
         <!--begin::Label-->
@@ -42,7 +42,7 @@
             <span class="required">Ngày cấp</span>
         </label>
         <!--end::Label-->
-        <input type="date" class="form-control form-control-solid" name="date_range_cmnd" />
+        <input type="date" class="form-control" name="date_range_cmnd" />
     </div>
 </div>
 <div class="d-flex flex-column mb-8 fv-row">
@@ -51,7 +51,7 @@
         <span class="required">Email</span>
     </label>
     <!--end::Label-->
-    <input type="email" class="form-control form-control-solid" name="email" />
+    <input type="email" class="form-control" name="email" />
 </div>
 <div class="d-flex flex-column mb-8 fv-row">
     <!--begin::Label-->
@@ -59,5 +59,5 @@
         <span class="required">Chữ ký</span>
     </label>
     <!--end::Label-->
-    <input type="file" class="form-control form-control-solid" name="chu_ky" accept="image/jpg" />
+    <input type="file" class="form-control" name="chu_ky" accept="image/jpg" />
 </div>

@@ -26,7 +26,7 @@
                     </label>
                     <!--end::Label-->
                     <input type="text" placeholder="Mã sinh viên" name="username" autocomplete="off"
-                        class="form-control form-control-solid" />
+                        class="form-control" />
                     <div class="fv-plugins-message-container invalid-feedback"></div>
                 </div>
                 <div class="d-flex flex-column mb-8 fv-row fv-plugins-icon-container">
@@ -36,7 +36,7 @@
                     </label>
                     <!--end::Label-->
                     <input type="password" placeholder="Mật khẩu" name="password" autocomplete="off"
-                        data-kt-translate="sign-in-input-password" class="form-control form-control-solid" />
+                        data-kt-translate="sign-in-input-password" class="form-control" />
                     <div class="fv-plugins-message-container invalid-feedback"></div>
                 </div>
                 <!--begin::Wrapper-->

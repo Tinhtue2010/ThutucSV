@@ -26,7 +26,7 @@ class PhongDaoTaoController extends Controller
         $tb_trocapxahoi = StopStudy::where('type', 2)->where('status', 3)->count();
         $tb_trocaphocphi = StopStudy::where('type', 3)->where('status', 3)->count();
         $lop = Lop::get();
-        return view('phong_dao_tao.index', ['tb_miengiamhp' => $tb_miengiamhp, 'tb_trocapxahoi' => $tb_trocapxahoi, 'lop' => $lop,'tb_trocaphocphi'=>$tb_trocaphocphi]);
+        return view('phong_dao_tao.index', ['tb_miengiamhp' => $tb_miengiamhp, 'tb_trocapxahoi' => $tb_trocapxahoi, 'lop' => $lop, 'tb_trocaphocphi' => $tb_trocaphocphi]);
     }
 
     public function getData(Request $request)
@@ -38,16 +38,33 @@ class PhongDaoTaoController extends Controller
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-            ->select('stop_studies.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name');
-
+            ->select('stop_studies.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name')
+            ->where(function ($query) {
+                $query
+                    ->where(function ($query) {
+                        $query->where('doi_tuong_chinh_sach', 'like', '%1%')
+                            ->orWhere('doi_tuong_chinh_sach', 'like', '%4%')
+                            ->orWhereNull('doi_tuong_chinh_sach');
+                    });
+            });
         if (isset($request->year)) {
             $query->whereYear('stop_studies.created_at', $request->year);
         }
         if (isset($request->status)) {
-            $query->where('status', $request->status);
+            $query->when($request->status == 0, function ($query) {
+                $query->where('stop_studies.status', 0);
+            })
+                ->when($request->status == 1, function ($query) {
+                    $query
+                        ->where('stop_studies.status', '>', 0)
+                        ->where('stop_studies.status', '<', 6);
+                })
+                ->when($request->status == 2, function ($query) {
+                    $query->whereIn('stop_studies.status', [6, -99]);
+                });
         }
         if (isset($request->type)) {
-            $query->where('type', $request->type);
+            $query->where('stop_studies.type', $request->type);
         }
         $data = $this->queryPagination($request, $query, ['students.full_name', 'students.student_code']);
 
@@ -97,8 +114,8 @@ class PhongDaoTaoController extends Controller
         try {
             $stopStudy =  StopStudy::find($request->id);
 
-            $this->giaiQuyetCongViec($request->ykientiepnhan ?? '',$stopStudy,1);
-            
+            $this->giaiQuyetCongViec($request->ykientiepnhan ?? '', $stopStudy, 1);
+
             if ($stopStudy->type == 0) {
                 return $this->phongdaotao->tiepnhanhsRHS($request, $stopStudy);
             }
@@ -156,7 +173,7 @@ class PhongDaoTaoController extends Controller
     function duyeths(Request $request)
     {
         $stopStudy =  StopStudy::find($request->id);
-        $this->giaiQuyetCongViec($request->ykientiepnhan ?? '',$stopStudy,2);
+        $this->giaiQuyetCongViec($request->ykientiepnhan ?? '', $stopStudy, 2);
         if ($stopStudy->type == 0) {
             return $this->phongdaotao->duyethsRHS($request, $stopStudy);
         }

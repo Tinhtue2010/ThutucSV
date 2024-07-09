@@ -4,5 +4,5 @@
         <span class="required">Tên khoa</span>
     </label>
     <!--end::Label-->
-    <input type="text" class="form-control form-control-solid" name="name"/>
+    <input type="text" class="form-control" name="name"/>
 </div>

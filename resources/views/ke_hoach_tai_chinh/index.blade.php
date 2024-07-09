@@ -16,7 +16,7 @@
                             <!--begin::Search-->
                             <div class="d-flex align-items-center position-relative my-1">
                                 <i class="ki-outline ki-magnifier fs-3 position-absolute ms-4"></i>
-                                <input type="text" data-kt-ecommerce-product-filter="search" class="form-control form-control-solid w-250px ps-12" placeholder="Tên, mã sinh viên" />
+                                <input type="text" data-kt-ecommerce-product-filter="search" class="form-control w-250px ps-12" placeholder="Tên, mã sinh viên" />
                             </div>
                             <!--end::Search-->
                         </div>
@@ -32,7 +32,8 @@
                                     <option value="0">Đơn xin rút hồ sơ</option>
                                     <option value="1">Đơn xin miễn giảm học phí</option>
                                     <option value="2">Đơn xin trợ cấp xã hội</option>
-                                    <option value="3">Đơn xin chế độ chính sách</option>
+                                    <option value="3">Đơn xin trợ cấp học phí</option>
+                                    <option value="4">Đơn xin chế độ chính sách</option>
                                 </select>
                                 <!--end::Select2-->
                             </div>
@@ -48,19 +49,7 @@
                                 </select>
                                 <!--end::Select2-->
                             </div>
-                            <div class="w-100 mw-150px">
-                                <label class="form-label">Trạng thái</label>
-
-                                <select class="form-select form-select-solid filter-select" data-name="status" data-control="select2" data-hide-search="true" data-placeholder="Trạng thái">
-                                    <option></option>
-                                    <option value="all">Hiển thị tất cả</option>
-                                    <option value="0">Chưa được xác nhận</option>
-                                    <option value="1">GV chủ nhiệm đã xác nhận</option>
-                                    <option value="2">Khoa đã xác nhận</option>
-                                    <option value="3">CTHSSV đã xác nhận</option>
-                                    <option value="4">Lãnh đạo CTHSSV đã xác nhận</option>
-                                </select>
-                            </div>
+                            @include('common.select_status_ho_so')
 
 
                         </div>

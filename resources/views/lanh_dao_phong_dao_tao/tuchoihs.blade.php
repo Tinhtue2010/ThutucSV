@@ -18,7 +18,7 @@
                                 <span>Lý do không tiếp nhận</span>
                             </label>
                             <!--end::Label-->
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="lydo"></textarea>
+                            <textarea type="text" class="form-control" cols="5" rows="3" name="lydo"></textarea>
                         </div>
                     </div>
                     <input type="hidden" class="button_clicked" name="button_clicked" value="">

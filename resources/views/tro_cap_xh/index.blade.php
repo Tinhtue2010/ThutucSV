@@ -54,10 +54,10 @@
                             <!--end::Label-->
                             <select @if (isset($don_parent)) @if ($don_parent->status != 0)
                                 readonly @endif @endif name="doituong" class="form-select form-select-solid filter-select" data-name="year" data-control="select2" data-placeholder="Năm">
-                                <option value="1">Học sinh, sinh viên là người dân tộc thiểu số ở vùng cao từ 03 năm trở lên.</option>
-                                <option value="2">Học sinh, sinh viên mồ côi cả cha lẫn mẹ không nơi nương tựa.</option>
-                                <option value="3">Học sinh, sinh viên là người tàn tật gặp khó khăn về kinh tế.</option>
-                                <option value="4">Học sinh, sinh viên có hoàn cảnh đặc biệt khó khăn về kinh tế, vượt khó học tập, gia đình thuộc diện xóa đói giảm nghèo.</option>
+                                <option value="0">Học sinh, sinh viên là người dân tộc thiểu số ở vùng cao từ 03 năm trở lên.</option>
+                                <option value="1">Học sinh, sinh viên mồ côi cả cha lẫn mẹ không nơi nương tựa.</option>
+                                <option value="2">Học sinh, sinh viên là người tàn tật gặp khó khăn về kinh tế.</option>
+                                <option value="3">Học sinh, sinh viên có hoàn cảnh đặc biệt khó khăn về kinh tế, vượt khó học tập, gia đình thuộc diện xóa đói giảm nghèo.</option>
                             </select>
                         </div>
                         <div class="d-flex flex-column mb-2 fv-row">
@@ -67,14 +67,22 @@
                             </label>
                             <div class="form-check form-check-custom form-check-solid mb-2">
                                 <input name="trocapxh" class="form-check-input" type="checkbox" value="1"checked />
-                                <label class="form-check-label">
-                                    Trợ cấp xã hội
+                                <label class="ms-4">
+                                    <b>Trợ cấp xã hội</b> <br>
+                                    Đối tượng được hưởng chế độ Trợ cấp xã hội là một trong những trường hợp sau: <br>
+                                    - Học sinh, sinh viên là người dân tộc thiểu số ở vùng cao từ 03 năm trở lên. <br>
+                                    - Học sinh, sinh viên mồ côi cả cha lẫn mẹ không nơi nương tựa. <br>
+                                    - Học sinh, sinh viên là người tàn tật gặp khó khăn về kinh tế. <br>
+                                    - Học sinh, sinh viên có hoàn cảnh đặc biệt khó khăn về kinh tế, vượt khó học tập, gia đình thuộc diện xóa đói giảm nghèo.
                                 </label>
                             </div>
                             <div class="form-check form-check-custom form-check-solid">
                                 <input name="hocphi" class="form-check-input" type="checkbox" value="1" />
-                                <label class="form-check-label">
-                                    Trợ cấp học phí
+                                <label class="ms-4">
+                                    <b> Trợ cấp học phí </b> <br>
+                                    Đối tượng được hưởng chế độ Hỗ trợ chi phí học tập thuộc trường hợp: <br>
+                                    Học sinh, sinh viên là người dân tộc thiểu số thuộc hộ nghèo,
+                                    cận nghèo theo quy định của Thủ tướng Chính phủ phê duyệt từng thời kỳ.
                                 </label>
                             </div>
                         </div>
@@ -87,7 +95,7 @@
                             </label>
                             <!--end::Label-->
                             <textarea @if (isset($don_parent)) @if ($don_parent->status > 0)
-                                readonly @endif @endif class="form-control form-control-solid h-150px" name="hoso">{{ $phieu['hoso'] ?? '' }}</textarea>
+                                readonly @endif @endif class="form-control h-150px" name="hoso">{{ $phieu['hoso'] ?? '' }}</textarea>
                         </div>
                         <div class="fs-6 fw-semibol d-flex flex-column">
                             <p class="100">
@@ -109,7 +117,7 @@
                                 <span class="">File</span>
                             </label>
                             <!--end::Label-->
-                            <input type="file" class="form-control form-control-solid" name="files[]" accept="application/pdf" multiple />
+                            <input type="file" class="form-control" name="files[]" accept="application/pdf" multiple />
                         </div>
                         <input type="hidden" id="button_clicked" name="button_clicked" value="">
                         <div class="d-flex w-100">

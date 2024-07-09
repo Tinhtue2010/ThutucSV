@@ -57,53 +57,74 @@
                 <tr style="height: 160px;">
                     <td class="ps-5 align-top">1. Tiếp nhận hồ sơ
                         <br>
-                        {{ $phieu['tiepnhan']->data }}
+                        @isset($phieu['tiepnhan']->chu_ky)
+                            {{ $phieu['tiepnhan']->data }}
+                        @endisset
+
                     </td>
                     <td>
-                        <br>
-                        <br>
-                        <i>({{ $phieu['tiepnhan']->thoigian }})</i>
-                        <br>
-                        {{ $phieu['tiepnhan']->hoten }}
+                        @isset($phieu['tiepnhan']->chu_ky)
+                            <br>
+                            <img style="height: 50px" src="{{ asset('storage/' . $phieu['tiepnhan']->chu_ky) }}" alt="">
+                            <br>
+                            <i>({{ $phieu['tiepnhan']->thoigian }})</i>
+                            <br>
+                            {{ $phieu['tiepnhan']->hoten }}
+                        @endisset
                     </td>
                 </tr>
                 <tr style="height: 160px;">
                     <td class="ps-5 align-top">2. Ý kiến chuyên viên
                         <br>
-                        {{ $phieu['ykien']->data }}
+                        @isset($phieu['ykien']->chu_ky)
+                            {{ $phieu['ykien']->data }}
+                        @endisset
                     </td>
                     <td>
-                        <br>
-                        <br>
-                        <i>({{ $phieu['ykien']->thoigian }})</i>
-                        <br>
-                        {{ $phieu['ykien']->hoten }}
+                        @isset($phieu['ykien']->chu_ky)
+                            <br>
+                            <img style="height: 50px" src="{{ asset('storage/' . $phieu['ykien']->chu_ky) }}" alt="">
+                            <br>
+                            <i>({{ $phieu['ykien']->thoigian }})</i>
+                            <br>
+                            {{ $phieu['ykien']->hoten }}
+                        @endisset
                     </td>
                 </tr>
                 <tr style="height: 160px;">
                     <td class="ps-5 align-top">3. Ý kiến lãnh đạo phòng
                         <br>
-                        {{ $phieu['lanhdaophong']->data }}
+                        @isset($phieu['lanhdaophong']->chu_ky)
+                            {{ $phieu['lanhdaophong']->data }}
+                        @endisset
                     </td>
                     <td>
-                        <br>
-                        <br>
-                        <i>({{ $phieu['lanhdaophong']->thoigian }})</i>
-                        <br>
-                        {{ $phieu['lanhdaophong']->hoten }}
+                        @isset($phieu['lanhdaophong']->chu_ky)
+                            <br>
+                            <img style="height: 50px" src="{{ asset('storage/' . $phieu['lanhdaophong']->chu_ky) }}" alt="">
+                            <br>
+                            <i>({{ $phieu['lanhdaophong']->thoigian }})</i>
+                            <br>
+                            {{ $phieu['lanhdaophong']->hoten }}
+                        @endisset
                     </td>
                 </tr>
                 <tr style="height: 160px;">
                     <td class="ps-5 align-top">4. Ý kiến lãnh đạo Trường
                         <br>
-                        {{ $phieu['lanhdaotruong']->data }}
+                        @isset($phieu['lanhdaotruong']->chu_ky)
+                            {{ $phieu['lanhdaotruong']->data }}
+                        @endisset
                     </td>
                     <td>
-                        <br>
-                        <br>
-                        <i>({{ $phieu['lanhdaotruong']->thoigian }})</i>
-                        <br>
-                        {{ $phieu['lanhdaotruong']->hoten }}
+                        @isset($phieu['lanhdaotruong']->chu_ky)
+                            <br>
+                            <img style="height: 50px" src="{{ asset('storage/' . $phieu['lanhdaotruong']->chu_ky) }}" alt="">
+                            <br>
+                            <i>({{ $phieu['lanhdaotruong']->thoigian }})</i>
+                            <br>
+                            {{ $phieu['lanhdaotruong']->hoten }}
+                        @endisset
                     </td>
                 </tr>
             </table>

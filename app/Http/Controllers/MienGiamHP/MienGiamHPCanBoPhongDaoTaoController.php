@@ -54,9 +54,6 @@ class MienGiamHPCanBoPhongDaoTaoController extends Controller
             $this->giaiQuyetCongViec($request->ykientiepnhan, $stopStudy,3);
             $stopStudy->status = 3; 
             $stopStudy->save();  
-            $user_id = User::where('student_id',$stopStudy->id)->first()->id;
-            $this->notification("Danh sách miễn giảm học phí đã được cán bộ phòng đào tạo phê duyệt", null, "GHP", $user_id);
-
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;

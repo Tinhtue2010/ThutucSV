@@ -4,6 +4,7 @@ namespace App\Http\Controllers\MienGiamHP;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lop;
+use App\Models\Phieu;
 use App\Models\StopStudy;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -41,19 +42,21 @@ class MienGiamHPKeHoachTaiChinhController extends Controller
         return $data;
     }
 
-    function xacnhan() {
+    function xacnhan(Request $request) {
         $query = StopStudy::where('type', 1)
         ->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
             $query->where('status', 4)
                   ->orWhere('status', 5)
                   ->orWhere('status', -5);
-        })->get();
+        })->get(); 
+        $phieu = Phieu::where('key','PTGHP')->where('status',0)->first();
+        $content = json_decode($phieu->content,true);
+        $content[0]['y_kien_khtc'] = $request->ykientiepnhan;
+        $phieu->content = json_encode($content,true);
+        $phieu->save();
         foreach ($query as $stopStudy) {
             $stopStudy->status = 5; 
             $stopStudy->save();  
-            $user_id = User::where('student_id',$stopStudy->id)->first()->id;
-            $this->notification("Danh sách miễn giảm học phí đã được phòng kết hoạch tài chính phê duyệt", null, "GHP", $user_id);
-
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
@@ -75,11 +78,6 @@ class MienGiamHPKeHoachTaiChinhController extends Controller
         foreach ($query as $stopStudy) {
             $stopStudy->status = -5; 
             $stopStudy->save();  
-            $users = User::where('role',4)->get();
-            foreach($users as $item)
-            {
-                $this->notification("Danh sách miễn giảm học phí đã bị từ chối phòng kết hoạch tài chính", null, "GHP", $item->id);
-            }
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 0;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;

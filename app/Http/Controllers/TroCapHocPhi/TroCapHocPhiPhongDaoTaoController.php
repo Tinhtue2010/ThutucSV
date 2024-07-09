@@ -4,8 +4,10 @@ namespace App\Http\Controllers\TroCapHocPhi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lop;
+use App\Models\Phieu;
 use App\Models\StopStudy;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -64,7 +66,7 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
         $users = User::where('role',6)->get();
         foreach($users as $item)
         {
-            $this->notification("Danh sách miễn giảm học phí đã được tạo bởi ".$username, null, "GHP", $item->id);
+            $this->notification("Danh sách miễn giảm học phí đã được tạo bởi ".$username, null, "TCXH", $item->id);
         }
         return redirect()->back();
     }
@@ -85,6 +87,10 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
     }
 
     function guiTBSV() {
+
+        $phieu = Phieu::where('key','DSTCHP')->orderBy('created_at', 'desc')->first();
+
+
         $query = StopStudy::where('type', 3)
         ->studentActive()
         ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
@@ -96,7 +102,7 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
             $stopStudy->status = 4; 
             $stopStudy->save();  
             $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-            $this->notification("Cần kiểm tra lại thông tin trong danh sách miễn giảm học phí", null, "GHP", $user_id);
+            $this->notification("Danh sách trợ cấp chi phí học tập dự kiến", $phieu->id, "TCXH", $user_id);
             
             $users = User::where(function($query) {
                 $query->where('role', 2)
@@ -104,7 +110,7 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
             })->get();
             foreach($users as $item)
             {
-                $this->notification("Danh sách miễn giảm học phí đã bị từ chối bởi lãnh đạo phòng đào tạo ", null, "GHP", $item->id);
+                $this->notification("Danh sách trợ cấp chi phí học tập dự kiến", null, "TCXH", $item->id);
             }
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
@@ -115,5 +121,124 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
             $newStopStudy->save();
         }
         return redirect()->back();
+    }
+
+    function guiTBSALL()
+    {
+        
+        $phieu = Phieu::where('key','DSTCHP')->orderBy('created_at', 'desc')->first();
+
+        $users = User::get();
+        foreach ($users as $item) {
+            $this->notification("Danh sách trợ cấp chi phí học tập", $phieu->id, "TCXH", $item->id);
+        }
+
+
+        $phieu = Phieu::where('status', 0)->update(['status' => 1]);
+        $query = StopStudy::where('type', 3)
+        ->studentActive()
+        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+        ->whereNull('parent_id')
+        ->where('stop_studies.status', 6)
+        ->select('stop_studies.*')
+        ->get();
+        foreach ($query as $stopStudy) {
+            $stopStudy->status = -99;
+            $stopStudy->save();
+        }
+        return redirect()->back();
+    }
+    function createQuyetDinh(Request $request)
+    {
+        $date = Carbon::createFromFormat('d/m/Y', $request->thoi_gian_tao,);
+
+        $day = $date->day;
+        $month = $date->month;
+        $year = $date->year;
+        $content = [
+            "so_QD" => $request->so_QD,
+            "thoi_gian_tao_ngay" => $day,
+            "thoi_gian_tao_thang" => $month,
+            "thoi_gian_tao_nam" => $year,
+            "tom_tat" => $request->tom_tat ?? "",
+            "nam" => $request->nam,
+            "ky" => $request->ky,
+            "tong" => 0,
+        ];
+
+        $content_DSTCHP = [];
+        
+        $query = StopStudy::where('type', 3)
+        ->where('stop_studies.status','>=',1)
+        ->studentActive()
+        ->whereNull('parent_id')
+        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+        ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+        ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'lops.hocphi')
+        ->get();
+        
+        $content["tong_hs"] = count($query);
+
+        foreach($query as $item){
+            $content_DSTCHP[] =  [
+                "ho_ten" => $item->full_name,
+                "ngay_sinh" => Carbon::createFromFormat('Y-m-d', $item->date_of_birth)->format('d/m/Y'),
+                "lop" => $item->lop_name,
+                "doi_tuong" => 'Đối tượng '.$item->type_miengiamhp + 1,
+                "muc_tro_cap_hp" => config('doituong.muctrocaphp'),
+                "so_thang_tro_cap" => 5,
+                "tro_cap_ky" =>5*config('doituong.muctrocaphp')
+              ];
+              $content["tong"] += 5*config('doituong.muctrocaphp');
+        }
+
+        $phieu =  Phieu::updateOrCreate(
+            [
+                'key' => 'DSTCHP',
+                'status' => 0
+            ],
+            [
+                'name' => 'Danh sách sinh viên được trợ cấp xã hội',
+                'content' => json_encode([$content,$content_DSTCHP], true)
+            ]
+        );
+        Phieu::updateOrCreate(
+            [
+                'key' => 'QDTCHP',
+                'status' => 0
+            ],
+            [
+                'name' => 'Quyết định trợ cấp xã hội',
+                'content' => json_encode([$content,0], true)
+            ]
+        );
+        Phieu::updateOrCreate(
+            [
+                'key' => 'PTTCHP',
+                'status' => 0
+            ],
+            [
+                'name' => 'Phiếu trình trợ cấp xã hội',
+                'content' => json_encode([$content,0], true)
+            ]
+        );
+
+        return true;
+    }
+    function xoaQuyetDinh() {
+        Phieu::where('status',0)
+        ->whereIn('key', ['DSTCHP', 'QDTCHP', 'PTTCHP'])
+        ->delete();
+        return redirect()->back();
+    }
+
+    function getQuyetDinh(Request $request)
+    {
+        $phieu =  Phieu::where('key','DSTCHP')->where('status',0)->first();
+        if($phieu)
+        {
+            return json_decode($phieu->content,true)[0];
+        }
+        return [];
     }
 }

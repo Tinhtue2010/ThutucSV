@@ -83,7 +83,7 @@
                                     </div>
                                 `;
                                 urlgqcv = "{{ route('phieu.giaQuyetCongViec') }}/"+data;
-                                if ((row['type'] == 0 && row['status'] == 6) || (row['type'] == 1 && row['status'] == 6) || (row['type'] == 2 && row['status'] == 6)) {
+                                if (row['status'] == -99 || (row['type'] == 0 && row['status'] == 6) || (row['type'] == 1 && row['status'] == 6) || (row['type'] == 2 && row['status'] == 6)) {
                                     dataRes +=`<a href="${urlgqcv}"  target="_blank" class="ki-duotone ki-abstract-4 fs-2x cursor-pointer text-dark">
                                         <span class="path1"></span>
                                         <span class="path2"></span>

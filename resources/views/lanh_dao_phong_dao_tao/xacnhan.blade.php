@@ -15,7 +15,7 @@
                         <div class="col-12">
                             <label for="kt_td_picker_linked_2_input" class="form-label">Ý kiến giải quyết công việc</label><br>
                             <label for="kt_td_picker_linked_2_input" class="form-label text-warning">Lưu ý: Nội dung sẽ được lưu vào phiếu theo dõi giải quyết công việc</label>
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="ykientiepnhan"></textarea>
+                            <textarea type="text" class="form-control" cols="5" rows="3" name="ykientiepnhan"></textarea>
                         </div>
                         <br>
                         <div class="d-flex flex-column mb-8 fv-row">
@@ -25,7 +25,7 @@
                                 <span class="text-warning">Lưu ý: nội dung sẽ được thông báo cho sinh viên</span>
                             </label>
                             <!--end::Label-->
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="note">Lãnh đạo phòng CTSV đã duyệt đơn</textarea>
+                            <textarea type="text" class="form-control" cols="5" rows="3" name="note">Lãnh đạo phòng CTSV đã duyệt đơn</textarea>
                         </div>
 
                     </div>

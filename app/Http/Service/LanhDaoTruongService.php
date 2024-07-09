@@ -33,6 +33,18 @@ class LanhDaoTruongService  extends Controller
                 } else {
                 }
             }
+
+            $teacher = Teacher::find(Auth::user()->teacher_id);
+            $phieu = Phieu::find($stopStudy->phieu_id);
+            $phieu_content = json_decode($phieu->content,true);
+            $phieu_content['lanh_dao_truong'] = [
+                "full_name" => $teacher->full_name,
+                "url_chuky" => $teacher->chu_ky,
+            ];
+            $phieu->content = json_encode($phieu_content,true);
+            $phieu->save();
+
+
             Student::where('id',$stopStudy->student_id)->update(['status'=>1]);
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->phieu_id = null;

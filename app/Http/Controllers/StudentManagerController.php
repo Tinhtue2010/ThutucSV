@@ -43,8 +43,8 @@ class StudentManagerController extends Controller
         if (isset($request->he_tuyen_sinh)) {
             $query->where('he_tuyen_sinh', $request->he_tuyen_sinh);
         }
-        if (isset($request->status_dk)) {
-            $query->where('status_dk', $request->status_dk);
+        if (isset($request->status)) {
+            $query->where('status', $request->status);
         }
         if (isset($request->lop_id)) {
             $query->where('lop_id', $request->lop_id);

@@ -18,7 +18,7 @@
                                 <span>Bổ sung thêm các giấy tờ thủ tục sau</span>
                             </label>
                             <!--end::Label-->
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="bosunggiayto"></textarea>
+                            <textarea type="text" class="form-control" cols="5" rows="3" name="bosunggiayto"></textarea>
                         </div>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
@@ -26,7 +26,7 @@
                                 <span>Kê khai lại các giấy tờ thủ tục sau</span>
                             </label>
                             <!--end::Label-->
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="kekhailaigiayto"></textarea>
+                            <textarea type="text" class="form-control" cols="5" rows="3" name="kekhailaigiayto"></textarea>
                         </div>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
@@ -34,7 +34,7 @@
                                 <span>Hướng dẫn khác</span>
                             </label>
                             <!--end::Label-->
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="huongdankhac"></textarea>
+                            <textarea type="text" class="form-control" cols="5" rows="3" name="huongdankhac"></textarea>
                         </div>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
@@ -42,7 +42,7 @@
                                 <span>Lý do</span>
                             </label>
                             <!--end::Label-->
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="lydo"></textarea>
+                            <textarea type="text" class="form-control" cols="5" rows="3" name="lydo"></textarea>
                         </div>
                     </div>
                     <input type="hidden" class="button_clicked" name="button_clicked" value="">

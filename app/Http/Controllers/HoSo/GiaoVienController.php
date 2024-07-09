@@ -16,7 +16,7 @@ class GiaoVienController extends Controller
     private $giaovien;
     function __construct()
     {
-         $this->giaovien = new GiaoVienService();
+        $this->giaovien = new GiaoVienService();
     }
     function index()
     {
@@ -33,7 +33,15 @@ class GiaoVienController extends Controller
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-            ->select('stop_studies.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name');
+            ->select('stop_studies.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name')
+            ->where(function ($query) {
+                $query
+                    ->where(function ($query) {
+                        $query->where('doi_tuong_chinh_sach', 'like', '%1%')
+                            ->orWhere('doi_tuong_chinh_sach', 'like', '%4%')
+                            ->orWhereNull('doi_tuong_chinh_sach');
+                    });
+            });
 
         $lopIds = Lop::where('teacher_id', $user->teacher_id)->pluck('id');
         $query = $query->whereIn('stop_studies.lop_id', $lopIds);
@@ -42,16 +50,25 @@ class GiaoVienController extends Controller
             $query->whereYear('stop_studies.created_at', $request->year);
         }
         if (isset($request->status)) {
-            $query->whereYear('status', $request->status);
+            $query->when($request->status == 0, function ($query) {
+                $query->where('stop_studies.status', 0);
+            })
+                ->when($request->status == 1, function ($query) {
+                    $query
+                        ->where('stop_studies.status', '>', 0)
+                        ->where('stop_studies.status', '<', 6);
+                })
+                ->when($request->status == 2, function ($query) {
+                    $query->whereIn('stop_studies.status', [6, -99]);
+                });
         }
         if (isset($request->type)) {
-            $query->where('type', $request->type);
+            $query->where('stop_studies.type', $request->type);
         }
         $data = $this->queryPagination($request, $query, ['students.full_name', 'students.student_code']);
 
         return $data;
     }
-
     function xacnhan(Request $request)
     {
         try {

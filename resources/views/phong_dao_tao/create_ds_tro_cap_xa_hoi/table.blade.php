@@ -80,23 +80,39 @@
                         {
                             data: 'id',
                             render: function(data, type, row) {
-                                return  `<select onchange="updateTile(this,${row['id']})" class="form-select" name="muctrocapxh">
-                                            <option value="140000" ${row['muctrocapxh'] == 140000 ? 'selected': ''}>140.000</option>
-                                            <option value="100000" ${row['muctrocapxh'] == 100000 ? 'selected': ''}>100.000</option>
+                                var muctrocapxh = 0;
+                                if (row['type_miengiamhp'] == 0) {
+                                    muctrocapxh = row['muctrocapxh'] ?? 140000;
+                                }
+                                else
+                                {
+                                    muctrocapxh = row['muctrocapxh'] ?? 100000;
+                                }
+                                return `<select id="muc_tro_cap_${data}" onchange="updateTile(this,${row['id']})" class="form-select" name="muctrocapxh">
+                                            <option value="140000" ${muctrocapxh == 140000 ? 'selected': ''}>140.000</option>
+                                            <option value="100000" ${muctrocapxh == 100000 ? 'selected': ''}>100.000</option>
                                         </select>`;
                             }
                         },
                         {
                             data: 'id',
                             render: function(data, type, row) {
-                                return `5 Tháng`;
+                                return `6 Tháng`;
                             }
                         },
                         {
                             data: 'id',
                             render: function(data, type, row) {
-                                var miengiam_thang = row['muchotrohp'] * 5;
-                                return `<p id="miengiam_thang_${data}">${miengiam_thang.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>`;
+                                let  miengiam_thang_ = 0;
+                                if (row['type_miengiamhp'] == 0) {
+                                    miengiam_thang_ = (row['muctrocapxh'] ?? 140000) * 6;
+                                }
+                                else
+                                {
+                                    miengiam_thang_ = (row['muctrocapxh'] ?? 100000) * 6;
+                                }
+                                
+                                return `<p id="miengiam_thang_${data}">${miengiam_thang_.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>`;
                             }
                         },
                         {
@@ -304,7 +320,7 @@
         function updateData(data, id) {
             axios({
                 method: 'GET',
-                url: `{{ route('PhongDaoTao.MienGiamHP.updatePercent') }}?id=${id}&muctrocapxh=${data}`,
+                url: `{{ route('PhongDaoTao.TroCapXaHoi.updateTroCap') }}?id=${id}&muctrocapxh=${data}`,
             }).then((response) => {}).catch(function(error) {
                 mess_error("Cảnh báo",
                     "{{ __('Có lỗi xảy ra.') }}"
@@ -322,20 +338,15 @@
         }
 
         function updateTile(data, id) {
-            const debouncedUpdate = debounce(updateData, 500);
-            var hocphi = $("#hocphi_" + id).data('hocphi');
-            var percent = data.value;
-            var miengiam_thang = (hocphi / 5) * (percent / 100)
-            var miengiamgiam_ky = hocphi * (percent / 100)
-            $("#miengiamgiam_ky_" + id).html(miengiamgiam_ky.toLocaleString('vi-VN', {
+            const debouncedUpdate = debounce(updateData, 10);
+
+
+            $(`#miengiam_thang_` + id).html((data.value * 6).toLocaleString('vi-VN', {
                 style: 'currency',
                 currency: 'VND'
-            }))
-            $("#miengiam_thang_" + id).html(miengiam_thang.toLocaleString('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-            }))
-            debouncedUpdate(percent, id);
+            }));
+
+            debouncedUpdate(data.value, id);
         }
     </script>
 @endpush

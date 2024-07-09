@@ -78,7 +78,7 @@
                             </label>
                             <!--end::Label-->
                             <textarea @if (isset($don_parent)) @if ($don_parent->status > 0)
-                                readonly @endif @endif class="form-control form-control-solid h-150px" name="hoso">{{ $phieu['hoso'] ?? '' }}</textarea>
+                                readonly @endif @endif class="form-control h-150px" name="hoso">{{ $phieu['hoso'] ?? '' }}</textarea>
                         </div>
 
                         <div class="d-flex flex-column mb-8 fv-row">
@@ -87,7 +87,7 @@
                                 <span class="">File</span>
                             </label>
                             <!--end::Label-->
-                            <input type="file" class="form-control form-control-solid" name="files[]" accept="application/pdf" multiple />
+                            <input type="file" class="form-control" name="files[]" accept="application/pdf" multiple />
                         </div>
                         <input type="hidden" id="button_clicked" name="button_clicked" value="">
                         <div class="d-flex w-100">

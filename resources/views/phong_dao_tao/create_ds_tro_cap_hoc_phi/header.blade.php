@@ -8,7 +8,7 @@
                     <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
                         <!--begin::Title-->
                         <h1 class="page-heading d-flex flex-column justify-content-center text-dark fw-bold fs-3 m-0">
-                            Danh sách sinh viên được trợ cấp học phí
+                            Danh sách sinh viên được trợ cấp chi phí học tập
                         </h1>
                         <!--end::Title-->
                     </div>
@@ -40,33 +40,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="w-100 justify-content-end flex-wrap d-flex">
-                        <div class="card-toolbar">
-                            <!--begin::Menu-->
-                            <button class="btn btn-icon btn-active-color-primary justify-content-end" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-overflow="true">
-                                <i class="ki-outline ki-dots-square fs-2x text-dark me-n1"></i>
-                            </button>
-                            <!--begin::Menu 3-->
-                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px py-3" data-kt-menu="true">
-                                <!--begin::Heading-->
-                                <div class="menu-item px-3">
-                                    <div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">{{ __('Chức năng') }}</div>
-                                </div>
-                                <!--end::Heading-->
-
-                                <!--begin::Menu item-->
-                                <div class="menu-item px-3">
-                                    <a href="" target="_blank" class="menu-link px-3">Xem phiếu</a>
-                                    <a href="{{ route('PhongDaoTao.TroCapXaHoi.createList') }}" class="menu-link px-3">Tạo danh sách và thông báo đến cán bộ phòng đào tạo</a>
-                                    <a href="{{ route('PhongDaoTao.TroCapXaHoi.deleteList') }}" class="menu-link px-3">Xóa danh sách</a>
-                                    <a href="" class="menu-link px-3">Yêu cầu bổ xung thông tin đối với sinh viên là dân tộc thiểu số</a>
-                                </div>
-                                <!--end::Menu item-->
-
-                            </div>
-                            <!--end::Menu 3-->
-                            <!--end::Menu-->
-                        </div>
+                    <div class="d-flex w-100 flex-wrap">
+                        <div onclick="taoQuyetDinhMGHP()" class="btn btn-secondary">Tạo, cập nhật quyết định</div>
+                        <a target="_bank"  href="{{ route('phieu.index',['id'=>"DSTCHP0"]) }}" class="btn btn-secondary ms-3">Xem danh sách</a>
+                        <a target="_bank"  href="{{ route('phieu.index',['id'=>"QDTCHP0"]) }}" class="btn btn-secondary ms-3">Xem quyết định</a>
+                        <a target="_bank"  href="{{ route('phieu.index',['id'=>"PTTCHP0"]) }}"  class="btn btn-secondary ms-3">Xem phiếu trình</a>
+                        <a href="{{ route('PhongDaoTao.TroCapHocPhi.xoaQuyetDinh') }}"  class="btn btn-danger ms-3">Xóa quyết định</a>
+                        <a href="{{ route('PhongDaoTao.TroCapHocPhi.guiTBSALL') }}"  class="btn btn-success ms-3">Thông báo và khóa DS</a>
                     </div>
                 </div>
                 <!--end::Toolbar wrapper-->

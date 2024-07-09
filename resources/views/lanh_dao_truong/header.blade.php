@@ -82,6 +82,7 @@
                             <!--end::Menu-->
                         </div>
                     </div>
+                    
                     <div class="w-100 d-flex">
                         @if ($tb_miengiamhp > 0)
                             <div class="d-flex align-items-center bg-light-warning rounded p-5 mb-2 w-100">

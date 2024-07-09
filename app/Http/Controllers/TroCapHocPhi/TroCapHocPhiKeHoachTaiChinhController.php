@@ -4,6 +4,7 @@ namespace App\Http\Controllers\TroCapHocPhi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lop;
+use App\Models\Phieu;
 use App\Models\StopStudy;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -45,7 +46,7 @@ class TroCapHocPhiKeHoachTaiChinhController extends Controller
         return $data;
     }
 
-    function xacnhan() {
+    function xacnhan(Request $request) {
         $query = StopStudy::where('type', 3)
         ->studentActive()
         ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
@@ -57,11 +58,15 @@ class TroCapHocPhiKeHoachTaiChinhController extends Controller
         ->select('stop_studies.*')
         ->get();
 
+        $phieu = Phieu::where('key','PTTCHP')->where('status',0)->first();
+        $content = json_decode($phieu->content,true);
+        $content[0]['y_kien_khtc'] = $request->ykientiepnhan;
+        $phieu->content = json_encode($content,true);
+        $phieu->save();
+
         foreach ($query as $stopStudy) {
             $stopStudy->status = 5; 
             $stopStudy->save();  
-            $user_id = User::where('student_id',$stopStudy->id)->first()->id;
-            $this->notification("Danh sách trợ cấp xã hội đã được phòng kết hoạch tài chính phê duyệt", null, "GHP", $user_id);
 
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;

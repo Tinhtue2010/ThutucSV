@@ -4,7 +4,9 @@ namespace App\Http\Controllers\TroCapHocPhi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lop;
+use App\Models\Phieu;
 use App\Models\StopStudy;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -52,6 +54,27 @@ class TroCapHocPhiLanhDaoTruongController extends Controller
         })
         ->select('stop_studies.*')
         ->get();
+
+
+        $phieu = Phieu::where('key', 'QDTCHP')->where('status', 0)->first();
+
+        $content = json_decode($phieu->content, true);
+        $teacher = Teacher::find(Auth::user()->teacher_id);
+
+        $content[0]['canbo_truong'] = $teacher->full_name;;
+        $content[0]['canbo_truong_chu_ky'] = $teacher->chu_ky;
+        $phieu->content = json_encode($content, true);
+        $phieu->save();
+
+        $phieu = Phieu::where('key', 'PTTCHP')->where('status', 0)->first();
+
+        $content = json_decode($phieu->content, true);
+        $content[0]['canbo_truong'] = $teacher->full_name;;
+        $content[0]['canbo_truong_chu_ky'] = $teacher->chu_ky;
+        $phieu->content = json_encode($content, true);
+        $phieu->save();
+
+        
         foreach ($query as $stopStudy) {
             $this->giaiQuyetCongViec($request->ykientiepnhan ?? '',$stopStudy,4);
             $stopStudy->status = 6; 

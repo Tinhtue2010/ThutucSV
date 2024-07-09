@@ -3,6 +3,8 @@
 namespace App\Http\Service;
 
 use App\Http\Controllers\Controller;
+use App\Models\Phieu;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +19,16 @@ class KhoaService  extends Controller
                 abort(404);
             }
             $stopStudy->update(["status" => 2]);
+
+            $teacher = Teacher::find(Auth::user()->teacher_id);
+            $phieu = Phieu::find($stopStudy->phieu_id);
+            $phieu_content = json_decode($phieu->content,true);
+            $phieu_content['khoa_xac_nhan'] = [
+                "full_name" => $teacher->full_name,
+                "url_chuky" => $teacher->chu_ky,
+            ];
+            $phieu->content = json_encode($phieu_content,true);
+            $phieu->save();
 
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->phieu_id = null;
@@ -41,6 +53,12 @@ class KhoaService  extends Controller
                 abort(404);
             }
             $stopStudy->update(["status" => -2]);
+
+            $phieu = Phieu::find($stopStudy->phieu_id);
+            $phieu_content = json_decode($phieu->content,true);
+            $phieu_content['khoa_xac_nhan'] = "";
+            $phieu->content = json_encode($phieu_content,true);
+            $phieu->save();
 
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 0;

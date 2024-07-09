@@ -86,9 +86,8 @@
         <div class="fst-italic">Uông Bí, ngày  {{$data['tao_day']}} tháng  {{$data['tao_month']}} năm  {{$data['tao_year']}}</div>
         <div class="fw-bold">NGƯỜI TIẾP NHẬN HỒ SƠ</div>
         <br />
-        <br />
-        <br />
-        <br />
+        <img style="height: 50px" src="{{ asset('storage/' . $data['chuky']) }}" alt=""> 
+        <br>
         {{$data['giaovien']}}
       </div>
     </div>

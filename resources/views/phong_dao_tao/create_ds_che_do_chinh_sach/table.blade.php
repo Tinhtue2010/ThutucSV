@@ -115,9 +115,20 @@
                             }
                         },
                         {
-                            data: "id",
+                            data: "che_do_chinh_sach_data",
                             render: function(data, type, row){
-                                return 'ktx'
+                                let array = JSON.parse(data);
+                                if(array == null)
+                                {
+                                    return '';
+                                }
+                                return `
+                                    Từ: ${array['ktx']['bat_dau']} <br>
+                                    Số tháng: ${array['ktx']['so_thang']} <br>
+                                    Tiền 1 tháng : ${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(array['ktx']['so_tien'])} <br>
+                                    Tổng : ${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(array['ktx']['so_tien'] * array['ktx']['so_thang'])} <br>
+                                `;
+                                return ''
                             }
                         },
                         {

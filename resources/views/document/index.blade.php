@@ -23,7 +23,7 @@
 
 <body>
     @include('document.thoi_hoc')
-    <button onclick="toPDF('doc_thoihoc');" class="d-flex flex-row gap-2 btn btn-warning fw-bold">
+    <button onclick="toPDF();" class="d-flex flex-row gap-2 btn btn-warning fw-bold">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             class="lucide lucide-file-down">

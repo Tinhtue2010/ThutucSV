@@ -20,7 +20,7 @@
                                 <span class="text-warning">Lưu ý: nội dung sẽ được thông báo cho sinh viên</span>
                             </label>
                             <!--end::Label-->
-                            <textarea type="text" class="form-control form-control-solid" cols="5" rows="3" name="note">Đơn của bạn đã bị từ chối bởi giáo viên chủ nhiệm</textarea>
+                            <textarea type="text" class="form-control" cols="5" rows="3" name="note">Đơn của bạn đã bị từ chối bởi giáo viên chủ nhiệm</textarea>
                         </div>
                         
                     </div>

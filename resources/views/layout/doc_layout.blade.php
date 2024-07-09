@@ -20,10 +20,88 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="{{ asset('assets/css/fontloader.css') }}">
 </head>
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
 
+    table,
+    th,
+    td {
+        border: 1px solid black;
+    }
+
+    @page {
+        size: A4;
+    }
+
+    body {
+        width: 210mm;
+        min-height: 297mm;
+        padding: 50px 0mm;
+        padding-top: 50px;
+        margin: 30px auto;
+        border: 1px solid #d3d3d3;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+    }
+
+    .btn-warning {
+        display: none !important;
+    }
+
+    .A4 {
+        width: 180mm;
+        min-height: 247mm;
+        padding: 0mm;
+        margin: auto;
+    }
+
+    .d-flex {
+        display: flex !important;
+    }
+
+    .flex-column {
+        flex-direction: column !important;
+    }
+
+    .flex-row {
+        flex-direction: row !important;
+    }
+
+    .justify-content-between {
+        justify-content: space-between !important;
+    }
+
+    @media print {
+        body {
+            width: auto;
+            min-height: auto;
+            padding: 0;
+            margin: 0;
+            border: none;
+            box-shadow: none;
+            background: none;
+        }
+
+        .A4 {
+            box-shadow: none;
+            border: none;
+            page-break-after: always;
+            padding: 0;
+            padding-right: 2px;
+        }
+
+        .not {
+            display: none !important;
+        }
+    }
+</style>
 <body>
-    @yield('data')
-    <button onclick="toPDF('doc_view');" class="d-flex flex-row gap-2 btn btn-warning fw-bold">
+    <button onclick="toPDF('doc_view');" class="d-flex flex-row gap-2 btn btn-warning fw-bold not me-5 ms-auto">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             class="lucide lucide-file-down">
@@ -34,34 +112,13 @@
         </svg>
         Xuất PDF
     </button>
-
+    @yield('data')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js"
         integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         function toPDF(el) {
-            doc = new jspdf.jsPDF('p', 'mm', [297, 210]);
-            // const font = doc.getFontList()[0]; // Assuming the first font is the default
-            doc.addFont('{{ asset('assets/font/times.ttf')}}', 'times', 'normal');
-            doc.addFont('{{ asset('assets/font/SVN-Times New Roman Bold.ttf')}}', 'times', 'bold');
-            doc.addFont('{{ asset('assets/font/SVN-Times New Roman Italic.ttf')}}', 'times', 'italic');
-            doc.setFont('times');
-            doc.html(document.getElementById(el), {
-                callback: function(pdf) {
-                    pdf.save("output.pdf");
-                },
-                x: 0,
-                y: 0,
-                width: 170, // set the width of the pdf to 170 mm (A4 width)
-                height: 287, // set the height of the pdf to 287 mm (A4 height)
-                windowWidth: 650, // set the width of the html content to 650 pixels
-                windowHeight: 900,
-                fontFaces: [
-                    { family: 'times', style: 'normal', file: 'font/times.ttf' }, // Default font
-                    { family: 'times', style: 'bold', file: 'font/SVN-Times New Roman Bold.ttf' }, // Bold font
-                    { family: 'times', style: 'italic', file: 'font/SVN-Times New Roman Italic.ttf' }, // Italic font
-                ],
-            });
+            window.print();
         }
     </script>
 </body>
