@@ -94,6 +94,7 @@ class TeacherManagerController extends Controller
             $user->username = explode('@', $request->email)[0]; // get the part before @ as username
             $user->password = bcrypt($user->username);
             $user->teacher_id = $teacher->id;
+            $user->role = $request->role;
             $user->save();
             return true;
         } catch (QueryException $e) {
@@ -106,18 +107,23 @@ class TeacherManagerController extends Controller
     {
         $teacher = Teacher::find($id);
         if (!$teacher) {
-            return response()->json(['message' => 'Bot not found'], 404);
+            return response()->json(['message' => 'Teacher not found'], 404);
         }
-
-        return $teacher->update($request->only([
+    
+        $teacher->update($request->only([
             'full_name',
             'khoa_id',
             'dia_chi',
             'sdt',
             'email',
-            'chuc_danh',
-            'role'
+            'chuc_danh'
         ]));
+    
+        $user = $teacher->user;
+        if ($user) {
+            $user->role = $request->role;
+            $user->save();
+        }
     }
 
     function importFile(Request $request)
