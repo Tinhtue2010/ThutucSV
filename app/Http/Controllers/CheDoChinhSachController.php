@@ -26,7 +26,6 @@ class CheDoChinhSachController extends Controller
             $phieu = null;
             $don = null;
         }
-
         $user = Auth::user();
         $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
             ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')

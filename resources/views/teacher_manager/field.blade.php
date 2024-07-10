@@ -13,7 +13,7 @@
             <span class="required">Khoa</span>
         </label>
         <!--end::Label-->
-        <select data-dropdown-parent="#select-parent-{{$type}}-1" name="khoa_id" class="form-select form-select-solid" data-control="select2">
+        <select data-dropdown-parent="#select-parent-{{$type}}-1" name="khoa_id" class="form-select " data-control="select2">
             @foreach ($khoas as $item)
                 <option value="{{ $item->id }}">{{ $item->name }}</option>
             @endforeach
@@ -56,5 +56,20 @@
         </label>
         <!--end::Label-->
         <input type="text" class="form-control" name="chuc_danh" />
+    </div>
+    <div class="d-flex flex-column mb-8 fv-row col-6 pe-4">
+        <!--begin::Label-->
+        <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+            <span class="required">Quyền</span>
+        </label>
+        <!--end::Label-->
+        <select data-dropdown-parent="#select-parent-{{$type}}-1" name="role" class="form-select " data-control="select2">
+                <option value="2">Giáo viên</option>
+                <option value="3">Cán bộ khoa</option>
+                <option value="4">Phòng CTSV</option>
+                <option value="6">Cán bộ phòng CTSV</option>
+                <option value="5">Phòng KHTC</option>
+                <option value="7">Lãnh đạo trường</option>
+        </select>
     </div>
 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CheDoChinhSach;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lop;
+use App\Models\Phieu;
 use App\Models\StopStudy;
 use App\Models\Student;
 use Hamcrest\Core\HasToString;
@@ -14,8 +15,13 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
 {
     function index()
     {
+        // where('key', 'DSMGHP')->
         $lop = Lop::get();
-        return view('phong_dao_tao.create_ds_che_do_chinh_sach.index', ['lop' => $lop]);
+        $phieu_2 = Phieu::where('status', 1)
+            ->orderBy('created_at', 'desc')
+            ->take(7)
+            ->get();
+        return view('phong_dao_tao.create_ds_che_do_chinh_sach.index', ['lop' => $lop, 'phieu_2' => $phieu_2]);
     }
 
     function getData(Request $request)
@@ -153,7 +159,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
                                 ->orWhere('doi_tuong_chinh_sach', 'like', '%4%');
                         })->first();
                     if ($check_phieu) {
-                        $che_do_chinh_sach_data = json_decode($check_phieu->che_do_chinh_sach_data,true);
+                        $che_do_chinh_sach_data = json_decode($check_phieu->che_do_chinh_sach_data, true);
                         $che_do_chinh_sach_data["ktx"] = [
                             "bat_dau" => $item[$indexHeader['ngay_vao']],
                             "so_tien" => $tien_ktx,
@@ -180,6 +186,47 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
         return true;
     }
 
+    function ImportQTMGHP(Request $request)
+    {
+        $phieu = Phieu::find($request->phieu_id);
+        $data = json_decode($phieu->content, true);
+        dd($data[1]);
+        $error_line = 0;
+        DB::beginTransaction();
+        try {
+            $indexHeader = [];
+            foreach ($data['header'] as $index => $value) {
+                $indexHeader[$value] = $index;
+            }
+            foreach ($data[1] as $index => $item) {
+                $check_phieu = StopStudy::where('student_id', $item->student_id)->where('type', 4)
+                    ->where(function ($query) {
+                        $query->where('doi_tuong_chinh_sach', 'like', '%1%')
+                            ->orWhere('doi_tuong_chinh_sach', 'like', '%2%');
+                    })->first();
+                if ($check_phieu) {
+                    $che_do_chinh_sach_data = json_decode($check_phieu->che_do_chinh_sach_data, true);
+                    $che_do_chinh_sach_data["ktx"] = [
+                        "bat_dau" => $item[$indexHeader['ngay_vao']],
+                        "so_tien" => $tien_ktx,
+                        "so_thang" => $item[$indexHeader['so_thang']]
+                    ];
+
+                    $check_phieu->che_do_chinh_sach_data = json_encode($che_do_chinh_sach_data);
+                    $check_phieu->save();
+                }
+            }
+        } catch (\Exception $e) {
+            DB::rollback();
+            \Log::error($e->getMessage(), ['file' => $e->getFile(), 'line' => $e->getLine()]);
+            return response()->json([
+                'error' => "Có lỗi khi thêm dữ liệu",
+                'file' => $e->getFile(),
+                'line' => isset($error_line) ? $error_line : $e->getLine()
+            ], 500);
+        }
+        DB::commit();
+    }
     function hoTroTienAn(Request $request)
     {
         set_time_limit(3600);
@@ -197,11 +244,10 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
             DB::beginTransaction();
             try {
                 $check_phieu = StopStudy::where('type', 4)
-                        ->where(function ($query) {
-                            $query->where('doi_tuong_chinh_sach', 'like', '%1%')
-                                ->orWhere('doi_tuong_chinh_sach', 'like', '%4%');
-                        })->first();
-
+                    ->where(function ($query) {
+                        $query->where('doi_tuong_chinh_sach', 'like', '%1%')
+                            ->orWhere('doi_tuong_chinh_sach', 'like', '%4%');
+                    })->first();
             } catch (\Exception $e) {
                 DB::rollback();
                 \Log::error($e->getMessage(), ['file' => $e->getFile(), 'line' => $e->getLine()]);

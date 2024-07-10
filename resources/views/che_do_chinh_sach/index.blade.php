@@ -80,7 +80,24 @@
                             <textarea @if (isset($don_parent)) @if ($don_parent->status > 0)
                                 readonly @endif @endif class="form-control h-150px" name="hoso">{{ $phieu['hoso'] ?? '' }}</textarea>
                         </div>
-
+                        <div class="d-flex flex-column mb-8 fv-row">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                <span class="">Địa chỉ:</span>
+                            </label>
+                            <!--end::Label-->
+                            <input type="text" @if (isset($don_parent)) @if ($don_parent->status > 0)
+                                readonly @endif @endif class="form-control" name="diachi" value="{{ $don_parent['diachi'] ?? '' }}"/>
+                        </div>
+                        <div class="d-flex flex-column mb-8 fv-row">
+                            <!--begin::Label-->
+                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                <span class="">Khoảng cách (lớn hơn 15km):</span>
+                            </label>
+                            <!--end::Label-->
+                            <input type="number" @if (isset($don_parent)) @if ($don_parent->status > 0)
+                                readonly @endif @endif class="form-control" name="km" min="15" value="{{ $don_parent['km'] ?? '' }}"/>
+                        </div>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">

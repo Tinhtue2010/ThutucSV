@@ -53,7 +53,7 @@
                             <input class="cursor-pointer m-0 p-0 top-0 left-0 w-100 h-100 position-absolute" style="opacity: 0" type="file" id="avatar" name="avatar" accept=".csv" />
                             {{ __('Import sinh viên ở ktx') }}
                         </div>
-                        <div id="import-file-ktx" class="btn btn-flex btn-outline h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
+                        <div onclick="import_qt_3()" class="btn btn-flex btn-outline h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
                             Thêm SV từ quy trình 3
                         </div>
                         <div id="import-file-ktx" class="btn btn-flex btn-outline h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">

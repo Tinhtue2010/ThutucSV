@@ -55,9 +55,13 @@ class TeacherManagerController extends Controller
     public function getDataChild($id)
     {
         try {
-            $error = Teacher::findOrFail($id);
+            $teacher = DB::table('teachers')
+            ->join('users', 'users.teacher_id', '=', 'teachers.id')
+            ->select('teachers.*', 'users.role')
+            ->where('teachers.id', $id)
+            ->first();
 
-            return $error;
+            return $teacher;
         } catch (QueryException $e) {
             abort(404);
         }
@@ -82,6 +86,7 @@ class TeacherManagerController extends Controller
                 'sdt',
                 'email',
                 'chuc_danh',
+                'role'
             ]));
 
             $user = new User();
@@ -111,6 +116,7 @@ class TeacherManagerController extends Controller
             'sdt',
             'email',
             'chuc_danh',
+            'role'
         ]));
     }
 

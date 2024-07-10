@@ -106,4 +106,6 @@
     @include('phong_dao_tao.duyethoso',['target'=>'duyethoso'])
     @include('phong_dao_tao.create_ds_che_do_chinh_sach.import_ktx')
     @include('phong_dao_tao.create_ds_che_do_chinh_sach.doi_tuong')
+    @include('phong_dao_tao.create_ds_che_do_chinh_sach.import_qt_3',['target' => 'import_qt_3'])
+    
 @endsection

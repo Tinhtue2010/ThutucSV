@@ -33,7 +33,9 @@ class StopStudy extends Model
         'muchotrohp',
         'muctrocapxh',
         'doi_tuong_chinh_sach',
-        'che_do_chinh_sach_data'
+        'che_do_chinh_sach_data',
+        'diachi',
+        'km'
     ];
 
 

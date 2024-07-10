@@ -202,7 +202,15 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('create-list', [CheDoChinhSachPhongDaoTaoController::class, 'createList'])->name('createList');
                 Route::get('delete-list', [CheDoChinhSachPhongDaoTaoController::class, 'deleteList'])->name('deleteList');
                 Route::get('gui-tb-sv', [CheDoChinhSachPhongDaoTaoController::class, 'guiTBSV'])->name('guiTBSV');
+                
                 Route::post('import-file-ktx', [CheDoChinhSachPhongDaoTaoController::class, 'importFileKTX'])->name('importFileKTX');
+                Route::post('import-qt-2', [CheDoChinhSachPhongDaoTaoController::class, 'ImportQTMGHP'])->name('ImportQTMGHP');
+
+                Route::get('gui-tb-all', [TroCapHocPhiPhongDaoTaoController::class, 'guiTBSALL'])->name('guiTBSALL');
+
+                Route::post('create-quyet-dinh', [TroCapHocPhiPhongDaoTaoController::class, 'createQuyetDinh'])->name('createQuyetDinh');
+                Route::get('get-quyet-dinh', [TroCapHocPhiPhongDaoTaoController::class, 'getQuyetDinh'])->name('getQuyetDinh');
+                Route::get('xoa-quyet-dinh', [TroCapHocPhiPhongDaoTaoController::class, 'xoaQuyetDinh'])->name('xoaQuyetDinh');
             });
         });
     });
