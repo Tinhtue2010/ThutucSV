@@ -6,7 +6,7 @@ return [
             "100",
             "Người có công với cách mạng",
             'Người có công với cách mạng và thân nhân của người có công với cách mạng theo Pháp lệnh số
-        02/2020/UBTVQH14 về ưu đãi người có công với cách mạng: Thân nhân của người có công với cách mạng bao gồm: Cha đẻ, 
+        02/2020/UBTVQH14 về ưu đãi người có công với cách mạng=> Thân nhân của người có công với cách mạng bao gồm=> Cha đẻ, 
         mẹ đẻ, vợ hoặc chồng, con (con đẻ, con nuôi), người có công nuôi liệt sĩ.'
         ],
         [ //1
@@ -66,7 +66,8 @@ return [
         ["-5", "Phòng KHTC từ chối danh sách"],
         ["6", "Lãnh đạo trường đã xác nhận"],
         ["-6", "Lãnh đạo trường từ chối DS"],
-        ["-99", "Đã khóa và lưu trữ"]
+        ["-99", "Đã khóa và lưu trữ"],
+        ["-88", "Không đủ điều khiện xét duyệt"]
     ],
     "muctrocaphp" => 894000,
     "trocapxahoi" => [
@@ -102,4 +103,33 @@ return [
         ],
     ],
     "tien_ktx" => 40000,
+    "phieu_trinh" => [
+        "GHP" => "miễn giảm học phí",
+        "TCXH" => "Trợ cấp xã hội",
+        "TCHP" => "Trợ cấp học phí",
+        "RHS" => "Rút hồ sơ",
+        "TNHS" => "Phiếu tiếp nhận hồ sơ",
+        "CDCS" => "chế độ chính sách",
+        "DSMGHP" => "danh sách miễn giảm học phí",
+        "QDGHP" => "quyết định miễn giảm học phí",
+        "PTGHP" => "phiếu trình miễn giảm học phí",
+        "DSTCXH" => "danh sách trợ cấp xã hội",
+        "QDTCXH" => "quyết định trợ cấp xã hội",
+        "PTTCXH" => "phiếu trình trợ cấp xã hội",
+        "DSTCHP" => "danh sách trợ cấp học phí",
+        "QDTCHP" => "quyết định trợ cấp học phí",
+        "PTTCHP" => "phiếu trình trợ cấp học phí",
+        "DSCDTA" => "danh sách trợ cấp tiền ăn",
+        "QDCDTA" => "quyết định trợ cấp tiền ăn",
+        "DSCDHP" => "danh sách trợ cấp học phí",
+        "QDCDHP" => "quyết định trợ cấp học phí",
+        "DSCDKTX1" => "danh sách miễn giảm ktx 1",
+        "QDCDKTX1" => "quyết định miễn giảm ktx 1",
+        "QDCDKTX4" => "quyết định miễn giảm ktx 4",
+        "DSCDKTX4" => "danh sách miễn giảm ktx 4",
+        "PTQT4" => "Phiếu trình quy trình 4",
+        // "GQCVDHP" => "Giải quyết công việc giảm học phí",
+        // "GQCVRHS" => "Giải quyết công việc rút hồ sơ"
+    ]
+
 ];

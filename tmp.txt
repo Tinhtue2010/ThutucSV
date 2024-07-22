@@ -1,0 +1,24 @@
+GHP : miễn giảm học phí
+TCXH : Trợ cấp xã hội
+TCHP : Trợ cấu học phí
+RHS : Rút hồ sơ
+TNHS : Phiếu tiếp nhận hồ sơ
+CDCS: chế độ chính sách
+DSMGHP : danh sách miễn giảm học phí
+QDGHP : quyết định miễn giảm học phí
+PTGHP: phiếu trình miễn giảm học phí
+DSTCXH: danh sách trợ cấp xã hội
+QDTCXH: quyết định trợ cấp xã hội
+PTTCXH: phiếu trình trợ cấp xã hội
+DSTCHP: danh sahcs trợ cấp học phí
+QDTCHP: phiếu trình trợ cấp học phí
+PTTCHP: phiếu trình trợ cấp học phí
+DSCDTA: danh sách trợ cấp tiền ăn
+QDCDTA: quyết định trợ cấp tiền ăn
+DSCDHP: danh sách trợ cấp học phí
+QDCDHP: quyết định trợ cấp học phí
+DSCDKTX1: danh sách miễn giảm ktx 1
+QDCDKTX1: quyết định  miễn giảm ktx 1
+QDCDKTX4: quyết định  miễn giảm ktx 4
+DSCDKTX4 :danh sách miễn giảm ktx 4
+PTQT4: Phiếu trình quy trình 4

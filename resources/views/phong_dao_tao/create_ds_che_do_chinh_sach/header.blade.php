@@ -42,27 +42,24 @@
                     </div>
                     <div class="d-flex w-100 flex-wrap">
                         <div onclick="taoQuyetDinhMGHP()" class="btn btn-secondary">Tạo, cập nhật quyết định</div>
-                        <a target="_bank"  href="{{ route('phieu.index',['id'=>"DSMGHP0"]) }}" class="btn btn-secondary ms-3">Xem danh sách</a>
-                        <a target="_bank"  href="{{ route('phieu.index',['id'=>"QDGHP0"]) }}" class="btn btn-secondary ms-3">Xem quyết định</a>
-                        <a target="_bank"  href="{{ route('phieu.index',['id'=>"PTGHP0"]) }}"  class="btn btn-secondary ms-3">Xem phiếu trình</a>
-                        <a href="{{ route('PhongDaoTao.MienGiamHP.xoaQuyetDinh') }}"  class="btn btn-danger ms-3">Xóa quyết định</a>
-                        <a href="{{ route('PhongDaoTao.MienGiamHP.guiTBSALL') }}"  class="btn btn-success ms-3">Thông báo và khóa DS</a>
+                        <div onclick="quyet_dinh_danh_sach()"  class="btn btn-secondary ms-3 cursor-pointer">Xem quyết định và danh sách</div>
+                        <a href="{{ route('PhongDaoTao.CheDoChinhSach.xoaQuyetDinh') }}" class="btn btn-danger ms-3">Xóa quyết định</a>
+                        <a href="{{ route('PhongDaoTao.CheDoChinhSach.guiTBSALL') }}" class="btn btn-success ms-3">Thông báo và khóa DS</a>
                     </div>
                     <div class="d-flex align-items-center gap-2 gap-lg-3 mt-3 w-100">
+                        <div id="import-file-diem-sv" class="btn btn-flex btn-outline h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
+                            <input class="cursor-pointer m-0 p-0 top-0 left-0 w-100 h-100 position-absolute" style="opacity: 0" type="file" id="avatar" name="avatar" accept=".csv" />
+                            {{ __('Import danh điểm sinh viên thuộc 20%') }}
+                        </div>
                         <div id="import-file-ktx" class="btn btn-flex btn-outline h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
                             <input class="cursor-pointer m-0 p-0 top-0 left-0 w-100 h-100 position-absolute" style="opacity: 0" type="file" id="avatar" name="avatar" accept=".csv" />
                             {{ __('Import sinh viên ở ktx') }}
                         </div>
                         <div onclick="import_qt_3()" class="btn btn-flex btn-outline h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
-                            Thêm SV từ quy trình 3
+                            Thêm SV từ nghị định 81
                         </div>
-                        <div id="import-file-ktx" class="btn btn-flex btn-outline h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
-                            Tạo danh sách hỗ trợ tiền ăn
-                        </div>
-                        <div id="import-file-ktx" class="btn btn-flex btn-outline h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
-                            <input class="cursor-pointer m-0 p-0 top-0 left-0 w-100 h-100 position-absolute" style="opacity: 0" type="file" id="avatar" name="avatar" accept=".csv" />
-                            {{ __('Import danh điểm sinh viên thuộc 20%') }}
-                        </div>
+
+                        <a href="{{ route('PhongDaoTao.CheDoChinhSach.cancelImport') }}" class="btn btn-danger ms-3">Hủy các import</a>
                     </div>
                 </div>
                 <!--end::Toolbar wrapper-->

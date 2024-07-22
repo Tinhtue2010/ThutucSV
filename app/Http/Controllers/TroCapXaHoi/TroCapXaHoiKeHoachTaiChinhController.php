@@ -92,11 +92,6 @@ class TroCapXaHoiKeHoachTaiChinhController extends Controller
         foreach ($query as $stopStudy) {
             $stopStudy->status = -5; 
             $stopStudy->save();  
-            $users = User::where('role',4)->get();
-            foreach($users as $item)
-            {
-                $this->notification("Danh sách trợ cấp xã hội đã bị từ chối phòng kết hoạch tài chính", null, "GHP", $item->id);
-            }
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 0;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;

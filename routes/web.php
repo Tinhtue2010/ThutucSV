@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CheDoChinhSach\CheDoChinhSachKeHoachTaiChinhController;
+use App\Http\Controllers\CheDoChinhSach\CheDoChinhSachLanhDaoPhongDaoTaoController;
+use App\Http\Controllers\CheDoChinhSach\CheDoChinhSachLanhDaoTruongController;
 use App\Http\Controllers\CheDoChinhSach\CheDoChinhSachPhongDaoTaoController;
 use App\Http\Controllers\CheDoChinhSachController;
 use App\Http\Controllers\ClassManagerController;
@@ -11,6 +14,7 @@ use App\Http\Controllers\HoSo\KhoaController;
 use App\Http\Controllers\HoSo\LanhDaoPhongDaoTaoController;
 use App\Http\Controllers\HoSo\LanhDaoTruongController;
 use App\Http\Controllers\HoSo\PhongDaoTaoController;
+use App\Http\Controllers\HoSoChungTuPhongDaoTaoController;
 use App\Http\Controllers\KhoaManagerController;
 use App\Http\Controllers\MienGiamHP\MienGiamHPCanBoPhongDaoTaoController;
 use App\Http\Controllers\MienGiamHP\MienGiamHPKeHoachTaiChinhController;
@@ -36,6 +40,7 @@ use App\Http\Controllers\TroCapXaHoi\TroCapXaHoiLanhDaoTruongController;
 use App\Http\Controllers\TroCapXaHoi\TroCapXaHoiPhongDaoTaoController;
 use App\Http\Controllers\TroCapXHController;
 use App\Mail\SendMail;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,6 +53,10 @@ use Illuminate\Support\Facades\Route;
     | contains the "web" middleware group. Now create something great!
     |
     */
+
+Route::get('/create-storage-link', function () {
+    Artisan::call('storage:link');
+});
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/check_login', [AuthController::class, 'checkLogin'])
@@ -118,8 +127,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::name('Profile.GiaoVien.')->prefix('giao-vien')->group(function () {
         Route::get('/teacher-info', [ProfileGiaoVienController::class, 'index'])->name('info');
-        Route::get('get-data-info',[ProfileGiaoVienController::class,'getDataInfo'])->name('getDataInfo');
-        Route::post('update',[ProfileGiaoVienController::class,'update'])->name('update');
+        Route::get('get-data-info', [ProfileGiaoVienController::class, 'getDataInfo'])->name('getDataInfo');
+        Route::post('update', [ProfileGiaoVienController::class, 'update'])->name('update');
     });
 
     Route::middleware('role:giaoVien')->group(function () {
@@ -144,6 +153,14 @@ Route::group(['middleware' => ['auth']], function () {
     });
     Route::middleware('role:4')->group(function () {
         Route::name('PhongDaoTao.')->prefix('phong-dao-tao')->group(function () {
+
+            Route::name('HoSoChungTu.')->prefix('ho-so-chung-tu')->group(function () {
+                Route::get('/', [HoSoChungTuPhongDaoTaoController::class, 'index'])->name('index');
+                Route::post('/save-all', [HoSoChungTuPhongDaoTaoController::class, 'saveAll'])->name('saveAll');
+                Route::get('/get-data', [HoSoChungTuPhongDaoTaoController::class, 'getData'])->name('getData');
+            });
+
+            
             Route::get('/', [PhongDaoTaoController::class, 'index'])->name('index');
             Route::get('get-data', [PhongDaoTaoController::class, 'getData'])->name('getData');
             Route::post('bosunghs', [PhongDaoTaoController::class, 'bosunghs'])->name('bosunghs');
@@ -179,7 +196,6 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::post('create-quyet-dinh', [TroCapXaHoiPhongDaoTaoController::class, 'createQuyetDinh'])->name('createQuyetDinh');
                 Route::get('get-quyet-dinh', [TroCapXaHoiPhongDaoTaoController::class, 'getQuyetDinh'])->name('getQuyetDinh');
                 Route::get('xoa-quyet-dinh', [TroCapXaHoiPhongDaoTaoController::class, 'xoaQuyetDinh'])->name('xoaQuyetDinh');
-               
             });
             Route::name('TroCapHocPhi.')->prefix('tro-cap-hoc-phi')->group(function () {
                 Route::get('/', [TroCapHocPhiPhongDaoTaoController::class, 'index'])->name('index');
@@ -202,15 +218,17 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('create-list', [CheDoChinhSachPhongDaoTaoController::class, 'createList'])->name('createList');
                 Route::get('delete-list', [CheDoChinhSachPhongDaoTaoController::class, 'deleteList'])->name('deleteList');
                 Route::get('gui-tb-sv', [CheDoChinhSachPhongDaoTaoController::class, 'guiTBSV'])->name('guiTBSV');
-                
+
                 Route::post('import-file-ktx', [CheDoChinhSachPhongDaoTaoController::class, 'importFileKTX'])->name('importFileKTX');
+                Route::post('import-file-diem-sv', [CheDoChinhSachPhongDaoTaoController::class, 'importFileDiemSV'])->name('importFileDiemSV');
                 Route::post('import-qt-2', [CheDoChinhSachPhongDaoTaoController::class, 'ImportQTMGHP'])->name('ImportQTMGHP');
+                Route::get('cancel-import', [CheDoChinhSachPhongDaoTaoController::class, 'cancelImport'])->name('cancelImport');
 
-                Route::get('gui-tb-all', [TroCapHocPhiPhongDaoTaoController::class, 'guiTBSALL'])->name('guiTBSALL');
+                Route::get('gui-tb-all', [CheDoChinhSachPhongDaoTaoController::class, 'guiTBSALL'])->name('guiTBSALL');
 
-                Route::post('create-quyet-dinh', [TroCapHocPhiPhongDaoTaoController::class, 'createQuyetDinh'])->name('createQuyetDinh');
-                Route::get('get-quyet-dinh', [TroCapHocPhiPhongDaoTaoController::class, 'getQuyetDinh'])->name('getQuyetDinh');
-                Route::get('xoa-quyet-dinh', [TroCapHocPhiPhongDaoTaoController::class, 'xoaQuyetDinh'])->name('xoaQuyetDinh');
+                Route::post('create-quyet-dinh', [CheDoChinhSachPhongDaoTaoController::class, 'createQuyetDinh'])->name('createQuyetDinh');
+                Route::get('get-quyet-dinh', [CheDoChinhSachPhongDaoTaoController::class, 'getQuyetDinh'])->name('getQuyetDinh');
+                Route::get('xoa-quyet-dinh', [CheDoChinhSachPhongDaoTaoController::class, 'xoaQuyetDinh'])->name('xoaQuyetDinh');
             });
         });
     });
@@ -240,6 +258,13 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::post('xacnhan', [TroCapHocPhiKeHoachTaiChinhController::class, 'xacnhan'])->name('xacnhan');
                 Route::get('tuchoi', [TroCapHocPhiKeHoachTaiChinhController::class, 'tuchoi'])->name('tuchoi');
             });
+
+            Route::name('CheDoChinhSach.')->prefix('che-do-chinh-sach')->group(function () {
+                Route::get('/', [CheDoChinhSachKeHoachTaiChinhController::class, 'index'])->name('index');
+                Route::get('get-data', [CheDoChinhSachKeHoachTaiChinhController::class, 'getData'])->name('getData');
+                Route::post('xacnhan', [CheDoChinhSachKeHoachTaiChinhController::class, 'xacnhan'])->name('xacnhan');
+                Route::get('tuchoi', [CheDoChinhSachKeHoachTaiChinhController::class, 'tuchoi'])->name('tuchoi');
+            });
         });
     });
     Route::middleware('role:6')->group(function () {
@@ -267,6 +292,13 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('get-data', [TroCapHocPhiLanhDaoPhongDaoTaoController::class, 'getData'])->name('getData');
                 Route::post('xacnhan', [TroCapHocPhiLanhDaoPhongDaoTaoController::class, 'xacnhan'])->name('xacnhan');
                 Route::get('tuchoi', [TroCapHocPhiLanhDaoPhongDaoTaoController::class, 'tuchoi'])->name('tuchoi');
+            });
+
+            Route::name('CheDoChinhSach.')->prefix('che-do-chinh-sach')->group(function () {
+                Route::get('/', [CheDoChinhSachLanhDaoPhongDaoTaoController::class, 'index'])->name('index');
+                Route::get('get-data', [CheDoChinhSachLanhDaoPhongDaoTaoController::class, 'getData'])->name('getData');
+                Route::post('xacnhan', [CheDoChinhSachLanhDaoPhongDaoTaoController::class, 'xacnhan'])->name('xacnhan');
+                Route::get('tuchoi', [CheDoChinhSachLanhDaoPhongDaoTaoController::class, 'tuchoi'])->name('tuchoi');
             });
         });
     });
@@ -296,6 +328,13 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('get-data', [TroCapHocPhiLanhDaoTruongController::class, 'getData'])->name('getData');
                 Route::post('xacnhan', [TroCapHocPhiLanhDaoTruongController::class, 'xacnhan'])->name('xacnhan');
                 Route::get('tuchoi', [TroCapHocPhiLanhDaoTruongController::class, 'tuchoi'])->name('tuchoi');
+            });
+
+            Route::name('CheDoChinhSach.')->prefix('che-do-chinh-sach')->group(function () {
+                Route::get('/', [CheDoChinhSachLanhDaoTruongController::class, 'index'])->name('index');
+                Route::get('get-data', [CheDoChinhSachLanhDaoTruongController::class, 'getData'])->name('getData');
+                Route::post('xacnhan', [CheDoChinhSachLanhDaoTruongController::class, 'xacnhan'])->name('xacnhan');
+                Route::get('tuchoi', [CheDoChinhSachLanhDaoTruongController::class, 'tuchoi'])->name('tuchoi');
             });
         });
     });

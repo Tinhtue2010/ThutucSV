@@ -76,6 +76,9 @@
         justify-content: space-between !important;
     }
 
+    th,td{
+        padding: 10px;
+    }
     @media print {
         body {
             width: auto;

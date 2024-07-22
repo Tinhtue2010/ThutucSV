@@ -76,8 +76,7 @@
                         },
                         {
                             data: 'full_name',
-                            render: function(data, type, row)
-                            {
+                            render: function(data, type, row) {
                                 return `
                                     Họ tên: ${data} <br/>
                                     Lớp: ${row['lop_name']} <br/>
@@ -89,9 +88,9 @@
                         {
                             data: 'doi_tuong_chinh_sach',
                             render: function(data, type, row) {
-                                let array = JSON.parse(data);
+                                let arrayDT = JSON.parse(data);
                                 let result = '<div class="d-flex flex-column">';
-                                array.forEach(function($item, $index) {
+                                arrayDT.forEach(function($item, $index) {
                                     switch ($item) {
                                         case "1":
                                             result += `<span onclick="doituong1()" class="cursor-pointer ms-0 me-auto text-wrap lh-sm mt-1 badge badge-primary">Đối tượng 1</span>`;
@@ -116,31 +115,62 @@
                         },
                         {
                             data: "che_do_chinh_sach_data",
-                            render: function(data, type, row){
+                            render: function(data, type, row) {
                                 let array = JSON.parse(data);
-                                if(array == null)
-                                {
+                                if (array == null || array['ktx'] == null || array['ktx'] == "") {
                                     return '';
                                 }
                                 return `
-                                    Từ: ${array['ktx']['bat_dau']} <br>
-                                    Số tháng: ${array['ktx']['so_thang']} <br>
-                                    Tiền 1 tháng : ${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(array['ktx']['so_tien'])} <br>
-                                    Tổng : ${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(array['ktx']['so_tien'] * array['ktx']['so_thang'])} <br>
+                                    Từ: ${array['ktx']['bat_dau'] ?? ""} <br>
+                                    Số tháng: ${array['ktx']['so_thang'] ?? ""} <br>
+                                    Địa chỉ : ${array['ktx']['diachi'] ?? ""} <br>
+                                    Khoảng cách : ${array['ktx']['km'] ?? ""} KM <br>
                                 `;
                                 return ''
                             }
                         },
                         {
-                            data: "id",
-                            render: function(data, type, row){
-                                return 'miễn giảm học phí'
+                            data: "che_do_chinh_sach_data",
+                            render: function(data, type, row) {
+                                let array = JSON.parse(data);
+                                if (array == null || array['mghp'] == null || array['mghp'] == "") {
+                                    return '';
+                                }
+                                return `
+                                    Tháng : ${array['mghp']['so_thang'] ?? ""} <br>
+                                    % đã giảm: ${array['mghp']['phan_tram_da_giam'] ?? ""} <br>
+                                    % giảm: ${array['mghp']['phan_tram_da_giam'] ?? ""} <br>
+                                    Giảm/tháng: ${array['mghp']['so_tien_1_thang_giam'].toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })} <br>
+                                    Giảm/kỳ: ${(array['mghp']['so_tien_1_thang_giam']*5).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })} <br>
+                                `;
                             }
                         },
                         {
-                            data: "id",
-                            render: function(data, type, row){
-                                return 'hỗ trợ tiền ăn'
+                            data: 'che_do_chinh_sach_data',
+                            render: function(data, type, row) {
+                                let array = JSON.parse(data);
+                                if (array == null || array['htta'] == null || array['htta'] == "") {
+                                    return '';
+                                }
+                                return `
+                                    Tháng : ${array['htta']['so_thang'] ?? ""} <br>
+                                    Hỗ trợ/tháng: ${array['htta']['muc_ho_tro'].toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })} <br>
+                                    Hỗ trợ/kỳ: ${(array['htta']['muc_ho_tro']*5).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })} <br>
+                                `;
+                            }
+                        },
+                        {
+                            data: 'che_do_chinh_sach_data',
+                            render: function(data, type, row) {
+                                let array = JSON.parse(data);
+
+                                if (array == null || array['diem'] == null || array['diem'] == "") {
+                                    return '';
+                                }
+                                return `
+                                    Điểm TB : ${array['diem']['diemtb'] ?? ""} <br>
+                                    Điểm rèn luyện : ${array['diem']['diemrenluyen'] ?? ""} <br>
+                                `;
                             }
                         },
                         {
@@ -148,14 +178,15 @@
                             render: function(data, type, row) {
                                 let array = JSON.parse(row['doi_tuong_chinh_sach']);
                                 var dataRes = `<div class="d-flex flex-row">`;
-                                if (row['type'] == 4) {
-                                    if (row['status'] == 0 || row['status'] == -1 || row['status'] == 2 || row['status'] == -2) {
-                                        dataRes += `<div onClick="tiepnhanhs(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
+                                if (array.includes("1") || array.includes("4")) {
+                                    if (row['type'] == 4) {
+                                        if (row['status'] == 0 || row['status'] == -1 || row['status'] == 2 || row['status'] == -2) {
+                                            dataRes += `<div onClick="tiepnhanhs(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                     </div>`;
-                                    }
-                                    if (array.includes("1") || array.includes("4")) {
+                                        }
+
                                         if (row['status'] == 1) {
                                             dataRes += `
                                             <div onClick="duyethoso(${data})" class="ki-duotone ki-file-added fs-2x cursor-pointer text-primary">
@@ -175,19 +206,20 @@
                                                 <span class="path2"></span>
                                             </div>`;
                                     }
+                                    dataRes += `
+                                        <div onClick="tientrinh(${data})" class="ki-duotone ki-information-2 fs-2x cursor-pointer text-warning">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                            <span class="path3"></span>
+                                        </div>
+                                        <div onClick="chitiet(${data})"  class="ki-duotone ki-document fs-2x cursor-pointer text-dark">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </div>
+                                    </div>
+                                    `;
                                 }
-                                dataRes += `
-                                    <div onClick="tientrinh(${data})" class="ki-duotone ki-information-2 fs-2x cursor-pointer text-warning">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                    </div>
-                                    <div onClick="chitiet(${data})"  class="ki-duotone ki-document fs-2x cursor-pointer text-dark">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </div>
-                                </div>
-                                `;
+
                                 return dataRes;
 
                             }

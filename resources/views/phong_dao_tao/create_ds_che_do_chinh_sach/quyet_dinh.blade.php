@@ -15,12 +15,43 @@
                             <div class="d-flex flex-column mb-8 fv-row col-6 pe-4">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                    <span class="required">Số quyết định</span>
+                                    <span class="required">Số quyết định hỗ trợ tiền ăn</span>
                                 </label>
                                 <!--end::Label-->
-                                <input type="text" class="form-control" name="so_QD" />
+                                <input type="text" class="form-control" name="so_QD_TA" />
                             </div>
-                            <div class="col-sm-6">
+                            
+                            <div class="d-flex flex-column mb-8 fv-row col-6 pe-4">
+                                <!--begin::Label-->
+                                <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                    <span class="required">Số quyết định hỗ trợ học phí</span>
+                                </label>
+                                <!--end::Label-->
+                                <input type="text" class="form-control" name="so_QD_HP" />
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row">
+                            <div class="d-flex flex-column mb-8 fv-row col-6 pe-4">
+                                <!--begin::Label-->
+                                <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                    <span class="required">Số quyết định miễn phí chỗ ở(đối tượng 1)</span>
+                                </label>
+                                <!--end::Label-->
+                                <input type="text" class="form-control" name="so_QD_KTX_1" />
+                            </div>
+                            
+                            <div class="d-flex flex-column mb-8 fv-row col-6 pe-4">
+                                <!--begin::Label-->
+                                <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                    <span class="required">Số quyết định miễn phí chỗ ở(đối tượng 4)</span>
+                                </label>
+                                <!--end::Label-->
+                                <input type="text" class="form-control" name="so_QD_KTX_4" />
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex flex-row pb-8">
+                            <div class="col-sm-12">
                                 <label class="form-label required">Thời gian</label>
                                 <div class="input-group log-event" id="kt_td_picker_{{ $target }}_1" data-td-target-input="nearest" data-td-target-toggle="nearest">
                                     <input readonly name="thoi_gian_tao" type="text" class="form-control" data-td-target="#kt_td_picker_{{ $target }}_1" />
@@ -30,6 +61,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="d-flex flex-row">
                             <div class="d-flex flex-column mb-8 fv-row col-6 pe-4" id="select-parent-{{ $target }}-1">
                                 <!--begin::Label-->
@@ -72,33 +104,53 @@
 @push('js')
     <script type="text/javascript">
         let model{{ $target }};
-        const fields = {
-            so_QD: {
-                validators: {
-                    notEmpty: {
-                        message: '{{ __('Vui lòng không để trống mục này') }}'
-                    }
-                }
-            },
-            ky: {
-                validators: {
-                    notEmpty: {
-                        message: '{{ __('Vui lòng không để trống mục này') }}'
-                    }
-                }
-            },
-            nam: {
-                validators: {
-                    notEmpty: {
-                        message: '{{ __('Vui lòng không để trống mục này') }}'
-                    }
-                }
-            }
-        };
         let form_{{ $target }} = document.querySelector('#form_{{ $target }}');
         let validation_{{ $target }} = FormValidation.formValidation(
             form_{{ $target }}, {
-                fields: fields,
+                fields: {
+                    so_QD_TA: {
+                        validators: {
+                            notEmpty: {
+                                message: '{{ __('Vui lòng không để trống mục này') }}'
+                            }
+                        }
+                    },
+                    so_QD_HP: {
+                        validators: {
+                            notEmpty: {
+                                message: '{{ __('Vui lòng không để trống mục này') }}'
+                            }
+                        }
+                    },
+                    so_QD_KTX_1: {
+                        validators: {
+                            notEmpty: {
+                                message: '{{ __('Vui lòng không để trống mục này') }}'
+                            }
+                        }
+                    },
+                    so_QD_KTX_4: {
+                        validators: {
+                            notEmpty: {
+                                message: '{{ __('Vui lòng không để trống mục này') }}'
+                            }
+                        }
+                    },
+                    ky: {
+                        validators: {
+                            notEmpty: {
+                                message: '{{ __('Vui lòng không để trống mục này') }}'
+                            }
+                        }
+                    },
+                    nam: {
+                        validators: {
+                            notEmpty: {
+                                message: '{{ __('Vui lòng không để trống mục này') }}'
+                            }
+                        }
+                    }
+                },
                 plugins: {
                     trigger: new FormValidation.plugins.Trigger(),
                     bootstrap: new FormValidation.plugins.Bootstrap5({
@@ -120,7 +172,7 @@
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
-                        url: "{{ route('PhongDaoTao.MienGiamHP.createQuyetDinh') }}",
+                        url: "{{ route('PhongDaoTao.CheDoChinhSach.createQuyetDinh') }}",
                         data: form.serialize(),
                     }).then((response) => {
                         mess_success('Thông báo',
@@ -157,9 +209,12 @@
             const inputElements = form.querySelector('[name]');
 
 
-            axios.get("{{ route('PhongDaoTao.MienGiamHP.getQuyetDinh') }}").then(
+            axios.get("{{ route('PhongDaoTao.CheDoChinhSach.getQuyetDinh') }}").then(
                 response => {
-                    form.querySelector('[name="so_QD"]').value = response.data["so_QD"] ?? "";
+                    form.querySelector('[name="so_QD_TA"]').value = response.data["so_QD_TA"] ?? "";
+                    form.querySelector('[name="so_QD_HP"]').value = response.data["so_QD_HP"] ?? "";
+                    form.querySelector('[name="so_QD_KTX_1"]').value = response.data["so_QD_KTX_1"] ?? "";
+                    form.querySelector('[name="so_QD_KTX_4"]').value = response.data["so_QD_KTX_4"] ?? "";
                     form.querySelector('[name="tom_tat"]').value = response.data["tom_tat"] ?? "";
                     form.querySelector('[name="nam"]').value = response.data["nam"] ?? "";
 

@@ -237,7 +237,29 @@
         </div>
         <!--end::Menu Item-->
     @endif
+    @if (Role(4))
+        <div class="menu-item mb-2 mt-4">
+            <div class="menu-heading text-uppercase fs-7 fw-bold">Hồ sơ chứng từ</div>
 
+            <div class="app-sidebar-separator separator"></div>
+        </div>
+        <!--begin::Menu Item-->
+        <div class="menu-item">
+            <!--begin::Menu link-->
+            <a class="menu-link {{ request()->routeIs('PhongDaoTao.HoSoChungTu.index') ? 'active' : '' }}" href="{{ route('PhongDaoTao.HoSoChungTu.index') }}">
+                <!--begin::Icon-->
+                <span class="menu-icon">
+                    <i class="ki-outline ki-document fs-2"></i>
+                </span>
+                <!--end::Icon-->
+                <!--begin::Title-->
+                <span class="menu-title">Quản lý hồ sơ chứng từ</span>
+                <!--end::Title-->
+            </a>
+            <!--end::Menu link-->
+        </div>
+        <!--end::Menu Item-->
+    @endif
     @if (Role(5))
         <div class="menu-item mb-2 mt-4">
             <div class="menu-heading text-uppercase fs-7 fw-bold">Hồ sơ sinh viên</div>

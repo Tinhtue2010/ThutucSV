@@ -103,14 +103,14 @@ class MienGiamHPController extends Controller
                 $check->update();
                 $phieu = Phieu::where('id', $check->phieu_id)->first();
                 $phieu->student_id = $user->student_id;
-                $phieu->name = "Đơn xin rút hồ sơ";
+                $phieu->name = "Đơn xin giảm học phí";
                 $phieu->key = "GHP";
                 $phieu->content = json_encode($studentData);
                 $phieu->save();
             } else {
                 $phieu = new Phieu();
                 $phieu->student_id = $user->student_id;
-                $phieu->name = "Đơn xin rút hồ sơ";
+                $phieu->name = "Đơn xin giảm học phí";
                 $phieu->key = "GHP";
                 $phieu->content = json_encode($studentData);
                 $phieu->save();

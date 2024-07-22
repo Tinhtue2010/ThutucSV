@@ -56,6 +56,41 @@ class PhieuController extends Controller
             $phieu = Phieu::where('key','PTTCHP')->where('status',0)->first();
         }
 
+
+        if ($id == "DSCDTA0") {
+            $phieu = Phieu::where('key','DSCDTA')->where('status',0)->first();
+        }
+        if ($id == "QDCDTA0") {
+            $phieu = Phieu::where('key','QDCDTA')->where('status',0)->first();
+        }
+
+        if ($id == "DSCDHP0") {
+            $phieu = Phieu::where('key','DSCDHP')->where('status',0)->first();
+        }
+        if ($id == "QDCDHP0") {
+            $phieu = Phieu::where('key','QDCDHP')->where('status',0)->first();
+        }
+
+
+        if ($id == "DSCDKTX10") {
+            $phieu = Phieu::where('key','DSCDKTX1')->where('status',0)->first();
+        }
+        if ($id == "DSCDKTX40") {
+            $phieu = Phieu::where('key','DSCDKTX4')->where('status',0)->first();
+        }
+
+        if ($id == "QDCDKTX10") {
+            $phieu = Phieu::where('key','QDCDKTX1')->where('status',0)->first();
+        }
+        if ($id == "QDCDKTX40") {
+            $phieu = Phieu::where('key','QDCDKTX4')->where('status',0)->first();
+        }
+
+        if ($id == "PTQT40") {
+            $phieu = Phieu::where('key','PTQT4')->where('status',0)->first();
+        }
+
+
         if (!$phieu) {
             abort(404);
         }
@@ -128,7 +163,50 @@ class PhieuController extends Controller
         {
             return view('document.theodoithongke.m01_03_10_2', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
         }
-        return dd("chưa có phiếu");
+        if($phieu->key == "DSCDTA")
+        {
+            return view('document.theodoithongke.m01_04_05', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if($phieu->key == "QDCDTA")
+        {
+            return view('document.theodoithongke.m01_04_06', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+
+        if($phieu->key == "DSCDHP")
+        {
+            return view('document.theodoithongke.m01_04_07', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if($phieu->key == "QDCDHP")
+        {
+            return view('document.theodoithongke.m01_04_08', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+
+        if($phieu->key == "DSCDKTX1")
+        {
+            return view('document.theodoithongke.m01_04_09', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if($phieu->key == "DSCDKTX4")
+        {
+            return view('document.theodoithongke.m01_04_10', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+        if($phieu->key == "QDCDKTX1")
+        {
+            return view('document.theodoithongke.m01_04_11', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if($phieu->key == "QDCDKTX4")
+        {
+            return view('document.theodoithongke.m01_04_12', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+        if($phieu->key == "PTQT4")
+        {
+            return view('document.theodoithongke.m01_04_13', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+        return abort(404);
     }
     function getData($id = null)
     {

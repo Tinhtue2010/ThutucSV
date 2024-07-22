@@ -148,6 +148,7 @@ trait CommonHelper
     }
     public function queryPagination($request, $query, $searchName = [])
     {
+
         $per_page = $request->per_page ?? 10;
         $page = $request->page ?? 1;
         $offset = 0;
@@ -162,6 +163,7 @@ trait CommonHelper
                 }
             }
             if ($searchName !== [] && $search != '') {
+
                 $query = $query->where(function ($query) use ($searchName, $search) {
                     foreach ($searchName as $field) {
                         $query->orWhere($field, 'like', '%' . $search . '%');

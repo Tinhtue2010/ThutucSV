@@ -24,7 +24,8 @@ class LanhDaoPhongDaoTaoController extends Controller
     {
         $tb_miengiamhp = StopStudy::where('type', 1)->whereNull('parent_id')->where('status', 2)->count();
         $tb_trocapxahoi = StopStudy::where('type', 2)->whereNull('parent_id')->where('status', 2)->count();
-        return view('lanh_dao_phong_dao_tao.index', ['tb_trocapxahoi' => $tb_trocapxahoi, 'tb_miengiamhp' => $tb_miengiamhp]);
+        $tb_chedochinhsach = StopStudy::where('type', 2)->whereNull('parent_id')->where('status', 2)->count();
+        return view('lanh_dao_phong_dao_tao.index', ['tb_trocapxahoi' => $tb_trocapxahoi, 'tb_miengiamhp' => $tb_miengiamhp,"tb_chedochinhsach"=>$tb_chedochinhsach]);
     }
 
     public function getData(Request $request)

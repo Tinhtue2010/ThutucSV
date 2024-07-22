@@ -34,11 +34,12 @@
                                 <th></th>
                                 <th class="text-nowrap" data-name="id">{{__('id')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Trạng thái')}}</th>
-                                <th class="text-nowrap" data-name="student_code">{{__('Sinh viên')}}</th>
+                                <th class="text-nowrap" data-name="student_code" style="width: 150px">{{__('Sinh viên')}}&#09</th>
                                 <th class="text-nowrap" data-name="id">{{__('Đối tượng')}}</th>
-                                <th class="text-nowrap">{{__('Ký túc xá')}}</th>
-                                <th class="text-nowrap">{!!__('Miễn giảm học phí')!!}</th>
-                                <th class="text-nowrap">{!!__('Hỗ trợ tiền ăn')!!}</th>
+                                <th class="text-nowrap" style="width: 160px">{{__('Ký túc xá')}}&#09</th>
+                                <th class="text-nowrap" style="width: 180px">{!!__('Miễn giảm học phí')!!}</th>
+                                <th class="text-nowrap" style="width: 180px">{!!__('Hỗ trợ tiền ăn')!!}</th>
+                                <th class="text-nowrap" style="width: 100px">{!!__('Điểm')!!}</th>
                                 <td class="text-nowrap">{{ __('Chức năng') }}</td>
                             </tr>
                             </thead>
@@ -107,5 +108,7 @@
     @include('phong_dao_tao.create_ds_che_do_chinh_sach.import_ktx')
     @include('phong_dao_tao.create_ds_che_do_chinh_sach.doi_tuong')
     @include('phong_dao_tao.create_ds_che_do_chinh_sach.import_qt_3',['target' => 'import_qt_3'])
-    
+    @include('phong_dao_tao.create_ds_che_do_chinh_sach.import_diem_sv',['target' => 'import_diem_sv'])
+    @include('phong_dao_tao.create_ds_che_do_chinh_sach.quyet_dinh',['target'=>'quyet_dinh'])
+    @include('phong_dao_tao.create_ds_che_do_chinh_sach.quyen_dinh_danh_sach',['target'=>'quyen_dinh_danh_sach'])
 @endsection

@@ -14,6 +14,7 @@ class Phieu extends Model
         'teacher_id',
         'name',
         'key',
-        'status'
+        'status',
+        'file'
     ];
 }

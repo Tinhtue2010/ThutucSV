@@ -107,13 +107,14 @@ class MienGiamHPPhongDaoTaoController extends Controller
 
         $miengiamhp = config('doituong.miengiamhp');
         foreach($query as $item){
-            $tien_1_thang = $item->hocphi*($item->phantramgiam/100);
+            $tien_1_thang = ($item->hocphi/5)*($item->phantramgiam/100);
             $content_DSMGHP[] =  [
                 "ho_ten" => $item->full_name,
                 "ngay_sinh" => Carbon::createFromFormat('Y-m-d', $item->date_of_birth)->format('d/m/Y'),
                 "lop" => $item->lop_name,
                 "doi_tuong" => 'Đối tượng '.$item->type_miengiamhp + 1,
                 "muc_hoc_phi" => $item->hocphi,
+                "student_id" => $item->student_id,
                 "ti_le_giam" => $item->phantramgiam,
                 "so_tien_giam_1_thang" => $tien_1_thang,
                 "so_thang_mien_giam" => 5,

@@ -25,8 +25,9 @@ class PhongDaoTaoController extends Controller
         $tb_miengiamhp = StopStudy::where('type', 1)->where('status', 3)->count();
         $tb_trocapxahoi = StopStudy::where('type', 2)->where('status', 3)->count();
         $tb_trocaphocphi = StopStudy::where('type', 3)->where('status', 3)->count();
+        $tb_chedochinhsach = StopStudy::where('type', 4)->where('status', 3)->count();
         $lop = Lop::get();
-        return view('phong_dao_tao.index', ['tb_miengiamhp' => $tb_miengiamhp, 'tb_trocapxahoi' => $tb_trocapxahoi, 'lop' => $lop, 'tb_trocaphocphi' => $tb_trocaphocphi]);
+        return view('phong_dao_tao.index', ['tb_miengiamhp' => $tb_miengiamhp, 'tb_trocapxahoi' => $tb_trocapxahoi, 'lop' => $lop, 'tb_trocaphocphi' => $tb_trocaphocphi,"tb_chedochinhsach"=>$tb_chedochinhsach]);
     }
 
     public function getData(Request $request)

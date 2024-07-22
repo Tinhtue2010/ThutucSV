@@ -81,9 +81,6 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
             $this->giaiQuyetCongViec($request->ykientiepnhan ?? '', $stopStudy, 4);
             $stopStudy->status = 6;
             $stopStudy->save();
-            $user_id = User::where('student_id', $stopStudy->id)->first()->id;
-            $this->notification("Danh sách trợ cấp xã hội đã được lãnh đạo trường phê duyệt", null, "GHP", $user_id);
-
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
@@ -110,10 +107,6 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
         foreach ($query as $stopStudy) {
             $stopStudy->status = -6;
             $stopStudy->save();
-            $users = User::where('role', 4)->get();
-            foreach ($users as $item) {
-                $this->notification("Danh sách trợ cấp xã hội đã bị từ chối lãnh đạo trường", null, "GHP", $item->id);
-            }
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 0;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;

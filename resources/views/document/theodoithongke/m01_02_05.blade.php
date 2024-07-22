@@ -26,7 +26,7 @@
             <br> của Hiệu trưởng Trường Đại học Hạ Long)
         </div>
         <div class="d-flex flex-column mt-5">
-            <table class="" style="border-collapse: collapse;">
+            <table class="" style="border-collapse: collapse;font-size: 15px">
                 <tr class="text-center p-0">
                     <th class="" rowspan="2">Stt</th>
                     <th class="" style="width: 120px" rowspan="2">
@@ -62,52 +62,8 @@
                         <td>{{ $item['mien_giam_ky'] }}</td>
                     </tr>
                 @endforeach
-                @foreach ($data[1] as $index => $item)
-                    <tr style="height: 30px; text-align: center">
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $item['ho_ten'] }}</td>
-                        <td>{{ $item['ngay_sinh'] }}</td>
-                        <td>{{ $item['lop'] }}</td>
-                        <td>{{ $item['doi_tuong'] }}</td>
-                        <td>{{ $item['muc_hoc_phi'] }}</td>
-                        <td>{{ $item['ti_le_giam'] }}</td>
-                        <td>{{ $item['so_tien_giam_1_thang'] }}</td>
-                        <td>{{ $item['so_thang_mien_giam'] }}</td>
-                        <td>{{ $item['mien_giam_ky'] }}</td>
-                    </tr>
-                @endforeach
-                @foreach ($data[1] as $index => $item)
-                    <tr style="height: 30px; text-align: center">
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $item['ho_ten'] }}</td>
-                        <td>{{ $item['ngay_sinh'] }}</td>
-                        <td>{{ $item['lop'] }}</td>
-                        <td>{{ $item['doi_tuong'] }}</td>
-                        <td>{{ $item['muc_hoc_phi'] }}</td>
-                        <td>{{ $item['ti_le_giam'] }}</td>
-                        <td>{{ $item['so_tien_giam_1_thang'] }}</td>
-                        <td>{{ $item['so_thang_mien_giam'] }}</td>
-                        <td>{{ $item['mien_giam_ky'] }}</td>
-                    </tr>
-                @endforeach
-                @foreach ($data[1] as $index => $item)
-                    <tr style="height: 30px; text-align: center">
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $item['ho_ten'] }}</td>
-                        <td>{{ $item['ngay_sinh'] }}</td>
-                        <td>{{ $item['lop'] }}</td>
-                        <td>{{ $item['doi_tuong'] }}</td>
-                        <td>{{ $item['muc_hoc_phi'] }}</td>
-                        <td>{{ $item['ti_le_giam'] }}</td>
-                        <td>{{ $item['so_tien_giam_1_thang'] }}</td>
-                        <td>{{ $item['so_thang_mien_giam'] }}</td>
-                        <td>{{ $item['mien_giam_ky'] }}</td>
-                    </tr>
-                @endforeach
                 <tr style="height: 30px">
-                    <td class="" colspan="2">Tổng: {{ $data[0]['tong'] }}</td>
-                    <td></td>
-                    <td></td>
+                    <td colspan="3" colspan="2">Tổng: {{ $data[0]['tong'] }}</td>
                     <td></td>
                     <td></td>
                     <td></td>

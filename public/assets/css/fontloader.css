@@ -22,7 +22,7 @@
 .A4{
     font-family: timesVN;
     font-size: 13pt;
-    height: 297mm;
+    height: auto;
     width: 210mm;
     padding: 20mm 18mm 20mm 30mm;
 }

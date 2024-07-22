@@ -17,6 +17,7 @@
                             $noti_title = 'Cảnh báo';
                         }
                     @endphp
+                    @isset($don->note)
                     <div class="d-flex align-items-center bg-light-{{ $noti_class_name }} rounded p-5 mb-7">
                         <i class="ki-outline ki-snapchat text-{{ $noti_class_name }} fs-1 me-5"></i>
                         <div class="flex-grow-1 me-2">
@@ -25,9 +26,8 @@
                                 @if ($don_parent->status == 0)
                                     {{ __('Đơn của bạn đã được gửi đi hãy chờ thông báo tiếp theo') }}
                                 @else
-                                    {{ $don->note }}
+                                    {{ $don->note ?? "" }}
                                 @endif
-
                             </span>
                         </div>
                         @isset($don->phieu_id)
@@ -35,6 +35,8 @@
                         @endisset
 
                     </div>
+                    @endisset
+
                 @endisset
 
                 <div class="card card-flush p-5">
