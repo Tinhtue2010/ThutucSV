@@ -12,22 +12,22 @@
                         <!--end::Title-->
                     </div>
                     <!--end::Page title-->
-                    <!--begin::Actions-->
-                    <div class="d-flex align-items-center gap-2 gap-lg-3">
-                        {{-- <div id="btn-totnghiep" class="btn btn-flex btn-primary h-40px fs-7 fw-bold">Sinh viên tốt nghiệp</div>
+                    @if (Role(4) || Role(0))
+                        <!--begin::Actions-->
+                        <div class="d-flex align-items-center gap-2 gap-lg-3">
+                            {{-- <div id="btn-totnghiep" class="btn btn-flex btn-primary h-40px fs-7 fw-bold">Sinh viên tốt nghiệp</div>
                         <div id="btn-chuatotnghiep" class="btn btn-flex btn-primary h-40px fs-7 fw-bold">Sinh viên đang học</div> --}}
                             <div id="import-file" class="btn btn-flex btn-primary h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
                                 <input class="m-0 p-0 top-0 left-0 w-100 h-100 position-absolute" style="opacity: 0" type="file" id="avatar" name="avatar" accept=".csv" />
-                                {{__("Thêm danh sách sinh viên")}}
+                                {{ __('Thêm danh sách sinh viên') }}
                             </div>
-                        <a href="#" class="btn btn-flex btn-primary h-40px fs-7 fw-bold" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_new_target">Thêm sinh viên</a>
-                    </div>
-                    <!--end::Actions-->
+                            <a href="#" class="btn btn-flex btn-primary h-40px fs-7 fw-bold" data-bs-toggle="modal" data-bs-target="#kt_modal_new_target">Thêm sinh viên</a>
+                        </div>
+                        <!--end::Actions-->
+                    @endif
                 </div>
                 <!--end::Toolbar wrapper-->
             </div>
             <!--end::Toolbar container-->
         </div>
         <!--end::Toolbar-->
-        
