@@ -29,7 +29,7 @@ class GiaoVienController extends Controller
         $user = Auth::user();
 
         $query = StopStudy::query()
-            // ->studentActive()
+            ->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')

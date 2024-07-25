@@ -47,7 +47,7 @@ class GiaoVienService  extends Controller
     {
         try {
 
-            if ($stopStudy->status != 0 && $stopStudy->status != 1) {
+            if ($stopStudy->status != 0 && $stopStudy->status != 1 && $stopStudy->status != -1) {
                 abort(404);
             }
             $stopStudy->update(["status" => -1]);
