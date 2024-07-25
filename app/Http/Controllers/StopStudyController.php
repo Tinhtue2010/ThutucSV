@@ -80,6 +80,7 @@ class StopStudyController extends Controller
                 $phieu->student_id = $user->student_id;
                 $phieu->name = "Đơn xin rút hồ sơ";
                 $phieu->key = "RHS";
+                $phieu->file = json_encode($this->uploadListFile($request,'files','rut_ho_so'));
                 $phieu->content = json_encode($studentData);
                 $phieu->save();
             } else {
@@ -87,6 +88,7 @@ class StopStudyController extends Controller
                 $phieu->student_id = $user->student_id;
                 $phieu->name = "Đơn xin rút hồ sơ";
                 $phieu->key = "RHS";
+                $phieu->file = json_encode($this->uploadListFile($request,'files','rut_ho_so'));
                 $phieu->content = json_encode($studentData);
                 $phieu->save();
 

@@ -195,6 +195,7 @@ class TroCapXHController extends Controller
             $phieu->student_id = $user->student_id;
             $phieu->name = $namePhieu;
             $phieu->key = $keyPhieu;
+            $phieu->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
             $phieu->content = json_encode($studentData);
             $phieu->save();
         } else {
@@ -203,6 +204,7 @@ class TroCapXHController extends Controller
             $phieu->name = $namePhieu;
             $phieu->key = $keyPhieu;
             $phieu->content = json_encode($studentData);
+            $phieu->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
             $phieu->save();
 
             $query = new StopStudy();

@@ -91,6 +91,7 @@ class CheDoChinhSachController extends Controller
                 $phieu->student_id = $user->student_id;
                 $phieu->name = "Đơn xin chế độ chính sách";
                 $phieu->key = "CDCS";
+                $phieu->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
                 $phieu->content = json_encode($studentData);
                 $phieu->save();
             } else {
@@ -98,6 +99,7 @@ class CheDoChinhSachController extends Controller
                 $phieu->student_id = $user->student_id;
                 $phieu->name = "Đơn xin chế độ chính sách";
                 $phieu->key = "CDCS";
+                $phieu->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
                 $phieu->content = json_encode($studentData);
                 $phieu->save();
 
