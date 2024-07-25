@@ -105,7 +105,7 @@ class MienGiamHPController extends Controller
                 $phieu->student_id = $user->student_id;
                 $phieu->name = "Đơn xin giảm học phí";
                 $phieu->key = "GHP";
-                $phieu->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
+                $phieu->file = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
                 $phieu->content = json_encode($studentData);
                 $phieu->save();
             } else {
@@ -114,7 +114,7 @@ class MienGiamHPController extends Controller
                 $phieu->name = "Đơn xin giảm học phí";
                 $phieu->key = "GHP";
                 $phieu->content = json_encode($studentData);
-                $phieu->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
+                $phieu->file = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
                 $phieu->save();
 
                 $query = new StopStudy();
