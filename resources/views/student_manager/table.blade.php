@@ -145,6 +145,7 @@
                                             </g>
                                         </svg>
                                     </div>
+                                    @if(Role(4) || Role(0))
                                     <div onClick="btnDelete('${ url }')" class="ml-2 btn btn-icon btn-bg-light btn-active-color-primary btn-sm svg-icon bg-hover-secondary">
                                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -160,6 +161,8 @@
                                             <span class="path2"></span>
                                         </i>
                                     </div>
+                                    @endif
+
                                 </div>
                             </td>`;
                             }
