@@ -60,7 +60,7 @@ class CheDoChinhSachController extends Controller
             $studentData['hoso'] = $request->hoso;
 
             $doituong = config('doituong.chedochinhsach');
-            dd($doituong);
+            
             $studentData['doituong'] = $doituong[$request->doituong][1];
             $doituong_key = 1;
             if($request->doituong == 2)
