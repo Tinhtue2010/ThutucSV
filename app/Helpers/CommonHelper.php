@@ -251,11 +251,11 @@ trait CommonHelper
             "email" => $email,
             'loai' => $loai
         ];
-        try {
-            Mail::to($email)->send(new SendMail("Thông báo xác nhận chữ ký", 'mail.otp', $data));
-        } catch (\Throwable $th) {
-            abort(404);
-        }
+        // try {
+        //     Mail::to($email)->send(new SendMail("Thông báo xác nhận chữ ký", 'mail.otp', $data));
+        // } catch (\Throwable $th) {
+        //     abort(404);
+        // }
 
         otps::updateOrCreate(
             ['user_id' => $user->id],
