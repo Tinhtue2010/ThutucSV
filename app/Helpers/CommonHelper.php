@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 use App\Mail\SendMail;
 use App\Models\Notification;
-use App\Models\otps;
+use App\Models\Otps;
 use App\Models\Student;
 use App\Models\Teacher;
 use Carbon\Carbon;
