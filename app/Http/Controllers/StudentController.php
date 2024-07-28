@@ -15,11 +15,19 @@ class StudentController extends Controller
         ->leftJoin('khoas','lops.khoa_id','=','khoas.id')
         ->select('students.*','lops.name as lop_name','khoas.name as khoa_name')
         ->where('students.id',$user->student_id)->first();
-        $studentArray = $student->toArray();
-        $totalFields = count($studentArray);
-        $nonNullFields = count(array_filter($studentArray));
-        
-        $percentage = intval(($nonNullFields / $totalFields) * 100);      
+        if($student)
+        {
+            $studentArray = $student->toArray();
+            $totalFields = count($studentArray);
+            $nonNullFields = count(array_filter($studentArray));
+            
+            $percentage = intval(($nonNullFields / $totalFields) * 100);    
+        }
+        else
+        {
+            $percentage = 0;
+        }
+  
         
         return view('student.index', ['percent'=>$percentage,'student'=>$student]);
     }

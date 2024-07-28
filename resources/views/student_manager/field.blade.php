@@ -76,8 +76,7 @@
         <select data-dropdown-parent="#select-parent-{{ $type }}-2" class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="he_tuyen_sinh" data-placeholder="Hệ đào tạo">
             <option value="Đại học">Đại học</option>
             <option value="Cao đẳng chính quy">Cao đẳng chính quy</option>
-            <option value="Liên thông đại học">Liên thông đại học</option>
-            <option value="Thạc sĩ">Thạc sĩ</option>
+            <option value="Trung cấp">Trung cấp</option>
         </select>
     </div>
     <div class="d-flex flex-column mb-8 fv-row col-6 ps-4">
@@ -91,21 +90,14 @@
 </div>
 
 <div class="d-flex flex-row">
-    <div class="d-flex flex-column mb-8 fv-row col-6 pe-4">
+    <div class="d-flex flex-column mb-8 fv-row col-12 pe-4" id="select-parent-{{ $type }}-nganh">
         <!--begin::Label-->
         <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
             <span class="required">Ngành tuyển sinh</span>
         </label>
         <!--end::Label-->
-        <input type="text" class="form-control" name="nganh_tuyen_sinh" />
-    </div>
-    <div class="d-flex flex-column mb-8 fv-row col-6 ps-4">
-        <!--begin::Label-->
-        <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-            <span class="required">Trình độ</span>
-        </label>
-        <!--end::Label-->
-        <input type="text" class="form-control" name="trinh_do" />
+        <select data-dropdown-parent="#select-parent-{{ $type }}-nganh" class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="nganh_tuyen_sinh" data-placeholder="Ngành tuyển sinh">
+        </select>
     </div>
 </div>
 
@@ -143,3 +135,80 @@
     <!--end::Label-->
     <textarea class="form-control" name="note"></textarea>
 </div>
+
+@push('js')
+    <script>
+        var daiHoc = [
+            "Công nghệ thông tin",
+            "Khoa học máy tính",
+            "Thiết kế đồ họa",
+            "Nuôi trồng thủy sản",
+            "Quản lý tài nguyên và môi trường",
+            "Ngôn ngữ Anh",
+            "Ngôn ngữ Nhật",
+            "Ngôn ngữ Hàn Quốc",
+            "Ngôn ngữ Trung Quốc",
+            "Kế toán",
+            "Quản trị kinh doanh",
+            "Quản trị khách sạn",
+            "Quản trị dịch vụ du lịch và lữ hành",
+            "Quản trị nhà hàng và dịch vụ ăn uống",
+            "Giáo dục Mầm non",
+            "Giáo dục Tiểu học",
+            "Sư phạm Tin học",
+            "Sư phạm Ngữ Văn",
+            "Sư phạm Tiếng Anh",
+            "Sư phạm Khoa học tự nhiên",
+            "Văn học",
+            "Quản lý văn hóa"
+        ];
+
+        var caoDang = [
+            "Giáo dục Mầm non",
+            "Thanh nhạc"
+        ];
+
+        var trungCap = [
+            "Biểu diễn nhạc cụ Phương Tây",
+            "Biểu diễn nhạc cụ truyền thống",
+            "Thanh nhạc",
+            "Hội họa"
+        ];
+
+        $(document).ready(function() {
+            const selectedValue = $('[data-dropdown-parent="#select-parent-{{ $type }}-2"]').val();
+            $('[data-dropdown-parent="#select-parent-{{ $type }}-nganh"]').empty();
+
+            let nganhHoc = [];
+            if (selectedValue === "Đại học") {
+                nganhHoc = daiHoc;
+            } else if (selectedValue === "Cao đẳng chính quy") {
+                nganhHoc = caoDang;
+            } else if (selectedValue === "Trung cấp") {
+                nganhHoc = trungCap;
+            }
+
+            nganhHoc.forEach(function(nganh) {
+                $('[data-dropdown-parent="#select-parent-{{ $type }}-nganh"]').append(new Option(nganh, nganh));
+            });
+        });
+        $('[data-dropdown-parent="#select-parent-{{ $type }}-2"]').change(function(e) {
+
+            const selectedValue = $(this).val();
+            $('[data-dropdown-parent="#select-parent-{{ $type }}-nganh"]').empty();
+
+            let nganhHoc = [];
+            if (selectedValue === "Đại học") {
+                nganhHoc = daiHoc;
+            } else if (selectedValue === "Cao đẳng chính quy") {
+                nganhHoc = caoDang;
+            } else if (selectedValue === "Trung cấp") {
+                nganhHoc = trungCap;
+            }
+
+            nganhHoc.forEach(function(nganh) {
+                $('[data-dropdown-parent="#select-parent-{{ $type }}-nganh"]').append(new Option(nganh, nganh));
+            });
+        });
+    </script>
+@endpush

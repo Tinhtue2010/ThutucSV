@@ -206,7 +206,7 @@
                 Datatable.loadData();
             }).catch(function (error) {
                 mess_error("Cảnh báo",
-                    "{{ __('An error has occurred.') }}"
+                    "{{ __('Có lỗi xảy ra, hãy đảm bảo rằng không có sinh viên nào đang theo học lớp này!') }}"
                 )
             });
         }

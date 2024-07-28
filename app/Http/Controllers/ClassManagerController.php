@@ -7,6 +7,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Models\Teacher;
 use App\Models\Khoa;
+use App\Models\Student;
 use Illuminate\Support\Facades\DB;
 
 class ClassManagerController extends Controller
@@ -37,7 +38,7 @@ class ClassManagerController extends Controller
             }
         );
 
-        $data = $this->queryPagination($request, $query, []);
+        $data = $this->queryPagination($request, $query, ['khoas.name','lops.name']);
 
         return $data;
     }
@@ -56,6 +57,11 @@ class ClassManagerController extends Controller
     function detele($id)
     {
         try {
+            $check = Student::where('lop_id',$id)->exists();
+            if($check)
+            {
+                abort(404);
+            }
             return Lop::findOrFail($id)->delete();
         } catch (QueryException $e) {
             abort(404);

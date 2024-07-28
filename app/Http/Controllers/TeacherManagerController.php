@@ -22,21 +22,21 @@ class TeacherManagerController extends Controller
     public function getData(Request $request)
     {
         $query = Teacher::query()
-                ->leftJoin("khoas", "teachers.khoa_id", "=", "khoas.id")
-                ->leftJoin("users", "teachers.id", "=", "users.teacher_id")
-                ->select("teachers.*", "khoas.name as khoa_name","users.username as username");
+            ->leftJoin("khoas", "teachers.khoa_id", "=", "khoas.id")
+            ->leftJoin("users", "teachers.id", "=", "users.teacher_id")
+            ->select("teachers.*", "khoas.name as khoa_name", "users.username as username", "users.role");
 
-            $query->when(
-                $request->has('status_error')
+        $query->when(
+            $request->has('status_error')
                 && $request->status_error !== 'all',
-                function ($query) use ($request) {
-                    $query->where(
-                        $request->status_error === 0 ? 'return_type' : null,
-                        $request->status_error === 0 ? null
-                            : $request->status_error
-                    );
-                }
-            );
+            function ($query) use ($request) {
+                $query->where(
+                    $request->status_error === 0 ? 'return_type' : null,
+                    $request->status_error === 0 ? null
+                        : $request->status_error
+                );
+            }
+        );
         // if (isset($request->school_year)) {
         //     $query->where('school_year', $request->school_year);
         // }
@@ -56,10 +56,10 @@ class TeacherManagerController extends Controller
     {
         try {
             $teacher = DB::table('teachers')
-            ->join('users', 'users.teacher_id', '=', 'teachers.id')
-            ->select('teachers.*', 'users.role')
-            ->where('teachers.id', $id)
-            ->first();
+                ->join('users', 'users.teacher_id', '=', 'teachers.id')
+                ->select('teachers.*', 'users.role')
+                ->where('teachers.id', $id)
+                ->first();
 
             return $teacher;
         } catch (QueryException $e) {
@@ -109,7 +109,7 @@ class TeacherManagerController extends Controller
         if (!$teacher) {
             return response()->json(['message' => 'Teacher not found'], 404);
         }
-    
+
         $teacher->update($request->only([
             'full_name',
             'khoa_id',
@@ -118,8 +118,8 @@ class TeacherManagerController extends Controller
             'email',
             'chuc_danh'
         ]));
-    
-        $user = $teacher->user;
+
+        $user = User::where('teacher_id',$teacher->id)->first();
         if ($user) {
             $user->role = $request->role;
             $user->save();
@@ -151,23 +151,34 @@ class TeacherManagerController extends Controller
                         }
                         $columnName = $header[$data['header'][$index_header]];
                         if ($data['header'][$index_header] == 'khoa') {
-                            $khoa = Khoa::where('name', 'like', '%' . $item[$index_header] . '%')->first();
-                            if ($khoa) {
-                                $teacher->khoa_id = $khoa->id;
+                            if ($item[$index_header] == "" || $item[$index_header] == null) {
                             } else {
-                                throw new \Exception("Không tìm thấy khoa với tên: " . $item[$index_header]);
+                                $khoa = Khoa::where('name', 'like', '%' . $item[$index_header] . '%')->first();
+                                if ($khoa) {
+                                    $teacher->khoa_id = $khoa->id;
+                                } else {
+                                    throw new \Exception("Không tìm thấy khoa với tên: " . $item[$index_header]);
+                                }
                             }
-                        } 
-                        elseif ($data['header'][$index_header] == 'tai_khoan'){
+                        } elseif ($data['header'][$index_header] == 'tai_khoan') {
                             $quyen_index = array_search("quyen", $data['header']);
                             if ($quyen_index !== false) {
                                 $user->role =  $item[$quyen_index];
                             }
                             $user->username = $item[$index_header];
                             $user->password = bcrypt($item[$index_header]);
-                        }
-                        else {
+                        } else {
                             $teacher->$columnName = $item[$index_header];
+                            if ($data['header'][$index_header] == 'email') {
+                                if ($user->username == null) {
+                                    $quyen_index = array_search("quyen", $data['header']);
+                                    if ($quyen_index !== false) {
+                                        $user->role =  $item[$quyen_index];
+                                    }
+                                    $user->username = explode('@', $item[$index_header])[0];
+                                    $user->password = bcrypt(explode('@', $item[$index_header])[0]);
+                                }
+                            }
                         }
                     }
                     $teacher->save();
@@ -189,8 +200,8 @@ class TeacherManagerController extends Controller
     function resetPass($id)
     {
         try {
-            $user = User::where('teacher_id',$id)->first();
-            $user->update(["password"=>bcrypt($user->username)]);
+            $user = User::where('teacher_id', $id)->first();
+            $user->update(["password" => bcrypt($user->username)]);
             return true;
         } catch (QueryException $e) {
             abort(404);

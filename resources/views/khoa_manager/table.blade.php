@@ -73,7 +73,7 @@
                             data: 'id',
                             render: function (data, type, row) {
                                 const url =
-                                    "{{ route('classManager.detele') }}/" +
+                                    "{{ route('khoaManager.detele') }}/" +
                                     data
                                 return `
                             <td>

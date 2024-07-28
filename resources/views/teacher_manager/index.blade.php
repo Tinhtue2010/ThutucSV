@@ -43,6 +43,7 @@
                                     <th class="text-nowrap" data-name="phone">{{ __('Điện thoại') }}</th>
                                     <th class="text-nowrap" data-name="email">{{ __('Email') }}</th>
                                     <th class="text-nowrap" data-name="school_year">{{ __('Chức danh') }}</th>
+                                    <th class="text-nowrap" data-name="school_year">{{ __('Quyền truy cập') }}</th>
                                     <td class="text-nowrap">{{ __('Chức năng') }}</td>
                                 </tr>
                             </thead>

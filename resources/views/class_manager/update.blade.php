@@ -66,7 +66,7 @@
                         Datatable.loadData();
                     }).catch(function (error) {
                         mess_error("Cảnh báo",
-                            "{{ __('An error has occurred.') }}"
+                            "{{ __('Cần kiểm tra lại thông tin') }}"
                         )
                     });
                 } else {

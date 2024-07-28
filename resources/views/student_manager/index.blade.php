@@ -151,4 +151,5 @@
     @include('student_manager.update')
     @include('student_manager.import')
     @include('student_manager.change_pass')
+    
 @endsection
