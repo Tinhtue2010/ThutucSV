@@ -37,17 +37,8 @@ class TeacherManagerController extends Controller
                 );
             }
         );
-        // if (isset($request->school_year)) {
-        //     $query->where('school_year', $request->school_year);
-        // }
-        // if (isset($request->he_tuyen_sinh)) {
-        //     $query->where('he_tuyen_sinh', $request->he_tuyen_sinh);
-        // } 
-        // if (isset($request->status_dk)) {
-        //     $query->where('status_dk', $request->status_dk);
-        // }
 
-        $data = $this->queryPagination($request, $query);
+        $data = $this->queryPagination($request, $query,['khoas.name','users.username','teachers.sdt']);
 
         return $data;
     }
