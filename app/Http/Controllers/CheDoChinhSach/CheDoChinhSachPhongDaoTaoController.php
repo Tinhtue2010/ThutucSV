@@ -237,6 +237,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
                         ->first();
 
                     if ($check_phieu) {
+                        dd("oke");
                         $che_do_chinh_sach_data = json_decode($check_phieu->che_do_chinh_sach_data, true);
                         $che_do_chinh_sach_data["diem"] = [
                             "diemtb" => $item[$indexHeader['diem_trung_binh']],
