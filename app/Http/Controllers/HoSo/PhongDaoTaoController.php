@@ -129,6 +129,9 @@ class PhongDaoTaoController extends Controller
             if ($stopStudy->type == 3) {
                 return $this->phongdaotao->tiepnhanhsTCHP($request, $stopStudy);
             }
+            if ($stopStudy->type == 4) {
+                return $this->phongdaotao->tiepnhanhsCDCS($request, $stopStudy);
+            }
         } catch (\Throwable $th) {
             abort(404);
         }
@@ -169,6 +172,9 @@ class PhongDaoTaoController extends Controller
         if ($stopStudy->type == 3) {
             return $this->phongdaotao->tuchoihsTCHP($request, $stopStudy);
         }
+        if ($stopStudy->type == 4) {
+            return $this->phongdaotao->tuchoihsCDCS($request, $stopStudy);
+        }
     }
 
     function duyeths(Request $request)
@@ -185,6 +191,9 @@ class PhongDaoTaoController extends Controller
             return $this->phongdaotao->duyethsTCXH($request, $stopStudy);
         }
         if ($stopStudy->type == 3) {
+            return $this->phongdaotao->duyethsTCXH($request, $stopStudy);
+        }
+        if ($stopStudy->type == 4) {
             return $this->phongdaotao->duyethsTCXH($request, $stopStudy);
         }
     }
