@@ -178,7 +178,6 @@ class TeacherManagerController extends Controller
                     $user->save();
                 }
             } catch (\Throwable $th) {
-                dd($th);
                 DB::rollback();
                 abort(404);
             }

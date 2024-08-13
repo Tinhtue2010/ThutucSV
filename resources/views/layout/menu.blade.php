@@ -32,7 +32,7 @@
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
-                <span class="menu-title">Quản lý khoa</span>
+                <span class="menu-title">Quản lý khoa, phòng ban</span>
                 <!--end::Title-->
             </a>
             <!--end::Menu link-->
@@ -83,7 +83,7 @@
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
-                <span class="menu-title">Quản lý khoa</span>
+                <span class="menu-title">Quản lý khoa, phòng ban</span>
                 <!--end::Title-->
             </a>
             <!--end::Menu link-->

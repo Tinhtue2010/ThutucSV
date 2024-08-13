@@ -11,7 +11,7 @@
                 <form class="form " id="form_create">
                     <div class="card-body">
                         @csrf
-                        @include('khoa_manager.field',[
+                        @include('khoa_manager.field', [
                             'type' => '_create',
                         ])
                     </div>
@@ -41,10 +41,30 @@
                 }
             }
         );
-        $('#form_create').submit(function (e) {
+
+
+        function btnCreate() {
+            modalEl = document.querySelector('#kt_modal_new_target');
+            if (!modalEl) {
+                return;
+            }
+            modelUpdate = new bootstrap.Modal(modalEl);
+            form = document.querySelector('#form_create');
+            axios.get("{{ route('khoaManager.nganh') }}").then(
+                response => {
+                    modelUpdate.show();
+                    $('select[name="nganh[]"]').empty();
+                    response.data.forEach(e => {
+                        var newOption = new Option(`${e.tennganh} - ${e.hedaotao == 0 ? "ĐH" : e.hedaotao == 1 ? "THS" : e.hedaotao == 2 ? "CĐ" : "TC"} (${e.manganh})    `, e.manganh, false, false);
+                        $('select[name="nganh[]"]').append(newOption).trigger('change');
+                    });
+                })
+        }
+
+        $('#form_create').submit(function(e) {
             e.preventDefault();
             let form = $(this);
-            validation_create.validate().then(function (status) {
+            validation_create.validate().then(function(status) {
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
@@ -58,7 +78,7 @@
                         $('#kt_modal_new_target').modal(
                             'hide');
                         Datatable.loadData();
-                    }).catch(function (error) {
+                    }).catch(function(error) {
                         mess_error("Cảnh báo",
                             "{{ __('Có lỗi xảy ra bạn cần kiểm tra lại thông tin.') }}"
                         )

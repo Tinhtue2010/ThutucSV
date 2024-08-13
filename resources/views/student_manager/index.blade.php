@@ -74,23 +74,13 @@
                                 <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                                     <th></th>
                                     <th><input type="checkbox" onchange="selectAll(this)"/></th>
-                                    <th class="text-nowrap" data-name="id">Id</th>
-                                    <th class="text-nowrap" data-name="full_name">{{ __('Họ và tên') }}</th>
-                                    <th class="text-nowrap" data-name="gioitinh">{{ __('Giới tính') }}</th>
-                                    <th class="text-nowrap" data-name="status">{{ __('Trạng thái') }}</th>
                                     <th class="text-nowrap" data-name="student_code">{{ __('Mã sinh viên') }}</th>
-                                    <th class="text-nowrap" data-name="student_id">{{ __('Mã học sinh') }}</th>
-                                    <th class="text-nowrap" data-name="khoa_name">{{ __('Khoa') }}</th>
-                                    <th class="text-nowrap" data-name="lop_name">{{ __('Lớp') }}</th>
+                                    <th class="text-nowrap" data-name="full_name">{{ __('Họ và tên') }}</th>
                                     <th class="text-nowrap" data-name="date_of_birth">{{ __('Ngày sinh') }}</th>
-                                    <th class="text-nowrap" data-name="phone">{{ __('Điện thoại') }}</th>
-                                    <th class="text-nowrap" data-name="email">{{ __('Email') }}</th>
-                                    <th class="text-nowrap" data-name="school_year">{{ __('Khóa') }}</th>
-                                    <th class="text-nowrap" data-name="he_tuyen_sinh">{{ __('Hệ tuyển sinh') }}</th>
-                                    <th class="text-nowrap" data-name="nganh_tuyen_sinh">{{ __('Ngành tuyển sinh') }}</th>
-                                    <th class="text-nowrap" data-name="trinh_do">{{ __('Trình độ') }}</th>
-                                    <th class="text-nowrap" data-name="ngay_nhap_hoc">{{ __('Ngày nhập học') }}</th>
-                                    <th class="text-nowrap" data-name="note">{{ __('Ghi chú') }}</th>
+                                    <th class="text-nowrap" data-name="lop_name">{{ __('Lớp') }}</th>
+                                    <th class="text-nowrap" data-name="khoa_name">{{ __('Khoa') }}</th>
+                                    <th class="text-nowrap" data-name="school_year">{{ __('Hệ đào tạo') }}</th>
+                                    <th class="text-nowrap" data-name="ngay_nhap_hoc">{{ __('Liên khóa') }}</th>
                                     <td class="text-nowrap">{{ __('Chức năng') }}</td>
                                 </tr>
                             </thead>

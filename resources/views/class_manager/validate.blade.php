@@ -14,13 +14,6 @@
                 },
             }
         },
-        teacher_id: {
-            validators: {
-                notEmpty: {
-                    message: '{{ __('Vui lòng không để trống mục này') }}'
-                },
-            }
-        },
         khoa_id: {
             validators: {
                 notEmpty: {
@@ -28,12 +21,5 @@
                 },
             }
         },
-        hocphi: {
-            validators: {
-                notEmpty: {
-                    message: '{{ __('Vui lòng không để trống mục này') }}'
-                },
-            }
-        }
     }
 </script>

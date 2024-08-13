@@ -59,40 +59,10 @@
                             }
                         },
                         {
-                            data: 'id'
-                        },
-                        {
-                            data: 'full_name'
-                        },
-                        {
-                            data: 'gioitinh',
-                            render: function(data, type, row) {
-                                if (data == 0)
-                                    return "Nữ";
-                                else return "Nam";
-                            }
-                        },
-                        {
-                            data: 'status',
-                            render: function(data, type, row) {
-                                if (data == 0)
-                                    return "Đang học";
-                                else if (data == 1)
-                                    return "Rút hồ sơ"
-                                else return "Đã ra trường"
-                            }
-                        },
-                        {
                             data: 'student_code'
                         },
                         {
-                            data: 'student_id'
-                        },
-                        {
-                            data: 'khoa_name'
-                        },
-                        {
-                            data: 'lop_name'
+                            data: 'full_name'
                         },
                         {
                             data: 'date_of_birth',
@@ -101,31 +71,19 @@
                             }
                         },
                         {
-                            data: 'phone'
+                            data: 'lop_name'
                         },
                         {
-                            data: 'email'
+                            data: 'khoa_name'
                         },
                         {
-                            data: 'school_year'
-                        },
-                        {
-                            data: 'he_tuyen_sinh',
-                            render: function(data, type, row) {
-                                return data;
+                            data: 'hedaotao', 
+                            render: function(data, type, row){
+                                return `${data.hedaotao == 0 ? "Đại học" : data.hedaotao == 1 ? "Thạc sĩ" : data.hedaotao == 2 ? "Cao đẳng" : "Trung cấp"}`;
                             }
                         },
                         {
-                            data: 'nganh_tuyen_sinh'
-                        },
-                        {
-                            data: 'trinh_do'
-                        },
-                        {
-                            data: 'ngay_nhap_hoc'
-                        },
-                        {
-                            data: 'note'
+                            data: 'school_year'
                         },
                         {
                             data: 'id',

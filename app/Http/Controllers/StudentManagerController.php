@@ -17,7 +17,8 @@ class StudentManagerController extends Controller
     function index()
     {
         $lops = Lop::get();
-        return view('student_manager.index', ['lops' => $lops]);
+        $khoas = Khoa::get();
+        return view('student_manager.index', ['lops' => $lops,'khoas' => $khoas, ]);
     }
 
     public function getData(Request $request)
@@ -27,7 +28,8 @@ class StudentManagerController extends Controller
         $lopIds = Lop::where('teacher_id', $user->teacher_id)->pluck('id');
         $query = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
             ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
-            ->select('students.*', 'lops.khoa_id', 'lops.name as lop_name', 'khoas.name as khoa_name');
+            ->leftJoin("nganhs", "lops.nganh_id", "=", "nganhs.manganh")
+            ->select('students.*','khoas.name as khoa_name','nganhs.hedaotao', 'lops.khoa_id', 'lops.name as lop_name', 'khoas.name as khoa_name');
         if (Role(2) || Role(3)) {
             if (isset($request->khoa)) {
                 $query = $query->where('lops.khoa_id', $teacher->khoa_id);
@@ -57,7 +59,9 @@ class StudentManagerController extends Controller
     public function getDataChild($id)
     {
         try {
-            $error = Student::findOrFail($id);
+            $error = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            ->select('students.*','lops.*')
+            ->findOrFail($id);
 
             return $error;
         } catch (QueryException $e) {
@@ -81,15 +85,10 @@ class StudentManagerController extends Controller
             $student =  Student::create($request->only([
                 'full_name',
                 'student_code',
-                'student_id',
                 'date_of_birth',
                 'phone',
-                'email',
                 'lop_id',
                 'school_year',
-                'he_tuyen_sinh',
-                'nganh_tuyen_sinh',
-                'trinh_do',
                 'ngay_nhap_hoc',
                 'status',
                 'note',

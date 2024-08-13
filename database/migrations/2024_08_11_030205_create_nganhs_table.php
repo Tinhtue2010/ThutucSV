@@ -13,16 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('lops', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-
+        Schema::create('nganhs', function (Blueprint $table) {
+            $table->string('manganh')->unique()->primary();
+            $table->string('tennganh');
+            $table->boolean('hedaotao')->default(0);
+            
             $table->unsignedBigInteger('khoa_id')->nullable();
             $table->foreign('khoa_id')->references('id')->on('khoas')->onDelete('set null');
-
-                        
-
-
+            
+            
             $table->timestamps();
         });
     }
@@ -34,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lops');
+        Schema::dropIfExists('nganhs');
     }
 };

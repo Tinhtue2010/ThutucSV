@@ -57,15 +57,13 @@
                             data: 'name'
                         },
                         {
-                            data: 'created_at',
+                            data: 'nganhs',
                             render: function (data, type, row) {
-                                return moment(data).format("DD/MM/YYYY");
-                            }
-                        },
-                        {
-                            data: 'updated_at',
-                            render: function (data, type, row) {
-                                return moment(data).format("DD/MM/YYYY");
+                                var res = ``;
+                                data.forEach(e => {
+                                    res += `${e.tennganh} - ${e.hedaotao == 0 ? "ĐH" : e.hedaotao == 1 ? "THS" : e.hedaotao == 2 ? "CĐ" : "TC"} - (${e.manganh}) <br/>`;
+                                });
+                                return res;
                             }
                         },
 

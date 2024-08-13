@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Lop extends Model
+class Nganhs extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'khoa_id','nganh_id','teacher_id','hocphi'];
+    protected $fillable = ["tennganh","manganh","hedaotao","khoa_id"];
+
 
     public function khoa()
     {

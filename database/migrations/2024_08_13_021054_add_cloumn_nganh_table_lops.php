@@ -13,17 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('lops', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-
-            $table->unsignedBigInteger('khoa_id')->nullable();
-            $table->foreign('khoa_id')->references('id')->on('khoas')->onDelete('set null');
-
-                        
-
-
-            $table->timestamps();
+        Schema::table('lops', function (Blueprint $table) {
+            $table->string('nganh_id')->nullable();
+            $table->foreign('nganh_id')->references('manganh')->on('nganhs')->onDelete('set null');
+            
         });
     }
 
@@ -34,6 +27,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lops');
+        Schema::table('lops', function (Blueprint $table) {
+            //
+        });
     }
 };

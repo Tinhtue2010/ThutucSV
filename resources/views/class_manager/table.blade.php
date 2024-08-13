@@ -41,7 +41,6 @@
                         "dataSrc": function (response) {
                             renderPagination(response.page,
                                 response.max_page);
-                                console.log('response.data :>> ', response.data);
                             return response.data;
                         },
                     },
@@ -58,19 +57,19 @@
                             data: 'name'
                         },
                         {
-                            data: 'nganh'
-                        },
-                        {
                             data: 'khoa_name'
                         },
                         {
-                            data: 'teacher_name'
+                            data: 'nganh'
                         },
                         {
-                            data: 'hocphi',
+                            data: 'hedaotao', 
                             render: function(data, type, row){
-                                return data.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+                                return `${data.hedaotao == 0 ? "Đại học" : data.hedaotao == 1 ? "Thạc sĩ" : data.hedaotao == 2 ? "Cao đẳng" : "Trung cấp"}`;
                             }
+                        },
+                        {
+                            data: 'teacher_name'
                         },
                         {
                             data: 'id',

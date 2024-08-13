@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Khoa;
+use App\Models\Lop;
+use App\Models\Nganhs;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +19,7 @@ class KhoaManagerController extends Controller
 
     public function getData(Request $request)
     {
-        $query = Khoa::query();
+        $query = Khoa::with('nganhs');
 
         $query->when(
             $request->has('status_error')
@@ -39,14 +41,9 @@ class KhoaManagerController extends Controller
     public function getDataChild($id)
     {
         try {
-            $error = Khoa::findOrFail($id);
+            $khoa = Khoa::with('nganhs')->findOrFail($id);
 
-            return [
-                'id'         => $error->id,
-                'name'       => $error->name,
-                'created_at' => $error->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $error->updated_at->format('Y-m-d H:i:s'),
-            ];
+            return $khoa;
         } catch (QueryException $e) {
             abort(404);
         }
@@ -64,29 +61,55 @@ class KhoaManagerController extends Controller
     public function create(Request $request)
     {
         try {
-            Khoa::create($request->only([
+            DB::beginTransaction(); 
+        
+            $khoa = Khoa::create($request->only([
                 'name',
             ]));
-
+            
+            Nganhs::whereNull('khoa_id')
+                ->whereIn('manganh', $request->nganh)
+                ->update(['khoa_id' => $khoa->id]);
+        
+            DB::commit(); 
+        
             return true;
-        } catch (QueryException) {
+        } catch (QueryException $e) {
+            DB::rollBack(); 
             return abort(404);
         }
     }
 
     public function update(Request $request, $id)
     {
-        $khoa = Khoa::find($id);
+        try {
+            DB::beginTransaction(); 
+        
+            $khoa = Khoa::find($id);
 
-        if (!$khoa) {
-            return response()->json([
-                'message' => 'Not found',
-            ], 404);
+            if (!$khoa) {
+                return response()->json([
+                    'message' => 'Not found',
+                ], 404);
+            }
+    
+            $khoa->update($request->only([
+                'name',
+            ]));
+            
+            Nganhs::where('khoa_id', $khoa->id)->update(['khoa_id' => null]);
+
+            Nganhs::whereNull('khoa_id')
+                ->whereIn('manganh', $request->nganh ?? [])
+                ->update(['khoa_id' => $khoa->id]);
+        
+            DB::commit(); 
+        
+            return true;
+        } catch (QueryException $e) {
+            DB::rollBack(); 
+            return abort(404);
         }
-
-        return $khoa->update($request->only([
-            'name',
-        ]));
     }
     function importFile(Request $request)
     {
@@ -108,5 +131,29 @@ class KhoaManagerController extends Controller
         }
         abort(404);
         return true;
+    }
+
+    function nganh() {
+        $nganh = Nganhs::whereNull('khoa_id')->get();
+        return $nganh;
+    }
+    function nganhKhoa($id) {
+        if(!isset($id))
+        {
+            return abort(404);
+        }
+        $nganh = Nganhs::where('khoa_id',$id)->get();
+        return $nganh;
+    }
+
+    function lop($id) {
+        if(!isset($id))
+        {
+            return abort(404);
+        }
+        $lop = Lop::where('lops.khoa_id',$id)
+        ->leftJoin("nganhs", "lops.nganh_id", "=", "nganhs.manganh")
+        ->select("lops.*","nganhs.tennganh as tennganh","nganhs.hedaotao as hedaotao")->get();
+        return $lop;
     }
 }

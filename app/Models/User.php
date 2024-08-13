@@ -85,17 +85,17 @@ class User extends Authenticatable
             return false;
         } else {
             $lop_id = Student::find($this->student_id)->lop_id;
-            $nganh = Lop::find($lop_id)->nganh;
+            $manganh = Lop::find($lop_id)->manganh;
             $list_nganh = [
-                "quan_tri_dich_vu_du_lich_va_lu_hanh",
-                "quan_tri_khach_san",
-                "quan_tri_nha_hang_va_dich_vu_an_uong",
-                "ngon_ngu_nhat",
-                "ngon_ngu_han_quoc",
-                "ngon_ngu_trung_quoc",
-                "nuoi_trong_thuy_san",
+                "7810103",
+                "7810201",
+                "7810202",
+                "7220209",
+                "7220210",
+                "7220204",
+                "7620301",
             ];            
-            if (in_array($this->convertVietnamese($nganh), $list_nganh)) {
+            if (in_array($manganh, $list_nganh)) {
                 return true;
             }
         }

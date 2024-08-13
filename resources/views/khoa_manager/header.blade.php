@@ -8,7 +8,7 @@
             <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
                 <!--begin::Title-->
                 <h1 class="page-heading d-flex flex-column justify-content-center text-dark fw-bold fs-3 m-0">
-                    Quản lý khoa</h1>
+                    Quản lý khoa, phòng ban</h1>
                 <!--end::Title-->
             </div>
             <!--end::Page title-->
@@ -16,10 +16,10 @@
             <div class="d-flex align-items-center gap-2 gap-lg-3">
                 <div id="import-file" class="btn btn-flex btn-primary h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
                     <input class="m-0 p-0 top-0 left-0 w-100 h-100 position-absolute" style="opacity: 0" type="file" id="avatar" name="avatar" accept=".csv" />
-                    {{__("Thêm danh sách khoa")}}
+                    {{__("Thêm danh sách khoa, phòng ban")}}
                 </div>
-                <a href="#" class="btn btn-flex btn-primary h-40px fs-7 fw-bold" data-bs-toggle="modal"
-                   data-bs-target="#kt_modal_new_target">Thêm khoa mới</a>
+                <div onclick="btnCreate()" class="btn btn-flex btn-primary h-40px fs-7 fw-bold cursor-pointer"
+                   data-bs-target="#kt_modal_new_target">Thêm khoa, phòng ban mới</div>
             </div>
             <!--end::Actions-->
         </div>

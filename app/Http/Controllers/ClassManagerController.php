@@ -24,7 +24,8 @@ class ClassManagerController extends Controller
         $query = Lop::query()
             ->leftJoin("khoas", "lops.khoa_id", "=", "khoas.id")
             ->leftJoin("teachers", "lops.teacher_id", "=", "teachers.id")
-            ->select("lops.*", "teachers.full_name as teacher_name", "khoas.name as khoa_name");
+            ->leftJoin("nganhs", "lops.nganh_id", "=", "nganhs.manganh")
+            ->select("lops.*","nganhs.tennganh as nganh","nganhs.hedaotao as hedaotao", "teachers.full_name as teacher_name", "khoas.name as khoa_name");
 
         $query->when(
             $request->has('status_error')
@@ -38,7 +39,7 @@ class ClassManagerController extends Controller
             }
         );
 
-        $data = $this->queryPagination($request, $query, ['khoas.name','lops.name']);
+        $data = $this->queryPagination($request, $query, ['khoas.name', 'lops.name']);
 
         return $data;
     }
@@ -57,9 +58,8 @@ class ClassManagerController extends Controller
     function detele($id)
     {
         try {
-            $check = Student::where('lop_id',$id)->exists();
-            if($check)
-            {
+            $check = Student::where('lop_id', $id)->exists();
+            if ($check) {
                 abort(404);
             }
             return Lop::findOrFail($id)->delete();
@@ -73,7 +73,7 @@ class ClassManagerController extends Controller
         try {
             Lop::create($request->only([
                 'name',
-                'nganh',
+                'nganh_id',
                 'khoa_id',
                 'teacher_id',
                 'hocphi'
@@ -108,36 +108,28 @@ class ClassManagerController extends Controller
     {
         if ($request->hasFile('csv_file')) {
             $data = $this->importCSV($request->file('csv_file'));
-            $header = [
-                "ten_lop" => "name",
-                "khoa" => "khoa_id",
-                "nganh" => "nganh",
-                "hoc_phi" => "hocphi"
-            ];
+
             DB::beginTransaction();
             try {
                 foreach ($data['data'] as $index => $item) {
                     $lop = new Lop();
-                    foreach ($data['header'] as $index_header => $item_header) {
-                        if (!isset($header[$data['header'][$index_header]])) {
-                            continue;
-                        }
-                        $columnName = $header[$data['header'][$index_header]];
-                        if ($data['header'][$index_header] == 'khoa') {
-                            $khoa = Khoa::where('name', 'like', '%' . $item[$index_header] . '%')->first();
-                            if ($khoa) {
-                                $lop->khoa_id = $khoa->id;
-                            } else {
-                                throw new \Exception("Không tìm thấy khoa với tên: " . $item[$index_header]);
-                            }
-                        } else {
-                            $lop->$columnName = $item[$index_header];
-                        }
+
+                    $khoa = Khoa::where('name', 'like', '%' . $item[1] . '%')->first();
+                    if ($khoa) {
+                        $lop->khoa_id = $khoa->id;
+                    } else {
+                        throw new \Exception("Không tìm thấy khoa với tên: " . $item[1]);
                     }
+
+                    $lop->name = $item[0];
+                    $lop->nganh_id = $this->getMaNganh($item[0]);
+                    
+
                     $lop->save();
                 }
             } catch (\Throwable $th) {
                 DB::rollback();
+                return $th;
                 abort(404);
             }
             DB::commit();

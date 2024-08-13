@@ -79,7 +79,6 @@
 
 
         function btnEdit(data) {
-            console.log("test");
             modalEl = document.querySelector('#kt_modal_update_target');
             if (!modalEl) {
                 return;

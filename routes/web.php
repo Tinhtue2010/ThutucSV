@@ -367,6 +367,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('create', [KhoaManagerController::class, 'create'])->name('create');
         Route::post('update/{id?}', [KhoaManagerController::class, 'update'])->name('update');
         Route::post('import-file', [KhoaManagerController::class, 'importFile'])->name('importFile');
+
+        Route::get('nganh', [KhoaManagerController::class, 'nganh'])->name('nganh');
+        Route::get('nganh/{id?}', [KhoaManagerController::class, 'nganhKhoa'])->name('nganhKhoa');
+        Route::get('lop/{id?}', [KhoaManagerController::class, 'lop'])->name('lop');
     });
 
     Route::middleware('role:classManager')->name('classManager.')->prefix('class-manager')->group(function () {

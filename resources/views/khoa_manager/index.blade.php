@@ -36,10 +36,8 @@
                             <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                                 <th></th>
                                 <th class="text-nowrap" data-name="id">Id</th>
-                                <th class="text-nowrap" data-name="name">{{ __('Tên khoa') }}</th>
-                                <th class="text-nowrap" data-name="created_at">{{ __('Tạo lúc') }}</th>
-                                <th class="text-nowrap" data-name="updated_at">{{ __('Cập nhật lúc') }}</th>
-
+                                <th class="text-nowrap" data-name="name">{{ __('Tên khoa, phòng ban') }}</th>
+                                <th data-name="created_at">{{ __('Ngành') }}</th>
                                 <td class="text-nowrap">{{ __('Chức năng') }}</td>
                             </tr>
                             </thead>

@@ -11996,7 +11996,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sZeroRecords": "No matching records found"
+			"sZeroRecords": "Không có dữ liệu"
 		},
 	
 	

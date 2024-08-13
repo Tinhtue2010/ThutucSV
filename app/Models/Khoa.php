@@ -10,6 +10,12 @@ class Khoa extends Model
     use HasFactory;
 
     protected $fillable = [
-            'name',
-        ];
+        'name',
+    ];
+
+
+    public function nganhs()
+    {
+        return $this->hasMany(Nganhs::class, 'khoa_id');
+    }
 }

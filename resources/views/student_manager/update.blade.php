@@ -1,5 +1,4 @@
-<div class="modal fade" id="kt_modal_update_target" tabindex="-1" role="dialog"
-    aria-hidden="true">
+<div class="modal fade" id="kt_modal_update_target" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -12,15 +11,13 @@
                 <form class="form" id="form_update">
                     <div class="card-body">
                         @csrf
-                        @include('student_manager.field',[
+                        @include('student_manager.field', [
                             'type' => '_update',
                         ])
                     </div>
                     <div class="card-footer">
-                        <button type="submit"
-                            class="btn btn-success mr-2">{{ __('Cập nhật') }}</button>
-                        <button type="reset"
-                            class="btn btn-secondary">{{ __('Nhập lại') }}</button>
+                        <button type="submit" class="btn btn-success mr-2">{{ __('Cập nhật') }}</button>
+                        <button type="reset" class="btn btn-secondary">{{ __('Nhập lại') }}</button>
                     </div>
                 </form>
             </div>
@@ -41,7 +38,7 @@
                     trigger: new FormValidation.plugins.Trigger(),
                     bootstrap: new FormValidation.plugins.Bootstrap5({
                         rowSelector: '.fv-row',
-                        eleInvalidClass: '', 
+                        eleInvalidClass: '',
                         eleValidClass: ''
                     })
                 }
@@ -70,8 +67,8 @@
                     });
                 } else {
                     mess_error("Cảnh báo",
-                            "{{ __('Có lỗi xảy ra bạn cần kiểm tra lại thông tin.') }}"
-                        )
+                        "{{ __('Có lỗi xảy ra bạn cần kiểm tra lại thông tin.') }}"
+                    )
                 }
             });
         });
@@ -85,18 +82,34 @@
             modelUpdate = new bootstrap.Modal(modalEl);
             form = document.querySelector('#form_update');
             id = data;
+
+            var lop_id = 0;
             axios.get("{{ route('studentManager.getDataChild') }}/" + data).then(
                 response => {
                     modelUpdate.show();
                     const inputElements = form.querySelectorAll('[name]');
                     inputElements.forEach(e => {
                         if (e.name != '_token') {
-                            e.value = response.data[e.name] == null ? '' : response.data[e.name] ;
+                            e.value = response.data[e.name] == null ? '' : response.data[e.name];
                             var event = new Event('change');
                             e.dispatchEvent(event);
                         }
                     });
-                })
+                    lop_id = response.data['lop_id'];
+                    return axios.get("{{ route('khoaManager.lop') }}/" + response.data['khoa_id']);
+                }
+            ).then(
+                response => {
+                    $('select[name="lop_id"]').prop('disabled', false);
+                    $('select[name="lop_id"]').empty();
+                    
+                    response.data.forEach(e => {
+                        var newOption = new Option(`${e.name} - ${e.hedaotao == 0 ? "ĐH" : e.hedaotao == 1 ? "THS" : e.hedaotao == 2 ? "CĐ" : "TC"}`, e.id, false, false);
+                        $('select[name="lop_id"]').append(newOption).trigger('change');
+                    });
+                    $('select[name="lop_id"]').val(lop_id).trigger('change');
+                }
+            );
         }
     </script>
 @endpush

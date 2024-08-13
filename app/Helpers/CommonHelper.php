@@ -301,4 +301,42 @@ trait CommonHelper
         }
         return false;
     }
+
+
+
+    function getMaNganh($lop) {
+        $mappings = [
+            'NA' => '7220201',
+            'NB' => '7220209',
+            'HQ' => '7220210',
+            'TQ' => '7220204',
+            'LH' => '7810103',
+            'KS' => '7810201',
+            'AU' => '7810202',
+            'QK' => '7340101',
+            'TS' => '7620301',
+            'MT' => '7850101',
+            'VH' => '7229042',
+            'KM' => '7480101',
+            'CT' => '7480201',
+            'ĐH' => '7210403',
+            'STH' => '7140202',
+            'SMN' => '7140201',
+            'CM' => '51140201',
+            'VBC' => '7229030',
+            'CTN' => '6210225',
+            'TTN' => '5210225',
+            'THH' => '5210103',
+            'TNP' => '5210217',
+            'TNT' => '5210216'
+        ];
+    
+        foreach ($mappings as $shortCode => $maNganh) {
+            if (strpos($lop, $shortCode) !== false) {
+                return $maNganh;
+            }
+        }
+        
+        return null;
+    }    
 }
