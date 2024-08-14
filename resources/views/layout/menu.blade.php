@@ -490,40 +490,43 @@
 
     @endif
 
-    <div class="menu-item mb-2 mt-4">
-        <div class="menu-heading text-uppercase fs-7 fw-bold"> Khác</div>
-        <div class="app-sidebar-separator separator"></div>
-    </div>
+    @if (!Role(0))
+        <div class="menu-item mb-2 mt-4">
+            <div class="menu-heading text-uppercase fs-7 fw-bold"> Khác</div>
+            <div class="app-sidebar-separator separator"></div>
+        </div>
 
-    @if (!Role(1))
+        @if (!Role(1))
+            <div class="menu-item">
+                <!--begin::Menu link-->
+                <a class="menu-link {{ request()->routeIs('Profile.GiaoVien.info') ? 'active' : '' }}" href="{{ route('Profile.GiaoVien.info') }}">
+                    <!--begin::Icon-->
+                    <span class="menu-icon">
+                        <i class="ki-outline ki-gear fs-2x"></i>
+                    </span>
+                    <!--end::Icon-->
+                    <!--begin::Title-->
+                    <span class="menu-title">Cài đặt</span>
+                    <!--end::Title-->
+                </a>
+                <!--end::Menu link-->
+            </div>
+        @endif
+
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('Profile.GiaoVien.info') ? 'active' : '' }}" href="{{ route('Profile.GiaoVien.info') }}">
+            <a class="menu-link {{ request()->routeIs('notification.index') ? 'active' : '' }}" href="{{ route('notification.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
-                    <i class="ki-outline ki-gear fs-2x"></i>
+                    <i class="bi bi-inbox fs-1"></i>
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
-                <span class="menu-title">Cài đặt</span>
+                <span class="menu-title">Hòm thư</span>
                 <!--end::Title-->
             </a>
             <!--end::Menu link-->
         </div>
     @endif
 
-    <div class="menu-item">
-        <!--begin::Menu link-->
-        <a class="menu-link {{ request()->routeIs('notification.index') ? 'active' : '' }}" href="{{ route('notification.index') }}">
-            <!--begin::Icon-->
-            <span class="menu-icon">
-                <i class="bi bi-inbox fs-1"></i>
-            </span>
-            <!--end::Icon-->
-            <!--begin::Title-->
-            <span class="menu-title">Hòm thư</span>
-            <!--end::Title-->
-        </a>
-        <!--end::Menu link-->
-    </div>
 </div>
