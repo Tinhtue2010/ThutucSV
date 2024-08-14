@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             NganhsSeeder::class,
             LopsSeeder::class,
             GiaoviensSeeder::class,
+            SinhViensSeeder::class,
         ]);
     }
 }

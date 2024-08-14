@@ -97,7 +97,7 @@
         </div>
     </div>
 @endif
-<div class="d-flex flex-row">
+{{-- <div class="d-flex flex-row">
     <div class="d-flex flex-column mb-8 fv-row col-12" id="select-parent-{{ $type }}-4">
         <!--begin::Label-->
         <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -109,7 +109,7 @@
             <option value="1">Nam</option>
         </select>
     </div>
-</div>
+</div> --}}
 <div class="d-flex flex-column mb-8 fv-row">
     <!--begin::Label-->
     <label class="d-flex align-items-center fs-6 fw-semibold mb-2">

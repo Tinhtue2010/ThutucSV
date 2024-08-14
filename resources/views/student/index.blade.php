@@ -61,34 +61,10 @@
                                                 <!--end::Label-->
                                             </div>
                                             <!--end::Stat-->
-                                            <!--begin::Stat-->
-                                            <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
-                                                <!--begin::Number-->
-                                                <div class="d-flex align-items-center">
-                                                    <i class="ki-outline ki-archive-tick fs-3 text-success me-2"></i>
-                                                    <div class="fs-2 fw-bold counted" data-kt-countup="true" data-kt-initialized="1">Ngành</div>
-                                                </div>
-                                                <!--end::Number-->
-                                                <!--begin::Label-->
-                                                <div class="fw-semibold fs-6 text-gray-400">{{ $student->nganh_tuyen_sinh }}</div>
-                                                <!--end::Label-->
-                                            </div>
-                                            <!--end::Stat-->
                                         </div>
                                         <!--end::Stats-->
                                     </div>
                                     <!--end::Wrapper-->
-                                    <!--begin::Progress-->
-                                    <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
-                                        <div class="d-flex justify-content-between w-100 mt-auto mb-2">
-                                            <span class="fw-semibold fs-6 text-gray-400">Hoàn thành hồ sơ</span>
-                                            <span class="fw-bold fs-6">{{ $percent }}%</span>
-                                        </div>
-                                        <div class="h-5px mx-3 w-100 bg-light mb-3">
-                                            <div class="bg-success rounded h-5px" role="progressbar" style="width: {{ $percent }}%;" aria-valuenow="{{ $percent }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <!--end::Progress-->
                                 </div>
                                 <!--end::Stats-->
                             </div>
@@ -142,18 +118,6 @@
                         </div>
                         <!--end::Row-->
 
-                        <!--begin::Row-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Mã học sinh</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ $student->student_id }}</span>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Row-->
                         <!--begin::Row-->
                         <div class="row mb-7">
                             <!--begin::Label-->
@@ -211,44 +175,6 @@
                             <!--begin::Col-->
                             <div class="col-lg-8">
                                 <span class="fw-bold fs-6 text-gray-800">{{ $student->khoa_name }}</span>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Row-->
-                        <!--begin::Row-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Hệ đào tạo</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">
-                                    {{ $student->he_tuyen_sinh }}
-                                </span>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Row-->
-                        <!--begin::Row-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Ngành tuyển sinh</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ $student->nganh_tuyen_sinh }}</span>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Row-->
-                        <!--begin::Row-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Trình độ</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ $student->trinh_do }}</span>
                             </div>
                             <!--end::Col-->
                         </div>

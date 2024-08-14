@@ -12,7 +12,7 @@
                         <!--end::Title-->
                     </div>
                     <!--end::Page title-->
-                    @if (Role(4) || Role(0))
+                    @if (Role(0))
                         <!--begin::Actions-->
                         <div class="d-flex align-items-center gap-2 gap-lg-3">
                             {{-- <div id="btn-totnghiep" class="btn btn-flex btn-primary h-40px fs-7 fw-bold">Sinh viên tốt nghiệp</div>

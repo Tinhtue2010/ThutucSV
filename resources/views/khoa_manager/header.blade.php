@@ -13,15 +13,16 @@
             </div>
             <!--end::Page title-->
             <!--begin::Actions-->
-            <div class="d-flex align-items-center gap-2 gap-lg-3">
-                <div id="import-file" class="btn btn-flex btn-primary h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
-                    <input class="m-0 p-0 top-0 left-0 w-100 h-100 position-absolute" style="opacity: 0" type="file" id="avatar" name="avatar" accept=".csv" />
-                    {{__("Thêm danh sách khoa, phòng ban")}}
+            @if (Role(0))
+                <div class="d-flex align-items-center gap-2 gap-lg-3">
+                    <div id="import-file" class="btn btn-flex btn-primary h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
+                        <input class="m-0 p-0 top-0 left-0 w-100 h-100 position-absolute" style="opacity: 0" type="file" id="avatar" name="avatar" accept=".csv" />
+                        {{ __('Thêm danh sách khoa, phòng ban') }}
+                    </div>
+                    <div onclick="btnCreate()" class="btn btn-flex btn-primary h-40px fs-7 fw-bold cursor-pointer" data-bs-target="#kt_modal_new_target">Thêm khoa, phòng ban mới</div>
                 </div>
-                <div onclick="btnCreate()" class="btn btn-flex btn-primary h-40px fs-7 fw-bold cursor-pointer"
-                   data-bs-target="#kt_modal_new_target">Thêm khoa, phòng ban mới</div>
-            </div>
-            <!--end::Actions-->
+                <!--end::Actions-->
+            @endif
         </div>
         <!--end::Toolbar wrapper-->
     </div>
@@ -30,7 +31,6 @@
 <!--end::Toolbar-->
 @push('js')
     <script>
-        
         $('#import-file input[type="file"]').change(function(e) {
             var file = e.target.files[0];
             var fileName = file.name;
@@ -40,7 +40,7 @@
             formData.append('_token', '{{ csrf_token() }}');
 
             $.ajax({
-                url: '{{route("khoaManager.importFile")}}',
+                url: '{{ route('khoaManager.importFile') }}',
                 type: 'POST',
                 data: formData,
                 contentType: false,
@@ -49,7 +49,7 @@
                     console.log("test");
                     mess_success('Thông báo',
                         "Tải lên thành công")
-                        Datatable.loadData();
+                    Datatable.loadData();
                 },
                 error: function(xhr, status, error) {
                     mess_error("Cảnh báo",
