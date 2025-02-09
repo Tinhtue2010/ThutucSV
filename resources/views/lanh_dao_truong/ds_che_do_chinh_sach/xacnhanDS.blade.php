@@ -37,6 +37,7 @@
         let id = 0;
         let model{{$target}};
 
+
         let form_{{$target}} = document.querySelector('#form_{{$target}}');
         let validation_{{$target}} = FormValidation.formValidation(
             form_{{$target}}, {
