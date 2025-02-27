@@ -13,8 +13,13 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+
+$client_id = env('VNPT_CLIENT_ID');
+$client_secret = env("VNPT_CLIENT_SECRET");  
+
 trait CommonHelper
 {
+ 
     public function importCSV($file)
     {
         $path = $file->getRealPath();
@@ -339,4 +344,7 @@ trait CommonHelper
         
         return null;
     }    
+
+    
+
 }

@@ -9,7 +9,8 @@
             </div>
             <div class="modal-body">
                 <div class="form" id="form_chu_ky">
-                    <h4 class="text-center">Bạn hãy nhập mã xác nhận được gửi vào gmail "{{ Auth::user()->gmail() }}", mã xác nhận chỉ có tác dụng trong 30s</h4>
+                    <h4 class="text-center">Yêu cầu ký số của bạn đã được gửi tới ứng dụng VNPT SmartCA của bạn.</h4>
+                    <div class="d-flex"><p class="mt-auto mb-0">Thời gian xác nhận còn lại: </p> <h1 id="demnguoc" class="mb-0 ms-2">05:00</h1></div>
                     <div class="card-body mt-10">
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
@@ -43,8 +44,33 @@
                 mess_error("Cảnh báo", "Gửi mã OTP thất bại")
             })
         });
+        let countdownInterval;
+        function startCountdown(duration, elementId) {
+            let timer = duration, minutes, seconds;
+            let countdownElement = document.getElementById(elementId);
+
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+
+            countdownInterval = setInterval(function () {
+                minutes = Math.floor(timer / 60);
+                seconds = timer % 60;
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                countdownElement.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.textContent = "Hết giờ!";
+                }
+            }, 1000);
+        }
 
         async function checkMaXacNhan() {
+            startCountdown(300, "demnguoc");
             var modalEl = document.querySelector('#kt_modal_chu_ky_target');
             var modelchu_ky = new bootstrap.Modal(modalEl);
             modelchu_ky.show();
@@ -62,7 +88,7 @@
                             confirmButton: "btn btn-primary"
                         }
                     }).then(function(res){
-                        // chưa cập nhật thông tin giáo viên
+                        // chưa cập nhật thông tin chữ ký và các thông tin khác
                         location.href = "{{route("student.info")}}";
                     });
                 }

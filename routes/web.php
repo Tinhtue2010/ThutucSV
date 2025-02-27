@@ -408,6 +408,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::name('otp.')->prefix('otp')->group(function () {
         Route::get('chu-ky', [OtpController::class, 'createOtpChuKy'])->name('createOtpChuKy');
         Route::get('check-chu-ky/{otp?}', [OtpController::class, 'checkOtpChuKy'])->name('checkOtpChuKy');
+        Route::get("check-info-signature",[OtpController::class,'checkSignature'])->name('checkSignature');
     });
 });
 
