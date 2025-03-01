@@ -40,8 +40,13 @@ use App\Http\Controllers\TroCapXaHoi\TroCapXaHoiLanhDaoTruongController;
 use App\Http\Controllers\TroCapXaHoi\TroCapXaHoiPhongDaoTaoController;
 use App\Http\Controllers\TroCapXHController;
 use App\Mail\SendMail;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
+
+use mikehaertl\wkhtmlto\Pdf;
+
 
 /*
     |--------------------------------------------------------------------------
@@ -400,16 +405,32 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('read-all', [NotificationController::class, 'readAll'])->name('readAll');
         Route::get('/{type}', [NotificationController::class, 'viewNotifi'])->name('viewNotifi');
     });
-    Route::name('phieu.')->prefix('phieu')->group(function () {
-        Route::get('giai-quyet-cong-viec/{id?}', [PhieuController::class, 'giaQuyetCongViec'])->name('giaQuyetCongViec');
-        Route::get('get-data/{id?}', [PhieuController::class, 'getData'])->name('getData');
-        Route::get('{id?}', [PhieuController::class, 'index'])->name('index');
-    });
+
     Route::name('otp.')->prefix('otp')->group(function () {
         Route::get('chu-ky', [OtpController::class, 'createOtpChuKy'])->name('createOtpChuKy');
         Route::get('check-chu-ky/{otp?}', [OtpController::class, 'checkOtpChuKy'])->name('checkOtpChuKy');
         Route::get("check-info-signature",[OtpController::class,'checkSignature'])->name('checkSignature');
     });
+    Route::get('/export-pdf', function () {
+        $url = 'http://localhost:8000/phieu/1'; // Đường dẫn đến trang bạn muốn xuất PDF
+    
+        $pdf = SnappyPdf::loadFile($url)
+            ->setPaper('a4')
+            ->setOption('encoding', 'utf-8');
+    
+        return Response::make($pdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="phieu.pdf"',
+        ]);
+    });
+    
+    
 });
 
 Route::get('pdf', [DocumentController::class, 'index']);
+
+Route::name('phieu.')->prefix('phieu')->group(function () {
+    Route::get('giai-quyet-cong-viec/{id?}', [PhieuController::class, 'giaQuyetCongViec'])->name('giaQuyetCongViec');
+    Route::get('get-data/{id?}', [PhieuController::class, 'getData'])->name('getData');
+    Route::get('{id?}', [PhieuController::class, 'index'])->name('index');
+});

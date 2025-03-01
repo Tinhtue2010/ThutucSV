@@ -17,7 +17,7 @@ class OtpController extends Controller
         }
         
     }
-    function checkSignature() : Returntype {
-        
+    function checkSignature() {
+        $this->getInfoSignature('022201001759');
     }
 }

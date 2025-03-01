@@ -13,13 +13,22 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+class OAuth2Config
+{
+    public $client_id;
+    public $client_secret;
 
-$client_id = env('VNPT_CLIENT_ID');
-$client_secret = env("VNPT_CLIENT_SECRET");  
+    public function __construct()
+    {
+        $this->client_id = config('services.vnpt.client_id');
+        $this->client_secret = config('services.vnpt.client_secret');
+    }
+}
+
 
 trait CommonHelper
 {
- 
+
     public function importCSV($file)
     {
         $path = $file->getRealPath();
@@ -71,36 +80,276 @@ trait CommonHelper
     function convertVietnamese($str)
     {
         $vietnamese = array(
-            'à', 'á', 'ạ', 'ả', 'ã', 'â', 'ầ', 'ấ', 'ậ', 'ẩ', 'ẫ', 'ă', 'ằ', 'ắ', 'ặ', 'ẳ', 'ẵ',
-            'è', 'é', 'ẹ', 'ẻ', 'ẽ', 'ê', 'ề', 'ế', 'ệ', 'ể', 'ễ',
-            'ì', 'í', 'ị', 'ỉ', 'ĩ',
-            'ò', 'ó', 'ọ', 'ỏ', 'õ', 'ô', 'ồ', 'ố', 'ộ', 'ổ', 'ỗ', 'ơ', 'ờ', 'ớ', 'ợ', 'ở', 'ỡ',
-            'ù', 'ú', 'ụ', 'ủ', 'ũ', 'ư', 'ừ', 'ứ', 'ự', 'ử', 'ữ',
-            'ỳ', 'ý', 'ỵ', 'ỷ', 'ỹ',
+            'à',
+            'á',
+            'ạ',
+            'ả',
+            'ã',
+            'â',
+            'ầ',
+            'ấ',
+            'ậ',
+            'ẩ',
+            'ẫ',
+            'ă',
+            'ằ',
+            'ắ',
+            'ặ',
+            'ẳ',
+            'ẵ',
+            'è',
+            'é',
+            'ẹ',
+            'ẻ',
+            'ẽ',
+            'ê',
+            'ề',
+            'ế',
+            'ệ',
+            'ể',
+            'ễ',
+            'ì',
+            'í',
+            'ị',
+            'ỉ',
+            'ĩ',
+            'ò',
+            'ó',
+            'ọ',
+            'ỏ',
+            'õ',
+            'ô',
+            'ồ',
+            'ố',
+            'ộ',
+            'ổ',
+            'ỗ',
+            'ơ',
+            'ờ',
+            'ớ',
+            'ợ',
+            'ở',
+            'ỡ',
+            'ù',
+            'ú',
+            'ụ',
+            'ủ',
+            'ũ',
+            'ư',
+            'ừ',
+            'ứ',
+            'ự',
+            'ử',
+            'ữ',
+            'ỳ',
+            'ý',
+            'ỵ',
+            'ỷ',
+            'ỹ',
             'đ',
-            'À', 'Á', 'Ạ', 'Ả', 'Ã', 'Â', 'Ầ', 'Ấ', 'Ậ', 'Ẩ', 'Ẫ', 'Ă', 'Ằ', 'Ắ', 'Ặ', 'Ẳ', 'Ẵ',
-            'È', 'É', 'Ẹ', 'Ẻ', 'Ẽ', 'Ê', 'Ề', 'Ế', 'Ệ', 'Ể', 'Ễ',
-            'Ì', 'Í', 'Ị', 'Ỉ', 'Ĩ',
-            'Ò', 'Ó', 'Ọ', 'Ỏ', 'Õ', 'Ô', 'Ồ', 'Ố', 'Ộ', 'Ổ', 'Ỗ', 'Ơ', 'Ờ', 'Ớ', 'Ợ', 'Ở', 'Ỡ',
-            'Ù', 'Ú', 'Ụ', 'Ủ', 'Ũ', 'Ư', 'Ừ', 'Ứ', 'Ự', 'Ử', 'Ữ',
-            'Ỳ', 'Ý', 'Ỵ', 'Ỷ', 'Ỹ',
+            'À',
+            'Á',
+            'Ạ',
+            'Ả',
+            'Ã',
+            'Â',
+            'Ầ',
+            'Ấ',
+            'Ậ',
+            'Ẩ',
+            'Ẫ',
+            'Ă',
+            'Ằ',
+            'Ắ',
+            'Ặ',
+            'Ẳ',
+            'Ẵ',
+            'È',
+            'É',
+            'Ẹ',
+            'Ẻ',
+            'Ẽ',
+            'Ê',
+            'Ề',
+            'Ế',
+            'Ệ',
+            'Ể',
+            'Ễ',
+            'Ì',
+            'Í',
+            'Ị',
+            'Ỉ',
+            'Ĩ',
+            'Ò',
+            'Ó',
+            'Ọ',
+            'Ỏ',
+            'Õ',
+            'Ô',
+            'Ồ',
+            'Ố',
+            'Ộ',
+            'Ổ',
+            'Ỗ',
+            'Ơ',
+            'Ờ',
+            'Ớ',
+            'Ợ',
+            'Ở',
+            'Ỡ',
+            'Ù',
+            'Ú',
+            'Ụ',
+            'Ủ',
+            'Ũ',
+            'Ư',
+            'Ừ',
+            'Ứ',
+            'Ự',
+            'Ử',
+            'Ữ',
+            'Ỳ',
+            'Ý',
+            'Ỵ',
+            'Ỷ',
+            'Ỹ',
             'Đ'
         );
 
         $latin = array(
-            'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a',
-            'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e',
-            'i', 'i', 'i', 'i', 'i',
-            'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o',
-            'u', 'u', 'u', 'u', 'u', 'u', 'u', 'u', 'u', 'u', 'u',
-            'y', 'y', 'y', 'y', 'y',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'i',
+            'i',
+            'i',
+            'i',
+            'i',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'y',
+            'y',
+            'y',
+            'y',
+            'y',
             'd',
-            'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
-            'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E',
-            'I', 'I', 'I', 'I', 'I',
-            'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-            'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U',
-            'Y', 'Y', 'Y', 'Y', 'Y',
+            'A',
+            'A',
+            'A',
+            'A',
+            'A',
+            'A',
+            'A',
+            'A',
+            'A',
+            'A',
+            'A',
+            'A',
+            'A',
+            'A',
+            'A',
+            'A',
+            'A',
+            'E',
+            'E',
+            'E',
+            'E',
+            'E',
+            'E',
+            'E',
+            'E',
+            'E',
+            'E',
+            'E',
+            'I',
+            'I',
+            'I',
+            'I',
+            'I',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+            'O',
+            'U',
+            'U',
+            'U',
+            'U',
+            'U',
+            'U',
+            'U',
+            'U',
+            'U',
+            'U',
+            'U',
+            'Y',
+            'Y',
+            'Y',
+            'Y',
+            'Y',
             'D'
         );
         if (substr($str, 0, 3) == "\xEF\xBB\xBF") {
@@ -114,7 +363,7 @@ trait CommonHelper
 
         return $str;
     }
-    
+
     public function convertDate($format, $date)
     {
         try {
@@ -292,7 +541,7 @@ trait CommonHelper
     public function checkOtpApi($otp)
     {
         $user = Auth::user();
-        $otpRecord = Otps::where('user_id', $user->id)->where('status',1)->first();
+        $otpRecord = Otps::where('user_id', $user->id)->where('status', 1)->first();
         if (!$otpRecord) {
             return false;
         }
@@ -309,7 +558,8 @@ trait CommonHelper
 
 
 
-    function getMaNganh($lop) {
+    function getMaNganh($lop)
+    {
         $mappings = [
             'NA' => '7220201',
             'NB' => '7220209',
@@ -335,16 +585,67 @@ trait CommonHelper
             'TNP' => '5210217',
             'TNT' => '5210216'
         ];
-    
+
         foreach ($mappings as $shortCode => $maNganh) {
             if (strpos($lop, $shortCode) !== false) {
                 return $maNganh;
             }
         }
-        
+
         return null;
-    }    
+    }
+    function getGUID()
+    {
+        mt_srand((int)microtime() * 10000); //optional for php 4.2.0 and up.
+        $charid = strtolower(md5(uniqid(rand(), true)));
+        $hyphen = chr(45); // "-"
+        $uuid = substr($charid, 0, 8) . $hyphen
+            . substr($charid, 8, 4) . $hyphen
+            . substr($charid, 12, 4) . $hyphen
+            . substr($charid, 16, 4) . $hyphen
+            . substr($charid, 20, 12);
+        return $uuid;
+    }
+    function api_smartca($link, $data)
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $link,
+            CURLOPT_HTTPHEADER => [
+                'Accept: application/json',
+                'Content-Type: application/json'
+            ],
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_SSL_CIPHER_LIST => 'DEFAULT@SECLEVEL=1',
+            CURLOPT_POSTFIELDS => json_encode($data)
+        ]);
+        $response = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $msg = json_decode($response);
+        curl_close($curl);
+        if ($httpcode != 200) {
+            print_r('<pre>');
+            print_r($response);
+            print_r('</pre>');
+        }
+        return $msg;
+    }
 
-    
 
+    function getInfoSignature($cccd)
+    {
+        $config = new OAuth2Config();
+        $data_getCertificate = [
+            "sp_id" => $config->client_id,
+            "sp_password" => $config->client_secret,
+            "user_id" => $cccd,
+            "transaction_id" => $this->getGUID()
+        ];
+        $msg_getCertificate = $this->api_smartca("https://gwsca.vnpt.vn/sca/sp769/v1/credentials/get_certificate", $data_getCertificate);
+        print_r("<pre>");
+        print_r($msg_getCertificate->data->user_certificates);
+        print_r("</pre>");
+    }
 }
