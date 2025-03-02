@@ -4,14 +4,16 @@
     <div id="doc_view" class="A4 d-flex flex-column ">
         <div class="text-center">CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
         <div class="text-center fw-bold">Độc lập - Tự do - Hạnh phúc</div>
-        <div style="
+        <div
+            style="
         width: 203px;
         height: 1px;
         background-color: black;
         margin-top: -1px;
         margin-left: auto;
         margin-right: auto;
-      "></div>
+      ">
+        </div>
         <div class="text-center fw-bold" style="margin-top: 35px">
             ĐƠN XIN THÔI HỌC VÀ RÚT HỒ SƠ
         </div>
@@ -26,90 +28,88 @@
         </div>
         <div class="d-flex flex-column">
             <p>
-                Họ và tên sinh viên: {{ $data['full_name'] }} &nbsp;&nbsp; Sinh ngày: {{ $data['date_of_birth'] }}
-                <br />
-                Lớp: {{ $data['lop'] }} &nbsp; Khoa: {{ $data['khoa'] }}
-                <br />
-                Lý do xin thôi học và rút hồ sơ: {{ $data['data'] }}
-                <br />
+                <p>Họ và tên sinh viên: {{ $data['full_name'] }} &nbsp;&nbsp; Sinh ngày: {{ $data['date_of_birth'] }}</p>
+                <p>Lớp: {{ $data['lop'] }} &nbsp; Khoa: {{ $data['khoa'] }}</p>
+                
+                <p style="margin: 0; height: 100px">Lý do xin thôi học và rút hồ sơ: {{ $data['data'] }}</p>
                 Em xin bồi hoàn kinh phí đào tạo theo quy định của Trường.
                 <br />
                 Em xin chân thành cảm ơn!
             </p>
         </div>
-        <div class="d-flex flex-row justify-content-end">
-            <div class="fst-italic">Quảng Ninh, ngày {{ $data['day'] }} tháng {{ $data['month'] }} năm {{ $data['year'] }}</div>
-        </div>
-        <div class="d-flex flex-row justify-content-between px-5 mt-3">
-            <div class="d-flex flex-column justify-content-end text-center">
-                Xác nhận của GVCN lớp
-            </div>
-            <div class="text-center">
-                NGƯỜI VIẾT ĐƠN
-                <br />
-                ( Ký và ghi rõ họ và tên)
+        <div class="d-flex flex-row justify-content-end" style="float: right">
+            <div class="fst-italic">Quảng Ninh, ngày {{ $data['day'] }} tháng {{ $data['month'] }} năm {{ $data['year'] }}
             </div>
         </div>
 
-        <div class="d-flex flex-row justify-content-between px-5" style="margin-top:20px">
-            <div class="text-center">
-                @if (!empty($data['giaovien']['url_chuky']))
-                    <img style="height: 50px" src="{{ asset('storage/' . $data['giaovien']['url_chuky']) }}" alt="">
-                    <br>
-                    {{ $data['giaovien']['full_name'] }}
-                @endif
-            </div>
-            <div class="text-center">
-                <img style="height: 50px" src="{{ asset('storage/' . $data['url_chuky']) }}" alt="">
-                <br>
-                {{ $data['full_name'] }}
+        <table style="width: 100%; margin-top: 30px">
 
-            </div>
-        </div>
-        <br>
-        <div class="d-flex flex-row justify-content-between px-5" style="margin-top: 20px">
-            <div class="text-center">Xác nhận của phòng KH-TC
-                <br>
-                <br>
-                @if (!empty($data['ke_hoac_tai_chinh']['url_chuky']))
-                    <img style="height: 50px" src="{{ asset('storage/' . $data['ke_hoac_tai_chinh']['url_chuky']) }}" alt="">
-                    <br>
-                    {{ $data['ke_hoac_tai_chinh']['full_name'] }}
-                @endif
-            </div>
-            <div class="text-center">
-                Xác nhận của lãnh đạo khoa
-                <br>
-                <br>
-                @if (!empty($data['khoa_xac_nhan']['url_chuky']))
-                    <img style="height: 50px" src="{{ asset('storage/' . $data['khoa_xac_nhan']['url_chuky']) }}" alt="">
-                    <br>
-                    {{ $data['khoa_xac_nhan']['full_name'] }}
-                @endif
-            </div>
-        </div>
-        <div class="d-flex flex-row justify-content-between ps-5" style="margin-top: 100px">
-            <div class="text-center">BAN GIÁM HIỆU DUYỆT
-                <br>
-                <br>
-                @if (!empty($data['lanh_dao_truong']['url_chuky']))
-                    <br>
-                    <img style="height: 50px" src="{{ asset('storage/' . $data['lanh_dao_truong']['url_chuky']) }}" alt="">
-                    <br>
-                    {{ $data['lanh_dao_truong']['full_name'] }}
-                @endif
-            </div>
-            <div class="text-center">
-                Phòng CTSV<br />
-                ( Xác nhận chế độ bồi hoàn kinh phí đào tạo)
-                <br>
-                @if (!empty($data['lanh_dao_CTSV']['url_chuky']))
-                    <br>
-                    <img style="height: 50px" src="{{ asset('storage/' . $data['lanh_dao_CTSV']['url_chuky']) }}" alt="">
-                    <br>
-                    {{ $data['lanh_dao_CTSV']['full_name'] }}
-                @endif
-            </div>
-        </div>
+            <body class="d-flex flex-row justify-content-between px-5 mt-3">
+                <tr>
+                    <td class="d-flex flex-column justify-content-end text-center">
+                        <b>Xác nhận của GVCN lớp</b>
+                        <br />
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                    </td>
+                    <td class="text-center">
+                        <b>NGƯỜI VIẾT ĐƠN</b>
+                        <br />
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        {{ $data['full_name'] }}
+                    </td>
+                </tr>
+                <tr >
+                    <td class="d-flex flex-column justify-content-end text-center" style="padding-top: 20px">
+                        <div class="text-center"><b>Xác nhận của phòng KH-TC</b>
+                            <br />
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        </div>
+                    </td>
+                    <td class="text-center" style="padding-top: 20px">
+                        <b>Xác nhận của lãnh đạo khoa</b>
+                        <br />
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <b>BAN GIÁM HIỆU DUYỆT</b>
+                        <br />
+                        <br>
+                        <br>
+                        <br>
+                        <br />
+                        <br>
+                    </td>
+                    <td style="text-align: center">
+                        <b>Phòng CTSV</b><br />
+                        (Xác nhận chế độ bồi hoàn kinh phí đào tạo)
+                        <br />
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                    </td>
+                </tr>
+            </body>
+        </table>
+
     </div>
 @endsection

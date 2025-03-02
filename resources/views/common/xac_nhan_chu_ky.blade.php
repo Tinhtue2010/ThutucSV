@@ -11,16 +11,6 @@
                 <div class="form" id="form_chu_ky">
                     <h4 class="text-center">Yêu cầu ký số của bạn đã được gửi tới ứng dụng VNPT SmartCA của bạn.</h4>
                     <div class="d-flex"><p class="mt-auto mb-0">Thời gian xác nhận còn lại: </p> <h1 id="demnguoc" class="mb-0 ms-2">05:00</h1></div>
-                    <div class="card-body mt-10">
-                        <div class="d-flex flex-column mb-8 fv-row">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="required">Mã xác nhận</span>
-                            </label>
-                            <!--end::Label-->
-                            <input type="text" class="form-control" name="verification_code" />
-                        </div>
-                    </div>
                     <div class="card-footer">
                         <button class="btn btn-success mr-2">{{ __('Xác nhận') }}</button>
                         <button class="btn btn-warning mr-2">{{ __('Gửi lại mã xác nhận') }}</button>
@@ -92,6 +82,9 @@
                         location.href = "{{route("student.info")}}";
                     });
                 }
+
+
+                
                 axios({
                     method: 'GET',
                     url: "{{ route('otp.createOtpChuKy') }}",
