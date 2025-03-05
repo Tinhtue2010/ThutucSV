@@ -8,6 +8,7 @@ use App\Models\Lop;
 use App\Models\Phieu;
 use App\Models\StopStudy;
 use App\Models\Teacher;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -69,12 +70,26 @@ class GiaoVienController extends Controller
 
         return $data;
     }
+    
+    function KyDonPdf(Request $request)
+    {
+        try {
+            $stopStudy =  StopStudy::find($request->id);
+            
+            if ($stopStudy->type == 0) {
+                return $this->giaovien->KyDonPdfRHS($request, $stopStudy);
+            }
+        } catch (QueryException $e) {
+            abort(404);
+        }
+    }
     function xacnhan(Request $request)
     {
         try {
             $stopStudy =  StopStudy::find($request->id);
+            
             if ($stopStudy->type == 0) {
-                $this->giaovien->xacnhanRHS($request, $stopStudy);
+                return $this->giaovien->xacnhanRHS($request, $stopStudy);
             }
         } catch (QueryException $e) {
             abort(404);

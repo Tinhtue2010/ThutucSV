@@ -105,6 +105,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::name('StopStudy.')->prefix('xin-thoi-hoc')->group(function () {
             Route::get('/', [StopStudyController::class, 'index'])->name('index');
             Route::post('/create_view_pdf', [StopStudyController::class, 'CreateViewPdf'])->name('CreateViewPdf');
+            Route::post('/ky_don_pdf', [StopStudyController::class, 'KyDonPdf'])->name('KyDonPdf');
             Route::get('/view_pdf/{id}', [StopStudyController::class, 'viewPdf'])->name('viewPdf');
             Route::get('/view_demo_pdf', [StopStudyController::class, 'viewDemoPdf'])->name('viewDemoPdf');
         });
@@ -142,6 +143,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('get-data', [GiaoVienController::class, 'getData'])->name('getData');
             Route::post('xacnhan', [GiaoVienController::class, 'xacnhan'])->name('xacnhan');
             Route::post('khongxacnhan', [GiaoVienController::class, 'khongxacnhan'])->name('khongxacnhan');
+            Route::post('/ky_don_pdf', [GiaoVienController::class, 'KyDonPdf'])->name('KyDonPdf');
         });
         Route::name('Khoa.')->prefix('khoa')->group(function () {
             Route::get('/', [KhoaController::class, 'index'])->name('index');

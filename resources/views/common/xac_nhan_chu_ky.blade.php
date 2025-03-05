@@ -10,10 +10,13 @@
             <div class="modal-body">
                 <div class="form" id="form_chu_ky">
                     <h4 class="text-center">Yêu cầu ký số của bạn đã được gửi tới ứng dụng VNPT SmartCA của bạn.</h4>
-                    <div class="d-flex"><p class="mt-auto mb-0">Thời gian xác nhận còn lại: </p> <h1 id="demnguoc" class="mb-0 ms-2">05:00</h1></div>
-                    <div class="card-footer">
-                        <button class="btn btn-success mr-2">{{ __('Xác nhận') }}</button>
-                        <button class="btn btn-warning mr-2">{{ __('Gửi lại mã xác nhận') }}</button>
+                    <div class="d-flex">
+                        <p class="mt-auto mb-0">Thời gian xác nhận còn lại: </p>
+                        <h1 id="demnguoc" class="mb-0 ms-2">05:00</h1>
+                    </div>
+                    <div class="card-footer mt-5">
+                        <button class="btn btn-success mr-2">{{ __('Đã xác nhận') }}</button>
+                        <button class="btn btn-warning mr-2">{{ __('Gửi lại xác nhận') }}</button>
                         <button type="reset" class="btn btn-secondary">{{ __('Hủy') }}</button>
                     </div>
                 </div>
@@ -24,6 +27,25 @@
 
 @push('js')
     <script>
+        function checkChuKy() {
+            if ("{{ Auth::user()->getUrlChuKy() }}" == "") {
+                var modalEl = document.querySelector('#kt_modal_chu_ky_target');
+                var modelchu_ky = new bootstrap.Modal(modalEl);
+                modelchu_ky.hide();
+                Swal.fire({
+                    text: "Cảnh báo bạn chưa cập nhật thông tin về chữ ký",
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Oke",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
+                }).then(function(res) {
+                    // chưa cập nhật thông tin chữ ký và các thông tin khác
+                    // location.href = "{{ route('student.info') }}";
+                });
+            }
+        }
         $('.modal .btn-warning').click(function() {
             axios({
                 method: 'GET',
@@ -35,15 +57,17 @@
             })
         });
         let countdownInterval;
+
         function startCountdown(duration, elementId) {
-            let timer = duration, minutes, seconds;
+            let timer = duration,
+                minutes, seconds;
             let countdownElement = document.getElementById(elementId);
 
             if (countdownInterval) {
                 clearInterval(countdownInterval);
             }
 
-            countdownInterval = setInterval(function () {
+            countdownInterval = setInterval(function() {
                 minutes = Math.floor(timer / 60);
                 seconds = timer % 60;
 
@@ -59,75 +83,52 @@
             }, 1000);
         }
 
-        async function checkMaXacNhan() {
+        async function checkMaXacNhan($data,$url =  "{{ route('StopStudy.CreateViewPdf') }}",id= null,note=null) {
+            checkChuKy();
             startCountdown(300, "demnguoc");
             var modalEl = document.querySelector('#kt_modal_chu_ky_target');
             var modelchu_ky = new bootstrap.Modal(modalEl);
             modelchu_ky.show();
             var otp = null;
 
-            return new Promise((resolve, reject) => {
-                if ("{{ Auth::user()->getUrlChuKy() }}" == "") {
-                    modelchu_ky.hide();
-                    Swal.fire({
-                        text: "Cảnh báo bạn chưa cập nhật thông tin về chữ ký",
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: "Oke",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    }).then(function(res){
-                        // chưa cập nhật thông tin chữ ký và các thông tin khác
-                        location.href = "{{route("student.info")}}";
-                    });
-                }
-
-
-                
+            $('.modal .close').click(function() {
+                modelchu_ky.hide();
+                resolve(false);
+            });
+            $('.modal .btn-secondary').click(function() {
+                modelchu_ky.hide();
+                resolve(false);
+            });
+            
+            $('.modal .btn-success').click(function() {
                 axios({
-                    method: 'GET',
-                    url: "{{ route('otp.createOtpChuKy') }}",
+                    method: 'POST',
+                    url: $url,
+                    data: {
+                        fileId: $data[0],
+                        tranId: $data[1],
+                        transIDHash: $data[2],
+                        id: id,
+                        note: note
+                    },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
                 }).then((response) => {
-                    $('.modal .close').click(function() {
-                        modelchu_ky.hide();
-                        resolve(false);
-                    });
-                    $('.modal .btn-secondary').click(function() {
-                        modelchu_ky.hide();
-                        resolve(false);
-                    });
-                    $('.modal .btn-success').click(function() {
-                        var enteredCode = document.querySelector('input[name="verification_code"]').value;
-                        axios({
-                            method: 'GET',
-                            url: "{{ route('otp.checkOtpChuKy') }}/" + enteredCode,
-                        }).then((response) => {
-                            if (response.data == true) {
-                                modelchu_ky.hide();
-                                mess_success('Thông báo', "OTP trùng khớp")
-                                otp = enteredCode;
-                                setTimeout(function() {
-                                    resolve(enteredCode);
-                                }, 1000);
+                    console.log(response.data);
+                    if (response.data === 0) {
+                        mess_error("Cảnh báo",
+                            "Chữ ký số chưa được xác nhận hãy xác nhận trên ứng dụng SmartCA")
+                    } else {
+                        mess_success('Thông báo',
+                            "Đã xác nhận thành công")
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    }
 
-                            } else
-                                mess_error("Cảnh báo", "OTP không trùng khớp hãy kiểm tra lại")
-
-                        }).catch((e) => {
-                            mess_error("Cảnh báo", "OTP không trùng khớp hãy kiểm tra lại")
-                        })
-
-                    });
-                    $(modalEl).on('hidden.bs.modal', function() {
-                        if (otp == null) {
-                            resolve(false);
-                        }
-                    });
-                }).catch(function(error) {
-                    resolve(false);
-                });
-
+                })
             });
         }
     </script>

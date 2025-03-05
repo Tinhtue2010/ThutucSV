@@ -5,13 +5,17 @@ namespace App\Helpers;
 use App\Mail\SendMail;
 use App\Models\Notification;
 use App\Models\Otps;
+use App\Models\Phieu;
 use App\Models\Student;
 use App\Models\Teacher;
 use Carbon\Carbon;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use setasign\Fpdi\Fpdi;
 
 class OAuth2Config
 {
@@ -451,11 +455,12 @@ trait CommonHelper
         }
     }
 
-    public function notification($notification, $phieu = null, $type = null, $user_id = null)
+    public function notification($notification, $phieu = null, $file_name = null, $type = null, $user_id = null)
     {
         $query = new Notification();
         $query->notification = $notification;
         $query->phieu_id = $phieu;
+        $query->file_name = $file_name;
         $query->type = $type;
         $query->user_id = $user_id ?? Auth::user()->id;
         $query->save();
@@ -479,6 +484,130 @@ trait CommonHelper
             return [];
         }
     }
+    function textToImage($imagePath, $text, $outputPath, $fontSize = 20)
+    {
+        $fontFile = public_path('fonts/4.ttf'); // Đường dẫn font
+
+        // Kiểm tra file ảnh có tồn tại không
+        if (!file_exists($imagePath)) {
+            die("Image file not found: " . $imagePath);
+        }
+
+        // Kiểm tra font có tồn tại không
+        if (!file_exists($fontFile)) {
+            die("Font file not found: " . $fontFile);
+        }
+
+        // Tải ảnh gốc
+        $image = imagecreatefrompng($imagePath);
+        if (!$image) {
+            die("Failed to create image from file.");
+        }
+
+        // Lấy kích thước ảnh
+        $imageWidth = imagesx($image);
+        $imageHeight = imagesy($image);
+
+        // Tạo vùng trống phía dưới ảnh để chứa chữ
+        $newHeight = $imageHeight + 40; // Thêm 40px để chứa chữ
+        $newImage = imagecreatetruecolor($imageWidth, $newHeight);
+
+        // Màu nền trắng
+        $white = imagecolorallocate($newImage, 255, 255, 255);
+
+        // Đổ nền trắng cho ảnh mới
+        imagefilledrectangle($newImage, 0, $imageHeight, $imageWidth, $newHeight, $white);
+
+        // Copy ảnh gốc vào ảnh mới
+        imagecopy($newImage, $image, 0, 0, 0, 0, $imageWidth, $imageHeight);
+
+        // Màu chữ đen
+        $black = imagecolorallocate($newImage, 0, 0, 0);
+
+        // Tính toán vị trí để căn giữa chữ
+        $textBox = imagettfbbox($fontSize, 0, $fontFile, $text);
+        $textWidth = abs($textBox[4] - $textBox[0]);
+        $textX = ($imageWidth - $textWidth) / 2; // Căn giữa theo chiều ngang
+        $textY = $imageHeight + 30; // Đặt chữ dưới ảnh
+
+        // Vẽ chữ lên ảnh mới
+        imagettftext($newImage, $fontSize, 0, $textX, $textY, $black, $fontFile, $text);
+
+        // Lưu ảnh kết quả
+        imagepng($newImage, $outputPath);
+        imagedestroy($newImage);
+        imagedestroy($image);
+
+        return $outputPath;
+    }
+
+
+    function mergeImageWithTextIntoPdf($pdfPath, $imagePath, $outputPath, $fullName, $pageNumber = 1, $x = 50, $y = 100, $height = 30)
+    {
+        $pdf = new FPDI();
+        $pageCount = $pdf->setSourceFile($pdfPath);
+
+        // Tạo ảnh mới với chữ dưới ảnh
+        $textImagePath = public_path('temp_text_image.png');
+        $this->textToImage($imagePath, $fullName, $textImagePath, 20);
+
+        // Lấy kích thước ảnh gốc
+        list($originalWidth, $originalHeight) = getimagesize($textImagePath);
+
+        // Tính chiều rộng dựa trên tỷ lệ gốc
+        $width = ($originalWidth / $originalHeight) * $height;
+
+        for ($i = 1; $i <= $pageCount; $i++) {
+            $tplIdx = $pdf->importPage($i);
+            $size = $pdf->getTemplateSize($tplIdx);
+            $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+            $pdf->useTemplate($tplIdx);
+
+            // Chỉ chèn ảnh vào trang mong muốn
+            if ($i == $pageNumber) {
+                $pdf->Image($textImagePath, $x, $y, $width, $height); // Chèn ảnh với tỷ lệ chuẩn
+            }
+        }
+
+        // Lưu file PDF mới
+        $pdf->Output($outputPath, 'F');
+
+        // Xóa ảnh tạm
+        unlink($textImagePath);
+    }
+    public function saveBase64AsPdf($base64Data, $name)
+    {
+        $user = Auth::user(); // Lấy thông tin người dùng
+        $file_name = $user->id . '_' . $user->id . '_' . date('d_Hi_Y') . '.pdf'; // Tạo tên file
+
+
+        // Kiểm tra nếu không có dữ liệu
+        if (!$base64Data) {
+            return response()->json(['error' => 'Không có dữ liệu Base64'], 400);
+        }
+
+
+        // Giải mã base64 thành dữ liệu nhị phân
+        $pdfData = base64_decode($base64Data);
+
+        // Kiểm tra xem có lỗi trong quá trình giải mã không
+        if ($pdfData === false) {
+            return response()->json(['error' => 'Lỗi khi giải mã Base64'], 400);
+        }
+
+        // Đường dẫn lưu file
+        $filePath = storage_path("app/public/$name/$file_name");
+
+        // Tạo thư mục nếu chưa có
+        if (!file_exists(dirname($filePath))) {
+            mkdir(dirname($filePath), 0777, true);
+        }
+
+        // Lưu file vào thư mục
+        file_put_contents($filePath, $pdfData);
+
+        return "$name/$file_name";
+    }
 
     function deleteFiles($fileNames)
     {
@@ -487,6 +616,31 @@ trait CommonHelper
         }
         return true;
     }
+
+    public function deletePdf($file_name)
+    {
+        $filePath = $file_name;
+        if (Storage::disk('public')->exists($filePath)) {
+            Storage::disk('public')->delete($filePath); // Xóa file
+
+
+        } else {
+        }
+    }
+    public function deletePdfAndTmp($file_name)
+    {
+        $filePath = $file_name;
+        if (Storage::disk('public')->exists($filePath)) {
+            Storage::disk('public')->delete($filePath); // Xóa file
+            $oldFilename = $filePath; 
+            $pathInfo = pathinfo($oldFilename);
+            
+            $newFilename = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '-tmp.pdf';
+            Storage::disk('public')->delete($newFilename); 
+        } else {
+        }
+    }
+    
 
     function sendOTP($loai = null)
     {
@@ -594,6 +748,62 @@ trait CommonHelper
 
         return null;
     }
+
+    function convertImageToBase64($imagePath)
+    {
+        $fullPath = public_path("storage/$imagePath");
+
+        if (!file_exists($fullPath)) {
+            return null; // Trả về null nếu file không tồn tại
+        }
+
+        $imageData = file_get_contents($fullPath);
+        if ($imageData === false) {
+            return null; // Trả về null nếu tải ảnh thất bại
+        }
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $fullPath);
+        finfo_close($finfo);
+
+        $base64 = base64_encode($imageData);
+
+        return $base64;
+    }
+    function createPDF($phieu)
+    {
+        $options = new Options();
+        $options->set('defaultFont', 'DejaVu Sans');
+        $dompdf = new Dompdf($options);
+        if ($phieu->key == "RHS") {
+
+            $html = view('document.thoi_hoc', ['data' => json_decode($phieu->content, true)])->render();
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+
+            // Lưu vào bộ nhớ tạm thời
+            $filePath = 'output.pdf';
+            file_put_contents($filePath, $dompdf->output());
+
+            // Đọc file PDF và chuyển thành Base64
+            $base64Pdf = base64_encode(file_get_contents($filePath));
+
+            // Xuất Base64
+            return $base64Pdf;
+        }
+    }
+
+    function convertPdfToBase64($filePath)
+    {
+        $fullPath = storage_path('app/public/'.$filePath); 
+
+        if (file_exists($fullPath)) {
+            return base64_encode(file_get_contents($fullPath));
+        } else {
+            return;
+        }
+    }
     function getGUID()
     {
         mt_srand((int)microtime() * 10000); //optional for php 4.2.0 and up.
@@ -626,9 +836,7 @@ trait CommonHelper
         $msg = json_decode($response);
         curl_close($curl);
         if ($httpcode != 200) {
-            print_r('<pre>');
-            print_r($response);
-            print_r('</pre>');
+            // báo lỗi 
         }
         return $msg;
     }
@@ -644,8 +852,168 @@ trait CommonHelper
             "transaction_id" => $this->getGUID()
         ];
         $msg_getCertificate = $this->api_smartca("https://gwsca.vnpt.vn/sca/sp769/v1/credentials/get_certificate", $data_getCertificate);
-        print_r("<pre>");
-        print_r($msg_getCertificate->data->user_certificates);
-        print_r("</pre>");
+        if (empty($msg_getCertificate->data) || empty($msg_getCertificate->data->user_certificates)) {
+            return false;
+        } else {
+            return $msg_getCertificate;
+        }
+    }
+
+    function craeteSignature($msg_getCertificate, $pdf, $cccd,  $file_name, $page = 1)
+    {
+        $config = new OAuth2Config();
+        $certBase64 = $msg_getCertificate->data->user_certificates[0]->cert_data;
+        $certBase64 = str_replace("\r\n", "", $certBase64);
+        $serialNumber = $msg_getCertificate->data->user_certificates[0]->serial_number;
+
+
+        // 2.CalculateHash
+        $unsignDataBase64 = $pdf;
+        $thoiGianKy = Carbon::now()->format('d/m/Y H:i');
+
+        $data_calculate_hash = [
+            "transaction_id" => $this->getGUID(),
+            "sp_id" => $config->client_id,
+            "sp_password" => $config->client_secret,
+            "signerCert" => $certBase64,
+            "digestAlgorithm" => "sha256",
+            "sign_files" => [
+                [
+                    "storage_file_name" => "",
+                    "name" => "test.pdf",
+                    "pdfContent" => $unsignDataBase64,
+                    "sigOptions" => [
+                        "renderMode" => 2, //0: TextOnly, 1:TEXT_WITH_LOGO_LEFT, 2:LOGO_ONLY, 3:TEXT_WITH_LOGO_TOP,4:TEXT_WITH_BACKGROUND 
+                        "customImage" => "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/UmMprQAAAAASUVORK5CYII=", //base64 của anh gửi
+                        "fontSize" => 10, //kcihs thước chữ
+                        "fontColor" => "#000000", //màu chữ							
+                        "signatureText" => " ",
+                        "signatures" => [
+                            [
+                                "page" => $page,
+                                "rectangle" => "0,581,200,657",
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+
+        ];
+        $msg_calculateHash = $this->api_smartca("https://gwsca.vnpt.vn/rest/v2/signature/calculateHash", $data_calculate_hash);
+
+        if ($msg_calculateHash->hashResps[0]->code != "sigSuccess") {
+            echo ("Không thể calculateHash đc");
+            exit();
+        }
+        $hashData = $msg_calculateHash->hashResps[0]->hash;
+        $fileID = $msg_calculateHash->hashResps[0]->fileID;
+        $transIdHash = $msg_calculateHash->tranId;
+
+        // 3.SignHash
+        $data_signhash = [
+            "sp_id" => $config->client_id,
+            "sp_password" => $config->client_secret,
+            "user_id" => $cccd,
+            "transaction_id" => $this->getGUID(),
+            "sign_files" => [
+                [
+                    "data_to_be_signed" => bin2hex(base64_decode($hashData)),
+                    "doc_id" => $file_name,
+                    "file_type" => "pdf",
+                    "sign_type" => "hash"
+                ]
+            ],
+            "serial_number" => $serialNumber,
+        ];
+        $msg_signHash = $this->api_smartca("https://gwsca.vnpt.vn/sca/sp769/v1/signatures/sign", $data_signhash);
+
+
+        return [$fileID, $msg_signHash->data->transaction_id, $transIdHash];
+    }
+
+
+    function api_get_tranInfo_curl($url)
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_HTTPHEADER => [
+                'Accept: application/json',
+                'Content-Type: application/json'
+            ],
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_SSL_CIPHER_LIST => 'DEFAULT@SECLEVEL=1',
+            CURLOPT_POSTFIELDS => '{}'
+        ]);
+        $response = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $msg = json_decode($response);
+        curl_close($curl);
+         
+        return $msg;
+    }
+
+    function api_service_get_hash($url, $data)
+    {
+
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_HTTPHEADER => [
+                'Accept: application/json',
+                'Content-Type: application/json'
+            ],
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_SSL_CIPHER_LIST => 'DEFAULT@SECLEVEL=1',
+            CURLOPT_POSTFIELDS => json_encode($data)
+        ]);
+        $response = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $msg = json_decode($response);
+        curl_close($curl);
+        if ($httpcode != 200) {
+            print_r('<pre>');
+            print_r($response);
+            print_r('</pre>');
+            exit();
+        }
+        return $msg;
+    }
+
+
+    function getPDF($fileId, $tranId, $transIDHash)
+    {
+        $user = Auth::user();
+        $config = new OAuth2Config();
+        $msg = $this->api_get_tranInfo_curl("https://gwsca.vnpt.vn/sca/sp769/v1/signatures/sign/" . $tranId . "/status");
+        if($msg == null)
+        {
+            return 0;
+        }
+        if ($msg->message != "SUCCESS") {
+            return 0;
+        }
+        $hashSigned = $msg->data->signatures[0]->signature_value;
+
+        // 5. signExternal
+        $data_signExternal = [
+            "tranId" => $transIDHash,
+            "sp_id" => $config->client_id,
+            "sp_password" => $config->client_secret,
+            "signatures" => [
+                [
+                    "fileID" => $fileId,
+                    "signature" => $hashSigned
+                ]
+            ]
+        ];
+        $msg_signExternal = $this->api_service_get_hash("https://gwsca.vnpt.vn/rest/v2/signature/signExternal", $data_signExternal);
+        
+        return $msg_signExternal->signResps[0]->signedData;
     }
 }

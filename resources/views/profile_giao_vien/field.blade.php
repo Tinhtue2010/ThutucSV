@@ -34,6 +34,14 @@
     <!--end::Label-->
     <input type="email" class="form-control" name="email" />
 </div>
+<div class="d-flex flex-column mb-8 fv-row">
+    <!--begin::Label-->
+    <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+        <span class="required">Căn cước công dân</span>
+    </label>
+    <!--end::Label-->
+    <input type="text" class="form-control" name="cccd" />
+</div>
 
 <div class="d-flex flex-column mb-8 fv-row">
     <!--begin::Label-->

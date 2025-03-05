@@ -82,6 +82,16 @@
                         </div>
                         <!--end::Col-->
                     </div>
+                    <div class="row mb-7">
+                        <!--begin::Label-->
+                        <label class="col-lg-4 fw-semibold text-muted">Căn cước công dân</label>
+                        <!--end::Label-->
+                        <!--begin::Col-->
+                        <div class="col-lg-8">
+                            <span class="fw-bold fs-6 text-gray-800">{{ $user->cccd }}</span>
+                        </div>
+                        <!--end::Col-->
+                    </div>
                     <!--end::Row-->
                      <!--begin::Row-->
                      <div class="row mb-7">

@@ -9,14 +9,15 @@ use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
-    function index() {
+    function index()
+    {
         $user = Auth::user();
-        $student = Student::leftJoin('lops','students.lop_id','=','lops.id')
-        ->leftJoin('khoas','lops.khoa_id','=','khoas.id')
-        ->select('students.*','lops.name as lop_name','khoas.name as khoa_name')
-        ->where('students.id',$user->student_id)->first();
+        $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+            ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
+            ->where('students.id', $user->student_id)->first();
 
-        return view('student.index', ['student'=>$student]);
+        return view('student.index', ['student' => $student]);
     }
 
     public function getDataInfo()
@@ -31,24 +32,29 @@ class StudentController extends Controller
         }
     }
 
-    public function update(Request $request) {
+    public function update(Request $request)
+    {
         $user = Auth::user();
         $student = Student::find($user->student_id);
-    
+
         if ($request->hasFile('chu_ky')) {
             $file = $request->file('chu_ky');
             $fileName = time() . '_' . $file->getClientOriginalName();
             $filePath = $file->storeAs('signatures', $fileName, 'public');
             $student->chu_ky = $filePath;
         }
-    
+
         $student->full_name = $request->input('full_name');
         $student->date_of_birth = $request->input('date_of_birth');
         $student->phone = $request->input('phone');
         $student->email = $request->input('email');
         $student->cmnd = $request->input('cmnd');
         $student->date_range_cmnd = $request->input('date_range_cmnd');
-    
+
         $student->save();
+
+        $user->cccd = $request->input('cmnd');
+        return $user->update();
+
     }
 }

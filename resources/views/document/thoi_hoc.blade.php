@@ -31,10 +31,13 @@
                 <p>Họ và tên sinh viên: {{ $data['full_name'] }} &nbsp;&nbsp; Sinh ngày: {{ $data['date_of_birth'] }}</p>
                 <p>Lớp: {{ $data['lop'] }} &nbsp; Khoa: {{ $data['khoa'] }}</p>
                 
-                <p style="margin: 0; height: 100px">Lý do xin thôi học và rút hồ sơ: {{ $data['data'] }}</p>
-                Em xin bồi hoàn kinh phí đào tạo theo quy định của Trường.
-                <br />
+                <p style="height: 100px">Lý do xin thôi học và rút hồ sơ: {{ $data['data'] }}</p>
+                <p>
+                    Em xin bồi hoàn kinh phí đào tạo theo quy định của Trường.
+                    <br />
                 Em xin chân thành cảm ơn!
+                </p>
+                
             </p>
         </div>
         <div class="d-flex flex-row justify-content-end" style="float: right">
@@ -56,9 +59,9 @@
                     </td>
                     <td class="text-center">
                         <b>NGƯỜI VIẾT ĐƠN</b>
-                        <br />
                         <br>
                         <br>
+                        <img style="height: 50px;widows: 50px" src="data:image/png;base64,{{ $data['chu_ky'] }}" alt="">
                         <br>
                         <br>
                         {{ $data['full_name'] }}

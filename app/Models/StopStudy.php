@@ -35,7 +35,8 @@ class StopStudy extends Model
         'doi_tuong_chinh_sach',
         'che_do_chinh_sach_data',
         'diachi',
-        'km'
+        'km',
+        'file_name'
     ];
 
 

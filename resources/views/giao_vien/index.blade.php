@@ -17,7 +17,7 @@
                             <div class="d-flex align-items-center position-relative my-1">
                                 <i class="ki-outline ki-magnifier fs-3 position-absolute ms-4"></i>
                                 <input type="text" data-kt-ecommerce-product-filter="search"
-                                       class="form-control w-250px ps-12" placeholder="Tên, mã sinh viên"/>
+                                    class="form-control w-250px ps-12" placeholder="Tên, mã sinh viên" />
                             </div>
                             <!--end::Search-->
                         </div>
@@ -27,7 +27,8 @@
                             <div class="w-100 mw-150px">
                                 <label class="form-label">Loại hồ sơ</label>
                                 <!--begin::Select2-->
-                                <select class="form-select form-select-solid filter-select" data-name="type" data-control="select2" data-placeholder="Loại hồ sơ">
+                                <select class="form-select form-select-solid filter-select" data-name="type"
+                                    data-control="select2" data-placeholder="Loại hồ sơ">
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>
                                     <option value="0">Đơn xin rút hồ sơ</option>
@@ -41,16 +42,18 @@
                             <div class="w-100 mw-150px">
                                 <label class="form-label">Năm</label>
                                 <!--begin::Select2-->
-                                <select class="form-select form-select-solid filter-select" data-name="year" data-control="select2" data-placeholder="Năm">
+                                <select class="form-select form-select-solid filter-select" data-name="year"
+                                    data-control="select2" data-placeholder="Năm">
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>
                                     @for ($year = 2000; $year <= 2100; $year++)
-                                        <option @if($year == date('Y')) selected @endif value="{{ $year }}">{{ $year }}</option>
+                                        <option @if ($year == date('Y')) selected @endif
+                                            value="{{ $year }}">{{ $year }}</option>
                                     @endfor
                                 </select>
                                 <!--end::Select2-->
                             </div>
-@include('common.select_status_ho_so')
+                            @include('common.select_status_ho_so')
 
 
                         </div>
@@ -63,16 +66,16 @@
                         <!--begin::Table-->
                         <table class="table align-middle table-row-dashed fs-6 gy-5" id="frm-table">
                             <thead>
-                            <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
-                                <th></th>
-                                <th class="text-nowrap" data-name="student_code">{{__('Mã sinh viên')}}</th>
-                                <th class="text-nowrap" data-name="full_name">{{ __('Họ và tên') }}</th>
-                                <th class="text-nowrap" data-name="lop_name">{{ __('Lớp') }}</th>
-                                <th class="text-nowrap" data-name="created_at">{{ __('Thời gian') }}</th>
-                                <th class="text-nowrap" data-name="type">{{ __('Loại') }}</th>
-                                <th class="text-nowrap" data-name="status">{{ __('Trạng thái') }}</th>
-                                <td class="text-nowrap">{{ __('Chức năng') }}</td>
-                            </tr>
+                                <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
+                                    <th></th>
+                                    <th class="text-nowrap" data-name="student_code">{{ __('Mã sinh viên') }}</th>
+                                    <th class="text-nowrap" data-name="full_name">{{ __('Họ và tên') }}</th>
+                                    <th class="text-nowrap" data-name="lop_name">{{ __('Lớp') }}</th>
+                                    <th class="text-nowrap" data-name="created_at">{{ __('Thời gian') }}</th>
+                                    <th class="text-nowrap" data-name="type">{{ __('Loại') }}</th>
+                                    <th class="text-nowrap" data-name="status">{{ __('Trạng thái') }}</th>
+                                    <td class="text-nowrap">{{ __('Chức năng') }}</td>
+                                </tr>
                             </thead>
                             <tbody class="fw-semibold text-gray-600">
                             </tbody>
@@ -96,21 +99,20 @@
                             <div
                                 class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
                                 <div class="dataTables_paginate paging_simple_numbers"
-                                     id="kt_ecommerce_products_table_paginate">
+                                    id="kt_ecommerce_products_table_paginate">
                                     <ul class="pagination">
                                         <li class="paginate_button page-item previous disabled"
                                             id="kt_ecommerce_products_table_previous">
                                             <a href="#" aria-controls="kt_ecommerce_products_table" data-dt-idx="0"
-                                               tabindex="0" class="page-link"><i class="previous"></i></a>
+                                                tabindex="0" class="page-link"><i class="previous"></i></a>
                                         </li>
                                         <li class="paginate_button page-item active">
                                             <a href="#" aria-controls="kt_ecommerce_products_table" data-dt-idx="1"
-                                               tabindex="0" class="page-link">1</a>
+                                                tabindex="0" class="page-link">1</a>
                                         </li>
-                                        <li class="paginate_button page-item next"
-                                            id="kt_ecommerce_products_table_next">
+                                        <li class="paginate_button page-item next" id="kt_ecommerce_products_table_next">
                                             <a href="#" aria-controls="kt_ecommerce_products_table" data-dt-idx="6"
-                                               tabindex="0" class="page-link">
+                                                tabindex="0" class="page-link">
                                                 <i class="next"></i></a>
                                         </li>
                                     </ul>
@@ -127,8 +129,8 @@
         <!--end::Content-->
     </div>
     @include('giao_vien.table')
-    @include('giao_vien.xacnhan',['target'=>'xacnhan'])
-    @include('giao_vien.khongxacnhan',['target'=>'khongxacnhan'])
-    @include('giao_vien.chitiet',['target'=>'chitiet'])
-    @include('giao_vien.tientrinh',['target'=>'tientrinh'])
+    @include('giao_vien.xacnhan', ['target' => 'xacnhan'])
+    @include('giao_vien.khongxacnhan', ['target' => 'khongxacnhan'])
+    @include('giao_vien.chitiet', ['target' => 'chitiet'])
+    @include('giao_vien.tientrinh', ['target' => 'tientrinh'])
 @endsection

@@ -17,6 +17,17 @@
                             $noti_title = 'Cảnh báo';
                         }
                     @endphp
+                    @if ($don_parent->status == -1)
+                        <div class="d-flex align-items-center bg-light-warning rounded p-5 mb-7">
+                            <i class="ki-outline ki-snapchat text-primary fs-1 me-5"></i>
+                            <div class="flex-grow-1 me-2">
+                                <a href="#" class=" fw-bold text-gray-800 text-hover-primary fs-4">Cảnh báo</a>
+                                <span class="fs-5 fw-semibold d-block">
+                                    Đơn của bạn đã bị từ chối bởi giáo viên chủ nhiệm hãy kiểm tra lại thông tin
+                                </span>
+                            </div>
+                        </div>
+                    @endif
                     @if ($don_parent->is_update == 1)
                         <div class="d-flex align-items-center bg-light-primary rounded p-5 mb-7">
                             <i class="ki-outline ki-snapchat text-primary fs-1 me-5"></i>
@@ -36,17 +47,19 @@
                                     @if ($don_parent->status == 0)
                                         {{ __('Đơn của bạn đã được gửi đi hãy chờ thông báo tiếp theo') }}
                                     @else
+                                    
                                         {{ $don->note }}
                                     @endif
 
                                 </span>
                             </div>
                             @isset($don->phieu_id)
-                                <a href="{{ route('phieu.index', ['id' => $don->phieu_id]) }}" target="_blank" class="btn btn-primary">Xem phiếu</a>
+                                <a href="{{ route('phieu.index', ['id' => $don->phieu_id]) }}" target="_blank"
+                                    class="btn btn-primary">Xem phiếu</a>
                             @endisset
                             @if ($don_parent->status == 6)
-                                <a href="{{ route('phieu.giaQuyetCongViec', ['id' => $don_parent->id]) }}" target="_blank" class="btn btn-primary">Phiếu giải quyết công việc</a>
-
+                                <a href="{{ route('phieu.giaQuyetCongViec', ['id' => $don_parent->id]) }}" target="_blank"
+                                    class="btn btn-primary">Phiếu giải quyết công việc</a>
                             @endif
 
                         </div>
@@ -68,8 +81,10 @@
                                 <span class="">Lý do rút hồ sơ</span>
                             </label>
                             <!--end::Label-->
-                            <textarea @if (isset($don_parent)) @if ($don_parent->status != 0)
-                                readonly @endif @endif class="form-control h-150px" name="data">{{ $don_parent->note ?? '' }}</textarea>
+                            <textarea
+                                @if (isset($don_parent)) @if ($don_parent->status >= 0)
+                                readonly @endif
+                                @endif class="form-control h-150px" name="data">{{ $don_parent->note ?? '' }}</textarea>
                         </div>
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
@@ -102,7 +117,10 @@
                             @endif
 
                             @isset($don_parent)
-                            <a href="{{ route('phieu.index', ['id' => $don_parent->phieu_id]) }}" target="_blank" class="btn btn-warning me-2">Xem đơn</a>
+                                <a href="{{ asset('storage/' . $don_parent->file_name) }}" target="_blank"
+                                    class="btn btn-warning me-2">Xem đơn</a>
+                                {{-- <a href="{{ asset('storage/'.$don_parent->file_name) }}"
+                                        class="btn btn-danger me-2">Xoá đơn</a> --}}
                             @endisset
                             @if (isset($don_parent))
                                 @if ($don_parent->status <= 0)
@@ -163,32 +181,22 @@
             const formData = new FormData(form);
             validation_create.validate().then(async function(status) {
                 if (status === 'Valid') {
-                    await checkMaXacNhan().then(function(result) {
-                        if (false) {
-                            return;
-                        } else {
-                            formData.append('otp', result);
-                        }
-                    });
+                    checkChuKy();
                     axios({
                         method: 'POST',
-                        url: "{{ route('StopStudy.CreateViewPdf') }}",
+                        url: "{{ route('StopStudy.KyDonPdf') }}",
                         data: formData,
                         headers: {
                             "Content-Type": "multipart/form-data",
                         },
                     }).then((response) => {
-                        if ($('#button_clicked').val() == 'xem_truoc') {
-                            window.open("{{ route('StopStudy.viewDemoPdf') }}", "_blank");
-                        } else {
-                            mess_success('Thông báo',
-                                "Đơn của bạn đã được gửi")
-                            setTimeout(function() {
-                                location.reload();
-                            }, 1000);
-
+                        console.log(response.data);
+                        if (response.data == 0) {
+                            mess_error("Cảnh báo",
+                                "{{ __('Bạn chưa đăng ký chữ ký số cần đăng ký chữ ký số SmartCA') }}"
+                            )
                         }
-
+                        checkMaXacNhan(response.data);
                     }).catch(function(error) {
                         mess_error("Cảnh báo",
                             "{{ __('Có lỗi xảy ra bạn cần kiểm tra lại thông tin.') }}"

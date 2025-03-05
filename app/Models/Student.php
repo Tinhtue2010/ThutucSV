@@ -23,7 +23,8 @@ class Student extends Model
         'cmnd',
         'date_range_cmnd',
         'gioitinh',
-        'status'
+        'status',
+        'file_name'
     ];
 
     public function lop()

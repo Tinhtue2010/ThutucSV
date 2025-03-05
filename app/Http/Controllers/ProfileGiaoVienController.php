@@ -15,7 +15,7 @@ class ProfileGiaoVienController extends Controller
         $teacher = Teacher::leftJoin('khoas', 'teachers.khoa_id', '=', 'khoas.id')
             ->select('teachers.*', 'khoas.name as khoa_name')
             ->where('teachers.id', $user->teacher_id)->first();
-        return view('profile_giao_vien.index', ['teacher' => $teacher]);
+        return view('profile_giao_vien.index', ['teacher' => $teacher,'user'=>$user]);
     }
 
     public function getDataInfo()
@@ -47,5 +47,8 @@ class ProfileGiaoVienController extends Controller
         $teacher->email = $request->input('email');
 
         $teacher->save();
+
+        $user->cccd = $request->input('cccd');
+        return $user->update();
     }
 }
