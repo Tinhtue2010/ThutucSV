@@ -20,8 +20,6 @@ class MienGiamHPController extends Controller
         $user = Auth::user();
         $don_parent = StopStudy::where('student_id', $user->student_id)->where('type', 1)->first();
         if ($don_parent) {
-            $phieu = Phieu::where('id', $don_parent->phieu_id)->first();
-            $phieu = json_decode($phieu->content, true);
             $don = StopStudy::where('parent_id', $don_parent->id)->orderBy('created_at', 'desc')->first();
         } else {
             $phieu = null;
@@ -33,7 +31,56 @@ class MienGiamHPController extends Controller
             ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)->first();
-        return view('mien_giam_hoc_phi.index', ['don_parent' => $don_parent, 'don' => $don, 'phieu' => $phieu, 'student' => $student]);
+        return view('mien_giam_hoc_phi.index', ['don_parent' => $don_parent, 'don' => $don, 'student' => $student]);
+    }
+
+
+    function KyDonPdf(Request $request)
+    {
+
+        $chu_ky =  $this->convertImageToBase64(Auth::user()->getUrlChuKy());
+        $user = Auth::user();
+
+        $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+            ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
+            ->where('students.id', $user->student_id)->first();
+
+        $studentData['full_name'] = $student->full_name;
+        $studentData['student_code'] = $student->student_code;
+        $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
+        $studentData['lop'] = $student->lop_name;
+        $studentData['khoa'] = $student->khoa_name;
+        $studentData['khoa_hoc'] = $student->school_year;
+        $studentData['noisinh'] = $request->noisinh;
+
+        $doituong = config('doituong.miengiamhp');
+        $studentData['doituong'] = $doituong[$request->doituong][2];
+
+        $studentData['daduochuong'] = $request->daduochuong;
+        $studentData['sdt'] = $student->phone;
+
+        $studentData['day'] = Carbon::now()->day;
+
+        $studentData['month'] = Carbon::now()->month;
+
+        $studentData['year'] = Carbon::now()->year;
+        
+        $studentData['chu_ky'] = $chu_ky;
+
+
+        $phieu = new Phieu();
+        $phieu->student_id = $user->student_id;
+        $phieu->name = "Đơn xin giảm học phí";
+        $phieu->key = "GHP";
+        $phieu->content = json_encode($studentData);
+        $phieu->file = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
+
+
+        $pdf =  $this->createPDF($phieu);
+
+        $this->saveBase64AsPdf($pdf,"demo");
+        return true;
     }
 
     function CreateViewPdf(Request $request)

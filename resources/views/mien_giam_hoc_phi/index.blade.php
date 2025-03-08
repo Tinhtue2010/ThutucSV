@@ -215,27 +215,20 @@
             const formData = new FormData(form);
             validation_create.validate().then(async function(status) {
                 if (status === 'Valid') {
-                    await checkMaXacNhan().then(function(result) {
-                        if (false) {
-                            return;
-                        } else {
-                            formData.append('otp', result);
-                        }
-                    });
                     axios({
                         method: 'POST',
-                        url: "{{ route('MienGiamHp.CreateViewPdf') }}",
+                        url: "{{ route('MienGiamHp.KyDonPdf') }}",
                         data: formData,
                         headers: {
                             "Content-Type": "multipart/form-data",
                         },
                     }).then((response) => {
                         if ($('#button_clicked').val() == 'xem_truoc') {
-                            window.open("{{ route('MienGiamHp.viewDemoPdf') }}", "_blank");
+                            // window.open("{{ route('MienGiamHp.viewDemoPdf') }}", "_blank");
                         } else {
                             mess_success('Thông báo',
                                 "Đơn của bạn đã được gửi")
-                            location.reload();
+                            // location.reload();
                         }
 
                     }).catch(function(error) {

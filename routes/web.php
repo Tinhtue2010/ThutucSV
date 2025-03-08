@@ -115,6 +115,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('/create_view_pdf', [MienGiamHPController::class, 'CreateViewPdf'])->name('CreateViewPdf');
             Route::get('/view_pdf/{id}', [MienGiamHPController::class, 'viewPdf'])->name('viewPdf');
             Route::get('/view_demo_pdf', [MienGiamHPController::class, 'viewDemoPdf'])->name('viewDemoPdf');
+            Route::post('/ky_don_pdf', [MienGiamHPController::class, 'KyDonPdf'])->name('KyDonPdf');
         });
 
         Route::name('TroCapXH.')->prefix('tro-cap-xh')->group(function () {
@@ -412,18 +413,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('chu-ky', [OtpController::class, 'createOtpChuKy'])->name('createOtpChuKy');
         Route::get('check-chu-ky/{otp?}', [OtpController::class, 'checkOtpChuKy'])->name('checkOtpChuKy');
         Route::get("check-info-signature",[OtpController::class,'checkSignature'])->name('checkSignature');
-    });
-    Route::get('/export-pdf', function () {
-        $url = 'http://localhost:8000/phieu/1'; // Đường dẫn đến trang bạn muốn xuất PDF
-    
-        $pdf = SnappyPdf::loadFile($url)
-            ->setPaper('a4')
-            ->setOption('encoding', 'utf-8');
-    
-        return Response::make($pdf->output(), 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="phieu.pdf"',
-        ]);
     });
     
     

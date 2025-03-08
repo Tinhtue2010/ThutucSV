@@ -6,7 +6,7 @@ return [
             "100",
             "Người có công với cách mạng",
             'Người có công với cách mạng và thân nhân của người có công với cách mạng theo Pháp lệnh số
-        02/2020/UBTVQH14 về ưu đãi người có công với cách mạng=> Thân nhân của người có công với cách mạng bao gồm=> Cha đẻ, 
+        02/2020/UBTVQH14 về ưu đãi người có công với cách mạng, Thân nhân của người có công với cách mạng bao gồm: Cha đẻ, 
         mẹ đẻ, vợ hoặc chồng, con (con đẻ, con nuôi), người có công nuôi liệt sĩ.'
         ],
         [ //1

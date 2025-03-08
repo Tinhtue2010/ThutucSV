@@ -596,7 +596,9 @@ trait CommonHelper
         }
 
         // Đường dẫn lưu file
-        $filePath = storage_path("app/public/$name/$file_name");
+        $filePath = storage_path("app/public/$name/a.pdf");
+        // $filePath = storage_path("app/public/$name/$file_name");
+
 
         // Tạo thư mục nếu chưa có
         if (!file_exists(dirname($filePath))) {
@@ -778,6 +780,23 @@ trait CommonHelper
         if ($phieu->key == "RHS") {
 
             $html = view('document.thoi_hoc', ['data' => json_decode($phieu->content, true)])->render();
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+
+            // Lưu vào bộ nhớ tạm thời
+            $filePath = 'output.pdf';
+            file_put_contents($filePath, $dompdf->output());
+
+            // Đọc file PDF và chuyển thành Base64
+            $base64Pdf = base64_encode(file_get_contents($filePath));
+
+            // Xuất Base64
+            return $base64Pdf;
+        }
+        
+        if ($phieu->key == "GHP") {
+            $html =  view('document.miengiamhp', ['data' => json_decode($phieu->content, true)]);
             $dompdf->loadHtml($html);
             $dompdf->setPaper('A4', 'portrait');
             $dompdf->render();
