@@ -66,7 +66,7 @@
                         url: "{{ route('GiaoVien.KyDonPdf') }}",
                         data: form.serialize(),
                     }).then((response) => {
-                        checkMaXacNhan(response.data,'{{route('GiaoVien.xacnhan')}}',$('[name="id"]').val(),$('[name="note"]').val())
+                        checkMaXacNhan(null,response.data,'{{route('GiaoVien.xacnhan')}}',$('[name="id"]').val(),$('[name="note"]').val())
                     }).catch(function (error) {
                         mess_error("Cảnh báo",
                             "{{ __('Có lỗi xảy ra.') }}"

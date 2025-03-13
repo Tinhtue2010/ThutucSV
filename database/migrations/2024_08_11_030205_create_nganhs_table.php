@@ -18,9 +18,8 @@ return new class extends Migration
             $table->string('tennganh');
             $table->boolean('hedaotao')->default(0);
             
-            $table->unsignedBigInteger('khoa_id')->nullable();
-            $table->foreign('khoa_id')->references('id')->on('khoas')->onDelete('set null');
-            
+            $table->string('ma_khoa')->nullable();
+            $table->foreign('ma_khoa')->references('ma_khoa')->on('khoas')->onDelete('set null');
             
             $table->timestamps();
         });

@@ -31,13 +31,12 @@
                 response => {
                     model{{ $target }}.show();
                     response.data[1].forEach(item => {
-                        url_phieu = "{{route('phieu.index')}}/"+item.phieu_id;
                         $('.list_data').append(
                             '<div class="d-flex flex-column">' +
                                 '<p class="fs-5 fw-medium">Giáo viên : ' + item.full_name + ' <span class="badge badge-primary">' + item.chuc_danh + '</span></p>' +
                                 '<p class="fs-5 fw-medium">Trạng thái : <span class="badge badge-' + (item.status == 1 ? 'success' : item.status == 0 ? 'danger' : 'warning') + '">' + (item.status == 1 ? 'Đã xác nhận' : item.status == 0 ? 'Đã từ chối' : 'Yêu cầu bổ sung hồ sơ') + '</span></p>' +
                                 '<p class="fs-5 fw-medium">Ghi chú : ' + item.note + '</p>' +
-                                (item.phieu_id != null ? '<a href="' + url_phieu + '" target="_blank" class="btn btn-success me-auto ms-0">Xem phiếu</a>' : '') +
+                                ((item.file_name != null &&item.file_name != '' ) ? '<a href="/storage/' + item.file_name + '" target="_blank" class="btn btn-success me-auto ms-0">Xem phiếu</a>' : '') +
                                 '<hr>' +
                             '</div>'
                         );

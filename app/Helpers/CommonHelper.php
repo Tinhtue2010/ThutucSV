@@ -459,7 +459,6 @@ trait CommonHelper
     {
         $query = new Notification();
         $query->notification = $notification;
-        $query->phieu_id = $phieu;
         $query->file_name = $file_name;
         $query->type = $type;
         $query->user_id = $user_id ?? Auth::user()->id;
@@ -596,8 +595,8 @@ trait CommonHelper
         }
 
         // Đường dẫn lưu file
-        $filePath = storage_path("app/public/$name/a.pdf");
-        // $filePath = storage_path("app/public/$name/$file_name");
+        // $filePath = storage_path("app/public/$name/a.pdf");
+        $filePath = storage_path("app/public/$name/$file_name");
 
 
         // Tạo thư mục nếu chưa có
@@ -777,40 +776,111 @@ trait CommonHelper
         $options = new Options();
         $options->set('defaultFont', 'DejaVu Sans');
         $dompdf = new Dompdf($options);
+
         if ($phieu->key == "RHS") {
-
             $html = view('document.thoi_hoc', ['data' => json_decode($phieu->content, true)])->render();
-            $dompdf->loadHtml($html);
-            $dompdf->setPaper('A4', 'portrait');
-            $dompdf->render();
-
-            // Lưu vào bộ nhớ tạm thời
-            $filePath = 'output.pdf';
-            file_put_contents($filePath, $dompdf->output());
-
-            // Đọc file PDF và chuyển thành Base64
-            $base64Pdf = base64_encode(file_get_contents($filePath));
-
-            // Xuất Base64
-            return $base64Pdf;
         }
         
         if ($phieu->key == "GHP") {
             $html =  view('document.miengiamhp', ['data' => json_decode($phieu->content, true)]);
-            $dompdf->loadHtml($html);
-            $dompdf->setPaper('A4', 'portrait');
-            $dompdf->render();
-
-            // Lưu vào bộ nhớ tạm thời
-            $filePath = 'output.pdf';
-            file_put_contents($filePath, $dompdf->output());
-
-            // Đọc file PDF và chuyển thành Base64
-            $base64Pdf = base64_encode(file_get_contents($filePath));
-
-            // Xuất Base64
-            return $base64Pdf;
         }
+
+        if ($phieu->key == "TCGQ") {
+            $html =  view('document.tuchoi', ['data' => json_decode($phieu->content, true)]);
+        }
+
+        if ($phieu->key == "TCXH") {
+            $html =  view('document.trocapxahoi', ['data' => json_decode($phieu->content, true)]);
+        }
+        if ($phieu->key == "TCHP") {
+            $html =  view('document.hotro_cpht', ['data' => json_decode($phieu->content, true)]);
+        }
+        if ($phieu->key == "CDCS") {
+            $html =  view('document.chinhsach_qn', ['data' => json_decode($phieu->content, true)]);
+        }
+        if ($phieu->key == "HDBSSH") {
+            $html =  view('document.huongdanbosung', ['data' => json_decode($phieu->content, true)]);
+        }
+
+        if ($phieu->key == "TNHS") {
+            $html =  view('document.tiepnhan', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "DSMGHP") {
+            $html =  view('document.theodoithongke.m01_02_05', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "QDGHP") {
+            $html =  view('document.theodoithongke.m01_02_06', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "PTGHP") {
+            $html =  view('document.theodoithongke.m01_02_07', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "DSTCXH") {
+            $html =  view('document.theodoithongke.m01_03_06', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "QDTCXH") {
+            $html =  view('document.theodoithongke.m01_03_07', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "PTTCXH") {
+            $html =  view('document.theodoithongke.m01_03_10', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+        if ($phieu->key == "DSTCHP") {
+            $html =  view('document.theodoithongke.m01_03_08', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "QDTCHP") {
+            $html =  view('document.theodoithongke.m01_03_09', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "PTTCHP") {
+            $html =  view('document.theodoithongke.m01_03_10_2', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "DSCDTA") {
+            $html =  view('document.theodoithongke.m01_04_05', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "QDCDTA") {
+            $html =  view('document.theodoithongke.m01_04_06', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+
+        if ($phieu->key == "DSCDHP") {
+            $html =  view('document.theodoithongke.m01_04_07', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "QDCDHP") {
+            $html =  view('document.theodoithongke.m01_04_08', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+
+        if ($phieu->key == "DSCDKTX1") {
+            $html =  view('document.theodoithongke.m01_04_09', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "DSCDKTX4") {
+            $html =  view('document.theodoithongke.m01_04_10', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+        if ($phieu->key == "QDCDKTX1") {
+            $html =  view('document.theodoithongke.m01_04_11', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "QDCDKTX4") {
+            $html =  view('document.theodoithongke.m01_04_12', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+        if ($phieu->key == "PTQT4") {
+            $html =  view('document.theodoithongke.m01_04_13', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        // Lưu vào bộ nhớ tạm thời
+        $filePath = 'output.pdf';
+        file_put_contents($filePath, $dompdf->output());
+
+        // Đọc file PDF và chuyển thành Base64
+        $base64Pdf = base64_encode(file_get_contents($filePath));
+
+        // Xuất Base64
+        return $base64Pdf;
     }
 
     function convertPdfToBase64($filePath)
@@ -1032,7 +1102,8 @@ trait CommonHelper
             ]
         ];
         $msg_signExternal = $this->api_service_get_hash("https://gwsca.vnpt.vn/rest/v2/signature/signExternal", $data_signExternal);
-        
+
+
         return $msg_signExternal->signResps[0]->signedData;
     }
 }

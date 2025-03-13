@@ -31,19 +31,19 @@
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>
                                     @foreach ($lops as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                    <option value="{{$item->ma_lop}}">{{$item->name}}</option>
                                     @endforeach
                                 </select>
                                 <!--end::Select2-->
                             </div>
                             <div class="w-100 mw-150px">
-                                <label class="form-label">Năm</label>
+                                <label class="form-label">Khoá học</label>
                                 <!--begin::Select2-->
-                                <select class="form-select form-select-solid filter-select" data-name="school_year" data-control="select2" data-placeholder="Năm">
+                                <select class="form-select form-select-solid filter-select" data-name="nien_khoa" data-control="select2" data-placeholder="Khoá học">
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>
-                                    @for ($year = 2000; $year <= 2100; $year++)
-                                        <option @if($year == date('Y')) @endif value="{{ $year }}">{{ $year }}</option>
+                                    @for ($year = 1; $year <= 100; $year++)
+                                        <option  value="{{ $year }}">{{ $year }}</option>
                                     @endfor
                                 </select>
                                 <!--end::Select2-->
@@ -79,8 +79,9 @@
                                     <th class="text-nowrap" data-name="date_of_birth">{{ __('Ngày sinh') }}</th>
                                     <th class="text-nowrap" data-name="lop_name">{{ __('Lớp') }}</th>
                                     <th class="text-nowrap" data-name="khoa_name">{{ __('Khoa') }}</th>
-                                    <th class="text-nowrap" data-name="school_year">{{ __('Hệ đào tạo') }}</th>
-                                    <th class="text-nowrap" data-name="ngay_nhap_hoc">{{ __('Liên khóa') }}</th>
+                                    <th class="text-nowrap" data-name="nien_khoa">{{ __('Hệ đào tạo') }}</th>
+                                    <th class="text-nowrap" data-name="nien_khoa">{{ __('Liên khóa') }}</th>
+                                    <th class="text-nowrap" data-name="khoa_hoc">{{ __('Khoá học') }}</th>
                                     <td class="text-nowrap">{{ __('Chức năng') }}</td>
                                 </tr>
                             </thead>

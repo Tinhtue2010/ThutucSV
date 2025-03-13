@@ -22,7 +22,7 @@ class ClassManagerController extends Controller
     public function getData(Request $request)
     {
         $query = Lop::query()
-            ->leftJoin("khoas", "lops.khoa_id", "=", "khoas.id")
+            ->leftJoin("khoas", "lops.ma_khoa", "=", "khoas.ma_khoa")
             ->leftJoin("teachers", "lops.teacher_id", "=", "teachers.id")
             ->leftJoin("nganhs", "lops.nganh_id", "=", "nganhs.manganh")
             ->select("lops.*","nganhs.tennganh as nganh","nganhs.hedaotao as hedaotao", "teachers.full_name as teacher_name", "khoas.name as khoa_name");
@@ -74,9 +74,8 @@ class ClassManagerController extends Controller
             Lop::create($request->only([
                 'name',
                 'nganh_id',
-                'khoa_id',
+                'ma_khoa',
                 'teacher_id',
-                'hocphi'
             ]));
 
             return true;
@@ -97,10 +96,9 @@ class ClassManagerController extends Controller
 
         return $lop->update($request->only([
             'name',
-            'nganh',
-            'khoa_id',
+            'nganh_id',
+            'ma_khoa',
             'teacher_id',
-            'hocphi'
         ]));
     }
 

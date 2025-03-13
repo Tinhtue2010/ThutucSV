@@ -142,7 +142,7 @@ class KhoaManagerController extends Controller
         {
             return abort(404);
         }
-        $nganh = Nganhs::where('khoa_id',$id)->get();
+        $nganh = Nganhs::where('ma_khoa',$id)->get();
         return $nganh;
     }
 
@@ -151,7 +151,7 @@ class KhoaManagerController extends Controller
         {
             return abort(404);
         }
-        $lop = Lop::where('lops.khoa_id',$id)
+        $lop = Lop::where('lops.ma_khoa',$id)
         ->leftJoin("nganhs", "lops.nganh_id", "=", "nganhs.manganh")
         ->select("lops.*","nganhs.tennganh as tennganh","nganhs.hedaotao as hedaotao")->get();
         return $lop;

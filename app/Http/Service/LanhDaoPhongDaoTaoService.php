@@ -108,7 +108,8 @@ class LanhDaoPhongDaoTaoService  extends Controller
             if ($student->date_range_cmnd == null) {
                 $content_phieu['ngaycap'] = '';
             } else {
-                $formattedDate = Carbon::createFromFormat('Y-m-d', $student->date_range_cmnd)->format('d/m/Y');
+                $date = substr($student->date_range_cmnd, 0, 10);
+            $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
                 $content_phieu['ngaycap'] = $formattedDate;
             }
 

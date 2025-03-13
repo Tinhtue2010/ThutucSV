@@ -50,9 +50,6 @@ class GiaoVienService  extends Controller
         
     
         try {
-            if ($stopStudy->status != 0 && $stopStudy->status != -1) {
-                abort(404);
-            }
             $getPDF = $this->getPDF($request->fileId, $request->tranId, $request->transIDHash);
             
             if ($getPDF === 0) {
@@ -71,11 +68,11 @@ class GiaoVienService  extends Controller
 
 
             $newStopStudy = $stopStudy->replicate();
-            $newStopStudy->phieu_id = null;
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = $teacher->id;
             $newStopStudy->parent_id = $request->id;
             $newStopStudy->note = $request->note;
+            $newStopStudy->file_name = null;
             $user = User::where('student_id',$stopStudy->student_id)->first();
             $this->notification("Đơn xin rút hồ sơ của bạn đã được giáo viên chủ nhiệm xác nhận", null,null, "RHS",$user->id);
             $newStopStudy->save();
@@ -101,7 +98,6 @@ class GiaoVienService  extends Controller
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 0;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = null;
             $newStopStudy->parent_id = $request->id;
             $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
             

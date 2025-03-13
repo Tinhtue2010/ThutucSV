@@ -24,8 +24,8 @@ class StopStudyController extends Controller
             $don = null;
         }
         $user = Auth::user();
-        $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+        $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)->first();
             
@@ -43,13 +43,14 @@ class StopStudyController extends Controller
         }
 
 
-        $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+        $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)->first();
 
         $studentData['full_name'] = $student->full_name;
-        $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
+
+        $studentData['date_of_birth'] = Carbon::parse($student->date_of_birth)->format('d/m/Y');
         $studentData['lop'] = $student->lop_name;
         $studentData['khoa'] = $student->khoa_name;
         $studentData['data'] = $request->data;
@@ -85,8 +86,8 @@ class StopStudyController extends Controller
         }
         $file_name = $this->saveBase64AsPdf($getPDF,'RUT_HO_SO');
 
-        $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-        ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+        $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+        ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
         ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
         ->where('students.id', $user->student_id)->first();
 
@@ -111,7 +112,7 @@ class StopStudyController extends Controller
             $query->round = 1;
             $query->note = $request->data;
             $query->file_name = $file_name;
-            $query->lop_id = $student->lop_id;
+            $query->ma_lop = $student->ma_lop;
             $query->save();
         }
 

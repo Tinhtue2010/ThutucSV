@@ -53,8 +53,8 @@
 
                                 </span>
                             </div>
-                            @isset($don->phieu_id)
-                                <a href="{{ route('phieu.index', ['id' => $don->phieu_id]) }}" target="_blank"
+                            @isset($don->file_name)
+                                <a href="/storage/{{$don->file_name}}" target="_blank"
                                     class="btn btn-primary">Xem phiếu</a>
                             @endisset
                             @if ($don_parent->status == 6)
@@ -196,7 +196,7 @@
                                 "{{ __('Bạn chưa đăng ký chữ ký số cần đăng ký chữ ký số SmartCA') }}"
                             )
                         }
-                        checkMaXacNhan(response.data);
+                        checkMaXacNhan(formData,response.data);
                     }).catch(function(error) {
                         mess_error("Cảnh báo",
                             "{{ __('Có lỗi xảy ra bạn cần kiểm tra lại thông tin.') }}"

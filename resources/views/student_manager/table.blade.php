@@ -31,7 +31,8 @@
                             {{ request('khoa') === 'true' ? 'data.khoa = true;' : '' }}
                             data.search = '';
                             $('.filter-select').each(function() {
-                                if ($(this).data('name') == undefined || $(this).val() == 'all') {
+                                if ($(this).data('name') == undefined || $(this).val() ==
+                                    'all') {
                                     return;
                                 }
                                 var name_filter = $(this).data('name');
@@ -77,13 +78,20 @@
                             data: 'khoa_name'
                         },
                         {
-                            data: 'hedaotao', 
-                            render: function(data, type, row){
-                                return `${data.hedaotao == 0 ? "Đại học" : data.hedaotao == 1 ? "Thạc sĩ" : data.hedaotao == 2 ? "Cao đẳng" : "Trung cấp"}`;
+                            data: 'hedaotao',
+                            render: function(data, type, row) {                     
+                                return `${data == 0 ? "Đại học" 
+                                    : data == 1 ? "Thạc sĩ" 
+                                    : data == 2 ? "Cao đẳng" 
+                                    : data == 3 ? "Trung cấp" 
+                                    : "Không xác định"}`;
                             }
                         },
                         {
-                            data: 'school_year'
+                            data: 'nien_khoa'
+                        },
+                        {
+                            data: 'khoa_hoc'
                         },
                         {
                             data: 'id',

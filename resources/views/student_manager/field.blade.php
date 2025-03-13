@@ -69,7 +69,7 @@
             <span class="required">Liên khóa</span>
         </label>
         <!--end::Label-->
-        <input type="text" value="{{ date('Y') }}" class="form-control" name="school_year" />
+        <input type="text" value="{{ date('Y') }}" class="form-control" name="nien_khoa" />
     </div>
     <div class="d-flex flex-column mb-8 fv-row col-6 ps-4">
         <!--begin::Label-->

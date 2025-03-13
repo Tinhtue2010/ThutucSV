@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreign('student_id')->references('id')->on('students')->onDelete('set null');
 
             $table->unsignedBigInteger('phieu_id')->nullable();
-            $table->foreign('phieu_id')->references('id')->on('phieus')->onDelete('set null');
+            $table->foreign('phieu_id')->references('id')->on('stop_studies')->onDelete('set null');
 
             $table->timestamps();
         });

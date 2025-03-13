@@ -12,20 +12,28 @@ class Student extends Model
     protected $fillable = [
         'full_name',
         'student_code',
-        'student_id',
         'date_of_birth',
         'phone',
         'email',
-        'lop_id',
-        'school_year',
-        'ngay_nhap_hoc',
+        'ma_lop',
+        'nien_khoa',
+        'khoa_hoc',
+        'trinh_do',
         'note',
         'cmnd',
         'date_range_cmnd',
         'gioitinh',
         'status',
-        'file_name'
+        'chu_ky',
     ];
+
+    protected $casts = [
+        'date_of_birth' => 'date',
+        'date_range_cmnd' => 'date',
+        'gioitinh' => 'boolean',
+        'status' => 'boolean',
+    ];
+
 
     public function lop()
     {

@@ -15,26 +15,36 @@
                         <div class="row mb-5">
                             <div class="col-sm-6">
                                 <label for="kt_td_picker_linked_1_input" class="form-label">Tiếp nhận</label>
-                                <div class="input-group log-event" id="kt_td_picker_linked_1" data-td-target-input="nearest" data-td-target-toggle="nearest">
-                                    <input readonly name="thoigiantiepnhan" id="kt_td_picker_linked_1_input" type="text" class="form-control" data-td-target="#kt_td_picker_linked_1" />
-                                    <span class="input-group-text" data-td-target="#kt_td_picker_linked_1" data-td-toggle="datetimepicker">
-                                        <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
+                                <div class="input-group log-event" id="kt_td_picker_linked_1"
+                                    data-td-target-input="nearest" data-td-target-toggle="nearest">
+                                    <input readonly name="thoigiantiepnhan" id="kt_td_picker_linked_1_input"
+                                        type="text" class="form-control" data-td-target="#kt_td_picker_linked_1" />
+                                    <span class="input-group-text" data-td-target="#kt_td_picker_linked_1"
+                                        data-td-toggle="datetimepicker">
+                                        <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span
+                                                class="path2"></span></i>
                                     </span>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <label for="kt_td_picker_linked_2_input" class="form-label">Trả kết quả</label>
-                                <div class="input-group log-event" id="kt_td_picker_linked_2" data-td-target-input="nearest" data-td-target-toggle="nearest">
-                                    <input readonly name="thoigiantraketqua" id="kt_td_picker_linked_2_input" type="text" class="form-control" data-td-target="#kt_td_picker_linked_2" />
-                                    <span class="input-group-text" data-td-target="#kt_td_picker_linked_2" data-td-toggle="datetimepicker">
-                                        <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
+                                <div class="input-group log-event" id="kt_td_picker_linked_2"
+                                    data-td-target-input="nearest" data-td-target-toggle="nearest">
+                                    <input readonly name="thoigiantraketqua" id="kt_td_picker_linked_2_input"
+                                        type="text" class="form-control" data-td-target="#kt_td_picker_linked_2" />
+                                    <span class="input-group-text" data-td-target="#kt_td_picker_linked_2"
+                                        data-td-toggle="datetimepicker">
+                                        <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span
+                                                class="path2"></span></i>
                                     </span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-12">
-                            <label for="kt_td_picker_linked_2_input" class="form-label">Ý kiến giải quyết công việc</label><br>
-                            <label for="kt_td_picker_linked_2_input" class="form-label text-warning">Lưu ý: Nội dung sẽ được lưu vào phiếu theo dõi giải quyết công việc</label>
+                            <label for="kt_td_picker_linked_2_input" class="form-label">Ý kiến giải quyết công
+                                việc</label><br>
+                            <label for="kt_td_picker_linked_2_input" class="form-label text-warning">Lưu ý: Nội dung sẽ
+                                được lưu vào phiếu theo dõi giải quyết công việc</label>
                             <textarea type="text" class="form-control" cols="5" rows="3" name="ykientiepnhan"></textarea>
                         </div>
                         <br>
@@ -49,7 +59,8 @@
                                     <tr>
                                         <th class="fw-bold text-center" style="width: 7%">TT</th>
                                         <th class="fw-bold text-center" style="width: 40%">Tên giấy tờ</th>
-                                        <th class="fw-bold text-center" style="width: 30%">Hình thức (bản chính, bản sao hoặc bản chụp)</th>
+                                        <th class="fw-bold text-center" style="width: 30%">Hình thức (bản chính, bản sao
+                                            hoặc bản chụp)</th>
                                         <th class="fw-bold text-center" style="width: 20%">Ghi chú</th>
                                         <th class="fw-bold text-center" style="width: 3%"></th>
                                     </tr>
@@ -67,7 +78,8 @@
                                             <input name="ghichu[]" class="w-100 p-3 border-0" type="text">
                                         </td>
                                         <th>
-                                            <i onclick="deleteCloumn(this)" class="ki-duotone ki-minus-circle fs-2x cursor-pointer text-danger">
+                                            <i onclick="deleteCloumn(this)"
+                                                class="ki-duotone ki-minus-circle fs-2x cursor-pointer text-danger">
                                                 <span class="path1"></span>
                                                 <span class="path2"></span>
                                             </i>
@@ -77,7 +89,8 @@
 
                             </table>
                             <div class="d-flex w-100 justify-content-end">
-                                <i onclick="addCloumn()" class="ki-duotone ki-plus-circle fs-2x cursor-pointer text-primary">
+                                <i onclick="addCloumn()"
+                                    class="ki-duotone ki-plus-circle fs-2x cursor-pointer text-primary">
                                     <span class="path1"></span>
                                     <span class="path2"></span>
                                 </i>
@@ -127,6 +140,7 @@
         $('#kt_modal_{{ $target }}_target button.btn-danger').click(function() {
             $('#kt_modal_{{ $target }}_target .button_clicked').val('huy_phieu');
         });
+
         function setSTT() {
             $('#table_tiepnhan tr').each(function(index) {
                 $(this).find('td:first').text(index + 1);
@@ -172,26 +186,26 @@
             let form = $(this);
             validation_{{ $target }}.validate().then(async function(status) {
                 if (status === 'Valid') {
-                    await checkMaXacNhan().then(function(result) {
-                        if (false) {
-                            return;
-                        } else {
-                            form.append('otp', result);
-                        }
-                    });
                     axios({
                         method: 'POST',
-                        url: "{{ route('PhongDaoTao.tiepnhanhs') }}",
+                        url: "{{ route('PhongDaoTao.tiepnhanhsPDF') }}",
                         data: form.serialize(),
-                    }).then((response) => {
-                        if ($('#kt_modal_{{ $target }}_target .button_clicked').val() == 'xem_truoc') {
-                            window.open("{{ route('phieu.index') }}/" + response.data, '_blank');
+                    }).then(async (response) => {
+
+                        var value = $('#kt_modal_{{ $target }}_target .button_clicked')
+                            .val();
+                        if (value === 'huy_phieu') {
+                            mess_success('Thông báo',
+                                "Đã xoá thành công")
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            
+                            await checkMaXacNhan(null, response.data,
+                                '{{ route('PhongDaoTao.tiepnhanhs') }}',
+                                $('[name="id"]').val(), null)
                         }
-                        mess_success('Thông báo',
-                            "Thành công")
-                        $(this).trigger("reset");
-                        model{{ $target }}.hide();
-                        Datatable.loadData();
                     }).catch(function(error) {
                         mess_error("Cảnh báo",
                             "{{ __('Có lỗi xảy ra.') }}"
@@ -251,30 +265,30 @@
             useCurrent: false
         });
 
-// Sử dụng event listeners
-linkedPicker1Element.addEventListener(tempusDominus.Namespace.events.change, (e) => {
-    const selectedDate = e.detail.date;
-    const maxDate = new Date(selectedDate);
-    maxDate.setDate(maxDate.getDate() + 7); // Thêm 7 ngày
-    linked2.updateOptions({
-        restrictions: {
-            minDate: selectedDate,
-            maxDate: maxDate
-        }
-    });
-});
+        // Sử dụng event listeners
+        linkedPicker1Element.addEventListener(tempusDominus.Namespace.events.change, (e) => {
+            const selectedDate = e.detail.date;
+            const maxDate = new Date(selectedDate);
+            maxDate.setDate(maxDate.getDate() + 7); // Thêm 7 ngày
+            linked2.updateOptions({
+                restrictions: {
+                    minDate: selectedDate,
+                    maxDate: maxDate
+                }
+            });
+        });
 
-// Sử dụng phương thức subscribe
-const subscription = linked2.subscribe(tempusDominus.Namespace.events.change, (e) => {
-    const selectedDate = e.date;
-    const minDate = new Date(selectedDate);
-    minDate.setDate(minDate.getDate() - 7); // Trừ 7 ngày
-    linked1.updateOptions({
-        restrictions: {
-            minDate: minDate,
-            maxDate: selectedDate
-        }
-    });
-});
+        // Sử dụng phương thức subscribe
+        const subscription = linked2.subscribe(tempusDominus.Namespace.events.change, (e) => {
+            const selectedDate = e.date;
+            const minDate = new Date(selectedDate);
+            minDate.setDate(minDate.getDate() - 7); // Trừ 7 ngày
+            linked1.updateOptions({
+                restrictions: {
+                    minDate: minDate,
+                    maxDate: selectedDate
+                }
+            });
+        });
     </script>
 @endpush

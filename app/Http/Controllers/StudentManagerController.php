@@ -25,33 +25,30 @@ class StudentManagerController extends Controller
     {
         $user = Auth::user();
         $teacher = Teacher::where('id', $user->teacher_id)->first();
-        $lopIds = Lop::where('teacher_id', $user->teacher_id)->pluck('id');
-        $query = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+        $lopIds = Lop::where('teacher_id', $user->teacher_id)->pluck('ma_lop');
+        $query = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
             ->leftJoin("nganhs", "lops.nganh_id", "=", "nganhs.manganh")
-            ->select('students.*','khoas.name as khoa_name','nganhs.hedaotao', 'lops.khoa_id', 'lops.name as lop_name', 'khoas.name as khoa_name');
+            ->select('students.*','khoas.name as khoa_name','nganhs.hedaotao', 'lops.ma_khoa', 'lops.name as lop_name', 'khoas.name as khoa_name');
         if (Role(2) || Role(3)) {
             if (isset($request->khoa)) {
-                $query = $query->where('lops.khoa_id', $teacher->khoa_id);
+                $query = $query->where('lops.ma_khoa', $teacher->ma_khoa);
             } elseif (isset($request->gvcn)) {
-                $query = $query->whereIn('lop_id', $lopIds);
+                $query = $query->whereIn('students.ma_lop', $lopIds);
             } else {
-                $query = $query->whereIn('lop_id', $lopIds);
+                $query = $query->whereIn('students.ma_lop', $lopIds);
             }
         }
-        if (isset($request->school_year)) {
-            $query->where('school_year', $request->school_year);
-        }
-        if (isset($request->he_tuyen_sinh)) {
-            $query->where('he_tuyen_sinh', $request->he_tuyen_sinh);
+        if (isset($request->nien_khoa)) {
+            $query->where('khoa_hoc', $request->nien_khoa);
         }
         if (isset($request->status)) {
             $query->where('status', $request->status);
         }
         if (isset($request->lop_id)) {
-            $query->where('lop_id', $request->lop_id);
+            $query->where('students.ma_lop', $request->lop_id);
         }
-        $data = $this->queryPagination($request, $query, ['full_name', 'student_code', 'student_id']);
+        $data = $this->queryPagination($request, $query, ['full_name', 'student_code']);
 
         return $data;
     }
@@ -88,7 +85,7 @@ class StudentManagerController extends Controller
                 'date_of_birth',
                 'phone',
                 'lop_id',
-                'school_year',
+                'nien_khoa',
                 'ngay_nhap_hoc',
                 'status',
                 'note',
@@ -125,7 +122,7 @@ class StudentManagerController extends Controller
             'phone',
             'email',
             'lop_id',
-            'school_year',
+            'nien_khoa',
             'he_tuyen_sinh',
             'nganh_tuyen_sinh',
             'trinh_do',
@@ -149,7 +146,7 @@ class StudentManagerController extends Controller
                 "so_dt_ca_nhan" => "phone",
                 "email" => "email",
                 "ten_lop" => "lop_id",
-                "lien_khoa"=>"school_year",
+                "lien_khoa"=>"nien_khoa",
                 "ngay_nhap_hoc" => "ngay_nhap_hoc",
                 "ghi_chu_ho_so" => "note",
                 "can_cuoc" => "cmnd",

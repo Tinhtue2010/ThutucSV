@@ -32,7 +32,7 @@ class KhoaController extends Controller
             ->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-            ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->select('stop_studies.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name')
             ->where(function ($query) {
                 $query
@@ -44,9 +44,9 @@ class KhoaController extends Controller
             });
 
         $teacher = Teacher::find($user->teacher_id);
-        $lopIds = Lop::where('khoa_id', $teacher->khoa_id ?? 0)->pluck('id') ?? [];
+        $lopIds = Lop::where('ma_khoa', $teacher->ma_khoa ?? 0)->pluck('ma_lop') ?? [];
 
-        $query = $query->whereIn('stop_studies.lop_id', $lopIds);
+        $query = $query->whereIn('stop_studies.ma_lop', $lopIds);
 
         if (isset($request->year)) {
             $query->whereYear('stop_studies.created_at', $request->year);
@@ -70,6 +70,19 @@ class KhoaController extends Controller
         $data = $this->queryPagination($request, $query, ['students.full_name', 'students.student_code']);
 
         return $data;
+    }
+
+    function KyDonPdf(Request $request)
+    {
+        try {
+            $stopStudy =  StopStudy::find($request->id);
+            
+            if ($stopStudy->type == 0) {
+                return $this->khoa->KyDonPdfRHS($request, $stopStudy);
+            }
+        } catch (QueryException $e) {
+            abort(404);
+        }
     }
 
     function xacnhan(Request $request)

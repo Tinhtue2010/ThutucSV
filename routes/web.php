@@ -151,6 +151,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('get-data', [KhoaController::class, 'getData'])->name('getData');
             Route::post('xacnhan', [KhoaController::class, 'xacnhan'])->name('xacnhan');
             Route::post('khongxacnhan', [KhoaController::class, 'khongxacnhan'])->name('khongxacnhan');
+            Route::post('/ky_don_pdf', [KhoaController::class, 'KyDonPdf'])->name('KyDonPdf');
         });
     });
 
@@ -172,10 +173,15 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/', [PhongDaoTaoController::class, 'index'])->name('index');
             Route::get('get-data', [PhongDaoTaoController::class, 'getData'])->name('getData');
             Route::post('bosunghs', [PhongDaoTaoController::class, 'bosunghs'])->name('bosunghs');
+            Route::post('bosunghs-pdf', [PhongDaoTaoController::class, 'bosunghsPDF'])->name('bosunghsPDF');
             Route::get('getbosunghs/{id?}', [PhongDaoTaoController::class, 'getbosunghs'])->name('getbosunghs');
             Route::post('tiepnhanhs', [PhongDaoTaoController::class, 'tiepnhanhs'])->name('tiepnhanhs');
+            Route::post('tiepnhanhs-pdf', [PhongDaoTaoController::class, 'tiepnhanhsPDF'])->name('tiepnhanhsPDF');
+
             Route::get('gettiepnhanhs/{id?}', [PhongDaoTaoController::class, 'gettiepnhanhs'])->name('gettiepnhanhs');
             Route::post('tuchoihs', [PhongDaoTaoController::class, 'tuchoihs'])->name('tuchoihs');
+            Route::post('tuchoihs-pdf', [PhongDaoTaoController::class, 'tuchoihsPDF'])->name('tuchoihsPDF');
+
             Route::post('duyeths', [PhongDaoTaoController::class, 'duyeths'])->name('duyeths');
             Route::post('khongxacnhan', [PhongDaoTaoController::class, 'khongxacnhan'])->name('khongxacnhan');
 
@@ -245,6 +251,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/', [KeHoachTaiChinhController::class, 'index'])->name('index');
             Route::get('get-data', [KeHoachTaiChinhController::class, 'getData'])->name('getData');
             Route::post('xacnhan', [KeHoachTaiChinhController::class, 'xacnhan'])->name('xacnhan');
+            Route::post('ky_don_pdf', [KeHoachTaiChinhController::class, 'KyDonPdf'])->name('KyDonPdf');
             Route::post('khongxacnhan', [KeHoachTaiChinhController::class, 'khongxacnhan'])->name('khongxacnhan');
 
             Route::name('MienGiamHP.')->prefix('mien-giam-hp')->group(function () {

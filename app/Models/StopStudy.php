@@ -13,7 +13,6 @@ class StopStudy extends Model
         'student_id',
         'round',
         'parent_id',
-        'phieu_id',
         'note',
         'status',
         'lop_id',

@@ -16,9 +16,6 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('phieu_id')->nullable();
-            $table->foreign('phieu_id')->references('id')->on('phieus')->onDelete('set null');
-
             $table->string('notification');
 
             $table->unsignedBigInteger('user_id')->nullable();
@@ -27,6 +24,8 @@ return new class extends Migration
             $table->boolean('status')->default(0);
 
             $table->string('type')->nullable();
+
+            $table->string('file_name')->nullable(); 
 
             $table->timestamps();
         });

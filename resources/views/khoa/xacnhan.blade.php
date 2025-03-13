@@ -58,23 +58,12 @@
             let form = $(this);
             validation_{{ $target }}.validate().then(async function(status) {
                 if (status === 'Valid') {
-                    await checkMaXacNhan().then(function(result) {
-                        if (false) {
-                            return;
-                        } else {
-                            form.append('otp', result);
-                        }
-                    });
                     axios({
                         method: 'POST',
-                        url: "{{ route('Khoa.xacnhan') }}",
+                        url: "{{ route('Khoa.KyDonPdf') }}",
                         data: form.serialize(),
                     }).then((response) => {
-                        mess_success('Thông báo',
-                            "Xác nhận đơn thành công")
-                        $(this).trigger("reset");
-                        model{{ $target }}.hide();
-                        Datatable.loadData();
+                        checkMaXacNhan(null,response.data,'{{route('Khoa.xacnhan')}}',$('[name="id"]').val(),$('[name="note"]').val())
                     }).catch(function(error) {
                         mess_error("Cảnh báo",
                             "{{ __('Có lỗi xảy ra.') }}"

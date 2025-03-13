@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
 
-            $table->unsignedBigInteger('khoa_id')->nullable();
-            $table->foreign('khoa_id')->references('id')->on('khoas')->onDelete('set null');
+            $table->string('ma_lop')->unique()->nullable();
 
-                        
+            $table->string('ma_khoa')->nullable();
+            $table->foreign('ma_khoa')->references('ma_khoa')->on('khoas')->onDelete('set null');
 
 
             $table->timestamps();

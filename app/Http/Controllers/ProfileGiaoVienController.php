@@ -12,7 +12,7 @@ class ProfileGiaoVienController extends Controller
     function index()
     {
         $user = Auth::user();
-        $teacher = Teacher::leftJoin('khoas', 'teachers.khoa_id', '=', 'khoas.id')
+        $teacher = Teacher::leftJoin('khoas', 'teachers.ma_khoa', '=', 'khoas.ma_khoa')
             ->select('teachers.*', 'khoas.name as khoa_name')
             ->where('teachers.id', $user->teacher_id)->first();
         return view('profile_giao_vien.index', ['teacher' => $teacher,'user'=>$user]);

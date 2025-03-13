@@ -15,6 +15,7 @@ class NganhsSeeder extends Seeder
      */
     public function run()
     {
+        $khoa = ["","NT","CNTT","NN","DL","TS","MT","VH","SP","KHCB"];
         $filePath = base_path('database/seeders/csv/nganhs.csv');
         if (!File::exists($filePath)) {
             $this->command->error("File CSV không tồn tại tại đường dẫn: " . $filePath);
@@ -29,7 +30,7 @@ class NganhsSeeder extends Seeder
                     'manganh' => $row[0],
                     'tennganh' => $row[1],
                     'hedaotao' => $row[2],
-                    'khoa_id' => !empty($row[3]) ? $row[3] : null,
+                    'ma_khoa' => !empty($row[3]) ? $khoa[$row[3]] : null,
                 ]);
             }
             fclose($handle);

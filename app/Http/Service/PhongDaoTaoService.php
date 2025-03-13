@@ -12,38 +12,18 @@ use Illuminate\Support\Facades\Auth;
 
 class PhongDaoTaoService extends Controller
 {
-
-    function bosunghsRHS($request, $stopStudy)
+    function bosunghsRHSPDF($request, $stopStudy)
     {
+
         if ($stopStudy->status != 2 && $stopStudy->status != -3 && $stopStudy->status != 3 && $stopStudy->status != -4) {
             abort(404);
-        }
-
-        if ($stopStudy->status == 3 || $stopStudy->status == -4) {
-            $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
-            if ($newStopStudy) {
-                try {
-                    $phieu = Phieu::find($newStopStudy->phieu_id);
-                    if ($phieu) {
-                        $phieu->delete();
-                    }
-                    $newStopStudy->delete();
-                    $stopStudy->update(["status" => 2]);
-                } catch (\Exception $e) {
-                }
-            }
         }
         if ($request->button_clicked == "huy_phieu" && $stopStudy->status == -3) {
             $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
             if ($newStopStudy) {
                 try {
-                    $phieu = Phieu::find($newStopStudy->phieu_id);
-                    if ($phieu) {
-                        $phieu->delete();
-                    }
                     $newStopStudy->delete();
-                    $stopStudy->update(["status" => 2]);
-
+                    $stopStudy->update(["status" => 3]);
                     return true;
                 } catch (\Exception $e) {
                     abort(404);
@@ -52,9 +32,13 @@ class PhongDaoTaoService extends Controller
                 abort(404);
             }
         }
-        if ($request->button_clicked == "huy_phieu") {
-            return true;
+        $user = Auth::user();
+        $info_signature = $this->getInfoSignature($user->cccd);
+        if ($info_signature === false) {
+            return 0;
         }
+
+
         $student = Student::find($stopStudy->student_id);
         $content_phieu['bosunggiayto'] = $request->bosunggiayto ?? '';
         $content_phieu['kekhailaigiayto'] = $request->kekhailaigiayto ?? '';
@@ -69,10 +53,12 @@ class PhongDaoTaoService extends Controller
         $content_phieu['ngaycap'] = $student->date_range_cmnd ?? '';
         $content_phieu['sdt'] = $student->phone ?? '';
         $content_phieu['email'] = $student->email ?? '';
+
         if ($student->date_range_cmnd == null) {
             $content_phieu['ngaycap'] = '';
         } else {
-            $formattedDate = Carbon::createFromFormat('Y-m-d', $student->date_range_cmnd)->format('d/m/Y');
+            $date = substr($student->date_range_cmnd, 0, 10);
+            $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
             $content_phieu['ngaycap'] = $formattedDate;
         }
 
@@ -80,72 +66,54 @@ class PhongDaoTaoService extends Controller
         $content_phieu['day'] = Carbon::now()->day;
         $content_phieu['month'] = Carbon::now()->month;
         $content_phieu['year'] = Carbon::now()->year;
+        $chu_ky =  $this->convertImageToBase64($user->getUrlChuKy());
+        $content_phieu['chu_ky'] = $chu_ky;
+
+
 
         $content_phieu['ndgiaiquyet'] = "đơn xin rút hồ sơ";
-        $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-        $this->notification("Đơn xin rút hồ sơ của bạn cần bổ sung hồ sơ", null, "RHS",$user_id);
 
-        // if ($stopStudy->type == 0) {
-        //     $content_phieu['ndgiaiquyet'] = "đơn xin rút hồ sơ";
-        //     $this->notification("Đơn xin rút hồ sơ của bạn cần bổ sung hồ sơ", null, "RHS");
-        // }
-        // if ($stopStudy->type == 1) {
-        //     $content_phieu['ndgiaiquyet'] = "đơn xin miễn giảm học phí";
-        //     $this->notification("Đơn xin miễn giảm học phí của bạn cần bổ sung hồ sơ", null, "GHP");
-        // }
-        // if ($stopStudy->type == 2) {
-        //     $content_phieu['ndgiaiquyet'] = "đơn xin trợ cấp xã hội";
-        //     $this->notification("Đơn xin trợ cấp xã hội của bạn cần bổ sung hồ sơ", null, "TCXH");
-        // }
+        $phieu = new Phieu();
+        $phieu->student_id = $stopStudy->student_id;
+        $phieu->teacher_id = $user->teacher_id;
+        $phieu->name = "Phiếu hướng dẫn bổ sung hồ sơ";
+        $phieu->key = "HDBSSH";
+        $phieu->content = json_encode($content_phieu);
 
-        // if ($stopStudy->type == 3) {
-        //     $content_phieu['ndgiaiquyet'] = "đơn xin chế độ chính sách";
-        //     $this->notification("Đơn xin chế độ chính sách của bạn cần bổ sung hồ sơ", null, "CDCS");
-        // }
+        $pdf =  $this->createPDF($phieu);
+        return $this->craeteSignature($info_signature, $pdf, $user->cccd, 'BO_SUNG_HS_RHS_SV_' . $student->student_code);
+    }
+    function bosunghsRHS($request, $stopStudy)
+    {
 
-        if ($stopStudy->status == 2) {
-
-            $phieu = new Phieu();
-            $phieu->student_id = $stopStudy->student_id;
-            $phieu->teacher_id = Auth::user()->teacher_id;
-            $phieu->name = "Phiếu hướng dẫn bổ sung hồ sơ";
-            $phieu->key = "HDBSSH";
-            $phieu->content = json_encode($content_phieu);
-            $phieu->save();
-
-            $newStopStudy = $stopStudy->replicate();
-            $newStopStudy->status = 0;
-            $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = $phieu->id;
-            $newStopStudy->parent_id = $request->id;
-            $newStopStudy->note = "Yêu cầu bổ sung hồ sơ";
-            $newStopStudy->save();
-            $stopStudy->update(["status" => -3, "is_update" => 0]);
-            return $phieu->id;
+        if ($stopStudy->status != 2 && $stopStudy->status != -3 && $stopStudy->status != 3 && $stopStudy->status != -4) {
+            abort(404);
         }
-        if ($stopStudy->status == -3) {
-            $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
-            $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->note = "Yêu cầu bổ sung hồ sơ";
-            $newStopStudy->save();
+        $user = Auth::user();
+        $getPDF = $this->getPDF($request->fileId, $request->tranId, $request->transIDHash);
 
-            $phieu = Phieu::find($newStopStudy->phieu_id);
-            $phieu->student_id = $stopStudy->student_id;
-            $phieu->teacher_id = Auth::user()->teacher_id;
-            $phieu->name = "Phiếu hướng dẫn bổ sung hồ sơ";
-            $phieu->key = "HDBSSH";
-            $phieu->content = json_encode($content_phieu);
-            $phieu->save();
-            $stopStudy->update(["status" => -3, "is_update" => 0]);
-            return $phieu->id;
+        if ($getPDF === 0) {
+            return 0;
         }
 
-        abort(404);
+        $file_name = $this->saveBase64AsPdf($getPDF, 'BO_SUNG_HS_RHS');
+
+        $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
+        $this->notification("Đơn xin rút hồ sơ của bạn cần bổ sung hồ sơ", null, "RHS", $user_id);
+
+        $newStopStudy = $stopStudy->replicate();
+        $newStopStudy->status = 0;
+        $newStopStudy->teacher_id = $user->teacher_id;
+        $newStopStudy->file_name = $file_name;
+        $newStopStudy->parent_id = $request->id;
+        $newStopStudy->note = "Yêu cầu bổ sung hồ sơ";
+        $newStopStudy->save();
+        $stopStudy->update(["status" => -3, "is_update" => 0]);
+        return;
     }
     function bosunghsGHP($request, $stopStudy)
     {
-        if($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6)
-        {
+        if ($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6) {
             $stopStudy->update(["status" => 0]);
         }
         if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
@@ -204,7 +172,8 @@ class PhongDaoTaoService extends Controller
         if ($student->date_range_cmnd == null) {
             $content_phieu['ngaycap'] = '';
         } else {
-            $formattedDate = Carbon::createFromFormat('Y-m-d', $student->date_range_cmnd)->format('d/m/Y');
+            $date = substr($student->date_range_cmnd, 0, 10);
+            $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
             $content_phieu['ngaycap'] = $formattedDate;
         }
 
@@ -215,8 +184,8 @@ class PhongDaoTaoService extends Controller
 
         $content_phieu['ndgiaiquyet'] = "đơn xin miễn giảm học phí";
 
-        $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-        $this->notification("Đơn xin miễn giảm học phí của bạn cần bổ sung hồ sơ", null, "GHP",$user_id);
+        $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
+        $this->notification("Đơn xin miễn giảm học phí của bạn cần bổ sung hồ sơ", null, "GHP", $user_id);
 
         if ($stopStudy->status == 0  || $stopStudy->status == 2) {
 
@@ -259,8 +228,7 @@ class PhongDaoTaoService extends Controller
     }
     function bosunghsTCXH($request, $stopStudy)
     {
-        if($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6)
-        {
+        if ($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6) {
             $stopStudy->update(["status" => 0]);
         }
         if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
@@ -319,7 +287,8 @@ class PhongDaoTaoService extends Controller
         if ($student->date_range_cmnd == null) {
             $content_phieu['ngaycap'] = '';
         } else {
-            $formattedDate = Carbon::createFromFormat('Y-m-d', $student->date_range_cmnd)->format('d/m/Y');
+            $date = substr($student->date_range_cmnd, 0, 10);
+            $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
             $content_phieu['ngaycap'] = $formattedDate;
         }
 
@@ -330,8 +299,8 @@ class PhongDaoTaoService extends Controller
 
         $content_phieu['ndgiaiquyet'] = "đơn xin trợ cấp xã hội";
 
-        $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-        $this->notification("Đơn xin trợ cấp xã hội của bạn cần bổ sung hồ sơ", null, "GHP",$user_id);
+        $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
+        $this->notification("Đơn xin trợ cấp xã hội của bạn cần bổ sung hồ sơ", null, "GHP", $user_id);
 
         if ($stopStudy->status == 0  || $stopStudy->status == 2) {
 
@@ -372,39 +341,18 @@ class PhongDaoTaoService extends Controller
 
         abort(404);
     }
-    function tiepnhanhsRHS($request, $stopStudy)
+    function tiepnhanhsRHSPDF($request, $stopStudy)
     {
         if ($stopStudy->status != 2 && $stopStudy->status != -3 && $stopStudy->status != 3 && $stopStudy->status != -4) {
             abort(404);
-        }
-
-        if ($stopStudy->status == -3 || $stopStudy->status == -4) {
-            $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
-            if ($newStopStudy) {
-                try {
-                    $phieu = Phieu::find($newStopStudy->phieu_id);
-                    if ($phieu) {
-                        $phieu->delete();
-                    }
-                    $newStopStudy->delete();
-                    $stopStudy->update(["status" => 2]);
-                } catch (\Exception $e) {
-                }
-            } else {
-            }
         }
 
         if ($request->button_clicked == "huy_phieu" && $stopStudy->status == 3) {
             $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
             if ($newStopStudy) {
                 try {
-                    $phieu = Phieu::find($newStopStudy->phieu_id);
-                    if ($phieu) {
-                        $phieu->delete();
-                    }
                     $newStopStudy->delete();
                     $stopStudy->update(["status" => 2]);
-
                     return true;
                 } catch (\Exception $e) {
                     abort(404);
@@ -413,9 +361,17 @@ class PhongDaoTaoService extends Controller
                 abort(404);
             }
         }
+
         if ($request->button_clicked == "huy_phieu") {
             return true;
         }
+
+        $user = Auth::user();
+        $info_signature = $this->getInfoSignature($user->cccd);
+        if ($info_signature === false) {
+            return 0;
+        }
+
         $student = Student::find($stopStudy->student_id);
 
         $teacher = Teacher::find(Auth::user()->teacher_id);
@@ -431,7 +387,8 @@ class PhongDaoTaoService extends Controller
         if ($student->date_range_cmnd == null) {
             $content_phieu['ngaycap'] = '';
         } else {
-            $formattedDate = Carbon::createFromFormat('Y-m-d', $student->date_range_cmnd)->format('d/m/Y');
+            $date = substr($student->date_range_cmnd, 0, 10);
+            $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
             $content_phieu['ngaycap'] = $formattedDate;
         }
 
@@ -452,6 +409,8 @@ class PhongDaoTaoService extends Controller
         $content_phieu['ketqua_year'] = date('Y', $timestamp);
         $content_phieu['ketqua_gio'] = date('H', $timestamp);
         $content_phieu['ketqua_phut'] = date('i', $timestamp);
+        $chu_ky =  $this->convertImageToBase64($user->getUrlChuKy());
+        $content_phieu['chu_ky'] = $chu_ky;
 
         $tmp = [];
         foreach ($request->tengiayto as $index => $item) {
@@ -465,53 +424,55 @@ class PhongDaoTaoService extends Controller
 
         $content_phieu['ndgiaiquyet'] = "đơn xin rút hồ sơ";
 
-        $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-        $this->notification("Đơn xin rút hồ sơ của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả", null, "RHS",$user_id);
 
+        $phieu = new Phieu();
+        $phieu->student_id = $stopStudy->student_id;
+        $phieu->teacher_id = Auth::user()->teacher_id;
+        $phieu->name = "Phiếu tiếp nhận hồ sơ";
+        $phieu->key = "TNHS";
+        $phieu->content = json_encode($content_phieu);
 
-        if ($stopStudy->status == 2) {
-
-            $phieu = new Phieu();
-            $phieu->student_id = $stopStudy->student_id;
-            $phieu->teacher_id = Auth::user()->teacher_id;
-            $phieu->name = "Phiếu tiếp nhận hồ sơ";
-            $phieu->key = "TNHS";
-            $phieu->content = json_encode($content_phieu);
-            $phieu->save();
-
-            $newStopStudy = $stopStudy->replicate();
-            $newStopStudy->status = 1;
-            $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = $phieu->id;
-            $newStopStudy->parent_id = $request->id;
-            $newStopStudy->note = "Đã được nhận bởi phòng đào tạo";
-            $newStopStudy->save();
-            $stopStudy->update(["status" => 3]);
-            return $phieu->id;
+        $pdf =  $this->createPDF($phieu);
+        return $this->craeteSignature($info_signature, $pdf, $user->cccd, 'TIEP_NHAN_HS_RHS_SV_' . $student->student_code);
+        
+    }
+    function tiepnhanhsRHS($request, $stopStudy)
+    {
+        if ($stopStudy->status != 2 && $stopStudy->status != -3 && $stopStudy->status != 3 && $stopStudy->status != -4) {
+            abort(404);
         }
-        if ($stopStudy->status == 3) {
-            $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
-            $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->note = "Đã được nhận bởi phòng đào tạo";
-            $newStopStudy->save();
+        $getPDF = $this->getPDF($request->fileId, $request->tranId, $request->transIDHash);
 
-            $phieu = Phieu::find($newStopStudy->phieu_id);
-            $phieu->student_id = $stopStudy->student_id;
-            $phieu->teacher_id = Auth::user()->teacher_id;
-            $phieu->name = "Phiếu hướng dẫn bổ sung hồ sơ";
-            $phieu->key = "TNHS";
-            $phieu->content = json_encode($content_phieu);
-            $phieu->save();
-            $stopStudy->update(["status" => 3]);
-            return $phieu->id;
+
+        if ($getPDF === 0) {
+            return 0;
         }
+        
+        $file_name = $this->saveBase64AsPdf($getPDF,'RUT_HO_SO');
 
-        abort(404);
+        $this->deletePdfAndTmp($stopStudy->file_name);
+
+
+        $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
+        $this->notification("Đơn xin rút hồ sơ của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả", null, "RHS", $user_id);
+
+
+
+        $newStopStudy = $stopStudy->replicate();
+        $newStopStudy->status = 1;
+        $newStopStudy->teacher_id = Auth::user()->teacher_id;
+        $newStopStudy->file_name = $file_name;
+        $newStopStudy->parent_id = $request->id;
+        $newStopStudy->note = "Đã được nhận bởi phòng đào tạo";
+        $newStopStudy->save();
+        $stopStudy->update(["status" => 3]);
+
+
+        return;
     }
     function tiepnhanhsGHP($request, $stopStudy)
     {
-        if($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6)
-        {
+        if ($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6) {
             $stopStudy->update(["status" => 0]);
         }
         if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
@@ -571,7 +532,8 @@ class PhongDaoTaoService extends Controller
         if ($student->date_range_cmnd == null) {
             $content_phieu['ngaycap'] = '';
         } else {
-            $formattedDate = Carbon::createFromFormat('Y-m-d', $student->date_range_cmnd)->format('d/m/Y');
+            $date = substr($student->date_range_cmnd, 0, 10);
+            $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
             $content_phieu['ngaycap'] = $formattedDate;
         }
 
@@ -604,9 +566,9 @@ class PhongDaoTaoService extends Controller
         $content_phieu['bang'] = $tmp;
 
         $content_phieu['ndgiaiquyet'] = "đơn xin miễn giảm học phí";
-        
-        $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-        $this->notification("Đơn xin miễn giảm học phí của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả", null, "GHP",$user_id);
+
+        $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
+        $this->notification("Đơn xin miễn giảm học phí của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả", null, "GHP", $user_id);
 
 
         if ($stopStudy->status == 0 || $stopStudy->status == 2) {
@@ -650,8 +612,7 @@ class PhongDaoTaoService extends Controller
     }
     function tiepnhanhsTCXH($request, $stopStudy)
     {
-        if($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6)
-        {
+        if ($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6) {
             $stopStudy->update(["status" => 0]);
         }
         if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
@@ -711,7 +672,8 @@ class PhongDaoTaoService extends Controller
         if ($student->date_range_cmnd == null) {
             $content_phieu['ngaycap'] = '';
         } else {
-            $formattedDate = Carbon::createFromFormat('Y-m-d', $student->date_range_cmnd)->format('d/m/Y');
+            $date = substr($student->date_range_cmnd, 0, 10);
+            $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
             $content_phieu['ngaycap'] = $formattedDate;
         }
 
@@ -744,9 +706,9 @@ class PhongDaoTaoService extends Controller
         $content_phieu['bang'] = $tmp;
 
         $content_phieu['ndgiaiquyet'] = "đơn xin trợ cấp xã hội";
-        
-        $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-        $this->notification("Đơn xin trợ cấp xã hội của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả", null, "GHP",$user_id);
+
+        $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
+        $this->notification("Đơn xin trợ cấp xã hội của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả", null, "GHP", $user_id);
 
 
         if ($stopStudy->status == 0 || $stopStudy->status == 2) {
@@ -790,8 +752,7 @@ class PhongDaoTaoService extends Controller
     }
     function tiepnhanhsTCHP($request, $stopStudy)
     {
-        if($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6)
-        {
+        if ($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6) {
             $stopStudy->update(["status" => 0]);
         }
         if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
@@ -851,7 +812,8 @@ class PhongDaoTaoService extends Controller
         if ($student->date_range_cmnd == null) {
             $content_phieu['ngaycap'] = '';
         } else {
-            $formattedDate = Carbon::createFromFormat('Y-m-d', $student->date_range_cmnd)->format('d/m/Y');
+            $date = substr($student->date_range_cmnd, 0, 10);
+            $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
             $content_phieu['ngaycap'] = $formattedDate;
         }
 
@@ -884,9 +846,9 @@ class PhongDaoTaoService extends Controller
         $content_phieu['bang'] = $tmp;
 
         $content_phieu['ndgiaiquyet'] = "đơn xin trợ học phí";
-        
-        $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-        $this->notification("Đơn xin trợ cấp học phí của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả", null, "GHP",$user_id);
+
+        $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
+        $this->notification("Đơn xin trợ cấp học phí của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả", null, "GHP", $user_id);
 
 
         if ($stopStudy->status == 0 || $stopStudy->status == 2) {
@@ -930,8 +892,7 @@ class PhongDaoTaoService extends Controller
     }
     function tiepnhanhsCDCS($request, $stopStudy)
     {
-        if($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6)
-        {
+        if ($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6) {
             $stopStudy->update(["status" => 0]);
         }
         if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
@@ -991,7 +952,8 @@ class PhongDaoTaoService extends Controller
         if ($student->date_range_cmnd == null) {
             $content_phieu['ngaycap'] = '';
         } else {
-            $formattedDate = Carbon::createFromFormat('Y-m-d', $student->date_range_cmnd)->format('d/m/Y');
+            $date = substr($student->date_range_cmnd, 0, 10);
+            $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
             $content_phieu['ngaycap'] = $formattedDate;
         }
 
@@ -1024,9 +986,9 @@ class PhongDaoTaoService extends Controller
         $content_phieu['bang'] = $tmp;
 
         $content_phieu['ndgiaiquyet'] = "đơn xin trợ học phí";
-        
-        $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-        $this->notification("Đơn xin trợ cấp học phí của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả", null, "GHP",$user_id);
+
+        $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
+        $this->notification("Đơn xin trợ cấp học phí của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả", null, "GHP", $user_id);
 
 
         if ($stopStudy->status == 0 || $stopStudy->status == 2) {
@@ -1068,35 +1030,15 @@ class PhongDaoTaoService extends Controller
 
         abort(404);
     }
-    function tuchoihsRHS($request, $stopStudy)
+    function tuchoihsRHSPDF($request, $stopStudy)
     {
         if ($stopStudy->status != 2 && $stopStudy->status != 3 && $stopStudy->status != -3 && $stopStudy->status != -4 && $stopStudy->status != 4) {
             abort(404);
         }
-        if ($stopStudy->status == -3 || $stopStudy->status == 3) {
-            $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
-            if ($newStopStudy) {
-                try {
-                    $phieu = Phieu::find($newStopStudy->phieu_id);
-                    if ($phieu) {
-                        $phieu->delete();
-                    }
-                    $newStopStudy->delete();
-                    $stopStudy->update(["status" => 3]);
-                } catch (\Exception $e) {
-                }
-            } else {
-            }
-        }
-
         if ($request->button_clicked == "huy_phieu" && $stopStudy->status == -4) {
             $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
             if ($newStopStudy) {
                 try {
-                    $phieu = Phieu::find($newStopStudy->phieu_id);
-                    if ($phieu) {
-                        $phieu->delete();
-                    }
                     $newStopStudy->delete();
                     $stopStudy->update(["status" => 3]);
                     return true;
@@ -1110,6 +1052,15 @@ class PhongDaoTaoService extends Controller
         if ($request->button_clicked == "huy_phieu") {
             return true;
         }
+        $user = Auth::user();
+
+        $info_signature = $this->getInfoSignature($user->cccd);
+        if ($info_signature === false) {
+            return 0; //chưa đăng ký chữ ký số cần đăng ký chữ ký số
+        }
+        $chu_ky =  $this->convertImageToBase64($user->getUrlChuKy());
+
+
         $student = Student::find($stopStudy->student_id);
 
         $teacher = Teacher::find(Auth::user()->teacher_id);
@@ -1125,7 +1076,8 @@ class PhongDaoTaoService extends Controller
         if ($student->date_range_cmnd == null) {
             $content_phieu['ngaycap'] = '';
         } else {
-            $formattedDate = Carbon::createFromFormat('Y-m-d', $student->date_range_cmnd)->format('d/m/Y');
+            $date = substr($student->date_range_cmnd, 0, 10);
+            $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
             $content_phieu['ngaycap'] = $formattedDate;
         }
 
@@ -1136,73 +1088,55 @@ class PhongDaoTaoService extends Controller
         $content_phieu['lydo'] = $request->lydo;
 
         $content_phieu['ndgiaiquyet'] = "đơn xin rút hồ sơ";
-
-        $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-        $this->notification("Đơn xin rút hồ sơ của bạn bị từ chối bởi phòng đào tạo ", null, "RHS",$user_id);
-
-        // if ($stopStudy->type == 0) {
-        //     $content_phieu['ndgiaiquyet'] = "đơn xin rút hồ sơ";
-        //     $this->notification("Đơn xin rút hồ sơ của bạn bị từ chối bởi phòng đào tạo ", null, "RHS");
-        // }
-        // if ($stopStudy->type == 1) {
-        //     $content_phieu['ndgiaiquyet'] = "đơn xin miễn giảm học phí";
-        //     $this->notification("Đơn xin miễn giảm học phí của bạn bị từ chối bởi phòng đào tạo ", null, "GHP");
-        // }
-        // if ($stopStudy->type == 2) {
-        //     $content_phieu['ndgiaiquyet'] = "đơn xin trợ cấp xã hội";
-        //     $this->notification("Đơn xin trợ cấp xã hội của bạn bị từ chối bởi phòng đào tạo ", null, "TCXH");
-        // }
-
-        // if ($stopStudy->type == 3) {
-        //     $content_phieu['ndgiaiquyet'] = "đơn xin chế độ chính sách";
-        //     $this->notification("Đơn xin chế độ chính sách của bạn bị từ chối bởi phòng đào tạo ", null, "CDCS");
-        // }
+        $content_phieu['chu_ky'] = $chu_ky;
 
 
+        $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
+        $this->notification("Đơn xin rút hồ sơ của bạn bị từ chối bởi phòng đào tạo ", null, "RHS", $user_id);
 
-        if ($stopStudy->status == 3 || $stopStudy->status == 2) {
 
-            $phieu = new Phieu();
-            $phieu->student_id = $stopStudy->student_id;
-            $phieu->teacher_id = Auth::user()->teacher_id;
-            $phieu->name = "Phiếu từ chối giải quyết hồ sơ";
-            $phieu->key = "TCGQ";
-            $phieu->content = json_encode($content_phieu);
-            $phieu->save();
+        $phieu = new Phieu();
+        $phieu->student_id = $stopStudy->student_id;
+        $phieu->teacher_id = Auth::user()->teacher_id;
+        $phieu->name = "Phiếu từ chối giải quyết hồ sơ";
+        $phieu->key = "TCGQ";
+        $phieu->content = json_encode($content_phieu);
+        $pdf =  $this->createPDF($phieu);
+        // $file_name = $this->saveBase64AsPdf($pdf,'TU_CHOI_GIAI_QUYET');
 
-            $newStopStudy = $stopStudy->replicate();
-            $newStopStudy->status = 0;
-            $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = $phieu->id;
-            $newStopStudy->parent_id = $request->id;
-            $newStopStudy->note = "Đã bị từ chối bởi phòng đào tạo";
-            $newStopStudy->save();
-            $stopStudy->update(["status" => -4]);
-            return $phieu->id;
-        }
-        if ($stopStudy->status == -4 || $stopStudy->status == 4) {
-            $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
-            $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->note = "Đã được nhận bởi phòng đào tạo";
-            $newStopStudy->save();
+        return $this->craeteSignature($info_signature, $pdf, $user->cccd, 'TU_CHOI_GIAI_QUYET_RHS_SV_' . $student->student_code);
+    }
 
-            $phieu = Phieu::find($newStopStudy->phieu_id);
-            $phieu->student_id = $stopStudy->student_id;
-            $phieu->teacher_id = Auth::user()->teacher_id;
-            $phieu->name = "Phiếu từ chối giải quyết hồ sơ";
-            $phieu->key = "TCGQ";
-            $phieu->content = json_encode($content_phieu);
-            $phieu->save();
-            $stopStudy->update(["status" => -4]);
-            return $phieu->id;
+    function tuchoihsRHS($request, $stopStudy)
+    {
+
+        $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
+        $this->notification("Đơn xin rút hồ sơ của bạn bị từ chối bởi phòng đào tạo ", null, "RHS", $user_id);
+
+
+
+        $getPDF = $this->getPDF($request->fileId, $request->tranId, $request->transIDHash);
+
+        if ($getPDF === 0) {
+            return 0;
         }
 
-        abort(404);
+        $file_name = $this->saveBase64AsPdf($getPDF, 'TU_CHOI_GIAI_QUYET_RHS');
+
+
+        $newStopStudy = $stopStudy->replicate();
+        $newStopStudy->status = 0;
+        $newStopStudy->teacher_id = Auth::user()->teacher_id;
+        $newStopStudy->file_name = $file_name;
+        $newStopStudy->parent_id = $request->id;
+        $newStopStudy->note = "Đã bị từ chối bởi phòng đào tạo";
+        $newStopStudy->save();
+        $stopStudy->update(["status" => -4]);
+        return $file_name;
     }
     function tuchoihsGHP($request, $stopStudy)
     {
-        if($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6)
-        {
+        if ($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6) {
             $stopStudy->update(["status" => 0]);
         }
         if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
@@ -1260,7 +1194,8 @@ class PhongDaoTaoService extends Controller
         if ($student->date_range_cmnd == null) {
             $content_phieu['ngaycap'] = '';
         } else {
-            $formattedDate = Carbon::createFromFormat('Y-m-d', $student->date_range_cmnd)->format('d/m/Y');
+            $date = substr($student->date_range_cmnd, 0, 10);
+            $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
             $content_phieu['ngaycap'] = $formattedDate;
         }
 
@@ -1272,8 +1207,8 @@ class PhongDaoTaoService extends Controller
 
         $content_phieu['ndgiaiquyet'] = "đơn xin miễn giảm học phí";
 
-        $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-        $this->notification("Đơn xin miễn giảm học phí của bạn bị từ chối bởi phòng đào tạo ", null, "GHP",$user_id);
+        $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
+        $this->notification("Đơn xin miễn giảm học phí của bạn bị từ chối bởi phòng đào tạo ", null, "GHP", $user_id);
 
         if ($stopStudy->status == 0 || $stopStudy->status == 2) {
 
@@ -1316,8 +1251,7 @@ class PhongDaoTaoService extends Controller
     }
     function tuchoihsTCXH($request, $stopStudy)
     {
-        if($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6)
-        {
+        if ($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6) {
             $stopStudy->update(["status" => 0]);
         }
         if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
@@ -1375,7 +1309,8 @@ class PhongDaoTaoService extends Controller
         if ($student->date_range_cmnd == null) {
             $content_phieu['ngaycap'] = '';
         } else {
-            $formattedDate = Carbon::createFromFormat('Y-m-d', $student->date_range_cmnd)->format('d/m/Y');
+            $date = substr($student->date_range_cmnd, 0, 10);
+            $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
             $content_phieu['ngaycap'] = $formattedDate;
         }
 
@@ -1387,8 +1322,8 @@ class PhongDaoTaoService extends Controller
 
         $content_phieu['ndgiaiquyet'] = "đơn xin trợ cấp xã hội";
 
-        $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-        $this->notification("Đơn xin trợ cấp xã hội của bạn bị từ chối bởi phòng đào tạo ", null, "GHP",$user_id);
+        $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
+        $this->notification("Đơn xin trợ cấp xã hội của bạn bị từ chối bởi phòng đào tạo ", null, "GHP", $user_id);
 
         if ($stopStudy->status == 0 || $stopStudy->status == 2) {
 
@@ -1431,8 +1366,7 @@ class PhongDaoTaoService extends Controller
     }
     function tuchoihsTCHP($request, $stopStudy)
     {
-        if($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6)
-        {
+        if ($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6) {
             $stopStudy->update(["status" => 0]);
         }
         if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
@@ -1490,7 +1424,8 @@ class PhongDaoTaoService extends Controller
         if ($student->date_range_cmnd == null) {
             $content_phieu['ngaycap'] = '';
         } else {
-            $formattedDate = Carbon::createFromFormat('Y-m-d', $student->date_range_cmnd)->format('d/m/Y');
+            $date = substr($student->date_range_cmnd, 0, 10);
+            $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
             $content_phieu['ngaycap'] = $formattedDate;
         }
 
@@ -1502,8 +1437,8 @@ class PhongDaoTaoService extends Controller
 
         $content_phieu['ndgiaiquyet'] = "đơn xin trợ cấp học phí";
 
-        $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-        $this->notification("Đơn xin trợ cấp học phí của bạn bị từ chối bởi phòng đào tạo ", null, "GHP",$user_id);
+        $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
+        $this->notification("Đơn xin trợ cấp học phí của bạn bị từ chối bởi phòng đào tạo ", null, "GHP", $user_id);
 
         if ($stopStudy->status == 0 || $stopStudy->status == 2) {
 
@@ -1546,8 +1481,7 @@ class PhongDaoTaoService extends Controller
     }
     function tuchoihsCDCS($request, $stopStudy)
     {
-        if($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6)
-        {
+        if ($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6) {
             $stopStudy->update(["status" => 0]);
         }
         if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
@@ -1605,7 +1539,8 @@ class PhongDaoTaoService extends Controller
         if ($student->date_range_cmnd == null) {
             $content_phieu['ngaycap'] = '';
         } else {
-            $formattedDate = Carbon::createFromFormat('Y-m-d', $student->date_range_cmnd)->format('d/m/Y');
+            $date = substr($student->date_range_cmnd, 0, 10);
+            $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
             $content_phieu['ngaycap'] = $formattedDate;
         }
 
@@ -1617,8 +1552,8 @@ class PhongDaoTaoService extends Controller
 
         $content_phieu['ndgiaiquyet'] = "đơn xin trợ cấp học phí";
 
-        $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
-        $this->notification("Đơn xin trợ cấp học phí của bạn bị từ chối bởi phòng đào tạo ", null, "GHP",$user_id);
+        $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
+        $this->notification("Đơn xin trợ cấp học phí của bạn bị từ chối bởi phòng đào tạo ", null, "GHP", $user_id);
 
         if ($stopStudy->status == 0 || $stopStudy->status == 2) {
 

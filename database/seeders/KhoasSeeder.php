@@ -17,42 +17,25 @@ class KhoasSeeder extends Seeder
      */
     public function run()
     {
-        $response = Http::get('https://api.uhl.edu.vn/quanlysinhvien/api/APITichHop/DanhSachKhoa?Start=0&Length=10000&KeyWord'); // Thay URL API thật của bạn vào đây
+        $response = Http::get('https://api.uhl.edu.vn/quanlysinhvien/api/APITichHop/DanhSachKhoa?Start=0&Length=10000&KeyWord');
 
-        // Kiểm tra nếu API trả về dữ liệu thành công
         if ($response->successful()) {
-            $data = $response->json(); // Chuyển đổi JSON thành mảng PHP
+            $data = $response->json();
 
-            // Lặp qua từng bản ghi và thêm vào database
-            foreach ($data as $item) {
-                Khoa::create([
-                    'ten_khoa' => $item['ten_khoa'], // Thay bằng các trường dữ liệu phù hợp
-                    'ma_khoa' => $item['ma_khoa'],
-                ]);
+            if (isset($data['result']['data']) && is_array($data['result']['data'])) {
+                foreach ($data['result']['data'] as $item) {
+                    Khoa::create([
+                        'name' => $item['tenKhoa'],
+                        'ma_khoa' => $item['maKhoa'],
+                    ]);
+                }
+
+                $this->command->info('Seeder cho bảng Khoas đã được thực thi thành công.');
+            } else {
+                $this->command->error('Dữ liệu API không hợp lệ hoặc không có dữ liệu.');
             }
         } else {
             $this->command->error('Không thể lấy dữ liệu từ API.');
         }
-        
-        $filePath = base_path('database/seeders/csv/khoas.csv');
-        if (!File::exists($filePath)) {
-            $this->command->error("File CSV không tồn tại tại đường dẫn: " . $filePath);
-            return;
-        }
-
-        if (($handle = fopen($filePath, 'r')) !== false) {
-            $header = fgetcsv($handle, 1000, ',');
-
-            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
-                Khoa::create([
-                    'name' => $row[0],
-                ]);
-            }
-            fclose($handle);
-        } else {
-            $this->command->error("Không thể mở file CSV.");
-        }
-
-        $this->command->info('Seeder cho bảng Khoas đã được thực thi thành công.');
     }
 }

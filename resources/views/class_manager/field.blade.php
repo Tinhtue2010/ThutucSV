@@ -14,10 +14,10 @@
             <span class="required">Khoa</span>
         </label>
         <!--end::Label-->
-        <select id="{{ $type }}_field_khoa" data-dropdown-parent="#khoa_{{ $type }}" name="khoa_id" class="form-select form-select-solid" data-control="select2">
+        <select id="{{ $type }}_field_khoa" data-dropdown-parent="#khoa_{{ $type }}" name="ma_khoa" class="form-select form-select-solid" data-control="select2">
             <option selected disabled>Chọn khoa</option>
             @foreach ($khoas as $item)
-                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                <option value="{{ $item->ma_khoa }}">{{ $item->name }}</option>
             @endforeach
         </select>
     </div>
@@ -49,18 +49,6 @@
 </div>
 
 
-
-
-@if ($type == "_update")
-<div class="d-flex flex-column mb-8 fv-row col-12 pe-4">
-    <!--begin::Label-->
-    <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-        <span class="">{{ __('Học phí') }}</span>
-    </label>
-    <!--end::Label-->
-    <input type="number" value="0" class="form-control" name="hocphi" />
-</div>
-@endif
 
 
 @push('js')

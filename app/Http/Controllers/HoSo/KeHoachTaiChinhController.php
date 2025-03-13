@@ -8,6 +8,7 @@ use App\Models\Lop;
 use App\Models\Phieu;
 use App\Models\StopStudy;
 use App\Models\Teacher;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,7 +34,7 @@ class KeHoachTaiChinhController extends Controller
             ->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-            ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->select('stop_studies.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name')
             ->where(function ($query) {
                 $query
@@ -67,12 +68,24 @@ class KeHoachTaiChinhController extends Controller
         return $data;
     }
 
+    function KyDonPdf(Request $request)
+    {
+        try {
+            $stopStudy =  StopStudy::find($request->id);
+            
+            if ($stopStudy->type == 0) {
+                return $this->khtc->KyDonPdfRHS($request, $stopStudy);
+            }
+        } catch (QueryException $e) {
+            abort(404);
+        }
+    }
     function xacnhan(Request $request)
     {
         try {
             $stopStudy =  StopStudy::find($request->id);
             if ($stopStudy->type == 0) {
-                $this->khtc->xacnhanRHS($stopStudy);
+                $this->khtc->xacnhanRHS($request,$stopStudy);
             }
         } catch (QueryException $e) {
             abort(404);

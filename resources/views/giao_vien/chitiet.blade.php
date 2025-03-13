@@ -37,7 +37,7 @@
                     response.data[0].forEach(item => {
                         $('.list_file').append(`<a href="/storage/${item[1]}" target="_blank">${item[0]}</a>`);
                     })
-                    url = "{{ route('phieu.index') }}" + '/' + response.data[2];
+                    url = "/storage/" + response.data[2];
                     $('.list_file').append(`<a href="${url}" target="_blank" class="btn btn-primary me-auto ms-0 mt-4">xem đơn</a>`)
                 })
 

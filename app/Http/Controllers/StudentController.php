@@ -12,8 +12,8 @@ class StudentController extends Controller
     function index()
     {
         $user = Auth::user();
-        $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+        $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)->first();
 

@@ -48,7 +48,6 @@
                     <input type="hidden" class="button_clicked" name="button_clicked" value="">
                     <div class="card-footer">
                         <button type="submit" class="btn btn-success mr-2">{{ __('Tạo') }}</button>
-                        <button type="submit" class="btn btn-warning mr-2">{{ __('Tạo và xem phiếu') }}</button>
                         <button type="submit" class="btn btn-danger mr-2">{{ __('Hủy phiếu') }}</button>
                         <button type="reset" class="btn btn-secondary">{{ __('Nhập lại') }}</button>
                     </div>
@@ -92,18 +91,22 @@
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
-                        url: "{{ route('PhongDaoTao.bosunghs') }}",
+                        url: "{{ route('PhongDaoTao.bosunghsPDF') }}",
                         data: form.serialize(),
                     }).then((response) => {
-                        if($('[name="button_clicked"]').val() == 'xem_truoc')
-                        {
-                            window.open("{{route('phieu.index')}}/"+response.data, '_blank');
+                        var value = $('#kt_modal_{{ $target }}_target .button_clicked')
+                            .val();
+                        if (value === 'huy_phieu') {
+                            mess_success('Thông báo',
+                                "Đã xoá thành công")
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            checkMaXacNhan(null, response.data,
+                                '{{ route('PhongDaoTao.bosunghs') }}',
+                                $('[name="id"]').val(), null)
                         }
-                        mess_success('Thông báo',
-                            "Thành công")
-                        $(this).trigger("reset");
-                        model{{ $target }}.hide();
-                        Datatable.loadData();
                     }).catch(function(error) {
                         mess_error("Cảnh báo",
                             "{{ __('Có lỗi xảy ra.') }}"

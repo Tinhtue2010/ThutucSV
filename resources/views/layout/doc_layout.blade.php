@@ -135,6 +135,38 @@
     font-weight: normal;
     font-style: normal;
 }
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table th {
+    background-color: #fff; /* Màu nền cho tiêu đề */
+    font-weight: bold;
+}
+
+.table td {
+    background-color: #fff;
+}
+
+.table tr:nth-child(even) {
+    background-color: #fff; /* Xen kẽ màu nền giữa các dòng */
+}
+
+.table .text-center {
+    text-align: center;
+}
+
+.table th div {
+    font-size: 14px; /* Giữ chữ trong <div> không quá to */
+}
 
 </style>
 

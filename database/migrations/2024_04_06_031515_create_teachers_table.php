@@ -18,8 +18,8 @@ return new class extends Migration
 
             $table->string('full_name')->nullable();
 
-            $table->unsignedBigInteger('khoa_id')->nullable();
-            $table->foreign('khoa_id')->references('id')->on('khoas')->onDelete('set null');
+            $table->string('ma_khoa')->nullable();
+            $table->foreign('ma_khoa')->references('ma_khoa')->on('khoas')->onDelete('set null');
 
             $table->string('dia_chi')->nullable();
 
@@ -27,6 +27,8 @@ return new class extends Migration
             $table->string('email')->nullable();
 
             $table->string('chuc_danh')->nullable();
+
+            $table->string('chu_ky')->nullable();
 
             $table->timestamps();
         });

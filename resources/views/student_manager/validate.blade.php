@@ -28,7 +28,7 @@
                 },
             }
         },
-        school_year: {
+        nien_khoa: {
             validators: {
                 notEmpty: {
                     message: '{{ __('Vui lòng không để trống mục này') }}'

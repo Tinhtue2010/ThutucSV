@@ -65,7 +65,13 @@
                         {
                             data: 'hedaotao', 
                             render: function(data, type, row){
-                                return `${data.hedaotao == 0 ? "Đại học" : data.hedaotao == 1 ? "Thạc sĩ" : data.hedaotao == 2 ? "Cao đẳng" : "Trung cấp"}`;
+                   
+                                return `${data == 0 ? "Đại học" 
+                                    : data == 1 ? "Thạc sĩ" 
+                                    : data == 2 ? "Cao đẳng" 
+                                    : data == 3 ? "Trung cấp" 
+                                    : "Không xác định"}`;
+                            
                             }
                         },
                         {

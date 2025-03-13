@@ -83,7 +83,9 @@
             }, 1000);
         }
 
-        async function checkMaXacNhan($data,$url =  "{{ route('StopStudy.CreateViewPdf') }}",id= null,note=null) {
+        async function checkMaXacNhan(formData = null, $data, $url = "{{ route('StopStudy.CreateViewPdf') }}", id = null,
+            note = null) {
+                
             checkChuKy();
             startCountdown(300, "demnguoc");
             var modalEl = document.querySelector('#kt_modal_chu_ky_target');
@@ -99,22 +101,25 @@
                 modelchu_ky.hide();
                 resolve(false);
             });
-            
+
             $('.modal .btn-success').click(function() {
+                if (!(formData instanceof FormData)) {
+                    formData = new FormData();
+                }
+                formData.append('fileId', $data[0]);
+                formData.append('tranId', $data[1]);
+                formData.append('transIDHash', $data[2]);
+                formData.append('id', id);
+                formData.append('note', note);
+
                 axios({
                     method: 'POST',
                     url: $url,
-                    data: {
-                        fileId: $data[0],
-                        tranId: $data[1],
-                        transIDHash: $data[2],
-                        id: id,
-                        note: note
-                    },
+                    data: formData,
                     headers: {
-                        'Content-Type': 'application/json',
+                        "Content-Type": "multipart/form-data",
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
+                    },
                 }).then((response) => {
                     console.log(response.data);
                     if (response.data === 0) {

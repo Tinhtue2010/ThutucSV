@@ -86,19 +86,23 @@ class User extends Authenticatable
             return false;
         } else {
             $lop_id = Student::find($this->student_id)->lop_id;
-            $manganh = Lop::find($lop_id)->manganh;
-            $list_nganh = [
-                "7810103",
-                "7810201",
-                "7810202",
-                "7220209",
-                "7220210",
-                "7220204",
-                "7620301",
-            ];            
-            if (in_array($manganh, $list_nganh)) {
-                return true;
+            $lop = Lop::find($lop_id);
+            if(isset($lop))
+            {
+                $list_nganh = [
+                    "7810103",
+                    "7810201",
+                    "7810202",
+                    "7220209",
+                    "7220210",
+                    "7220204",
+                    "7620301",
+                ];            
+                if (in_array($lop->manganh, $list_nganh)) {
+                    return true;
+                }
             }
+
         }
         return false;
     }

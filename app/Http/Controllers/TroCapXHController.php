@@ -63,7 +63,7 @@ class TroCapXHController extends Controller
             $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
             $studentData['lop'] = $student->lop_name;
             $studentData['khoa'] = $student->khoa_name;
-            $studentData['khoa_hoc'] = $student->school_year;
+            $studentData['khoa_hoc'] = $student->nien_khoa;
             $studentData['hoso'] = $request->hoso;
 
             $doituong = config('doituong.trocapxahoi');
@@ -123,7 +123,7 @@ class TroCapXHController extends Controller
         $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
         $studentData['lop'] = $student->lop_name;
         $studentData['khoa'] = $student->khoa_name;
-        $studentData['khoa_hoc'] = $student->school_year;
+        $studentData['khoa_hoc'] = $student->nien_khoa;
         $studentData['hoso'] = $hoso;
         $studentData['doituong'] = $doituong;
         $studentData['sdt'] = $student->phone;

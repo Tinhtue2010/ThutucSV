@@ -13,10 +13,10 @@
             <span class="required">Khoa</span>
         </label>
         <!--end::Label-->
-        <select data-dropdown-parent="#select-parent-{{$type}}-1" name="khoa_id" class="form-select " data-control="select2">
+        <select data-dropdown-parent="#select-parent-{{$type}}-1" name="ma_khoa" class="form-select " data-control="select2">
             <option value="">Cán bộ nhà trường</option>
             @foreach ($khoas as $item)
-                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                <option value="{{ $item->ma_khoa }}">{{ $item->name }}</option>
             @endforeach
         </select>
     </div>

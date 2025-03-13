@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 
 class SinhViensSeeder extends Seeder
 {
@@ -22,87 +23,65 @@ class SinhViensSeeder extends Seeder
      */
     public function run()
     {
-        $directoryPath = base_path('database/seeders/csv/hocsinh/');
 
-        if (!File::exists($directoryPath)) {
-            $this->command->error("Thư mục không tồn tại: " . $directoryPath);
-            return;
-        }
-
-        $csvFiles = File::files($directoryPath);
-
-        if (empty($csvFiles)) {
-            $this->command->error("Không có file CSV nào trong thư mục: " . $directoryPath);
-            return;
-        }
-
-        foreach ($csvFiles as $file) {
-            $filePath = $file->getRealPath();
-
-            $this->command->info("Đang xử lý file CSV: " . $filePath);
-
-            $data = $this->importCSV(new \SplFileObject($filePath));
-            $header = [
-                "ma_hs" => "student_id",
-                "ma_sinh_vien" => "student_code",
-                "ho_ten" => "full_name",
-                "ngay_sinh" => "date_of_birth",
-                "so_dt_ca_nhan" => "phone",
-                "email" => "email",
-                "ten_lop" => "lop_id",
-                "lien_khoa" => "school_year",
-                "ngay_nhap_hoc" => "ngay_nhap_hoc",
-                "ghi_chu_ho_so" => "note",
-                "can_cuoc" => "cmnd",
-                "ngay_cap_can_cuoc" => "date_range_cmnd",
-            ];
-
-            foreach ($data['data'] as $index => $item) {
-                $student = new Student();
-                foreach ($data['header'] as $index_header => $item_header) {
-                    if (!isset($header[$data['header'][$index_header]])) {
-                        continue;
-                    }
-                    $columnName = $header[$data['header'][$index_header]];
-                    if ($data['header'][$index_header] == 'ten_lop') {
-                        $lop = Lop::where('name', 'like', '%' . $item[$index_header] . '%')->first();
-                        if ($lop) {
-                            $student->lop_id = $lop->id;
-                        } else {
-                            throw new \Exception("Không tìm thấy lớp với tên: " . $item[$index_header]);
-                        }
-                    } else {
-                        if ($columnName == "phone") {
-                            $student->$columnName = '0' . $item[$index_header];
-                        } else if ($columnName == "date_of_birth" || $columnName == "ngay_nhap_hoc" || $columnName == "date_range_cmnd") {
-                            $student->$columnName = $this->convertDate('m/d/Y', $item[$index_header]);
-                        } else if ($columnName == "gioitinh") {
-                            if ($this->convertVietnamese($item[$index_header]) == 'nu') {
-                                $student->$columnName = 0;
+        $start = 0;
+        $length = 100;
+        do {
+            $response = Http::get("https://api.uhl.edu.vn/quanlysinhvien/api/APITichHop/DanhSachSinhVien", [
+                'Start' => $start,
+                'Length' => $length,
+                'KeyWord' => ''
+            ]);
+        
+            if ($response->successful()) {
+                $data = $response->json();
+        
+                if (isset($data['result']['data']) && is_array($data['result']['data']) && count($data['result']['data']) > 0) {
+                    foreach ($data['result']['data'] as $index => $item) {
+                        try {
+                            DB::beginTransaction(); // Bắt đầu transaction
+        
+                            $student = Student::create([
+                                'full_name' => $item['hoTen'],
+                                'student_code' => $item['maSV'] == '' ? null : $item['maSV'],
+                                'date_of_birth' => $item['ngaySinh'],
+                                'ma_lop' => Lop::where('name', 'LIKE', '%' . $item['tenLop'] . '%')->value('ma_lop'),
+                                'nien_khoa' => $item['nienKhoa'],
+                                'khoa_hoc' => $item['khoaHoc'],
+                                'trinh_do' => $item['tenHe'],
+                                'gioitinh' => $item['gioiTinh'] == "Nam" ? 1 : 0,
+                            ]);
+        
+                            if ($item['maSV'] != '') {
+                                User::create([
+                                    'username' => $item['maSV'],
+                                    'password' => bcrypt($item['maSV']),
+                                    'name' => $item['hoTen'],
+                                    'student_id' => $student->id,
+                                    'role' => 1,
+                                ]);
                             }
-                            if ($this->convertVietnamese($item[$index_header]) == 'nam') {
-                                $student->$columnName = 1;
-                            }
-                        } else if ($columnName == "email" && filter_var($item[$index_header], FILTER_VALIDATE_EMAIL)) {
-                            $student->email = $item[$index_header];
-                        } else {
-                            $student->$columnName = $item[$index_header];
+        
+                            DB::commit(); // Lưu lại dữ liệu nếu không có lỗi
+                        } catch (\Exception $e) {
+                            DB::rollBack(); // Hoàn tác nếu có lỗi
+                            $this->command->error("Lỗi khi thêm sinh viên: " . $item['hoTen'] . " - " . $e->getMessage());
+                            continue; // Bỏ qua lỗi và tiếp tục vòng lặp
                         }
                     }
+        
+                    $this->command->info("Đã thêm " . count($data['result']['data']) . " sinh viên từ API (Start = $start).");
+        
+                    $start += $length;
+                } else {
+                    $this->command->info('Đã lấy hết dữ liệu.');
+                    break;
                 }
-                $student->save();
-
-                $user = new User();
-
-                $user->name = $student->full_name;
-                $user->username = $student->student_code;
-                $user->password = bcrypt($student->student_code);
-                $user->student_id = $student->id;
-
-                $user->save();
+            } else {
+                $this->command->error('Không thể lấy dữ liệu từ API.');
+                break;
             }
-        }
-
-        $this->command->info('Seeder cho bảng sinhviens đã được thực thi thành công.');
+        } while (true);
+        
     }
 }

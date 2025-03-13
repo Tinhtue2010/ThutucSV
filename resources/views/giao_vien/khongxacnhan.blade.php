@@ -92,6 +92,8 @@
             model{{$target}} = new bootstrap.Modal(modalEl);
             model{{$target}}.show();
             $('[name="id"]').val(data);
+            console.log(data);
+            
         }
     </script>
 @endpush

@@ -33,7 +33,7 @@ class GiaoVienController extends Controller
             ->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-            ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->select('stop_studies.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name')
             ->where(function ($query) {
                 $query
@@ -44,8 +44,8 @@ class GiaoVienController extends Controller
                     });
             });
 
-        $lopIds = Lop::where('teacher_id', $user->teacher_id)->pluck('id');
-        $query = $query->whereIn('stop_studies.lop_id', $lopIds);
+        $ma_lop = Lop::where('teacher_id', $user->teacher_id)->pluck('ma_lop');
+        $query = $query->whereIn('stop_studies.ma_lop', $ma_lop);
 
         if (isset($request->year)) {
             $query->whereYear('stop_studies.created_at', $request->year);
@@ -118,7 +118,7 @@ class GiaoVienController extends Controller
                 ->orderBy('created_at', 'desc')->get();
             $data[] = json_decode($don->files ?? '[]');
             $data[] = $don_chill;
-            $data[] = $don->phieu_id;
+            $data[] = $don->file_name;
             return $data;
         } catch (QueryException $e) {
             abort(404);

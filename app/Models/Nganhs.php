@@ -9,11 +9,11 @@ class Nganhs extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["tennganh","manganh","hedaotao","khoa_id"];
+    protected $fillable = ["tennganh","manganh","hedaotao","ma_khoa"];
 
 
     public function khoa()
     {
-        return $this->belongsTo(Khoa::class, 'khoa_id');
+        return $this->belongsTo(Khoa::class, 'ma_khoa');
     }
 }

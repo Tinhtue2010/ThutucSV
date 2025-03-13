@@ -27,7 +27,7 @@ class PhongDaoTaoController extends Controller
         $tb_trocaphocphi = StopStudy::where('type', 3)->where('status', 3)->count();
         $tb_chedochinhsach = StopStudy::where('type', 4)->where('status', 3)->count();
         $lop = Lop::get();
-        return view('phong_dao_tao.index', ['tb_miengiamhp' => $tb_miengiamhp, 'tb_trocapxahoi' => $tb_trocapxahoi, 'lop' => $lop, 'tb_trocaphocphi' => $tb_trocaphocphi,"tb_chedochinhsach"=>$tb_chedochinhsach]);
+        return view('phong_dao_tao.index', ['tb_miengiamhp' => $tb_miengiamhp, 'tb_trocapxahoi' => $tb_trocapxahoi, 'lop' => $lop, 'tb_trocaphocphi' => $tb_trocaphocphi, "tb_chedochinhsach" => $tb_chedochinhsach]);
     }
 
     public function getData(Request $request)
@@ -38,7 +38,7 @@ class PhongDaoTaoController extends Controller
             ->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-            ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->select('stop_studies.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name')
             ->where(function ($query) {
                 $query
@@ -71,7 +71,23 @@ class PhongDaoTaoController extends Controller
 
         return $data;
     }
-
+    function bosunghsPDF(Request $request)
+    {
+        try {
+            $stopStudy =  StopStudy::find($request->id);
+            if ($stopStudy->type == 0) {
+                return $this->phongdaotao->bosunghsRHSPDF($request, $stopStudy);
+            }
+            if ($stopStudy->type == 1) {
+                return $this->phongdaotao->bosunghsGHP($request, $stopStudy);
+            }
+            if ($stopStudy->type == 2) {
+                return $this->phongdaotao->bosunghsTCXH($request, $stopStudy);
+            }
+        } catch (\Throwable $th) {
+            abort(404);
+        }
+    }
     function bosunghs(Request $request)
     {
         try {
@@ -101,13 +117,34 @@ class PhongDaoTaoController extends Controller
         if ($stopStudy->status != 2 && $stopStudy->status != -3  && $stopStudy->status != 3) {
             abort(404);
         }
-        $newStopStudy = $stopStudy->where('parent_id', $stopStudy->id)->orderBy('created_at', 'desc')->first();
-        $phieu = Phieu::find($newStopStudy->phieu_id);
-        if (!$phieu) {
 
-            return ['huongdankhac' => $stopStudy->note_pay];
+        return ['huongdankhac' => $stopStudy->note_pay];
+    }
+    function tiepnhanhsPDF(Request $request)
+    {
+        try {
+            $stopStudy =  StopStudy::find($request->id);
+
+            $this->giaiQuyetCongViec($request->ykientiepnhan ?? '', $stopStudy, 1);
+
+            if ($stopStudy->type == 0) {
+                return $this->phongdaotao->tiepnhanhsRHSPDF($request, $stopStudy);
+            }
+            if ($stopStudy->type == 1) {
+                return $this->phongdaotao->tiepnhanhsGHP($request, $stopStudy);
+            }
+            if ($stopStudy->type == 2) {
+                return $this->phongdaotao->tiepnhanhsTCXH($request, $stopStudy);
+            }
+            if ($stopStudy->type == 3) {
+                return $this->phongdaotao->tiepnhanhsTCHP($request, $stopStudy);
+            }
+            if ($stopStudy->type == 4) {
+                return $this->phongdaotao->tiepnhanhsCDCS($request, $stopStudy);
+            }
+        } catch (\Throwable $th) {
+            abort(404);
         }
-        return json_decode($phieu->content);
     }
 
     function tiepnhanhs(Request $request)
@@ -149,14 +186,28 @@ class PhongDaoTaoController extends Controller
         if ($stopStudy->status != 2 && $stopStudy->status != -3) {
             abort(404);
         }
-        $newStopStudy = $stopStudy->where('parent_id', $stopStudy->id)->orderBy('created_at', 'desc')->first();
-        $phieu = Phieu::find($newStopStudy->phieu_id);
-        if (!$phieu) {
-            abort(404);
-        }
-        return json_decode($phieu->content);
-    }
 
+        return;
+    }
+    function tuchoihsPDF(Request $request)
+    {
+        $stopStudy =  StopStudy::find($request->id);
+        if ($stopStudy->type == 0) {
+            return $this->phongdaotao->tuchoihsRHSPDF($request, $stopStudy);
+        }
+        if ($stopStudy->type == 1) {
+            return $this->phongdaotao->tuchoihsGHP($request, $stopStudy);
+        }
+        if ($stopStudy->type == 2) {
+            return $this->phongdaotao->tuchoihsTCXH($request, $stopStudy);
+        }
+        if ($stopStudy->type == 3) {
+            return $this->phongdaotao->tuchoihsTCHP($request, $stopStudy);
+        }
+        if ($stopStudy->type == 4) {
+            return $this->phongdaotao->tuchoihsCDCS($request, $stopStudy);
+        }
+    }
     function tuchoihs(Request $request)
     {
         $stopStudy =  StopStudy::find($request->id);

@@ -51,7 +51,7 @@ class MienGiamHPController extends Controller
         $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
         $studentData['lop'] = $student->lop_name;
         $studentData['khoa'] = $student->khoa_name;
-        $studentData['khoa_hoc'] = $student->school_year;
+        $studentData['khoa_hoc'] = $student->nien_khoa;
         $studentData['noisinh'] = $request->noisinh;
 
         $doituong = config('doituong.miengiamhp');
@@ -106,7 +106,7 @@ class MienGiamHPController extends Controller
             $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
             $studentData['lop'] = $student->lop_name;
             $studentData['khoa'] = $student->khoa_name;
-            $studentData['khoa_hoc'] = $student->school_year;
+            $studentData['khoa_hoc'] = $student->nien_khoa;
             $studentData['noisinh'] = $request->noisinh;
 
             $doituong = config('doituong.miengiamhp');
@@ -213,7 +213,7 @@ class MienGiamHPController extends Controller
         $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
         $studentData['lop'] = $student->lop_name;
         $studentData['khoa'] = $student->khoa_name;
-        $studentData['khoa_hoc'] = $student->school_year;
+        $studentData['khoa_hoc'] = $student->nien_khoa;
         $studentData['noisinh'] = $noisinh;
         $studentData['doituong'] = $doituong;
         $studentData['daduochuong'] = $daduochuong;

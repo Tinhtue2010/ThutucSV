@@ -19,7 +19,7 @@ class GiaoviensSeeder extends Seeder
      * @return void
      */
     public function run()
-    {
+    { 
         $filePath = base_path('database/seeders/csv/giaoviens.csv');
         if (!File::exists($filePath)) {
             $this->command->error("File CSV không tồn tại tại đường dẫn: " . $filePath);
@@ -29,7 +29,7 @@ class GiaoviensSeeder extends Seeder
         $data = $this->importCSV(new \SplFileObject($filePath));
         $header = [
             "ho_ten" => "full_name",
-            "khoa" => "khoa_id",
+            "khoa" => "ma_khoa",
             "dia_chi" => "dia_chi",
             "dien_thoai" => "sdt",
             "email" => "email",
@@ -49,7 +49,7 @@ class GiaoviensSeeder extends Seeder
                     } else {
                         $khoa = Khoa::where('name', 'like', '%' . $item[$index_header] . '%')->first();
                         if ($khoa) {
-                            $teacher->khoa_id = $khoa->id;
+                            $teacher->ma_khoa = $khoa->ma_khoa;
                         } else {
                             throw new \Exception("Không tìm thấy khoa với tên: " . $item[$index_header]);
                         }

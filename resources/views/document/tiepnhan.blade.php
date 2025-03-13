@@ -2,40 +2,31 @@
 
 @section('data')
     <div id="doc_view" class="A4 d-flex flex-column ">
-        <div class="d-flex flex-row justify-content-between">
-            <div>
-                <div class="text-center">TRƯỜNG ĐẠI HỌC HẠ LONG</div>
-                <div class="text-center fw-bold">PHÒNG CTCT, HT&SV</div>
-                <div style="
-            width: 94px;
-            height: 1px;
-            background-color: black;
-            margin-top: -1px;
-            margin-left: auto;
-            margin-right: auto;
-          "></div>
-            </div>
-            <div>
-                <div class="text-center">CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
-                <div class="text-center fw-bold">Độc lập - Tự do - Hạnh phúc</div>
-                <div style="
-            width: 203px;
-            height: 1px;
-            background-color: black;
-            margin-top: -1px;
-            margin-left: auto;
-            margin-right: auto;
-          "></div>
-                <div class="text-center fst-italic mt-1">
-                    Quảng Ninh, ngày {{ $data['tao_day'] }} tháng {{ $data['tao_month'] }} năm {{ $data['tao_year'] }}
-                </div>
-            </div>
-        </div>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <!-- Cột bên trái -->
+                <td style="width: 40%; text-align: center; vertical-align: top;">
+                    <div>TRƯỜNG ĐẠI HỌC HẠ LONG</div>
+                    <div class="fw-bold">PHÒNG CTCT, HT&SV</div>
+                    <div style="width: 94px; height: 1px; background-color: black; margin: -1px auto 0;"></div>
+                </td>
+        
+                <!-- Cột bên phải -->
+                <td style="width: 60%; text-align: center; vertical-align: top;">
+                    <div>CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
+                    <div class="fw-bold">Độc lập - Tự do - Hạnh phúc</div>
+                    <div style="width: 203px; height: 1px; background-color: black; margin: -1px auto 0;"></div>
+                    <div class="fst-italic mt-1">
+                        Quảng Ninh, ngày {{ $data['tao_day'] }} tháng {{ $data['tao_month'] }} năm {{ $data['tao_year'] }}
+                    </div>
+                </td>
+            </tr>
+        </table>
+        
 
-        <div class="text-center fw-bold" style="margin-top: 35px">
+        <div class="text-center fw-bold" style="margin-top: 35px; margin-bottom: 20px">
             PHIẾU TIẾP NHẬN HỒ SƠ VÀ HẸN TRẢ KẾT QUẢ
         </div>
-        <div class="text-center">Mã hồ sơ: {{ $phieu->key }}{{ $phieu->id }}</div>
         <div class="d-flex flex-column">
             <p>
                 Phòng Công tác chính trị, Quản lý và Hỗ trợ sinh viên đã tiếp nhận hồ sơ
@@ -82,9 +73,7 @@
                 <div class="fst-italic">Uông Bí, ngày {{ $data['tao_day'] }} tháng {{ $data['tao_month'] }} năm {{ $data['tao_year'] }}</div>
                 <div class="fw-bold">NGƯỜI TIẾP NHẬN HỒ SƠ</div>
                 <br />
-                @isset($data['chuky'])
-                    <img style="height: 50px" src="{{ asset('storage/' . $data['chuky'] ?? '') }}" alt="">
-                @endisset
+                <img style="height: 50px;widows: 50px" src="data:image/png;base64,{{ $data['chu_ky'] }}" alt="">
                 <br>
                 {{ $data['giaovien'] }}
             </div>

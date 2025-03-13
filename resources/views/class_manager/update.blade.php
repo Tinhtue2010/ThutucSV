@@ -100,6 +100,16 @@
                         {
                             $(e).val(response.data[e.name]).trigger('change');
                         }
+                        if(e.name == 'ma_khoa' && response.data[e.name] != null)
+                        {
+                            $(e).val(response.data[e.name]).trigger('change');
+                        }
+                        if(e.name == 'nganh_id' && response.data[e.name] != null)
+                        {
+                            console.log(response.data[e.name]);
+                            
+                            $(e).val(response.data[e.name]).trigger('change');
+                        }
                     });
                 })
         }

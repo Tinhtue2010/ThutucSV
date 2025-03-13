@@ -22,7 +22,7 @@ class TeacherManagerController extends Controller
     public function getData(Request $request)
     {
         $query = Teacher::query()
-            ->leftJoin("khoas", "teachers.khoa_id", "=", "khoas.id")
+            ->leftJoin("khoas", "teachers.ma_khoa", "=", "khoas.ma_khoa")
             ->leftJoin("users", "teachers.id", "=", "users.teacher_id")
             ->select("teachers.*", "khoas.name as khoa_name", "users.username as username", "users.role");
 
@@ -103,7 +103,7 @@ class TeacherManagerController extends Controller
 
         $teacher->update($request->only([
             'full_name',
-            'khoa_id',
+            'ma_khoa',
             'dia_chi',
             'sdt',
             'email',
