@@ -67,23 +67,16 @@
             let form = $(this);
             validation_{{$target}}.validate().then(async function (status) {
                 if (status === 'Valid') {
-                    await checkMaXacNhan().then(function(result) {
-                        if (false) {
-                            return;
-                        } else {
-                            form.append('otp', result);
-                        }
-                    });
                     axios({
                         method: 'POST',
                         url: "{{ route('PhongDaoTao.duyeths') }}",
                         data: form.serialize(),
                     }).then((response) => {
-                        mess_success('Thông báo',
-                            "Thành công")
-                        $(this).trigger("reset");
-                        model{{$target}}.hide();
-                        Datatable.loadData();
+                        // mess_success('Thông báo',
+                        //     "Thành công")
+                        // $(this).trigger("reset");
+                        // model{{$target}}.hide();
+                        // Datatable.loadData();
                     }).catch(function (error) {
                         mess_error("Cảnh báo",
                             "{{ __('Có lỗi xảy ra.') }}"

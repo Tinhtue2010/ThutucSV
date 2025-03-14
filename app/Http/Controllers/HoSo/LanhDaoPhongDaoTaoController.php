@@ -36,7 +36,7 @@ class LanhDaoPhongDaoTaoController extends Controller
             ->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-            ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->select('stop_studies.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name')
             ->where(function ($query) {
                 $query
@@ -69,7 +69,14 @@ class LanhDaoPhongDaoTaoController extends Controller
 
         return $data;
     }
-
+    function xacnhanRHS(Request $request)
+    {
+        $stopStudy =  StopStudy::find($request->id);
+        $this->giaiQuyetCongViec($request->ykientiepnhan ?? '', $stopStudy, 3);
+        if ($stopStudy->type == 0) {
+            return $this->lanhdaophongdaotao->xacnhanRHSPDF($request, $stopStudy);
+        }
+    }
     function xacnhan(Request $request)
     {
         $stopStudy =  StopStudy::find($request->id);
@@ -78,7 +85,13 @@ class LanhDaoPhongDaoTaoController extends Controller
             return $this->lanhdaophongdaotao->xacnhanRHS($request, $stopStudy);
         }
     }
-
+    function tuchoihsPDF(Request $request)
+    {
+        $stopStudy =  StopStudy::find($request->id);
+        if ($stopStudy->type == 0) {
+            return $this->lanhdaophongdaotao->tuchoihsRHSPDF($request, $stopStudy);
+        }
+    }
     function tuchoihs(Request $request)
     {
         $stopStudy =  StopStudy::find($request->id);

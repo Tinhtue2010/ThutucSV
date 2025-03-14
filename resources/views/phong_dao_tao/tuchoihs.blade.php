@@ -80,8 +80,6 @@
                                 '{{ route('PhongDaoTao.tuchoihs') }}',
                                 $('[name="id"]').val(), null)
                         }
-
-
                     }).catch(function(error) {
                         mess_error("Cảnh báo",
                             "{{ __('Có lỗi xảy ra.') }}"

@@ -227,7 +227,7 @@ class PhongDaoTaoController extends Controller
             return $this->phongdaotao->tuchoihsCDCS($request, $stopStudy);
         }
     }
-
+    
     function duyeths(Request $request)
     {
         $stopStudy =  StopStudy::find($request->id);

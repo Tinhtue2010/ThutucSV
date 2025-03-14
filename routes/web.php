@@ -288,6 +288,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('get-data', [LanhDaoPhongDaoTaoController::class, 'getData'])->name('getData');
             Route::post('xacnhan', [LanhDaoPhongDaoTaoController::class, 'xacnhan'])->name('xacnhan');
             Route::post('tuchoihs', [LanhDaoPhongDaoTaoController::class, 'tuchoihs'])->name('tuchoihs');
+            Route::post('tuchoihs-pdf', [LanhDaoPhongDaoTaoController::class, 'tuchoihsPDF'])->name('tuchoihsPDF');
 
             Route::name('MienGiamHP.')->prefix('mien-giam-hp')->group(function () {
                 Route::get('/', [MienGiamHPCanBoPhongDaoTaoController::class, 'index'])->name('index');

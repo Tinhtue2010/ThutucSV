@@ -54,11 +54,7 @@
                             <a href="{{ route('notification.viewNotifi', ['type' => $item['type']]) }}" class="flex-grow-1 me-2">
                                 <div class="text-black  fw-bold text-gray-800  fs-4">Thông báo</div>
                                 <span class="text-black fs-5 fw-semibold d-block">{{ $item['notification'] }}</span>
-                                @if ($item['phieu_id'] != null)
-                                    <div class="d-flex justify-content-end">
-                                        <a target="_bank" href="{{ route('phieu.index', ['id' => $item['phieu_id']]) }}" class="btn btn-flex btn-success fs-7 fw-bold">Xem</a>
-                                    </div>
-                                @endif
+
                             </a>
                         @endif
 
