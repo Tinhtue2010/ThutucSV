@@ -79,7 +79,7 @@ class PhongDaoTaoController extends Controller
                 return $this->phongdaotao->bosunghsRHSPDF($request, $stopStudy);
             }
             if ($stopStudy->type == 1) {
-                return $this->phongdaotao->bosunghsGHP($request, $stopStudy);
+                return $this->phongdaotao->bosunghsGHPPDF($request, $stopStudy);
             }
             if ($stopStudy->type == 2) {
                 return $this->phongdaotao->bosunghsTCXH($request, $stopStudy);
@@ -107,6 +107,7 @@ class PhongDaoTaoController extends Controller
     }
     function getbosunghs($id = null)
     {
+        return;
         if ($id == null) {
             abort(404);
         }
@@ -118,7 +119,7 @@ class PhongDaoTaoController extends Controller
             abort(404);
         }
 
-        return ['huongdankhac' => $stopStudy->note_pay];
+        return;
     }
     function tiepnhanhsPDF(Request $request)
     {

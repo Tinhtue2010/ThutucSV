@@ -190,7 +190,6 @@
                             "Content-Type": "multipart/form-data",
                         },
                     }).then((response) => {
-                        console.log(response.data);
                         if (response.data == 0) {
                             mess_error("Cảnh báo",
                                 "{{ __('Bạn chưa đăng ký chữ ký số cần đăng ký chữ ký số SmartCA') }}"

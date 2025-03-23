@@ -27,8 +27,8 @@ class MienGiamHPController extends Controller
         }
 
         $user = Auth::user();
-        $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+        $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)->first();
         return view('mien_giam_hoc_phi.index', ['don_parent' => $don_parent, 'don' => $don, 'student' => $student]);
@@ -41,14 +41,20 @@ class MienGiamHPController extends Controller
         $chu_ky =  $this->convertImageToBase64(Auth::user()->getUrlChuKy());
         $user = Auth::user();
 
-        $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+        $info_signature = $this->getInfoSignature($user->cccd);
+        if ($info_signature === false) {
+            return 0; //chưa đăng ký chữ ký số cần đăng ký chữ ký số
+        }
+        $user = Auth::user();
+
+        $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)->first();
 
         $studentData['full_name'] = $student->full_name;
         $studentData['student_code'] = $student->student_code;
-        $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
+        $studentData['date_of_birth'] = Carbon::parse($student->date_of_birth)->format('d/m/Y');
         $studentData['lop'] = $student->lop_name;
         $studentData['khoa'] = $student->khoa_name;
         $studentData['khoa_hoc'] = $student->nien_khoa;
@@ -59,7 +65,6 @@ class MienGiamHPController extends Controller
 
         $studentData['daduochuong'] = $request->daduochuong;
         $studentData['sdt'] = $student->phone;
-
         $studentData['day'] = Carbon::now()->day;
 
         $studentData['month'] = Carbon::now()->month;
@@ -76,123 +81,67 @@ class MienGiamHPController extends Controller
         $phieu->content = json_encode($studentData);
         $phieu->file = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
 
-
         $pdf =  $this->createPDF($phieu);
 
-        $this->saveBase64AsPdf($pdf,"demo");
-        return true;
+        return $this->craeteSignature($info_signature, $pdf, $user->cccd, 'MIEN_GIAM_HOC_PHI');
     }
-
     function CreateViewPdf(Request $request)
     {
-        if(!$this->checkOtpApi($request->otp ?? ''))
-        {
-            abort(404);
+        $getPDF = $this->getPDF($request->fileId, $request->tranId, $request->transIDHash);
+        if ($getPDF === 0) {
+            return 0;
         }
-        if ($request->button_clicked == "xem_truoc") {
-            Session::put('noisinh', $request->noisinh);
-            Session::put('doituong', $request->doituong);
-            Session::put('daduochuong', $request->daduochuong);
-        } else {
-            $user = Auth::user();
+        $file_name = $this->saveBase64AsPdf($getPDF,'MIEN_GIAM_HOC_PHI');
 
-            $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-                ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
-                ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
-                ->where('students.id', $user->student_id)->first();
-
-            $studentData['full_name'] = $student->full_name;
-            $studentData['student_code'] = $student->student_code;
-            $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
-            $studentData['lop'] = $student->lop_name;
-            $studentData['khoa'] = $student->khoa_name;
-            $studentData['khoa_hoc'] = $student->nien_khoa;
-            $studentData['noisinh'] = $request->noisinh;
-
-            $doituong = config('doituong.miengiamhp');
-            $studentData['doituong'] = $doituong[$request->doituong][2];
-
-            $studentData['daduochuong'] = $request->daduochuong;
-            $studentData['sdt'] = $student->phone;
-
-            $studentData['day'] = Carbon::now()->day;
-
-            $studentData['month'] = Carbon::now()->month;
-
-            $studentData['year'] = Carbon::now()->year;
-            
-            $studentData['url_chuky'] = Auth::user()->getUrlChuKy();
-
-            $check = StopStudy::where('student_id', $user->student_id)->where('type', 1)->first();
-
-            if ($check) {
-
-                if (isset($check->files)) {
-                    $this->deleteFiles(json_decode($check->files));
-                }
-                $check->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
-
-                $check->note = $request->data;
-                $check->is_update = 1;
-                if($request->doituong < 5)
-                {
-                    $check->phantramgiam = 100;
-                }
-                else if($request->doituong == 7)
-                {
-                    $check->phantramgiam = 50;
-                }
-                else
-                {
-                    $check->phantramgiam = 70;
-                }
-                $check->type_miengiamhp = $request->doituong ?? 1;
-                $check->update();
-                $phieu = Phieu::where('id', $check->phieu_id)->first();
-                $phieu->student_id = $user->student_id;
-                $phieu->name = "Đơn xin giảm học phí";
-                $phieu->key = "GHP";
-                $phieu->file = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
-                $phieu->content = json_encode($studentData);
-                $phieu->save();
-            } else {
-                $phieu = new Phieu();
-                $phieu->student_id = $user->student_id;
-                $phieu->name = "Đơn xin giảm học phí";
-                $phieu->key = "GHP";
-                $phieu->content = json_encode($studentData);
-                $phieu->file = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
-                $phieu->save();
-
-                $query = new StopStudy();
-                $query->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
-                $query->student_id = $user->student_id;
-                $query->type_miengiamhp = $request->doituong ?? 1;
-                $query->round = 1;
-                $query->type = 1;
-                if($request->doituong < 5)
-                {
-                    $query->phantramgiam = 100;
-                }
-                else if($request->doituong == 7)
-                {
-                    $query->phantramgiam = 50;
-                }
-                else
-                {
-                    $query->phantramgiam = 70;
-                }
-                $query->note = $request->data;
-                $query->phieu_id = $phieu->id;
-                $query->lop_id = $student->lop_id;
-
-                $query->save();
-
-                $this->notification("Đơn xin miễn giảm học phí của bạn đã được gửi, vui lòng chờ thông báo khác", $phieu->id, "GHP");
+    
+        $user = Auth::user();
+        $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
+            ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
+            ->where('students.id', $user->student_id)
+            ->first();
+    
+        
+        $phantramgiam = match ($request->doituong) {
+            null, 5, 6 => 70,
+            7 => 50,
+            default => 100,
+        };
+    
+        $uploadedFiles = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
+        
+        $check = StopStudy::where('student_id', $user->student_id)->where('type', 1)->first();
+    
+        if ($check) {
+            if (isset($check->files)) {
+                $this->deleteFiles(json_decode($check->files));
             }
+            $check->update([
+                'files' => $uploadedFiles,
+                'note' => $request->data,
+                'is_update' => 1,
+                'phantramgiam' => $phantramgiam,
+                'type_miengiamhp' => $request->doituong ?? 1,
+            ]);
+        } else {
+            $query = new StopStudy([
+                'files' => $uploadedFiles,
+                'student_id' => $user->student_id,
+                'type_miengiamhp' => $request->doituong ?? 1,
+                'round' => 1,
+                'type' => 1,
+                'phantramgiam' => $phantramgiam,
+                'note' => $request->data,
+                'ma_lop' => $student->ma_lop,
+                'file_name' => $file_name
+            ]);
+            $query->save();
+            $this->notification("Đơn xin miễn giảm học phí của bạn đã được gửi, vui lòng chờ thông báo khác", null,$file_name, "GHP");
         }
+        
         return true;
     }
+    
     function viewDemoPdf()
     {
         $noisinh = Session::get('noisinh');
@@ -203,7 +152,7 @@ class MienGiamHPController extends Controller
         $doituong = $doituong[$doituongSS];
 
         $user = Auth::user();
-        $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+        $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)->first();

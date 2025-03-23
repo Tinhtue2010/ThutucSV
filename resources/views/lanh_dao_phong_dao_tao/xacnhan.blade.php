@@ -64,23 +64,12 @@
             let form = $(this);
             validation_{{ $target }}.validate().then(async function(status) {
                 if (status === 'Valid') {
-                    await checkMaXacNhan().then(function(result) {
-                        if (false) {
-                            return;
-                        } else {
-                            form.append('otp', result);
-                        }
-                    });
                     axios({
                         method: 'POST',
-                        url: "{{ route('LanhDaoPhongDaoTao.xacnhan') }}",
+                        url: "{{ route('LanhDaoPhongDaoTao.xacnhanPDF') }}",
                         data: form.serialize(),
                     }).then((response) => {
-                        mess_success('Thông báo',
-                            "Xác nhận đơn thành công")
-                        $(this).trigger("reset");
-                        model{{ $target }}.hide();
-                        Datatable.loadData();
+                        checkMaXacNhan(null,response.data,'{{route('LanhDaoPhongDaoTao.xacnhan')}}',$('[name="id"]').val(),$('[name="note"]').val())
                     }).catch(function(error) {
                         mess_error("Cảnh báo",
                             "{{ __('Có lỗi xảy ra.') }}"

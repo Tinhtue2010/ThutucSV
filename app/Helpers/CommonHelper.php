@@ -36,44 +36,27 @@ trait CommonHelper
     public function importCSV($file)
     {
         $path = $file->getRealPath();
-
         $file = fopen($path, 'r');
-        $row = 1;
         $header = [];
         $datas = [];
+        
         while (($data = fgetcsv($file, 9000000, ',')) !== false) {
-            if ($data !== null) {
-                $i = 0;
-                $tmpData = [];
-                while (isset($data[$i])) {
-                    if ($row == 1) {
-                        $header[] = $this->convertVietnamese($data[$i]);
-                    } else {
-                        try {
-                            $tmpData[] = $data[$i];
-                        } catch (Exception $e) {
-                            break;
-                        }
-                    }
-                    $i++;
-                }
-                if ($row > 1) {
-                    if (!$this->isAllEmptyStringsArray($tmpData)) {
-                        $datas[] = $tmpData;
-                    } else {
-                        break;
-                    }
-                }
-                $row++;
+            if (empty($data)) continue;
+            
+            if (empty($header)) {
+                $header = array_map([$this, 'convertVietnamese'], $data);
             } else {
-                break;
+                $tmpData = array_filter($data, fn($value) => $value !== "");
+                if (!empty($tmpData)) {
+                    $datas[] = $tmpData;
+                } else {
+                    break;
+                }
             }
         }
         fclose($file);
-        $dataFile['header'] = $header;
-        $dataFile['data'] = $datas;
-
-        return $dataFile;
+        
+        return ['header' => $header, 'data' => $datas];
     }
     function isAllEmptyStringsArray($data)
     {
@@ -773,75 +756,115 @@ trait CommonHelper
     }
     function createPDF($phieu)
     {
-        try {
-            $options = new Options();
-            $options->set('defaultFont', 'DejaVu Sans');
-            $dompdf = new Dompdf($options);
+        $options = new Options();
+        $options->set('defaultFont', 'DejaVu Sans');
+        $dompdf = new Dompdf($options);
 
-            $viewMap = [
-                "RHS" => 'document.thoi_hoc',
-                "GHP" => 'document.miengiamhp',
-                "TCGQ" => 'document.tuchoi',
-                "TCXH" => 'document.trocapxahoi',
-                "TCHP" => 'document.hotro_cpht',
-                "CDCS" => 'document.chinhsach_qn',
-                "HDBSSH" => 'document.huongdanbosung',
-                "TNHS" => 'document.tiepnhan',
-                "DSMGHP" => 'document.theodoithongke.m01_02_05',
-                "QDGHP" => 'document.theodoithongke.m01_02_06',
-                "PTGHP" => 'document.theodoithongke.m01_02_07',
-                "DSTCXH" => 'document.theodoithongke.m01_03_06',
-                "QDTCXH" => 'document.theodoithongke.m01_03_07',
-                "PTTCXH" => 'document.theodoithongke.m01_03_10',
-                "DSTCHP" => 'document.theodoithongke.m01_03_08',
-                "QDTCHP" => 'document.theodoithongke.m01_03_09',
-                "PTTCHP" => 'document.theodoithongke.m01_03_10_2',
-                "DSCDTA" => 'document.theodoithongke.m01_04_05',
-                "QDCDTA" => 'document.theodoithongke.m01_04_06',
-                "DSCDHP" => 'document.theodoithongke.m01_04_07',
-                "QDCDHP" => 'document.theodoithongke.m01_04_08',
-                "DSCDKTX1" => 'document.theodoithongke.m01_04_09',
-                "DSCDKTX4" => 'document.theodoithongke.m01_04_10',
-                "QDCDKTX1" => 'document.theodoithongke.m01_04_11',
-                "QDCDKTX4" => 'document.theodoithongke.m01_04_12',
-                "PTQT4" => 'document.theodoithongke.m01_04_13',
-            ];
-    
-            // Kiểm tra key có hợp lệ không
-            if (!isset($viewMap[$phieu->key])) {
-                throw new Exception("Không tìm thấy view cho key: " . $phieu->key);
-            }
-    
-            // Giải mã JSON
-            $data = json_decode($phieu->content, true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new Exception("Lỗi JSON: " . json_last_error_msg());
-            }
-    
-            // Kiểm tra view có tồn tại không trước khi render
-            if (!View::exists($viewMap[$phieu->key])) {
-                throw new Exception("View không tồn tại: " . $viewMap[$phieu->key]);
-            }
-    
-            // Render view
-            $html = view($viewMap[$phieu->key], ['data' => $data, 'phieu' => $phieu])->render();
-    
-            $dompdf->loadHtml($html);
-            $dompdf->setPaper('A4', 'portrait');
-            $dompdf->render();
-    
-            // Lưu vào bộ nhớ tạm thời
-            $filePath = storage_path('app/output.pdf');
-            file_put_contents($filePath, $dompdf->output());
-    
-            // Đọc file PDF và chuyển thành Base64
-            $base64Pdf = base64_encode(file_get_contents($filePath));
-    
-            return $base64Pdf;
-        } catch (Exception $e) {
-            Log::error("Lỗi khi tạo PDF: " . $e->getMessage());
-            return response()->json(['error' => $e->getMessage()], 500);
+        if ($phieu->key == "RHS") {
+            $html = view('document.thoi_hoc', ['data' => json_decode($phieu->content, true)])->render();
         }
+        
+        if ($phieu->key == "GHP") {
+            $html =  view('document.miengiamhp', ['data' => json_decode($phieu->content, true)]);
+        }
+
+        if ($phieu->key == "TCGQ") {
+            $html =  view('document.tuchoi', ['data' => json_decode($phieu->content, true)]);
+        }
+
+        if ($phieu->key == "TCXH") {
+            $html =  view('document.trocapxahoi', ['data' => json_decode($phieu->content, true)]);
+        }
+        if ($phieu->key == "TCHP") {
+            $html =  view('document.hotro_cpht', ['data' => json_decode($phieu->content, true)]);
+        }
+        if ($phieu->key == "CDCS") {
+            $html =  view('document.chinhsach_qn', ['data' => json_decode($phieu->content, true)]);
+        }
+        if ($phieu->key == "HDBSSH") {
+            $html =  view('document.huongdanbosung', ['data' => json_decode($phieu->content, true)])->render();
+        }
+
+        if ($phieu->key == "TNHS") {
+            $html =  view('document.tiepnhan', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "DSMGHP") {
+            $html =  view('document.theodoithongke.m01_02_05', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "QDGHP") {
+            $html =  view('document.theodoithongke.m01_02_06', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "PTGHP") {
+            $html =  view('document.theodoithongke.m01_02_07', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "DSTCXH") {
+            $html =  view('document.theodoithongke.m01_03_06', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "QDTCXH") {
+            $html =  view('document.theodoithongke.m01_03_07', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "PTTCXH") {
+            $html =  view('document.theodoithongke.m01_03_10', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+        if ($phieu->key == "DSTCHP") {
+            $html =  view('document.theodoithongke.m01_03_08', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "QDTCHP") {
+            $html =  view('document.theodoithongke.m01_03_09', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "PTTCHP") {
+            $html =  view('document.theodoithongke.m01_03_10_2', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "DSCDTA") {
+            $html =  view('document.theodoithongke.m01_04_05', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "QDCDTA") {
+            $html =  view('document.theodoithongke.m01_04_06', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+
+        if ($phieu->key == "DSCDHP") {
+            $html =  view('document.theodoithongke.m01_04_07', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "QDCDHP") {
+            $html =  view('document.theodoithongke.m01_04_08', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+
+        if ($phieu->key == "DSCDKTX1") {
+            $html =  view('document.theodoithongke.m01_04_09', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "DSCDKTX4") {
+            $html =  view('document.theodoithongke.m01_04_10', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+        if ($phieu->key == "QDCDKTX1") {
+            $html =  view('document.theodoithongke.m01_04_11', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+        if ($phieu->key == "QDCDKTX4") {
+            $html =  view('document.theodoithongke.m01_04_12', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+        if ($phieu->key == "PTQT4") {
+            $html =  view('document.theodoithongke.m01_04_13', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+        }
+
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        // Lưu vào bộ nhớ tạm thời
+        $filePath = 'output.pdf';
+        file_put_contents($filePath, $dompdf->output());
+
+        // Đọc file PDF và chuyển thành Base64
+        $base64Pdf = base64_encode(file_get_contents($filePath));
+
+        // Xuất Base64
+        return $base64Pdf;
+    }
 
     function convertPdfToBase64($filePath)
     {

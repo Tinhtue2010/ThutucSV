@@ -72,11 +72,11 @@
                         url: "{{ route('PhongDaoTao.duyeths') }}",
                         data: form.serialize(),
                     }).then((response) => {
-                        // mess_success('Thông báo',
-                        //     "Thành công")
-                        // $(this).trigger("reset");
-                        // model{{$target}}.hide();
-                        // Datatable.loadData();
+                        mess_success('Thông báo',
+                            "Thành công")
+                        $(this).trigger("reset");
+                        model{{$target}}.hide();
+                        Datatable.loadData();
                     }).catch(function (error) {
                         mess_error("Cảnh báo",
                             "{{ __('Có lỗi xảy ra.') }}"

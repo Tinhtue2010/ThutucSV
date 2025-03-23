@@ -77,6 +77,14 @@ class LanhDaoPhongDaoTaoController extends Controller
             return $this->lanhdaophongdaotao->xacnhanRHSPDF($request, $stopStudy);
         }
     }
+    function xacnhanPDF(Request $request)
+    {
+        $stopStudy =  StopStudy::find($request->id);
+        $this->giaiQuyetCongViec($request->ykientiepnhan ?? '', $stopStudy, 3);
+        if ($stopStudy->type == 0) {
+            return $this->lanhdaophongdaotao->xacnhanRHSPDF($request, $stopStudy);
+        }
+    }
     function xacnhan(Request $request)
     {
         $stopStudy =  StopStudy::find($request->id);

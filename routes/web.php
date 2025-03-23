@@ -287,6 +287,8 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/', [LanhDaoPhongDaoTaoController::class, 'index'])->name('index');
             Route::get('get-data', [LanhDaoPhongDaoTaoController::class, 'getData'])->name('getData');
             Route::post('xacnhan', [LanhDaoPhongDaoTaoController::class, 'xacnhan'])->name('xacnhan');
+            Route::post('xacnhan-pdf', [LanhDaoPhongDaoTaoController::class, 'xacnhanPDF'])->name('xacnhanPDF');
+
             Route::post('tuchoihs', [LanhDaoPhongDaoTaoController::class, 'tuchoihs'])->name('tuchoihs');
             Route::post('tuchoihs-pdf', [LanhDaoPhongDaoTaoController::class, 'tuchoihsPDF'])->name('tuchoihsPDF');
 
@@ -323,7 +325,9 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/', [LanhDaoTruongController::class, 'index'])->name('index');
             Route::get('get-data', [LanhDaoTruongController::class, 'getData'])->name('getData');
             Route::post('xacnhan', [LanhDaoTruongController::class, 'xacnhan'])->name('xacnhan');
+            Route::post('xacnhan-pdf', [LanhDaoTruongController::class, 'xacnhanPDF'])->name('xacnhanPDF');
             Route::post('tuchoihs', [LanhDaoTruongController::class, 'tuchoihs'])->name('tuchoihs');
+            Route::post('tuchoihs-pdf', [LanhDaoTruongController::class, 'tuchoihsPDF'])->name('tuchoihsPDF');
 
             Route::name('MienGiamHP.')->prefix('mien-giam-hp')->group(function () {
                 Route::get('/', [MienGiamHPLanhDaoTruongController::class, 'index'])->name('index');

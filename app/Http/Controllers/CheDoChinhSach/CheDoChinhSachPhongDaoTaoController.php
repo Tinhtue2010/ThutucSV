@@ -33,7 +33,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
             ->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-            ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'lops.hocphi');
 
 
@@ -221,7 +221,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
                 foreach ($data['data'] as $index => $item) {
                     $error_line = $index + 2;
                     $student = Student::where('student_code', $item[$indexHeader['ma_sinh_vien']])
-                        ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+                        ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
                         ->select('students.*', 'lops.name as lop_name', 'lops.hocphi')
                         ->first();
                     if (!$student) {
@@ -526,7 +526,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
             ->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-            ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'lops.hocphi')
             ->get();
 

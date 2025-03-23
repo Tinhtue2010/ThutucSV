@@ -110,7 +110,7 @@
 
         if(data < 0 && row['is_update'] == 0 && data != -4)
         {
-            res += `<span class="mt-1 badge badge-danger">Sinh viên chưa bổ xung hồ sơ</span>`;
+            res += `<span class="mt-1 badge badge-danger">Sinh viên chưa bổ sung hồ sơ</span>`;
         }
 
         res = '<div class="d-flex flex-column">'+res+`</div>`;

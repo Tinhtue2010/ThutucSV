@@ -34,7 +34,7 @@ class TroCapXHController extends Controller
         }
 
         $user = Auth::user();
-        $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+        $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)->first();
@@ -53,7 +53,7 @@ class TroCapXHController extends Controller
         } else {
             $user = Auth::user();
 
-            $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
                 ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
                 ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
                 ->where('students.id', $user->student_id)->first();
@@ -113,7 +113,7 @@ class TroCapXHController extends Controller
         }
 
         $user = Auth::user();
-        $student = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+        $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)->first();

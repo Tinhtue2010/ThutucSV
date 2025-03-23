@@ -26,8 +26,8 @@ class MienGiamHPPhongDaoTaoController extends Controller
             ->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-            ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'lops.hocphi');
+            ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name');
 
         if (isset($request->type_miengiamhp)) {
             $query->where('stop_studies.type_miengiamhp', $request->type_miengiamhp);
@@ -99,7 +99,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
         ->studentActive()
         ->whereNull('parent_id')
         ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-        ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+        ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
         ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'lops.hocphi')
         ->get();
         
@@ -265,13 +265,14 @@ class MienGiamHPPhongDaoTaoController extends Controller
 
     function tinhSoLuong()
     {
+
         $miengiamHP = StopStudy::where('type', 1)->where('stop_studies.status', '>', 0)
             ->studentActive()
             ->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-            ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
-            ->selectRaw('ROUND(SUM(stop_studies.phantramgiam / 100 * lops.hocphi)) as hocphi, COUNT(*) as tong')
+            ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->selectRaw('ROUND(SUM(stop_studies.phantramgiam / 100 * 1)) as hocphi, COUNT(*) as tong')
             ->get()->toArray();
         return $miengiamHP;
     }

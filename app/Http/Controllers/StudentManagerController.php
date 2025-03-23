@@ -56,7 +56,7 @@ class StudentManagerController extends Controller
     public function getDataChild($id)
     {
         try {
-            $error = Student::leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            $error = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->select('students.*','lops.*')
             ->findOrFail($id);
 

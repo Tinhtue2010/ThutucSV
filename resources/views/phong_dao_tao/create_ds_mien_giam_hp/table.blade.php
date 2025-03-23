@@ -81,7 +81,8 @@
                         {
                             data: 'hocphi',
                             render: function(data, type, row) {
-                                return `<p id="hocphi_${row['id']}" data-hocphi="${data}">${data.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>`;;
+                                var hocphi = data ?? 0;
+                                return `<p id="hocphi_${row['id']}" data-hocphi="${hocphi}">${hocphi.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>`;
                             }
                         },
                         {
@@ -106,12 +107,16 @@
                             data: 'id',
                             render: function(data, type, row) {
                                 var phantramgiam = 0;
+                                var hocphi = row['hocphi'] ?? 0;
+                                
                                 if (row['phantramgiam'] == 100 || row['phantramgiam'] == 70 || row['phantramgiam'] == 50) {
                                     var phantramgiam = row['phantramgiam'] / 100;
                                 } else {
                                     var phantramgiam = row['type_miengiamhp'] < 5 ? 1 : row['type_miengiamhp'] == 7 ? 0.5 : 0.7
                                 }
-                                var miengiam_thang = (row['hocphi'] / 5) * phantramgiam
+                                var miengiam_thang = (hocphi / 5) * phantramgiam
+                                console.log(miengiam_thang);
+                                
                                 return `<p id="miengiam_thang_${data}">${miengiam_thang.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>`;
                             }
                         },

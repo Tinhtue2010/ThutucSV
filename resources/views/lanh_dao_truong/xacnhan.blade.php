@@ -67,23 +67,14 @@
             let form = $(this);
             validation_{{$target}}.validate().then(async function (status) {
                 if (status === 'Valid') {
-                    await checkMaXacNhan().then(function(result) {
-                        if (false) {
-                            return;
-                        } else {
-                            form.append('otp', result);
-                        }
-                    });
                     axios({
                         method: 'POST',
-                        url: "{{ route('LanhDaoTruong.xacnhan') }}",
+                        url: "{{ route('LanhDaoTruong.xacnhanPDF') }}",
                         data: form.serialize(),
                     }).then((response) => {
-                        mess_success('Thông báo',
-                            "Xác nhận đơn thành công")
-                        $(this).trigger("reset");
-                        model{{$target}}.hide();
-                        Datatable.loadData();
+                        checkMaXacNhan(null, response.data,
+                                '{{ route('LanhDaoTruong.xacnhan') }}',
+                                $('[name="id"]').val(), null)
                     }).catch(function (error) {
                         mess_error("Cảnh báo",
                             "{{ __('Có lỗi xảy ra.') }}"
@@ -105,7 +96,7 @@
             }
             model{{$target}} = new bootstrap.Modal(modalEl);
             model{{$target}}.show();
-            $('[name="id"]').val(data);
+            $('[name="id"]').val(data);            
         }
     </script>
 @endpush

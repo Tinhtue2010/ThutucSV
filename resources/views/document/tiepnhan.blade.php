@@ -17,7 +17,7 @@
                     <div class="fw-bold">Độc lập - Tự do - Hạnh phúc</div>
                     <div style="width: 203px; height: 1px; background-color: black; margin: -1px auto 0;"></div>
                     <div class="fst-italic mt-1">
-                        Quảng Ninh, ngày {{ $data['tao_day'] }} tháng {{ $data['tao_month'] }} năm {{ $data['tao_year'] }}
+                        Quảng Ninh, ngày {{ $data['day'] }} tháng {{ $data['month'] }} năm {{ $data['year'] }}
                     </div>
                 </td>
             </tr>
@@ -70,7 +70,7 @@
         <div class="d-flex flex-row justify-content-between px-5 mt-1">
             <div class="d-flex flex-column justify-content-end text-center"></div>
             <div class="text-center">
-                <div class="fst-italic">Uông Bí, ngày {{ $data['tao_day'] }} tháng {{ $data['tao_month'] }} năm {{ $data['tao_year'] }}</div>
+                <div class="fst-italic">Uông Bí, ngày {{ $data['day'] }} tháng {{ $data['month'] }} năm {{ $data['year'] }}</div>
                 <div class="fw-bold">NGƯỜI TIẾP NHẬN HỒ SƠ</div>
                 <br />
                 <img style="height: 50px;widows: 50px" src="data:image/png;base64,{{ $data['chu_ky'] }}" alt="">

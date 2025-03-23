@@ -17,7 +17,7 @@ class HoSoChungTuPhongDaoTaoController extends Controller
     function getData(Request $request)
     {
         $query = Phieu::leftJoin('students', 'phieus.student_id', '=', 'students.id')
-            ->leftJoin('lops', 'students.lop_id', '=', 'lops.id')
+            ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->select('phieus.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name');
 
         if (isset($request->group)) {
