@@ -129,7 +129,7 @@
                         mess_success('Thông báo',
                             "Đã xác nhận thành công")
                         setTimeout(function() {
-                            location.reload();
+                            // location.reload();
                         }, 2000);
                     }
 

@@ -10,17 +10,16 @@
     <link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.ico') }}" />
 
     <!--begin::Fonts(mandatory for all pages)-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <!--end::Fonts-->
 
     <!--begin::Vendor Stylesheets(used for this page only)-->
-    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
-          type="text/css"/>
+    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
     <!--end::Vendor Stylesheets-->
 
     <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
-    <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
     <!--end::Global Stylesheets Bundle-->
 </head>
 <!--end::Head-->
@@ -70,8 +69,7 @@
                         </div>
                         <!--begin::Logo image-->
                         <a href="/">
-                            <img alt="Logo" src="{{ asset('assets/custom/Logo.png') }}"
-                                class="h-30px" />
+                            <img alt="Logo" src="{{ asset('assets/custom/Logo.png') }}" class="h-30px" />
                         </a>
                         <!--end::Logo image-->
                     </div>
@@ -497,8 +495,7 @@
                                         <!--begin::User-->
                                         <div class="symbol symbol-circle symbol-25px" data-bs-toggle="tooltip"
                                             data-bs-boundary="window" data-bs-placement="top" title="Alan Nilson">
-                                            <img src="{{ asset('assets/custom/avatar.png') }}"
-                                                alt="img" />
+                                            <img src="{{ asset('assets/custom/avatar.png') }}" alt="img" />
                                         </div>
                                         <!--end::User-->
                                     </div>
@@ -941,6 +938,7 @@
                 }
             });
         }
+
         function mess_error(title, content) {
             Swal.fire({
                 text: content,
@@ -949,6 +947,25 @@
                 confirmButtonText: "Oke",
                 customClass: {
                     confirmButton: "btn btn-primary"
+                }
+            });
+        }
+
+        function confirmApproval(callback, noti) {
+            Swal.fire({
+                text: noti ?? "Bạn có chắc muốn duyệt danh sách không? Thao tác này sẽ không thể hoàn tác!",
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: "Duyệt",
+                cancelButtonText: "Hủy",
+                customClass: {
+                    confirmButton: "btn btn-danger",
+                    cancelButton: "btn btn-secondary"
+                }
+            }).then((result) => {
+                if (result.isConfirmed && typeof callback === "function") {
+                    callback();
                 }
             });
         }

@@ -24,7 +24,7 @@ class MienGiamHPCanBoPhongDaoTaoController extends Controller
         ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'lops.hocphi');
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name');
 
         if (isset($request->type_miengiamhp)) {
             $query->where('stop_studies.type_miengiamhp', $request->type_miengiamhp);
@@ -57,7 +57,7 @@ class MienGiamHPCanBoPhongDaoTaoController extends Controller
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = null;
+            $newStopStudy->file_name = null;
             $newStopStudy->parent_id = $stopStudy->id;
             $newStopStudy->note = "Cán bộ phòng đào tạo duyệt danh sách";
             $newStopStudy->save();

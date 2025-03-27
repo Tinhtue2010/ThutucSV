@@ -119,55 +119,74 @@
     .mt-5 {
         margin-top: 3rem;
     }
-    p{
+
+    p {
         margin: 0;
     }
 
-    @page {
-        size: A4 portrait;
-        /* A4 dọc */
-        margin: 20mm 20mm 20mm 25mm;
-        /* Lề chuẩn để tránh bị cắt nội dung */
-    }
+    @isset($ngang)
+        @if ($ngang == 0)
+            @page {
+                size: A4 portrait;
+                margin: 20mm 20mm 20mm 25mm;
+            }
+        @else
+            @page {
+                size: A4 landscape;
+                margin: 20mm 20mm 20mm 25mm;
+            }
+        @endif
+    @else
+        @page {
+            size: A4 portrait;
+            margin: 20mm 20mm 20mm 25mm;
+        }
+    @endisset
+
+
     @font-face {
-    font-family: 'MyCustomFont';
-    src: url('{{ public_path("fonts/4.ttf") }}') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-.table {
-    width: 100%;
-    border-collapse: collapse;
-}
+        font-family: 'MyCustomFont';
+        src: url('{{ public_path('fonts/4.ttf') }}') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
 
-.table th, .table td {
-    border: 1px solid black;
-    padding: 8px;
-    text-align: center;
-    vertical-align: middle;
-}
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
 
-.table th {
-    background-color: #fff; /* Màu nền cho tiêu đề */
-    font-weight: bold;
-}
+    .table th,
+    .table td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+        vertical-align: middle;
+    }
 
-.table td {
-    background-color: #fff;
-}
+    .table th {
+        background-color: #fff;
+        /* Màu nền cho tiêu đề */
+        font-weight: bold;
+    }
 
-.table tr:nth-child(even) {
-    background-color: #fff; /* Xen kẽ màu nền giữa các dòng */
-}
+    .table td {
+        background-color: #fff;
+    }
 
-.table .text-center {
-    text-align: center;
-}
+    .table tr:nth-child(even) {
+        background-color: #fff;
+        /* Xen kẽ màu nền giữa các dòng */
+    }
 
-.table th div {
-    font-size: 14px; /* Giữ chữ trong <div> không quá to */
-}
+    .table .text-center {
+        text-align: center;
+    }
 
+    .table th div {
+        font-size: 14px;
+        /* Giữ chữ trong <div> không quá to */
+    }
 </style>
 
 <body>

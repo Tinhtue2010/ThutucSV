@@ -332,6 +332,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::name('MienGiamHP.')->prefix('mien-giam-hp')->group(function () {
                 Route::get('/', [MienGiamHPLanhDaoTruongController::class, 'index'])->name('index');
                 Route::get('get-data', [MienGiamHPLanhDaoTruongController::class, 'getData'])->name('getData');
+                Route::post('xacnhan-pdf', [MienGiamHPLanhDaoTruongController::class, 'xacnhanPDF'])->name('xacnhanPDF');
                 Route::post('xacnhan', [MienGiamHPLanhDaoTruongController::class, 'xacnhan'])->name('xacnhan');
                 Route::get('tuchoi', [MienGiamHPLanhDaoTruongController::class, 'tuchoi'])->name('tuchoi');
             });

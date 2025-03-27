@@ -111,7 +111,7 @@
                                         Cần gửi danh sách miễn giảm học phí đến khoa và sinh viên
                                     </span>
                                 </div>
-                                <a href="{{ route('PhongDaoTao.MienGiamHP.guiTBSV') }}" class="btn btn-primary">Gửi</a>
+                                <a href="{{ route('PhongDaoTao.MienGiamHP.guiTBSALL') }}" class="btn btn-primary">Gửi</a>
                             </div>
                         @endif
                         @if ($tb_trocapxahoi > 0)

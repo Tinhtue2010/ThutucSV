@@ -26,7 +26,7 @@
             <br> của Hiệu trưởng Trường Đại học Hạ Long)
         </div>
         <div class="d-flex flex-column mt-5">
-            <table class="" style="border-collapse: collapse;font-size: 15px">
+            <table class="table" style="border-collapse: collapse;font-size: 15px">
                 <tr class="text-center p-0">
                     <th class="" rowspan="2">Stt</th>
                     <th class="" style="width: 120px" rowspan="2">
@@ -63,19 +63,13 @@
                     </tr>
                 @endforeach
                 <tr style="height: 30px">
-                    <td colspan="3" colspan="2">Tổng: {{ $data[0]['tong'] }}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td colspan="10" style="text-align: left">Tổng: {{ $data[0]['tong'] }}</td>
                 </tr>
             </table>
         </div>
         <div class="d-flex flex-row justify-content-between mt-1">
             <div class="d-flex justify-content-end text-center align-items-baseline">
-                <span><b>Số tiền bằng chữ:</b> {{ numberInVietnameseCurrency($data[0]['tong']) }}</span>
+                <span style="text-align: left"><b>Số tiền bằng chữ:</b> {{ numberInVietnameseCurrency($data[0]['tong']) }}</span>
             </div>
             <div class="text-center px-5">
                 <br />

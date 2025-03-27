@@ -25,7 +25,7 @@
             <span>Vấn đề trình: Trình ký duyệt danh sách miễn giảm học phí</span>
         </div>
         <div class="d-flex flex-column mt-3">
-            <table class="" style="border-collapse: collapse; ">
+            <table class="table" style="border-collapse: collapse; ">
                 <tr class="text-center p-0">
                     <th class="">
                         TÓM TẮT TÌNH HÌNH VÀ KIẾN NGHỊ

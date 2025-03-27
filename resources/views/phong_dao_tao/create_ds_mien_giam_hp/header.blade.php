@@ -42,11 +42,16 @@
                     </div>
                     <div class="d-flex w-100 flex-wrap">
                         <div onclick="taoQuyetDinhMGHP()" class="btn btn-secondary">Tạo, cập nhật quyết định</div>
-                        <a target="_bank"  href="{{ route('phieu.index',['id'=>"DSMGHP0"]) }}" class="btn btn-secondary ms-3">Xem danh sách</a>
-                        <a target="_bank"  href="{{ route('phieu.index',['id'=>"QDGHP0"]) }}" class="btn btn-secondary ms-3">Xem quyết định</a>
-                        <a target="_bank"  href="{{ route('phieu.index',['id'=>"PTGHP0"]) }}"  class="btn btn-secondary ms-3">Xem phiếu trình</a>
-                        <a href="{{ route('PhongDaoTao.MienGiamHP.xoaQuyetDinh') }}"  class="btn btn-danger ms-3">Xóa quyết định</a>
-                        <a href="{{ route('PhongDaoTao.MienGiamHP.guiTBSALL') }}"  class="btn btn-success ms-3">Thông báo và khóa DS</a>
+                        @if (isset($hoso) && $hoso)
+                            <a target="_blank" href="/storage/{{ $hoso->file_list }}"
+                                class="btn btn-secondary ms-3">Xem danh sách</a>
+                            <a target="_blank" href="/storage/{{ $hoso->file_quyet_dinh }}"
+                                class="btn btn-secondary ms-3">Xem quyết định</a>
+                            <a href="{{ route('PhongDaoTao.MienGiamHP.xoaQuyetDinh') }}" class="btn btn-danger ms-3">Xóa
+                                quyết định</a>
+                            <a href="{{ route('PhongDaoTao.MienGiamHP.guiTBSALL') }}" class="btn btn-success ms-3">Thông
+                                báo và khóa DS</a>
+                        @endif
                     </div>
                     <div id="tinhtong">
                     </div>

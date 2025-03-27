@@ -35,7 +35,7 @@ class TroCapXHController extends Controller
 
         $user = Auth::user();
         $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+            ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)->first();
         return view('tro_cap_xh.index', ['don_parent' => $don_parent, 'don_parent_tcxh' => $don_parent_tcxh, 'don_parent_mghp' => $don_parent_mghp, 'don' => $don, 'phieu' => $phieu, 'student' => $student]);

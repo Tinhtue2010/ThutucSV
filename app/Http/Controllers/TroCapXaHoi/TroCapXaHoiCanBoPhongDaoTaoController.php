@@ -49,6 +49,7 @@ class TroCapXaHoiCanBoPhongDaoTaoController extends Controller
                   ->orWhere('stop_studies.status', 3)
                   ->orWhere('stop_studies.status', -3);
         })->select('stop_studies.*')->get();
+
         foreach ($query as $stopStudy) {
             $this->giaiQuyetCongViec($request->ykientiepnhan, $stopStudy,3);
             $stopStudy->status = 3; 
@@ -57,7 +58,7 @@ class TroCapXaHoiCanBoPhongDaoTaoController extends Controller
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = null;
+            $newStopStudy->file_name = null;
             $newStopStudy->parent_id = $stopStudy->id;
             $newStopStudy->note = "Cán bộ phòng đào tạo duyệt danh sách";
             $newStopStudy->save();

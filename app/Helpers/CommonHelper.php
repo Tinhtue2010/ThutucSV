@@ -754,7 +754,7 @@ trait CommonHelper
 
         return $base64;
     }
-    function createPDF($phieu)
+    function createPDF($phieu,$ngang = 0)
     {
         $options = new Options();
         $options->set('defaultFont', 'DejaVu Sans');
@@ -789,7 +789,7 @@ trait CommonHelper
             $html =  view('document.tiepnhan', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
         }
         if ($phieu->key == "DSMGHP") {
-            $html =  view('document.theodoithongke.m01_02_05', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+            $html =  view('document.theodoithongke.m01_02_05', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu,'ngang'=>$ngang]);
         }
         if ($phieu->key == "QDGHP") {
             $html =  view('document.theodoithongke.m01_02_06', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
@@ -853,6 +853,7 @@ trait CommonHelper
 
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
+
         $dompdf->render();
 
         // Lưu vào bộ nhớ tạm thời
