@@ -123,6 +123,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('/create_view_pdf', [TroCapXHController::class, 'CreateViewPdf'])->name('CreateViewPdf');
             Route::get('/view_pdf/{id}', [TroCapXHController::class, 'viewPdf'])->name('viewPdf');
             Route::get('/view_demo_pdf', [TroCapXHController::class, 'viewDemoPdf'])->name('viewDemoPdf');
+            Route::post('/ky_don_pdf', [TroCapXHController::class, 'KyDonPdf'])->name('KyDonPdf');
         });
         Route::name('CheDoChinhSach.')->prefix('che-do-chinh-sach')->group(function () {
             Route::get('/', [CheDoChinhSachController::class, 'index'])->name('index');

@@ -209,28 +209,15 @@
             const formData = new FormData(form);
             validation_create.validate().then(async function(status) {
                 if (status === 'Valid') {
-                    await checkMaXacNhan().then(function(result) {
-                        if (false) {
-                            return;
-                        } else {
-                            formData.append('otp', result);
-                        }
-                    });
                     axios({
                         method: 'POST',
-                        url: "{{ route('TroCapXH.CreateViewPdf') }}",
+                        url: "{{ route('TroCapXH.KyDonPdf') }}",
                         data: formData,
                         headers: {
                             "Content-Type": "multipart/form-data",
                         },
                     }).then((response) => {
-                        if ($('#button_clicked').val() == 'xem_truoc') {
-                            window.open("{{ route('TroCapXH.viewDemoPdf') }}", "_blank");
-                        } else {
-                            mess_success('Thông báo',
-                                "Đơn của bạn đã được gửi")
-                            location.reload();
-                        }
+                        console.log(response);
 
                     }).catch(function(error) {
                         mess_error("Cảnh báo",

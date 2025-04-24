@@ -52,7 +52,7 @@
                 NNGƯỜI LÀM ĐƠN
                 <br />
 
-                <img style="height: 50px; margin-top: 10px; margin-bottom: 10px" src="{{ asset('storage/' . $data['url_chuky']) }}" alt="">
+                <img style="height: 50px;widows: 50px" src="data:image/png;base64,{{ $data['chu_ky'] }}" alt="">
                 <br>
                 {{ $data['full_name'] }}
             </div>

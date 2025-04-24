@@ -41,6 +41,50 @@ class TroCapXHController extends Controller
         return view('tro_cap_xh.index', ['don_parent' => $don_parent, 'don_parent_tcxh' => $don_parent_tcxh, 'don_parent_mghp' => $don_parent_mghp, 'don' => $don, 'phieu' => $phieu, 'student' => $student]);
     }
 
+    function kydonPDF(Request $request)
+    {
+        $chu_ky =  $this->convertImageToBase64(Auth::user()->getUrlChuKy());
+
+        $user = Auth::user();
+
+        $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
+            ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
+            ->where('students.id', $user->student_id)->first();
+
+        $studentData['full_name'] = $student->full_name;
+        $studentData['student_code'] = $student->student_code;
+        $studentData['date_of_birth'] = Carbon::parse($student->date_of_birth)->format('d/m/Y');
+        $studentData['lop'] = $student->lop_name;
+        $studentData['khoa'] = $student->khoa_name;
+        $studentData['khoa_hoc'] = $student->nien_khoa;
+        $studentData['hoso'] = $request->hoso;
+
+        $doituong = config('doituong.trocapxahoi');
+        $studentData['doituong'] = $doituong[$request->doituong][2];
+
+
+        $studentData['sdt'] = $student->phone;
+        $studentData['thuongchu'] = $request->thuongchu;
+
+        $studentData['day'] = Carbon::now()->day;
+
+        $studentData['month'] = Carbon::now()->month;
+
+        $studentData['year'] = Carbon::now()->year;
+
+        $studentData['chu_ky'] = $chu_ky;
+
+
+        if (isset($request->trocapxh)) {
+            $tcxh =  $this->createPhieu($user, $request, $studentData, $student, 2);
+        }
+        if (isset($request->hocphi)) {
+            $tchp =  $this->createPhieu($user, $request, $studentData, $student, 3);
+        }
+
+        return [$tcxh ?? null, $tchp ?? null];
+    }
     function CreateViewPdf(Request $request)
     {
         if (!$this->checkOtpApi($request->otp ?? '')) {
@@ -82,13 +126,13 @@ class TroCapXHController extends Controller
             $studentData['url_chuky'] = Auth::user()->getUrlChuKy();
 
             if (isset($request->trocapxh)) {
-                $this->createPhieu($user, $request, $studentData, $student, 2);
+                $tcxh =  $this->createPhieu($user, $request, $studentData, $student, 2);
             }
             if (isset($request->hocphi)) {
-                $this->createPhieu($user, $request, $studentData, $student, 3);
+                $tchp =  $this->createPhieu($user, $request, $studentData, $student, 3);
             }
         }
-        return true;
+        return [$tcxh ?? null, $tchp ?? null];
     }
     function viewDemoPdf()
     {
@@ -157,6 +201,35 @@ class TroCapXHController extends Controller
 
     function createPhieu($user, $request, $studentData, $student, $type = 2)
     {
+        $user = Auth::user();
+
+        $info_signature = $this->getInfoSignature($user->cccd);
+        if ($info_signature === false) {
+            return 0;
+        }
+
+        if ($type == 2) {
+            $namePhieu = "Đơn xin trợ cấp xã hội";
+            $keyPhieu = "TCXH";
+        } else {
+            $namePhieu = "Đơn xin trợ cấp học phí";
+            $keyPhieu = "TCHP";
+        }
+
+        $phieu = new Phieu();
+        $phieu->student_id = $user->student_id;
+        $phieu->name = $namePhieu;
+        $phieu->key = $keyPhieu;
+        $phieu->content = json_encode($studentData);
+        $phieu->file = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
+
+        $pdf =  $this->createPDF($phieu);
+
+        return $this->craeteSignature($info_signature, $pdf, $user->cccd, 'TRO_CAP_XH_VA_HP');
+    }
+
+    function createPhieuTMP($user, $request, $studentData, $student, $type = 2)
+    {
         if ($type == 2) {
             $namePhieu = "Đơn xin trợ cấp xã hội";
             $keyPhieu = "TCXH";
@@ -177,12 +250,9 @@ class TroCapXHController extends Controller
             $check->is_update = 1;
             $check->type_miengiamhp = $request->doituong ?? 1;
             $check->type_miengiamhp = $request->doituong ?? 1;
-            if($check->type_miengiamhp == 0)
-            {
+            if ($check->type_miengiamhp == 0) {
                 $check->muctrocapxh = 140000;
-            }
-            else
-            {
+            } else {
                 $check->muctrocapxh = 100000;
             }
             if ($type == 2) {
