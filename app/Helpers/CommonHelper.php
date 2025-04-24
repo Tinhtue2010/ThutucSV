@@ -902,7 +902,7 @@ trait CommonHelper
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_SSL_CIPHER_LIST => 'DEFAULT@SECLEVEL=1',
+            // CURLOPT_SSL_CIPHER_LIST => 'DEFAULT@SECLEVEL=1',
             CURLOPT_POSTFIELDS => json_encode($data),
             CURLOPT_TIMEOUT => 30, // thêm timeout nếu API lag
         ]);
