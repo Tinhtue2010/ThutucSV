@@ -1036,7 +1036,7 @@ trait CommonHelper
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_SSL_CIPHER_LIST => 'DEFAULT@SECLEVEL=1',
+            // CURLOPT_SSL_CIPHER_LIST => 'DEFAULT@SECLEVEL=1',
             CURLOPT_POSTFIELDS => '{}'
         ]);
         $response = curl_exec($curl);
@@ -1061,7 +1061,7 @@ trait CommonHelper
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_SSL_CIPHER_LIST => 'DEFAULT@SECLEVEL=1',
+            // CURLOPT_SSL_CIPHER_LIST => 'DEFAULT@SECLEVEL=1',
             CURLOPT_POSTFIELDS => json_encode($data)
         ]);
         $response = curl_exec($curl);
