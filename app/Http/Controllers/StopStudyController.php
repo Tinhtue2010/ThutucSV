@@ -38,7 +38,7 @@ class StopStudyController extends Controller
         $user = Auth::user();
 
         $info_signature = $this->getInfoSignature($user->cccd);
-        dd($user->cccd);
+        // dd($user->cccd);
         dd($info_signature);
 
         if ($info_signature === false) {
