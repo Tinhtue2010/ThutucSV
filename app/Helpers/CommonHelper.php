@@ -926,6 +926,7 @@ trait CommonHelper
             "transaction_id" => $this->getGUID()
         ];
         $msg_getCertificate = $this->api_smartca("https://gwsca.vnpt.vn/sca/sp769/v1/credentials/get_certificate", $data_getCertificate);
+            dd($msg_getCertificate);
         if (empty($msg_getCertificate->data) || empty($msg_getCertificate->data->user_certificates)) {
             return false;
         } else {
