@@ -38,6 +38,7 @@ class StopStudyController extends Controller
         $user = Auth::user();
 
         $info_signature = $this->getInfoSignature($user->cccd);
+        dd($info_signature);
 
         if ($info_signature === false) {
             return 0; //chưa đăng ký chữ ký số cần đăng ký chữ ký số
