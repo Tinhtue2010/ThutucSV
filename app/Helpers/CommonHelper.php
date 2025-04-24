@@ -903,21 +903,34 @@ trait CommonHelper
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_SSL_CIPHER_LIST => 'DEFAULT@SECLEVEL=1',
-            CURLOPT_POSTFIELDS => json_encode($data)
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_TIMEOUT => 30, // thêm timeout nếu API lag
         ]);
+    
         $response = curl_exec($curl);
+    
+        if (curl_errno($curl)) {
+            // Nếu cURL bị lỗi (ví dụ không kết nối được)
+            $error_msg = curl_error($curl);
+            curl_close($curl);
+            dd("Lỗi cURL: $error_msg");
+        }
+    
         $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        $msg = json_decode($response);
         curl_close($curl);
+    
         if ($httpcode != 200) {
-            // báo lỗi 
+            // Show response lỗi ra luôn
             dd([
                 'HTTP Code' => $httpcode,
                 'Response'  => $response
             ]);
         }
-        return $msg;
+    
+        // Nếu ok thì decode trả về
+        return json_decode($response);
     }
+    
 
 
     function getInfoSignature($cccd)
