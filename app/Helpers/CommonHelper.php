@@ -911,6 +911,10 @@ trait CommonHelper
         curl_close($curl);
         if ($httpcode != 200) {
             // báo lỗi 
+            dd([
+                'HTTP Code' => $httpcode,
+                'Response'  => $response
+            ]);
         }
         return $msg;
     }
