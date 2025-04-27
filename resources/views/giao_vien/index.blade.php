@@ -27,7 +27,7 @@
                             <div class="w-100 mw-150px">
                                 <label class="form-label">Loại hồ sơ</label>
                                 <!--begin::Select2-->
-                                <select class="form-select form-select-solid filter-select" data-name="type"
+                                <select class="form-select  filter-select" data-name="type"
                                     data-control="select2" data-placeholder="Loại hồ sơ">
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>
@@ -42,7 +42,7 @@
                             <div class="w-100 mw-150px">
                                 <label class="form-label">Năm</label>
                                 <!--begin::Select2-->
-                                <select class="form-select form-select-solid filter-select" data-name="year"
+                                <select class="form-select  filter-select" data-name="year"
                                     data-control="select2" data-placeholder="Năm">
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>

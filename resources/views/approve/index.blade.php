@@ -27,7 +27,7 @@
                             <div class="w-100 mw-150px">
                                 <label class="form-label">Năm</label>
                                 <!--begin::Select2-->
-                                <select class="form-select form-select-solid filter-select" data-name="year" data-control="select2" data-placeholder="Năm">
+                                <select class="form-select  filter-select" data-name="year" data-control="select2" data-placeholder="Năm">
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>
                                     @for ($year = 2000; $year <= 2100; $year++)

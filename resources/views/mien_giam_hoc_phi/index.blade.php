@@ -42,7 +42,7 @@
                                 @if (isset($don_parent)) @if ($don_parent->status != 0)
                                 readonly @endif
                                 @endif name="doituong"
-                                class="form-select form-select-solid filter-select" data-name="year" data-control="select2"
+                                class="form-select  filter-select" data-name="year" data-control="select2"
                                 data-placeholder="Năm">
                                 @foreach (config('doituong.miengiamhp') as $index => $item)
                                     <option value="{{ $index }}">{{ $item[2] }}</option>

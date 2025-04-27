@@ -53,7 +53,7 @@
                             </label>
                             <!--end::Label-->
                             <select @if (isset($don_parent)) @if ($don_parent->status != 0)
-                                readonly @endif @endif name="doituong" class="form-select form-select-solid filter-select" data-name="year" data-control="select2" data-placeholder="Năm">
+                                readonly @endif @endif name="doituong" class="form-select  filter-select" data-name="year" data-control="select2" data-placeholder="Năm">
                                 <option value="0">Học sinh, sinh viên là người dân tộc thiểu số ở vùng cao từ 03 năm trở lên.</option>
                                 <option value="1">Học sinh, sinh viên mồ côi cả cha lẫn mẹ không nơi nương tựa.</option>
                                 <option value="2">Học sinh, sinh viên là người tàn tật gặp khó khăn về kinh tế.</option>
