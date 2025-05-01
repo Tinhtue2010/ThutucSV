@@ -59,5 +59,5 @@
         <span class="required">Chữ ký</span>
     </label>
     <!--end::Label-->
-    <input type="file" class="form-control" name="chu_ky" accept="image/jpg" />
+    <input type="file" class="form-control" name="chu_ky" accept="image/jpg, image/jpeg, image/png" />
 </div>

@@ -76,8 +76,12 @@ class KhoaService extends Controller
                 return 0;
             }
 
-            $file_name = $this->saveBase64AsPdf($getPDF, 'RUT_HO_SO');
-            $this->deletePdfAndTmp($stopStudy->file_name);
+            
+            $student = Student::find($stopStudy->student_id);
+
+            $file_name = $this->saveBase64AsPdf($getPDF, 'DON_XIN_RUT_HO_SO/'.$student->student_code);
+            
+            $this->deletePdfAndTmp($stopStudy->file_name, $file_name);
             $stopStudy->update(["status" => 2, "file_name" => $file_name]);
 
             $newStopStudy = $stopStudy->replicate()->fill([
@@ -89,7 +93,7 @@ class KhoaService extends Controller
             ]);
 
             $user_id = User::where('student_id', $stopStudy->student_id)->value('id');
-            $this->notification("Đơn xin rút hồ sơ của bạn đã được cán bộ khoa xác nhận", null, "RHS", $user_id);
+            $this->notification("Đơn xin rút hồ sơ của bạn đã được cán bộ khoa xác nhận", null, null, "RHS", $user_id);
 
             $newStopStudy->save();
             DB::commit();
@@ -119,7 +123,7 @@ class KhoaService extends Controller
             ]);
 
             $user_id = User::where('student_id', $stopStudy->student_id)->value('id');
-            $this->notification("Đơn xin rút của bạn đã bị từ chối bởi giáo viên chủ nhiệm", null, "RHS", $user_id);
+            $this->notification("Đơn xin rút của bạn đã bị từ chối bởi giáo viên chủ nhiệm", null, null, "RHS", $user_id);
 
             $newStopStudy->save();
             DB::commit();

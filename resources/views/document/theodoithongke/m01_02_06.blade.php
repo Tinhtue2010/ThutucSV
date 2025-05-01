@@ -80,7 +80,7 @@
                 <li>Số sinh viên được giảm 70% học phí: {{ $data[0]['70'] }};</li>
                 <li>Số sinh viên được giảm 50% học phí: {{ $data[0]['50'] }};</li>
                 <li>Số tháng được miễn, giảm: 05 tháng.</li>
-                <li>Tổng số tiền miễn, giảm: {{ $data[0]['tong'] }}.</li>
+                <li>Tổng số tiền miễn, giảm: {{ number_format($data[0]['tong'], 0, ',', '.') }}.</li>
                 {{-- {{ numberInVietnameseCurrency($data[0]['tong']) }} --}}
             </ul>
         </div>

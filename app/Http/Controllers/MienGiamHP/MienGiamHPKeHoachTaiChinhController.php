@@ -15,7 +15,10 @@ class MienGiamHPKeHoachTaiChinhController extends Controller
     function index()
     {
         $lop = Lop::get();
-        return view('ke_hoach_tai_chinh.ds_mien_giam_hp.index', ['lop' => $lop]);
+        $hoso = HoSo::where('type', 2)
+        ->latest('created_at')
+        ->first();
+        return view('ke_hoach_tai_chinh.ds_mien_giam_hp.index', ['lop' => $lop,'hoso'=>$hoso]);
     }
 
     function getData(Request $request)
@@ -26,7 +29,7 @@ class MienGiamHPKeHoachTaiChinhController extends Controller
         ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name');
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name','students.hocphi');
 
         if (isset($request->type_miengiamhp)) {
             $query->where('stop_studies.type_miengiamhp', $request->type_miengiamhp);

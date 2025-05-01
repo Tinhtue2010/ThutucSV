@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\DB;
 
 class PhongDaoTaoService extends Controller
 {
-    function parseDateTime($dateString) {
+    function parseDateTime($dateString)
+    {
         try {
             return $dateString ? Carbon::createFromFormat('d/m/Y H:i', trim($dateString)) : null;
         } catch (\Exception $e) {
@@ -53,7 +54,7 @@ class PhongDaoTaoService extends Controller
 
             $tiepnhan = $this->parseDateTime($request->thoigiantiepnhan ?? '');
             $ketqua = $this->parseDateTime($request->thoigiantraketqua ?? '');
-            
+
             $content_phieu = [
                 'bosunggiayto'     => $request->bosunggiayto ?? '',
                 'kekhailaigiayto'  => $request->kekhailaigiayto ?? '',
@@ -70,19 +71,19 @@ class PhongDaoTaoService extends Controller
                 'month'            => now()->month,
                 'year'             => now()->year,
                 'chu_ky'           => $this->convertImageToBase64($user->getUrlChuKy()),
-            
+
                 'tiepnhan_day'   => $tiepnhan?->day ?? '',
                 'tiepnhan_month' => $tiepnhan?->month ?? '',
                 'tiepnhan_year'  => $tiepnhan?->year ?? '',
                 'tiepnhan_gio'   => $tiepnhan?->hour ?? '',
                 'tiepnhan_phut'  => $tiepnhan?->minute ?? '',
-            
+
                 'ketqua_day'   => $ketqua?->day ?? '',
                 'ketqua_month' => $ketqua?->month ?? '',
                 'ketqua_year'  => $ketqua?->year ?? '',
                 'ketqua_gio'   => $ketqua?->hour ?? '',
                 'ketqua_phut'  => $ketqua?->minute ?? '',
-            
+
                 'bang' => isset($request->tengiayto) ? array_map(
                     fn($index) => [
                         "tengiayto" => $request->tengiayto[$index] ?? '',
@@ -91,7 +92,7 @@ class PhongDaoTaoService extends Controller
                     ],
                     array_keys($request->tengiayto)
                 ) : [],
-            
+
                 'ndgiaiquyet' => $ndgiaiquyet ?? "đơn xin giảm học phí",
             ];
             $phieu = new Phieu();
@@ -125,7 +126,6 @@ class PhongDaoTaoService extends Controller
             abort(404);
         }
         return $this->SendSignature($request, $stopStudy, "Phiếu từ chối hồ sơ", "TCGQ", -4, 4, "từ chối bổ sung hồ sơ", "TU_CHOI_HS");
-    
     }
     function tiepnhanhsRHSPDF($request, $stopStudy)
     {
@@ -137,7 +137,7 @@ class PhongDaoTaoService extends Controller
         return $this->SendSignature($request, $stopStudy, "Phiếu tiếp nhận hồ sơ", "TNHS", 3, 2, "đơn xin rút hồ sơ", "TIEP_NHAN_HS");
     }
 
-    function saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, $folder)
+    function saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, $folder, $tiepnhan = false)
     {
         $user = Auth::user();
         $getPDF = $this->getPDF($request->fileId, $request->tranId, $request->transIDHash);
@@ -146,9 +146,12 @@ class PhongDaoTaoService extends Controller
             return 0;
         }
 
-        $file_name = $this->saveBase64AsPdf($getPDF, $folder);
-        $this->deletePdfAndTmp($stopStudy->file_name);
+        $student = Student::find($stopStudy->student_id);
 
+        if (!$tiepnhan) {
+            $file_name = $this->saveBase64AsPdf($getPDF, $folder . '/' . $student->student_code);
+            $this->deletePdfAndTmp($stopStudy->file_name, $file_name);
+        }
 
         $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
         $this->notification($notfi_content, null, $noti_key, $user_id);
@@ -156,7 +159,9 @@ class PhongDaoTaoService extends Controller
         $newStopStudy = $stopStudy->replicate();
         $newStopStudy->status = 0;
         $newStopStudy->teacher_id = $user->teacher_id;
-        $newStopStudy->file_name = $file_name;
+        if (!$tiepnhan) {
+            $newStopStudy->file_name = $file_name;
+        }
         $newStopStudy->parent_id = $request->id;
         $newStopStudy->note = $note;
         $newStopStudy->save();
@@ -181,7 +186,7 @@ class PhongDaoTaoService extends Controller
         $note = "Đã được nhận bởi phòng đào tạo";
         $stopStudyUpdate = ["status" => 3];
 
-        return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'RUT_HO_SO');
+        return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'DON_XIN_RUT_HO_SO', true);
     }
 
 
@@ -206,7 +211,7 @@ class PhongDaoTaoService extends Controller
         $note = "Yêu cầu bổ sung hồ sơ";
         $stopStudyUpdate = ["status" => -1, "is_update" => 0];
 
-        return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'RUT_HO_SO');
+        return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'DON_XIN_RUT_HO_SO');
     }
 
 
@@ -227,7 +232,7 @@ class PhongDaoTaoService extends Controller
         $note = "Yêu cầu bổ sung hồ sơ";
         $stopStudyUpdate = ["status" => -1, "is_update" => 0];
 
-        return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'RUT_HO_SO');
+        return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'DON_XIN_RUT_HO_SO');
     }
     function tiepnhanhsGHPPDF($request, $stopStudy)
     {
@@ -239,8 +244,6 @@ class PhongDaoTaoService extends Controller
         }
 
         return $this->SendSignature($request, $stopStudy, "Phiếu tiếp nhận hồ sơ", "TNHS", 1, 0, "đơn xin rút hồ sơ", "TIEP_NHAN_HS");
-
-
     }
     function tiepnhanhsGHP($request, $stopStudy)
     {
@@ -260,18 +263,18 @@ class PhongDaoTaoService extends Controller
         if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
             abort(404);
         }
-    
-    
+
+
         return $this->SendSignature($request, $stopStudy, "Phiếu tiếp nhận hồ sơ", "TNHS", 1, 0, "đơn xin trợ cấp xã hội", "TIEP_NHAN_HS");
     }
-    
+
     function tiepnhanhsTCXH($request, $stopStudy)
     {
         $notfi_content = "Đơn xin trợ cấp xã hội của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả";
         $noti_key = "TCXH";
         $note = "Đã được nhận bởi phòng đào tạo";
         $stopStudyUpdate = ["status" => 1];
-    
+
         return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'TRO_CAP_XA_HOI');
     }
 
@@ -284,17 +287,17 @@ class PhongDaoTaoService extends Controller
             abort(404);
         }
 
-    
+
         return $this->SendSignature($request, $stopStudy, "Phiếu tiếp nhận hồ sơ", "TNHS", 1, 0, "đơn xin trợ cấp học phí", "TIEP_NHAN_HS");
     }
-    
+
     function tiepnhanhsTCHP($request, $stopStudy)
     {
         $notfi_content = "Đơn xin trợ cấp học phí của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả";
         $noti_key = "GHP";
         $note = "Đã được nhận bởi phòng đào tạo";
         $stopStudyUpdate = ["status" => 1];
-    
+
         return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'TRO_CAP_XA_HOI');
     }
 
@@ -338,7 +341,7 @@ class PhongDaoTaoService extends Controller
         }
         return $this->SendSignature($request, $stopStudy, "Phiếu từ chối hồ sơ", "TCGQ", -2, 0, "từ chối hồ sơ", "TU_CHOI_HS");
     }
-    
+
 
     function tuchoihsGHP($request, $stopStudy)
     {
@@ -492,7 +495,7 @@ class PhongDaoTaoService extends Controller
     {
         return $this->saveFile($request, $stopStudy, "Đã bị từ chối bởi phòng đào tạo", "Đơn xin trợ cấp xã hội của bạn bị từ chối bởi phòng đào tạo", "TCXH", ["status" => -2], "TU_CHOI_GIAI_QUYET_TRO_CAP_XA_HOI");;
     }
-    
+
     function tuchoihsTCHP($request, $stopStudy)
     {
         return $this->saveFile($request, $stopStudy, "Đã bị từ chối bởi phòng đào tạo", "Đơn xin trợ cấp học phí của bạn bị từ chối bởi phòng đào tạo", "TCHP", ["status" => -2], "TU_CHOI_GIAI_QUYET_TRO_CAP_HOC_PHI");;

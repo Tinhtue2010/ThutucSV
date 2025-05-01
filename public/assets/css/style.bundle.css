@@ -46224,7 +46224,7 @@ label.rating-label:hover ~ .rating-label > i, label.rating-label:hover ~ .rating
 }
 
 .text-muted {
-  color: var(--bs-text-muted) !important;
+  color: #000 !important;
 }
 
 .text-hover-muted {

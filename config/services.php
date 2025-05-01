@@ -33,6 +33,7 @@ return [
     'vnpt' => [
         'client_id' => env('VNPT_CLIENT_ID', ''),
         'client_secret' => env('VNPT_CLIENT_SECRET', ''),
+        'mac' => env('PC','')
     ]
 
 ];

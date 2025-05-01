@@ -21,11 +21,13 @@ class OAuth2Config
 {
     public $client_id;
     public $client_secret;
+    public $pc;
 
     public function __construct()
     {
         $this->client_id = config('services.vnpt.client_id');
         $this->client_secret = config('services.vnpt.client_secret');
+        $this->pc = 'mac';
     }
 }
 
@@ -39,10 +41,10 @@ trait CommonHelper
         $file = fopen($path, 'r');
         $header = [];
         $datas = [];
-        
+
         while (($data = fgetcsv($file, 9000000, ',')) !== false) {
             if (empty($data)) continue;
-            
+
             if (empty($header)) {
                 $header = array_map([$this, 'convertVietnamese'], $data);
             } else {
@@ -55,7 +57,7 @@ trait CommonHelper
             }
         }
         fclose($file);
-        
+
         return ['header' => $header, 'data' => $datas];
     }
     function isAllEmptyStringsArray($data)
@@ -457,7 +459,7 @@ trait CommonHelper
             foreach ($request->file($name) as $file) {
                 $extension = $file->getClientOriginalExtension();
                 $originalName = $file->getClientOriginalName();
-                $newFileName = $folder . '/' . date('Y-m-d') . '-' . uniqid() . '.' . $extension;
+                $newFileName = $folder . '/' . 'file-'.date('Y-m-d') .'.'. $extension;
                 Storage::putFileAs('public', $file, $newFileName);
                 $fileNames[] = [$originalName, $newFileName];
             }
@@ -557,11 +559,10 @@ trait CommonHelper
         // Xóa ảnh tạm
         unlink($textImagePath);
     }
-    public function saveBase64AsPdf($base64Data, $name)
+    public function saveBase64AsPdf($base64Data, $name,$mota='don_chung_tu_')
     {
         $user = Auth::user(); // Lấy thông tin người dùng
-        $file_name = $user->id . '_' . $user->id . '_' . date('d_Hi_Y') . '.pdf'; // Tạo tên file
-
+        $file_name = $mota. $user->id . '_' . date('d_Hi_Y') . '.pdf'; // Tạo tên file
 
         // Kiểm tra nếu không có dữ liệu
         if (!$base64Data) {
@@ -611,20 +612,23 @@ trait CommonHelper
         } else {
         }
     }
-    public function deletePdfAndTmp($file_name)
+    public function deletePdfAndTmp($file_name, $file_name_new)
     {
         $filePath = $file_name;
         if (Storage::disk('public')->exists($filePath)) {
-            Storage::disk('public')->delete($filePath); // Xóa file
-            $oldFilename = $filePath; 
+            if($file_name != $file_name_new)
+            {
+                Storage::disk('public')->delete($filePath); // Xóa file
+            }
+            $oldFilename = $filePath;
             $pathInfo = pathinfo($oldFilename);
-            
+
             $newFilename = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '-tmp.pdf';
-            Storage::disk('public')->delete($newFilename); 
+            Storage::disk('public')->delete($newFilename);
         } else {
         }
     }
-    
+
 
     function sendOTP($loai = null)
     {
@@ -754,7 +758,7 @@ trait CommonHelper
 
         return $base64;
     }
-    function createPDF($phieu,$ngang = 0)
+    function createPDF($phieu, $ngang = 0)
     {
         $options = new Options();
         $options->set('defaultFont', 'DejaVu Sans');
@@ -763,7 +767,7 @@ trait CommonHelper
         if ($phieu->key == "RHS") {
             $html = view('document.thoi_hoc', ['data' => json_decode($phieu->content, true)])->render();
         }
-        
+
         if ($phieu->key == "GHP") {
             $html =  view('document.miengiamhp', ['data' => json_decode($phieu->content, true)]);
         }
@@ -789,7 +793,7 @@ trait CommonHelper
             $html =  view('document.tiepnhan', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
         }
         if ($phieu->key == "DSMGHP") {
-            $html =  view('document.theodoithongke.m01_02_05', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu,'ngang'=>$ngang]);
+            $html =  view('document.theodoithongke.m01_02_05', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu, 'ngang' => $ngang]);
         }
         if ($phieu->key == "QDGHP") {
             $html =  view('document.theodoithongke.m01_02_06', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
@@ -869,7 +873,7 @@ trait CommonHelper
 
     function convertPdfToBase64($filePath)
     {
-        $fullPath = storage_path('app/public/'.$filePath); 
+        $fullPath = storage_path('app/public/' . $filePath);
 
         if (file_exists($fullPath)) {
             return base64_encode(file_get_contents($fullPath));
@@ -892,8 +896,11 @@ trait CommonHelper
     }
     function api_smartca($link, $data)
     {
+        $config = new OAuth2Config();
+
         $curl = curl_init();
-        curl_setopt_array($curl, [
+
+        $options = [
             CURLOPT_URL => $link,
             CURLOPT_HTTPHEADER => [
                 'Accept: application/json',
@@ -902,23 +909,28 @@ trait CommonHelper
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            // CURLOPT_SSL_CIPHER_LIST => 'DEFAULT@SECLEVEL=1',
-            CURLOPT_POSTFIELDS => json_encode($data),
-            CURLOPT_TIMEOUT => 30, // thêm timeout nếu API lag
-        ]);
-    
+            CURLOPT_POSTFIELDS => json_encode($data)
+        ];
+
+        if ($config->pc === 'mac') {
+            $options[CURLOPT_SSL_CIPHER_LIST] = 'DEFAULT@SECLEVEL=1';
+        }
+
+
+        curl_setopt_array($curl, $options);
+
         $response = curl_exec($curl);
-    
+
         if (curl_errno($curl)) {
             // Nếu cURL bị lỗi (ví dụ không kết nối được)
             $error_msg = curl_error($curl);
             curl_close($curl);
             dd("Lỗi cURL: $error_msg");
         }
-    
+
         $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
-    
+
         if ($httpcode != 200) {
             // Show response lỗi ra luôn
             dd([
@@ -926,11 +938,11 @@ trait CommonHelper
                 'Response'  => $response
             ]);
         }
-    
+
         // Nếu ok thì decode trả về
         return json_decode($response);
     }
-    
+
 
 
     function getInfoSignature($cccd)
@@ -943,7 +955,7 @@ trait CommonHelper
             "transaction_id" => $this->getGUID()
         ];
         $msg_getCertificate = $this->api_smartca("https://gwsca.vnpt.vn/sca/sp769/v1/credentials/get_certificate", $data_getCertificate);
-            // dd($data_getCertificate);
+        // dd($data_getCertificate);
         if (empty($msg_getCertificate->data) || empty($msg_getCertificate->data->user_certificates)) {
             return false;
         } else {
@@ -1026,8 +1038,10 @@ trait CommonHelper
 
     function api_get_tranInfo_curl($url)
     {
+        $config = new OAuth2Config();
         $curl = curl_init();
-        curl_setopt_array($curl, [
+
+        $options = [
             CURLOPT_URL => $url,
             CURLOPT_HTTPHEADER => [
                 'Accept: application/json',
@@ -1036,23 +1050,30 @@ trait CommonHelper
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            // CURLOPT_SSL_CIPHER_LIST => 'DEFAULT@SECLEVEL=1',
             CURLOPT_POSTFIELDS => '{}'
-        ]);
+        ];
+
+        if ($config->pc === 'mac') {
+            $options[CURLOPT_SSL_CIPHER_LIST] = 'DEFAULT@SECLEVEL=1';
+        }
+
+        curl_setopt_array($curl, $options);
+
+
         $response = curl_exec($curl);
         $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $msg = json_decode($response);
         curl_close($curl);
-         
+
         return $msg;
     }
 
     function api_service_get_hash($url, $data)
     {
-
-
+        $config = new OAuth2Config();
         $curl = curl_init();
-        curl_setopt_array($curl, [
+
+        $options = [
             CURLOPT_URL => $url,
             CURLOPT_HTTPHEADER => [
                 'Accept: application/json',
@@ -1061,9 +1082,15 @@ trait CommonHelper
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            // CURLOPT_SSL_CIPHER_LIST => 'DEFAULT@SECLEVEL=1',
             CURLOPT_POSTFIELDS => json_encode($data)
-        ]);
+        ];
+
+        if ($config->pc === 'mac') {
+            $options[CURLOPT_SSL_CIPHER_LIST] = 'DEFAULT@SECLEVEL=1';
+        }
+
+        curl_setopt_array($curl, $options);
+
         $response = curl_exec($curl);
         $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $msg = json_decode($response);
@@ -1080,33 +1107,37 @@ trait CommonHelper
 
     function getPDF($fileId, $tranId, $transIDHash)
     {
-        $user = Auth::user();
-        $config = new OAuth2Config();
-        $msg = $this->api_get_tranInfo_curl("https://gwsca.vnpt.vn/sca/sp769/v1/signatures/sign/" . $tranId . "/status");
-        if($msg == null)
-        {
-            return 0;
-        }
-        if ($msg->message != "SUCCESS") {
-            return 0;
-        }
-        $hashSigned = $msg->data->signatures[0]->signature_value;
-
-        // 5. signExternal
-        $data_signExternal = [
-            "tranId" => $transIDHash,
-            "sp_id" => $config->client_id,
-            "sp_password" => $config->client_secret,
-            "signatures" => [
-                [
-                    "fileID" => $fileId,
-                    "signature" => $hashSigned
+        try {
+            $config = new OAuth2Config();
+            $msg = $this->api_get_tranInfo_curl("https://gwsca.vnpt.vn/sca/sp769/v1/signatures/sign/" . $tranId . "/status");
+            if ($msg == null) {
+                return 0;
+            }
+            if ($msg->message != "SUCCESS") {
+                return 0;
+            }
+            $hashSigned = $msg->data->signatures[0]->signature_value;
+    
+            // 5. signExternal
+            $data_signExternal = [
+                "tranId" => $transIDHash,
+                "sp_id" => $config->client_id,
+                "sp_password" => $config->client_secret,
+                "signatures" => [
+                    [
+                        "fileID" => $fileId,
+                        "signature" => $hashSigned
+                    ]
                 ]
-            ]
-        ];
-        $msg_signExternal = $this->api_service_get_hash("https://gwsca.vnpt.vn/rest/v2/signature/signExternal", $data_signExternal);
+            ];
+    
+            $msg_signExternal = $this->api_service_get_hash("https://gwsca.vnpt.vn/rest/v2/signature/signExternal", $data_signExternal);
+    
+    
+            return $msg_signExternal->signResps[0]->signedData;
+        } catch (\Throwable $th) {
+            return 0;
+        }
 
-
-        return $msg_signExternal->signResps[0]->signedData;
     }
 }

@@ -102,7 +102,7 @@ class LanhDaoPhongDaoTaoService  extends Controller
             }
             $file_name = $this->saveBase64AsPdf($getPDF, 'TU_CHOI_HS_RHS');
 
-            $this->deletePdfAndTmp($stopStudy->file_name);
+            $this->deletePdfAndTmp($stopStudy->file_name, $file_name);
 
 
 
@@ -183,8 +183,11 @@ class LanhDaoPhongDaoTaoService  extends Controller
             $user = Auth::user();
             $teacher = Teacher::find($user->teacher_id);
 
-            $file_name = $this->saveBase64AsPdf($getPDF, 'RUT_HO_SO');
-            $this->deletePdfAndTmp($stopStudy->file_name);
+            
+            $student = Student::find($stopStudy->student_id);
+
+            $file_name = $this->saveBase64AsPdf($getPDF, 'DON_XIN_RUT_HO_SO/'.$student->student_code);
+            $this->deletePdfAndTmp($stopStudy->file_name, $file_name);
             $stopStudy->update(["status" => 5, "file_name" => $file_name]);
 
 
@@ -198,7 +201,7 @@ class LanhDaoPhongDaoTaoService  extends Controller
             ])->save();
 
             $user_id = User::where('student_id', $stopStudy->student_id)->value('id');
-            $this->notification("Đơn xin rút hồ sơ của bạn đã được lãnh đạo phòng CTSV xác nhận", null, "RHS", $user_id);
+            $this->notification("Đơn xin rút hồ sơ của bạn đã được lãnh đạo phòng CTSV xác nhận", null, null, "RHS", $user_id);
 
             return true;
         } catch (QueryException $e) {

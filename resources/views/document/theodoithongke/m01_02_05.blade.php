@@ -55,15 +55,15 @@
                         <td>{{ $item['ngay_sinh'] }}</td>
                         <td>{{ $item['lop'] }}</td>
                         <td>{{ $item['doi_tuong'] }}</td>
-                        <td>{{ $item['muc_hoc_phi'] }}</td>
+                        <td>{{ number_format($item['muc_hoc_phi'], 0, ',', '.') }}</td>
                         <td>{{ $item['ti_le_giam'] }}</td>
-                        <td>{{ $item['so_tien_giam_1_thang'] }}</td>
+                        <td>{{ number_format($item['so_tien_giam_1_thang'], 0, ',', '.') }}</td>
                         <td>{{ $item['so_thang_mien_giam'] }}</td>
-                        <td>{{ $item['mien_giam_ky'] }}</td>
+                        <td>{{ number_format($item['mien_giam_ky'], 0, ',', '.') }}</td>
                     </tr>
                 @endforeach
                 <tr style="height: 30px">
-                    <td colspan="10" style="text-align: left">Tổng: {{ $data[0]['tong'] }}</td>
+                    <td colspan="10" style="text-align: left">Tổng: {{ number_format($data[0]['tong'], 0, ',', '.') }}</td>
                 </tr>
             </table>
         </div>

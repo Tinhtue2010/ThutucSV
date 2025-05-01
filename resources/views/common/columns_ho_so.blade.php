@@ -107,10 +107,13 @@
         {
             res += `<span class="mt-1 badge badge-primary">Sinh viên đã bổ sung hồ sơ</span>`;
         }
-
-        if(data < 0 && row['is_update'] == 0 && data != -4)
+        if(!(row['type'] == 1 || row['type'] == 2 || row['type'] == 3 || row['type'] == 4))
         {
-            res += `<span class="mt-1 badge badge-danger">Sinh viên chưa bổ sung hồ sơ</span>`;
+
+            if(data < 0 && row['is_update'] == 0 && data != -4)
+            {
+                res += `<span class="mt-1 badge badge-danger">Sinh viên chưa bổ sung hồ sơ</span>`;
+            }
         }
 
         res = '<div class="d-flex flex-column">'+res+`</div>`;

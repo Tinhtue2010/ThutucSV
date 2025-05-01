@@ -7,7 +7,7 @@
         <div id="kt_app_content" class="app-content flex-column-fluid">
             <!--begin::Content container-->
             <div id="kt_app_content_container" class="app-container container-fluid">
-                @isset($don_parent)
+                {{-- @isset($don_parent)
                     @php
                         $noti_class_name = 'primary';
                         $noti_title = 'Thông báo';
@@ -58,14 +58,14 @@
                                     class="btn btn-primary">Xem phiếu</a>
                             @endisset
                             @if ($don_parent->status == 6)
-                                <a href="{{ route('phieu.giaQuyetCongViec', ['id' => $don_parent->id]) }}" target="_blank"
-                                    class="btn btn-primary">Phiếu giải quyết công việc</a>
+                            <a href="/storage/{{$don->file_name}}" target="_blank"
+                                class="btn btn-primary">Xem đơn</a>
                             @endif
 
                         </div>
                     @endif
 
-                @endisset
+                @endisset --}}
 
                 <div class="card card-flush p-5">
 

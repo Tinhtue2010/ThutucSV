@@ -31,7 +31,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name');
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name','students.hocphi');
 
         if (isset($request->type_miengiamhp)) {
             $query->where('stop_studies.type_miengiamhp', $request->type_miengiamhp);
@@ -104,7 +104,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name')
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name','students.hocphi')
             ->get();
 
         $content["tong_hs"] = count($query);
@@ -145,7 +145,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
         $phieu->content = json_encode([$content, $content_DSMGHP], true);
 
         $base64 = $this->createPDF($phieu, 1);
-        $file_list = $this->saveBase64AsPdf($base64, 'DANH_SACH_MIEN_GIAM_HP');
+        $file_list = $this->saveBase64AsPdf($base64, 'MIEN_GIAM_HP_PDT','ds_mien_giam_hp_');
 
 
         $phieu =  new Phieu();
@@ -154,7 +154,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
         $phieu->content = json_encode([$content, 0], true);
 
         $base64 = $this->createPDF($phieu);
-        $file_quyet_dinh = $this->saveBase64AsPdf($base64, 'QUYET_DINH_MIEN_GIAM_HP');
+        $file_quyet_dinh = $this->saveBase64AsPdf($base64, 'MIEN_GIAM_HP_PDT','qd_mien_giam_hp_');
         // Tìm hồ sơ hiện có
         $hoso = HoSo::where('ky_hoc', $request->ky)
             ->where('nam_hoc', $request->nam)
@@ -210,6 +210,12 @@ class MienGiamHPPhongDaoTaoController extends Controller
         $this->deletePdf($hoso->file_list);
         $hoso->delete();
 
+        $query = StopStudy::where('type', 1)
+        ->whereNull('parent_id')->get();
+        foreach ($query as $stopStudy) {
+            $stopStudy->status = 0; 
+            $stopStudy->save();  
+        }
         return redirect()->back();
     }
 
@@ -316,7 +322,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->selectRaw('ROUND(SUM(stop_studies.phantramgiam / 100 * 1)) as hocphi, COUNT(*) as tong')
+            ->selectRaw('ROUND(SUM(stop_studies.phantramgiam / 100 * students.hocphi)) as hocphi, COUNT(*) as tong')
             ->get()->toArray();
         return $miengiamHP;
     }

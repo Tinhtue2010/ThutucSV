@@ -17,7 +17,10 @@ class MienGiamHPLanhDaoTruongController extends Controller
     function index()
     {
         $lop = Lop::get();
-        return view('lanh_dao_truong.ds_mien_giam_hp.index', ['lop' => $lop]);
+        $hoso = HoSo::where('type', 2)
+        ->latest('created_at')
+        ->first();
+        return view('lanh_dao_truong.ds_mien_giam_hp.index', ['lop' => $lop,'hoso'=>$hoso]);
     }
 
     function getData(Request $request)
@@ -27,7 +30,7 @@ class MienGiamHPLanhDaoTruongController extends Controller
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name');
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name','students.hocphi');
 
         if (isset($request->type_miengiamhp)) {
             $query->where('stop_studies.type_miengiamhp', $request->type_miengiamhp);
@@ -98,13 +101,15 @@ class MienGiamHPLanhDaoTruongController extends Controller
             if (!isset($hoso)) {
                 return 0;
             }
+
             $getPDF = $this->getPDF($request->fileId, $request->tranId, $request->transIDHash);
             if (!$getPDF) {
                 return 0;
             }
 
-            $file_name = $this->saveBase64AsPdf($getPDF, 'QUYET_DINH_MIEN_GIAM_HP');
-            $this->deletePdfAndTmp($hoso->file_quyet_dinh);
+            $file_name = $this->saveBase64AsPdf($getPDF, 'MIEN_GIAM_HP_PDT');
+            $this->deletePdfAndTmp($hoso->file_quyet_dinh,$file_name);
+
             $hoso->update(["file_quyet_dinh" => $file_name]);
 
 

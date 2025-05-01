@@ -127,7 +127,7 @@ class LanhDaoTruongService  extends Controller
         }
     }
 
-    function saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, $folder)
+    function saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, $folder, $tiepnhan = false)
     {
         $user = Auth::user();
         $getPDF = $this->getPDF($request->fileId, $request->tranId, $request->transIDHash);
@@ -135,9 +135,13 @@ class LanhDaoTruongService  extends Controller
         if ($getPDF === 0) {
             return 0;
         }
+        if (!$tiepnhan) {
+            $student = Student::find($stopStudy->student_id);
 
-        $file_name = $this->saveBase64AsPdf($getPDF, $folder);
-        $this->deletePdfAndTmp($stopStudy->file_name);
+            $file_name = $this->saveBase64AsPdf($getPDF, $folder . '/' . $student->student_code);
+
+            $this->deletePdfAndTmp($stopStudy->file_name, $file_name);
+        }
 
 
         $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
@@ -146,7 +150,9 @@ class LanhDaoTruongService  extends Controller
         $newStopStudy = $stopStudy->replicate();
         $newStopStudy->status = 0;
         $newStopStudy->teacher_id = $user->teacher_id;
-        $newStopStudy->file_name = $file_name;
+        if (!$tiepnhan) {
+            $newStopStudy->file_name = $file_name;
+        }
         $newStopStudy->parent_id = $request->id;
         $newStopStudy->note = $note;
         $newStopStudy->save();
@@ -179,7 +185,9 @@ class LanhDaoTruongService  extends Controller
                 storage_path('app/public/' . $teacher->chu_ky),
                 storage_path('app/public/' . $newFilename),
                 $teacher->full_name,
-                1, 35, 250
+                1,
+                35,
+                250
             );
 
             return $this->craeteSignature(
@@ -200,8 +208,11 @@ class LanhDaoTruongService  extends Controller
                 return 0;
             }
 
-            $file_name = $this->saveBase64AsPdf($getPDF, 'RUT_HO_SO');
-            $this->deletePdfAndTmp($stopStudy->file_name);
+
+            $student = Student::find($stopStudy->student_id);
+
+            $file_name = $this->saveBase64AsPdf($getPDF, 'DON_XIN_RUT_HO_SO/' . $student->student_code);
+            $this->deletePdfAndTmp($stopStudy->file_name, $file_name);
             $stopStudy->update(["status" => 6, "file_name" => $file_name]);
 
 
@@ -214,7 +225,7 @@ class LanhDaoTruongService  extends Controller
             $newStopStudy->file_name = null;
 
             $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
-            $this->notification("Đơn xin rút hồ sơ của bạn đã được lãnh đạo trường xác nhận", null, "RHS", $user_id);
+            $this->notification("Đơn xin rút hồ sơ của bạn đã được lãnh đạo trường xác nhận", null, null, "RHS", $user_id);
 
             $newStopStudy->note = $request->note;
 
@@ -234,6 +245,5 @@ class LanhDaoTruongService  extends Controller
     function tuchoihsRHS($request, $stopStudy)
     {
         return $this->saveFile($request, $stopStudy, "Yêu cầu rút hồ sơ của bạn cần bổ sung hồ sơ", "Đơn xin rút hồ sơ của bạn chưa thể duyệt", "RHS", ["status" => -6, "is_update" => 0], "RUT_HS");
-
     }
 }

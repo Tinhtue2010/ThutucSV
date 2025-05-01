@@ -65,10 +65,9 @@ class StopStudyController extends Controller
         $phieu->student_id = $user->student_id;
         $phieu->name = "Đơn xin rút hồ sơ";
         $phieu->key = "RHS";
-        $phieu->file = json_encode($this->uploadListFile($request, 'files', 'rut_ho_so'));
+        $phieu->file = json_encode($this->uploadListFile($request, 'files', 'DON_XIN_RUT_HO_SO/' . ($student->student_code ?? $student->id)));
         $phieu->content = json_encode($studentData);
         
-
         $pdf =  $this->createPDF($phieu);
 
         return $this->craeteSignature($info_signature, $pdf, $user->cccd, 'DON_XIN_RUT_HO_SO');
@@ -84,12 +83,15 @@ class StopStudyController extends Controller
         if ($getPDF === 0) {
             return 0;
         }
-        $file_name = $this->saveBase64AsPdf($getPDF,'RUT_HO_SO');
 
         $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
         ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
         ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
         ->where('students.id', $user->student_id)->first();
+
+        $file_name = $this->saveBase64AsPdf($getPDF,'DON_XIN_RUT_HO_SO/' . ($student->student_code ?? $student->id));
+
+
 
         $check = StopStudy::where('student_id', $user->student_id)->where('type', 0)->first();
 
@@ -97,7 +99,7 @@ class StopStudyController extends Controller
             if (isset($check->files)) {
                 $this->deleteFiles(json_decode($check->files));
             }
-            $check->files = json_encode($this->uploadListFile($request, 'files', 'rut_ho_so'));
+            $check->files = json_encode($this->uploadListFile($request, 'files', 'DON_XIN_RUT_HO_SO/' . ($student->student_code ?? $student->id)));
 
             $this->deletePdf($check->file_name);
 
@@ -107,7 +109,7 @@ class StopStudyController extends Controller
             $check->update();
         } else {
             $query = new StopStudy();
-            $query->files = json_encode($this->uploadListFile($request, 'files', 'rut_ho_so'));
+            $query->files = json_encode($this->uploadListFile($request, 'files', 'DON_XIN_RUT_HO_SO/' . ($student->student_code ?? $student->id)));
             $query->student_id = $user->student_id;
             $query->round = 1;
             $query->note = $request->data;
