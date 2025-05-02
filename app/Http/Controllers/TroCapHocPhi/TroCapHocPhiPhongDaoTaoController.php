@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\TroCapHocPhi;
 
 use App\Http\Controllers\Controller;
+use App\Models\HoSo;
 use App\Models\Lop;
 use App\Models\Phieu;
 use App\Models\StopStudy;
@@ -16,19 +17,22 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
     function index()
     {
         $lop = Lop::get();
-        return view('phong_dao_tao.create_ds_tro_cap_hoc_phi.index', ['lop' => $lop]);
+        $hoso = HoSo::where('type', 4)
+            ->latest('created_at')
+            ->first();
+        return view('phong_dao_tao.create_ds_tro_cap_hoc_phi.index', ['lop' => $lop, 'hoso' => $hoso]);
     }
 
     function getData(Request $request)
     {
         $query = StopStudy::where('type', 3)
-        ->studentActive()
-        ->whereNull('parent_id')
+            ->studentActive()
+            ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi');
 
-        
+
         if (isset($request->type_miengiamhp)) {
             $query->where('stop_studies.type_miengiamhp', $request->type_miengiamhp);
         }
@@ -53,8 +57,8 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
     function createList(Request $request)
     {
         $query = StopStudy::where('type', 3)
-        ->studentActive()
-        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+            ->studentActive()
+            ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->where(function ($query) {
                 $query->where('stop_studies.status', 1)
                     ->orWhere('stop_studies.status', 2);
@@ -63,53 +67,52 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
             ->whereNull('parent_id')
             ->update(['status' => 2]);
         $username = Auth::user()->name;
-        $users = User::where('role',6)->get();
-        foreach($users as $item)
-        {
-            $this->notification("Danh sách miễn giảm học phí đã được tạo bởi ".$username, null, "TCXH", $item->id);
+        $users = User::where('role', 6)->get();
+        foreach ($users as $item) {
+            $this->notification("Danh sách miễn giảm học phí đã được tạo bởi " . $username, null, "TCXH", $item->id);
         }
         return redirect()->back();
     }
     function deleteList(Request $request)
     {
         $query = StopStudy::where('type', 3)
-        ->studentActive()
-        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-        ->where(function($query) {
-            $query->where('stop_studies.status', 1)
-                  ->orWhere('stop_studies.status', 2);
-        })
-        ->select('stop_studies.*')
-        ->whereNull('parent_id')
-        ->update(['status' => 1]);
+            ->studentActive()
+            ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+            ->where(function ($query) {
+                $query->where('stop_studies.status', 1)
+                    ->orWhere('stop_studies.status', 2);
+            })
+            ->select('stop_studies.*')
+            ->whereNull('parent_id')
+            ->update(['status' => 1]);
 
         return redirect()->back();
     }
 
-    function guiTBSV() {
+    function guiTBSV()
+    {
 
-        $phieu = Phieu::where('key','DSTCHP')->orderBy('created_at', 'desc')->first();
+        $phieu = Phieu::where('key', 'DSTCHP')->orderBy('created_at', 'desc')->first();
 
 
         $query = StopStudy::where('type', 3)
-        ->studentActive()
-        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-        ->whereNull('parent_id')
-        ->where('stop_studies.status', 3)
-        ->select('stop_studies.*')
-        ->get();
+            ->studentActive()
+            ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+            ->whereNull('parent_id')
+            ->where('stop_studies.status', 3)
+            ->select('stop_studies.*')
+            ->get();
         foreach ($query as $stopStudy) {
-            $stopStudy->status = 4; 
-            $stopStudy->save();  
-            $user_id = User::where('student_id',$stopStudy->student_id)->first()->id;
+            $stopStudy->status = 4;
+            $stopStudy->save();
+            $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
             $this->notification("Danh sách trợ cấp chi phí học tập dự kiến", $phieu->id, "TCXH", $user_id);
-            
-            $users = User::where(function($query) {
+
+            $users = User::where(function ($query) {
                 $query->where('role', 2)
-                      ->orWhere('role', 3);
+                    ->orWhere('role', 3);
             })->get();
-            foreach($users as $item)
-            {
+            foreach ($users as $item) {
                 $this->notification("Danh sách trợ cấp chi phí học tập dự kiến", null, "TCXH", $item->id);
             }
             $newStopStudy = $stopStudy->replicate();
@@ -125,8 +128,8 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
 
     function guiTBSALL()
     {
-        
-        $phieu = Phieu::where('key','DSTCHP')->orderBy('created_at', 'desc')->first();
+
+        $phieu = Phieu::where('key', 'DSTCHP')->orderBy('created_at', 'desc')->first();
 
         $users = User::get();
         foreach ($users as $item) {
@@ -136,12 +139,12 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
 
         $phieu = Phieu::where('status', 0)->update(['status' => 1]);
         $query = StopStudy::where('type', 3)
-        ->studentActive()
-        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-        ->whereNull('parent_id')
-        ->where('stop_studies.status', 6)
-        ->select('stop_studies.*')
-        ->get();
+            ->studentActive()
+            ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+            ->whereNull('parent_id')
+            ->where('stop_studies.status', 6)
+            ->select('stop_studies.*')
+            ->get();
         foreach ($query as $stopStudy) {
             $stopStudy->status = -99;
             $stopStudy->save();
@@ -167,68 +170,88 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
         ];
 
         $content_DSTCHP = [];
-        
+
         $query = StopStudy::where('type', 3)
-        ->where('stop_studies.status','>=',1)
-        ->studentActive()
-        ->whereNull('parent_id')
-        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-        ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-        ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi')
-        ->get();
-        
+            ->where('stop_studies.status', '>=', 1)
+            ->studentActive()
+            ->whereNull('parent_id')
+            ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+            ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi')
+            ->get();
+
         $content["tong_hs"] = count($query);
 
-        foreach($query as $item){
+        foreach ($query as $item) {
             $content_DSTCHP[] =  [
                 "ho_ten" => $item->full_name,
                 "ngay_sinh" => Carbon::createFromFormat('Y-m-d', $item->date_of_birth)->format('d/m/Y'),
                 "lop" => $item->lop_name,
-                "doi_tuong" => 'Đối tượng '.$item->type_miengiamhp + 1,
+                "doi_tuong" => 'Đối tượng ' . $item->type_miengiamhp + 1,
                 "muc_tro_cap_hp" => config('doituong.muctrocaphp'),
                 "so_thang_tro_cap" => 5,
-                "tro_cap_ky" =>5*config('doituong.muctrocaphp')
-              ];
-              $content["tong"] += 5*config('doituong.muctrocaphp');
+                "tro_cap_ky" => 5 * config('doituong.muctrocaphp')
+            ];
+            $content["tong"] += 5 * config('doituong.muctrocaphp');
         }
 
-        $phieu =  Phieu::updateOrCreate(
-            [
-                'key' => 'DSTCHP',
-                'status' => 0
-            ],
-            [
-                'name' => 'Danh sách sinh viên được trợ cấp xã hội',
-                'content' => json_encode([$content,$content_DSTCHP], true)
-            ]
-        );
-        Phieu::updateOrCreate(
-            [
-                'key' => 'QDTCHP',
-                'status' => 0
-            ],
-            [
-                'name' => 'Quyết định trợ cấp xã hội',
-                'content' => json_encode([$content,0], true)
-            ]
-        );
-        Phieu::updateOrCreate(
-            [
-                'key' => 'PTTCHP',
-                'status' => 0
-            ],
-            [
-                'name' => 'Phiếu trình trợ cấp xã hội',
-                'content' => json_encode([$content,0], true)
-            ]
-        );
+        $phieuDSTCHP = new Phieu();
+        $phieuDSTCHP->key = 'DSTCHP';
+        $phieuDSTCHP->status = 0;
+        $phieuDSTCHP->name = 'Danh sách sinh viên được trợ cấp xã hội';
+        $phieuDSTCHP->content = json_encode([$content, $content_DSTCHP], true);
+        $base64 = $this->createPDF($phieuDSTCHP, 1);
+        $file_list = $this->saveBase64AsPdf($base64, 'TRO_CAP_HP/' . $year . '/' . $month, 'ds_tro_cap_hp');
+
+        // Tạo phiếu QDTCHP
+        $phieuQDTCHP = new Phieu();
+        $phieuQDTCHP->key = 'QDTCHP';
+        $phieuQDTCHP->status = 0;
+        $phieuQDTCHP->name = 'Quyết định trợ cấp xã hội';
+        $phieuQDTCHP->content = json_encode([$content, 0], true);
+        $base64 = $this->createPDF($phieuQDTCHP);
+        $file_quyet_dinh = $this->saveBase64AsPdf($base64, 'TRO_CAP_HP/' . $year . '/' . $month, 'qd_tro_cap_hp');
+
+        $hoso = HoSo::where('ky_hoc', $request->ky)
+            ->where('nam_hoc', $request->nam)
+            ->where('type', 4)
+            ->latest('created_at')
+            ->first();
+
+        if ($hoso) {
+            if ($hoso->file_quyet_dinh != $file_quyet_dinh) {
+                $this->deletePdf($hoso->file_quyet_dinh);
+            }
+            if ($hoso->file_list != $file_list) {
+                $this->deletePdf($hoso->file_list);
+            }
+
+            $hoso->update([
+                'name' => "Trợ cấp xã hội",
+                'file_quyet_dinh' => $file_quyet_dinh,
+                'file_list' => $file_list,
+                'list_info' => json_encode($content_DSTCHP, true),
+                'type' => 4
+            ]);
+        } else {
+            $hoso = HoSo::create([
+                'name' => "Trợ cấp xã hội",
+                'file_quyet_dinh' => $file_quyet_dinh,
+                'file_list' => $file_list,
+                'ky_hoc' => $request->ky,
+                'nam_hoc' => $request->nam,
+                'list_info' => json_encode($content_DSTCHP, true),
+                'type' => 4
+            ]);
+        }
 
         return true;
     }
-    function xoaQuyetDinh() {
-        Phieu::where('status',0)
-        ->whereIn('key', ['DSTCHP', 'QDTCHP', 'PTTCHP'])
-        ->delete();
+    function xoaQuyetDinh()
+    {
+        Phieu::where('status', 0)
+            ->whereIn('key', ['DSTCHP', 'QDTCHP', 'PTTCHP'])
+            ->delete();
         return redirect()->back();
     }
 
@@ -239,12 +262,13 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
 
     function tinhSoLuong()
     {
+        $mucrocap = config('doituong.muctrocaphp');
         $trocaphp = StopStudy::where('type', 3)->where('stop_studies.status', '>', 0)
             ->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->selectRaw('SUM(stop_studies.muctrocaphp) as hocphi, COUNT(*) as tong')
+            ->selectRaw("{$mucrocap} * 5 * COUNT(*) as hocphi, COUNT(*) as tong")
             ->get()->toArray();
         return $trocaphp;
     }

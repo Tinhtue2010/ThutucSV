@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\TroCapXaHoi;
 
 use App\Http\Controllers\Controller;
+use App\Models\HoSo;
 use App\Models\Lop;
 use App\Models\Phieu;
 use App\Models\StopStudy;
@@ -16,7 +17,10 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
     function index()
     {
         $lop = Lop::get();
-        return view('lanh_dao_truong.ds_tro_cap_xa_hoi.index', ['lop' => $lop]);
+        $hoso = HoSo::where('type', 3)
+        ->latest('created_at')
+        ->first();
+        return view('lanh_dao_truong.ds_tro_cap_xa_hoi.index', ['lop' => $lop,'hoso'=>$hoso]);
     }
 
     function getData(Request $request)

@@ -252,28 +252,31 @@ class MienGiamHPPhongDaoTaoController extends Controller
             ->where('stop_studies.status', 3)
             ->select('stop_studies.*')
             ->get();
-        $phieu = Phieu::where('key', 'DSMGHP')->orderBy('created_at', 'desc')->first();
+            $hoso = HoSo::where('type', 2)
+            ->latest('created_at')
+            ->first();
         foreach ($query as $stopStudy) {
             $stopStudy->status = 4;
             $stopStudy->save();
             $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
-            $this->notification("Danh sách miễn giảm học phí dự kiến", $phieu->id, "GHP", $user_id);
+            $this->notification("Danh sách miễn giảm học phí dự kiến",null, $hoso->file_list, "GHP", $user_id);
 
-            $users = User::where(function ($query) {
-                $query->where('role', 2)
-                    ->orWhere('role', 3);
-            })->get();
-            foreach ($users as $item) {
-                $this->notification("Danh sách miễn giảm học phí dự kiến", $phieu->id, "GHP", $item->id);
-            }
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = null;
             $newStopStudy->parent_id = $stopStudy->id;
             $newStopStudy->note = "Gửi thông báo về danh sách";
             $newStopStudy->save();
         }
+
+        $users = User::where(function ($query) {
+            $query->where('role', 2)
+                ->orWhere('role', 3);
+        })->get();
+        foreach ($users as $item) {
+            $this->notification("Danh sách miễn giảm học phí dự kiến",null, $hoso->file_list,  "GHP", $item->id);
+        }
+
         return redirect()->back();
     }
 

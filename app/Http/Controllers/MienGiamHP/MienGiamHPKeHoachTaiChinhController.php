@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\MienGiamHP;
 
 use App\Http\Controllers\Controller;
+use App\Models\HoSo;
 use App\Models\Lop;
 use App\Models\Phieu;
 use App\Models\StopStudy;

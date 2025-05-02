@@ -802,7 +802,7 @@ trait CommonHelper
             $html =  view('document.theodoithongke.m01_02_07', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
         }
         if ($phieu->key == "DSTCXH") {
-            $html =  view('document.theodoithongke.m01_03_06', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+            $html =  view('document.theodoithongke.m01_03_06', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu, 'ngang' => $ngang]);
         }
         if ($phieu->key == "QDTCXH") {
             $html =  view('document.theodoithongke.m01_03_07', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
@@ -812,7 +812,7 @@ trait CommonHelper
         }
 
         if ($phieu->key == "DSTCHP") {
-            $html =  view('document.theodoithongke.m01_03_08', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+            $html =  view('document.theodoithongke.m01_03_08', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu, 'ngang' => $ngang]);
         }
         if ($phieu->key == "QDTCHP") {
             $html =  view('document.theodoithongke.m01_03_09', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
@@ -821,7 +821,7 @@ trait CommonHelper
             $html =  view('document.theodoithongke.m01_03_10_2', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
         }
         if ($phieu->key == "DSCDTA") {
-            $html =  view('document.theodoithongke.m01_04_05', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);
+            $html =  view('document.theodoithongke.m01_04_05', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu, 'ngang' => $ngang]);
         }
         if ($phieu->key == "QDCDTA") {
             $html =  view('document.theodoithongke.m01_04_06', ['data' => json_decode($phieu->content, true), 'phieu' => $phieu]);

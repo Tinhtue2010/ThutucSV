@@ -46,7 +46,7 @@
                             <a target="_blank" href="/storage/{{ $hoso->file_list }}" class="btn btn-secondary ms-3">Xem
                                 danh sách</a>
                             <a target="_blank" href="/storage/{{ $hoso->file_quyet_dinh }}"
-                                class="btn btn-secondary ms-3">Xem quyết định</a>x
+                                class="btn btn-secondary ms-3">Xem quyết định</a>
                             <a href="{{ route('PhongDaoTao.TroCapXaHoi.xoaQuyetDinh') }}"
                                 class="btn btn-danger ms-3">Xóa quyết định</a>
                             <a href="{{ route('PhongDaoTao.TroCapXaHoi.guiTBSALL') }}"

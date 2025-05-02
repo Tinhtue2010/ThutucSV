@@ -126,7 +126,7 @@
                     }).then((response) => {
                         mess_success('Thông báo',
                             "Thành công")
-                        $(this).trigger("reset");
+                        // $(this).trigger("reset");
                         model{{ $target }}.hide();
                         Datatable.loadData();
                     }).catch(function(error) {
