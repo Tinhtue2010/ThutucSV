@@ -34,7 +34,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'lops.hocphi');
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi');
 
 
         if (isset($request->type_miengiamhp)) {
@@ -222,7 +222,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
                     $error_line = $index + 2;
                     $student = Student::where('student_code', $item[$indexHeader['ma_sinh_vien']])
                         ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-                        ->select('students.*', 'lops.name as lop_name', 'lops.hocphi')
+                        ->select('students.*', 'lops.name as lop_name', 'students.hocphi')
                         ->first();
                     if (!$student) {
                         return response()->json([
@@ -527,7 +527,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'lops.hocphi')
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi')
             ->get();
 
         $content_DSCDTA = [];

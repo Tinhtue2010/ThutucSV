@@ -24,7 +24,7 @@ class CheDoChinhSachLanhDaoPhongDaoTaoController extends Controller
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'lops.hocphi');
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi');
 
 
         if (isset($request->type_miengiamhp)) {

@@ -17,6 +17,7 @@
                         "url": "{{ route('PhongDaoTao.TroCapXaHoi.getData') }}", // Thay đổi đường dẫn đến tệp xử lý AJAX
                         "type": "GET",
                         "data": function(data) {
+                            tinhTong();
                             var name_order = document
                                 .querySelectorAll(
                                     'table thead tr th')[data
@@ -253,6 +254,7 @@
             };
 
             function getData(propsPage) {
+                tinhTong();
                 const filterSearch = document.querySelector(
                     '[data-kt-ecommerce-product-filter="search"]');
                 const filteTableLenght = document.querySelector(
@@ -280,7 +282,21 @@
                 dataCustom = data;
                 datatable.ajax.reload();
             }
-
+            function tinhTong() {
+                $.ajax({
+                    url: '{{ route('TroCapXaHoi.tinhSoLuong') }}',
+                    type: 'GET',
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        var hocphi =Number(response[0].hocphi).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+                        $('#tinhtong').html(`
+                        <h5>Tổng số lượng sinh viên : ${response[0].tong}</h5>
+                        <h5>Tổng số tiền : ${hocphi}</h5>
+                        `);
+                    }
+                });
+            }
             @include('layout.render_pagination')
         }();
 

@@ -451,7 +451,7 @@ trait CommonHelper
     }
 
 
-    public function uploadListFile($request, $name, $folder)
+    public function uploadListFile($request, $name,$folder, $type='file-')
     {
         $fileNames = [];
 
@@ -459,7 +459,7 @@ trait CommonHelper
             foreach ($request->file($name) as $file) {
                 $extension = $file->getClientOriginalExtension();
                 $originalName = $file->getClientOriginalName();
-                $newFileName = $folder . '/' . 'file-'.date('Y-m-d') .'.'. $extension;
+                $newFileName = $folder . '/' . $type.date('Y-m-d') .'.'. $extension;
                 Storage::putFileAs('public', $file, $newFileName);
                 $fileNames[] = [$originalName, $newFileName];
             }

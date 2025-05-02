@@ -9,10 +9,11 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('studentManager.index') ? 'active' : '' }}" href="{{ route('studentManager.index') }}">
+            <a class="menu-link {{ request()->routeIs('studentManager.index') ? 'active' : '' }}"
+                href="{{ route('studentManager.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
-                    <i class="ki-outline ki-category fs-2"></i>
+                    <i class="ki-outline ki-user-tick fs-2"></i>
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
@@ -25,10 +26,11 @@
 
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('khoaManager.index') ? 'active' : '' }}" href="{{ route('khoaManager.index') }}">
+            <a class="menu-link {{ request()->routeIs('khoaManager.index') ? 'active' : '' }}"
+                href="{{ route('khoaManager.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
-                    <i class="ki-outline ki-category fs-2"></i>
+                    <i class="ki-outline ki-abstract-27 fs-2"></i>
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
@@ -40,10 +42,11 @@
 
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('classManager.index') ? 'active' : '' }}" href="{{ route('classManager.index') }}">
+            <a class="menu-link {{ request()->routeIs('classManager.index') ? 'active' : '' }}"
+                href="{{ route('classManager.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
-                    <i class="ki-outline ki-category fs-2"></i>
+                    <i class="ki-outline ki-abstract-25 fs-2"></i>
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
@@ -54,10 +57,11 @@
         </div>
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('teacherManager.index') ? 'active' : '' }}" href="{{ route('teacherManager.index') }}">
+            <a class="menu-link {{ request()->routeIs('teacherManager.index') ? 'active' : '' }}"
+                href="{{ route('teacherManager.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
-                    <i class="ki-outline ki-category fs-2"></i>
+                    <i class="ki-outline ki-security-user fs-2"></i>
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
@@ -76,10 +80,11 @@
 
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('khoaManager.index') ? 'active' : '' }}" href="{{ route('khoaManager.index') }}">
+            <a class="menu-link {{ request()->routeIs('khoaManager.index') ? 'active' : '' }}"
+                href="{{ route('khoaManager.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
-                    <i class="ki-outline ki-category fs-2"></i>
+                    <i class="ki-outline ki-abstract-19 fs-2"></i>
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
@@ -91,10 +96,11 @@
 
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('classManager.index') ? 'active' : '' }}" href="{{ route('classManager.index') }}">
+            <a class="menu-link {{ request()->routeIs('classManager.index') ? 'active' : '' }}"
+                href="{{ route('classManager.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
-                    <i class="ki-outline ki-category fs-2"></i>
+                    <i class="ki-outline ki-abstract-31 fs-2"></i>
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
@@ -105,10 +111,11 @@
         </div>
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('teacherManager.index') ? 'active' : '' }}" href="{{ route('teacherManager.index') }}">
+            <a class="menu-link {{ request()->routeIs('teacherManager.index') ? 'active' : '' }}"
+                href="{{ route('teacherManager.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
-                    <i class="ki-outline ki-category fs-2"></i>
+                    <i class="ki-outline ki-user-square fs-2"></i>
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
@@ -127,7 +134,8 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('GiaoVien.index') ? 'active' : '' }}" href="{{ route('GiaoVien.index') }}">
+            <a class="menu-link {{ request()->routeIs('GiaoVien.index') ? 'active' : '' }}"
+                href="{{ route('GiaoVien.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
                     <i class="ki-outline ki-document fs-2"></i>
@@ -143,10 +151,11 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link  {{ request('gvcn') === 'true' && request()->is('student-manager') ? 'active' : '' }}" href="{{ route('studentManager.index', ['gvcn' => 'true']) }}">
+            <a class="menu-link  {{ request('gvcn') === 'true' && request()->is('student-manager') ? 'active' : '' }}"
+                href="{{ route('studentManager.index', ['gvcn' => 'true']) }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
-                    <i class="ki-outline ki-category fs-2"></i>
+                    <i class="ki-outline ki-user-tick fs-2"></i>
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
@@ -167,7 +176,8 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('Khoa.index') ? 'active' : '' }}" href="{{ route('Khoa.index') }}">
+            <a class="menu-link {{ request()->routeIs('Khoa.index') ? 'active' : '' }}"
+                href="{{ route('Khoa.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
                     <i class="ki-outline ki-document fs-2"></i>
@@ -183,10 +193,11 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request('khoa') === 'true' && request()->is('student-manager') ? 'active' : '' }}" href="{{ route('studentManager.index', ['khoa' => 'true']) }}">
+            <a class="menu-link {{ request('khoa') === 'true' && request()->is('student-manager') ? 'active' : '' }}"
+                href="{{ route('studentManager.index', ['khoa' => 'true']) }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
-                    <i class="ki-outline ki-category fs-2"></i>
+                    <i class="ki-outline ki-user-tick fs-2"></i>
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
@@ -207,7 +218,8 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('PhongDaoTao.index') ? 'active' : '' }}" href="{{ route('PhongDaoTao.index') }}">
+            <a class="menu-link {{ request()->routeIs('PhongDaoTao.index') ? 'active' : '' }}"
+                href="{{ route('PhongDaoTao.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
                     <i class="ki-outline ki-document fs-2"></i>
@@ -223,10 +235,11 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->is('student-manager') ? 'active' : '' }}" href="{{ route('studentManager.index') }}">
+            <a class="menu-link {{ request()->is('student-manager') ? 'active' : '' }}"
+                href="{{ route('studentManager.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
-                    <i class="ki-outline ki-category fs-2"></i>
+                    <i class="ki-outline ki-user-tick fs-2"></i>
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
@@ -246,10 +259,11 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('PhongDaoTao.HoSoChungTu.index') ? 'active' : '' }}" href="{{ route('PhongDaoTao.HoSoChungTu.index') }}">
+            <a class="menu-link {{ request()->routeIs('PhongDaoTao.HoSoChungTu.index') ? 'active' : '' }}"
+                href="{{ route('PhongDaoTao.HoSoChungTu.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
-                    <i class="ki-outline ki-document fs-2"></i>
+                    <i class="ki-outline ki-update-folder fs-2"></i>
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
@@ -269,7 +283,8 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('KeHoachTaiChinh.index') ? 'active' : '' }}" href="{{ route('KeHoachTaiChinh.index') }}">
+            <a class="menu-link {{ request()->routeIs('KeHoachTaiChinh.index') ? 'active' : '' }}"
+                href="{{ route('KeHoachTaiChinh.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
                     <i class="ki-outline ki-document fs-2"></i>
@@ -285,7 +300,8 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->is('student-manager') ? 'active' : '' }}" href="{{ route('studentManager.index') }}">
+            <a class="menu-link {{ request()->is('student-manager') ? 'active' : '' }}"
+                href="{{ route('studentManager.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
                     <i class="ki-outline ki-category fs-2"></i>
@@ -308,7 +324,8 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('LanhDaoPhongDaoTao.index') ? 'active' : '' }}" href="{{ route('LanhDaoPhongDaoTao.index') }}">
+            <a class="menu-link {{ request()->routeIs('LanhDaoPhongDaoTao.index') ? 'active' : '' }}"
+                href="{{ route('LanhDaoPhongDaoTao.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
                     <i class="ki-outline ki-document fs-2"></i>
@@ -324,7 +341,8 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->is('student-manager') ? 'active' : '' }}" href="{{ route('studentManager.index') }}">
+            <a class="menu-link {{ request()->is('student-manager') ? 'active' : '' }}"
+                href="{{ route('studentManager.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
                     <i class="ki-outline ki-category fs-2"></i>
@@ -347,7 +365,8 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('LanhDaoTruong.index') ? 'active' : '' }}" href="{{ route('LanhDaoTruong.index') }}">
+            <a class="menu-link {{ request()->routeIs('LanhDaoTruong.index') ? 'active' : '' }}"
+                href="{{ route('LanhDaoTruong.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
                     <i class="ki-outline ki-document fs-2"></i>
@@ -363,7 +382,8 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->is('student-manager') ? 'active' : '' }}" href="{{ route('studentManager.index') }}">
+            <a class="menu-link {{ request()->is('student-manager') ? 'active' : '' }}"
+                href="{{ route('studentManager.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
                     <i class="ki-outline ki-category fs-2"></i>
@@ -400,10 +420,11 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('student.info') ? 'active' : '' }}" href="{{ route('student.info') }}">
+            <a class="menu-link {{ request()->routeIs('student.info') ? 'active' : '' }}"
+                href="{{ route('student.info') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
-                    <i class="ki-outline ki-more-2 fs-2"></i>
+                    <i class="ki-outline ki-setting-4 fs-2"></i>
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
@@ -421,10 +442,11 @@
         <!--begin::Menu Item-->
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('StopStudy.index') ? 'active' : '' }}" href="{{ route('StopStudy.index') }}">
+            <a class="menu-link {{ request()->routeIs('StopStudy.index') ? 'active' : '' }}"
+                href="{{ route('StopStudy.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
-                    <i class="ki-outline ki-more-2 fs-2"></i>
+                    <i class="ki-outline ki-information fs-2"></i>
                 </span>
                 <!--end::Icon-->
                 <!--begin::Title-->
@@ -438,10 +460,11 @@
             <!--begin::Menu Item-->
             <div class="menu-item">
                 <!--begin::Menu link-->
-                <a class="menu-link {{ request()->routeIs('MienGiamHp.index') ? 'active' : '' }}" href="{{ route('MienGiamHp.index') }}">
+                <a class="menu-link {{ request()->routeIs('MienGiamHp.index') ? 'active' : '' }}"
+                    href="{{ route('MienGiamHp.index') }}">
                     <!--begin::Icon-->
                     <span class="menu-icon">
-                        <i class="ki-outline ki-more-2 fs-2"></i>
+                        <i class="ki-outline ki-award fs-2"></i>
                     </span>
                     <!--end::Icon-->
                     <!--begin::Title-->
@@ -454,10 +477,11 @@
             <!--begin::Menu Item-->
             <div class="menu-item">
                 <!--begin::Menu link-->
-                <a class="menu-link {{ request()->routeIs('TroCapXH.index') ? 'active' : '' }}" href="{{ route('TroCapXH.index') }}">
+                <a class="menu-link {{ request()->routeIs('TroCapXH.index') ? 'active' : '' }}"
+                    href="{{ route('TroCapXH.index') }}">
                     <!--begin::Icon-->
                     <span class="menu-icon">
-                        <i class="ki-outline ki-more-2 fs-2"></i>
+                        <i class="ki-outline ki-subtitle fs-2"></i>
                     </span>
                     <!--end::Icon-->
                     <!--begin::Title-->
@@ -467,14 +491,32 @@
                 <!--end::Menu link-->
             </div>
             <!--end::Menu Item-->
+            <!--begin::Menu Item-->
+            <div class="menu-item">
+                <!--begin::Menu link-->
+                <a class="menu-link {{ request()->routeIs('TroCapHP.index') ? 'active' : '' }}"
+                    href="{{ route('TroCapHP.index') }}">
+                    <!--begin::Icon-->
+                    <span class="menu-icon">
+                        <i class="ki-outline ki-sort fs-2"></i>
+                    </span>
+                    <!--end::Icon-->
+                    <!--begin::Title-->
+                    <span class="menu-title">Trợ cấp học phí</span>
+                    <!--end::Title-->
+                </a>
+                <!--end::Menu link-->
+            </div>
+            <!--end::Menu Item-->
             @if (Auth::user()->checkNganhCheDoChinhSach())
                 <!--begin::Menu Item-->
                 <div class="menu-item">
                     <!--begin::Menu link-->
-                    <a class="menu-link {{ request()->routeIs('CheDoChinhSach.index') ? 'active' : '' }}" href="{{ route('CheDoChinhSach.index') }}">
+                    <a class="menu-link {{ request()->routeIs('CheDoChinhSach.index') ? 'active' : '' }}"
+                        href="{{ route('CheDoChinhSach.index') }}">
                         <!--begin::Icon-->
                         <span class="menu-icon">
-                            <i class="ki-outline ki-more-2 fs-2"></i>
+                            <i class="ki-outline ki-brifecase-tick fs-2"></i>
                         </span>
                         <!--end::Icon-->
                         <!--begin::Title-->
@@ -499,7 +541,8 @@
         @if (!Role(1))
             <div class="menu-item">
                 <!--begin::Menu link-->
-                <a class="menu-link {{ request()->routeIs('Profile.GiaoVien.info') ? 'active' : '' }}" href="{{ route('Profile.GiaoVien.info') }}">
+                <a class="menu-link {{ request()->routeIs('Profile.GiaoVien.info') ? 'active' : '' }}"
+                    href="{{ route('Profile.GiaoVien.info') }}">
                     <!--begin::Icon-->
                     <span class="menu-icon">
                         <i class="ki-outline ki-gear fs-2x"></i>
@@ -515,7 +558,8 @@
 
         <div class="menu-item">
             <!--begin::Menu link-->
-            <a class="menu-link {{ request()->routeIs('notification.index') ? 'active' : '' }}" href="{{ route('notification.index') }}">
+            <a class="menu-link {{ request()->routeIs('notification.index') ? 'active' : '' }}"
+                href="{{ route('notification.index') }}">
                 <!--begin::Icon-->
                 <span class="menu-icon">
                     <i class="bi bi-inbox fs-1"></i>

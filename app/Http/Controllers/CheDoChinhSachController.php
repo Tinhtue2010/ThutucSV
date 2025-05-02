@@ -19,8 +19,7 @@ class CheDoChinhSachController extends Controller
         $user = Auth::user();
         $don_parent = StopStudy::where('student_id', $user->student_id)->where('type', 4)->first();
         if ($don_parent) {
-            $phieu = Phieu::where('id', $don_parent->phieu_id)->first();
-            $phieu = json_decode($phieu->content, true);
+            $phieu = null;
             $don = StopStudy::where('parent_id', $don_parent->id)->orderBy('created_at', 'desc')->first();
         } else {
             $phieu = null;
@@ -28,96 +27,107 @@ class CheDoChinhSachController extends Controller
         }
         $user = Auth::user();
         $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
+            ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)->first();
         return view('che_do_chinh_sach.index', ['don_parent' => $don_parent, 'don' => $don, 'phieu' => $phieu, 'student' => $student]);
     }
+    function kydonPDF(Request $request)
+    {
+        $chu_ky =  $this->convertImageToBase64(Auth::user()->getUrlChuKy());
+        $user = Auth::user();
 
+        $info_signature = $this->getInfoSignature($user->cccd);
+        if ($info_signature === false) {
+            return 0; //chưa đăng ký chữ ký số cần đăng ký chữ ký số
+        }
+        $user = Auth::user();
+
+
+        $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
+            ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
+            ->where('students.id', $user->student_id)->first();
+
+        $studentData['full_name'] = $student->full_name;
+        $studentData['student_code'] = $student->student_code;
+        $studentData['date_of_birth'] = Carbon::parse($student->date_of_birth)->format('d/m/Y');
+        $studentData['lop'] = $student->lop_name;
+        $studentData['khoa'] = $student->khoa_name;
+        $studentData['khoa_hoc'] = $student->nien_khoa;
+        $studentData['hoso'] = $request->hoso;
+
+        $doituong = config('doituong.chedochinhsach');
+
+        $studentData['doituong'] = $doituong[$request->doituong][1];
+
+        $studentData['sdt'] = $student->phone;
+        $studentData['thuongchu'] = $request->thuongchu;
+        $studentData['day'] = Carbon::now()->day;
+        $studentData['month'] = Carbon::now()->month;
+        $studentData['year'] = Carbon::now()->year;
+        $studentData['chu_ky'] = $chu_ky;
+
+
+        $phieu = new Phieu();
+        $phieu->student_id = $user->student_id;
+        $phieu->name = "Đơn xin chế độ chính sách";
+        $phieu->key = "CDCS";
+        $phieu->content = json_encode($studentData);
+
+        $pdf =  $this->createPDF($phieu);
+
+        return $this->craeteSignature($info_signature, $pdf, $user->cccd, 'CHE_DO_CHINH_SACH');
+    }
     function CreateViewPdf(Request $request)
     {
-        if (!$this->checkOtpApi($request->otp ?? '')) {
-            abort(404);
+        $getPDF = $this->getPDF($request->fileId, $request->tranId, $request->transIDHash);
+        if ($getPDF === 0) {
+            return 0;
         }
-        if ($request->button_clicked == "xem_truoc") {
-            Session::put('doituong', $request->doituong);
-            Session::put('hoso', $request->hoso);
-            Session::put('thuongchu', $request->thuongchu);
+
+        $user = Auth::user();
+
+        $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
+            ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
+            ->where('students.id', $user->student_id)->first();
+
+        $file_name = $this->saveBase64AsPdf($getPDF, 'CHE_DO_CHINH_SACH/' . ($student->student_code ?? $student->id), 'don-');
+        $uploadedFiles = json_encode($this->uploadListFile($request, 'files', 'CHE_DO_CHINH_SACH/' . ($student->student_code ?? $student->id), 'file-dinh-kem-'));
+
+        $doituong_key = "1";
+        if ($request->doituong == 2) {
+            $doituong_key = "4";
+        }
+
+
+        $check = StopStudy::where('student_id', $user->student_id)->where('type', 4)->first();
+        if ($check) {
+            if (isset($check->files)) {
+                $this->deleteFiles(json_decode($check->files));
+            }
+            $check->files = $uploadedFiles;
+            $check->file_name = $file_name;
+
+            $check->note = $request->data;
+            $check->doi_tuong_chinh_sach = json_encode([$doituong_key]);
+            $check->update();
         } else {
-            $user = Auth::user();
+            $query = new StopStudy();
+            $query->file_name = $file_name;
+            $query->files = $uploadedFiles;
+            $query->student_id = $user->student_id;
+            $query->round = 1;
+            $query->type = 4;
+            $query->note = $request->data;
+            $query->ma_lop = $student->ma_lop;
+            $query->doi_tuong_chinh_sach = json_encode([$doituong_key]);
+            $query->save();
 
-            $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-                ->leftJoin('khoas', 'lops.khoa_id', '=', 'khoas.id')
-                ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
-                ->where('students.id', $user->student_id)->first();
-
-            $studentData['full_name'] = $student->full_name;
-            $studentData['student_code'] = $student->student_code;
-            $studentData['date_of_birth'] = Carbon::createFromFormat('Y-m-d', $student->date_of_birth)->format('d/m/Y');
-            $studentData['lop'] = $student->lop_name;
-            $studentData['khoa'] = $student->khoa_name;
-            $studentData['khoa_hoc'] = $student->nien_khoa;
-            $studentData['hoso'] = $request->hoso;
-
-            $doituong = config('doituong.chedochinhsach');
-            
-            $studentData['doituong'] = $doituong[$request->doituong][1];
-            $doituong_key = "1";
-            if($request->doituong == 2)
-            {
-                $doituong_key = "4";
-            }
-
-            $studentData['sdt'] = $student->phone;
-            $studentData['thuongchu'] = $request->thuongchu;
-
-            $studentData['day'] = Carbon::now()->day;
-
-            $studentData['month'] = Carbon::now()->month;
-
-            $studentData['year'] = Carbon::now()->year;
-            $studentData['url_chuky'] = Auth::user()->getUrlChuKy();
-
-            $check = StopStudy::where('student_id', $user->student_id)->where('type', 4)->first();
-            if ($check) {
-                if (isset($check->files)) {
-                    $this->deleteFiles(json_decode($check->files));
-                }
-                $check->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
-
-                $check->note = $request->data;
-                $check->doi_tuong_chinh_sach = json_encode([$doituong_key]);
-                $check->update();
-                $phieu = Phieu::where('id', $check->phieu_id)->first();
-                $phieu->student_id = $user->student_id;
-                $phieu->name = "Đơn xin chế độ chính sách";
-                $phieu->key = "CDCS";
-                $phieu->file = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
-                $phieu->content = json_encode($studentData);
-                $phieu->save();
-            } else {
-                $phieu = new Phieu();
-                $phieu->student_id = $user->student_id;
-                $phieu->name = "Đơn xin chế độ chính sách";
-                $phieu->key = "CDCS";
-                $phieu->file = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
-                $phieu->content = json_encode($studentData);
-                $phieu->save();
-
-                $query = new StopStudy();
-                $query->files = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
-                $query->student_id = $user->student_id;
-                $query->round = 1;
-                $query->type = 4;
-                $query->note = $request->data;
-                $query->phieu_id = $phieu->id;
-                $query->lop_id = $student->lop_id;
-                $query->doi_tuong_chinh_sach = json_encode([$doituong_key]);
-                $query->save();
-
-                $this->notification("Đơn xin trợ cấp xã hội của bạn đã được gửi, vui lòng chờ thông báo khác", $phieu->id, "CDCS");
-            }
+            $this->notification("Đơn xin chế độ chính sách của bạn đã được gửi, vui lòng chờ thông báo khác", null, $file_name, "CDCS");
         }
+
         return true;
     }
     function viewDemoPdf()

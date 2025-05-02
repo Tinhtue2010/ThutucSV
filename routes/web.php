@@ -121,15 +121,18 @@ Route::group(['middleware' => ['auth']], function () {
         Route::name('TroCapXH.')->prefix('tro-cap-xh')->group(function () {
             Route::get('/', [TroCapXHController::class, 'index'])->name('index');
             Route::post('/create_view_pdf', [TroCapXHController::class, 'CreateViewPdf'])->name('CreateViewPdf');
-            Route::get('/view_pdf/{id}', [TroCapXHController::class, 'viewPdf'])->name('viewPdf');
-            Route::get('/view_demo_pdf', [TroCapXHController::class, 'viewDemoPdf'])->name('viewDemoPdf');
             Route::post('/ky_don_pdf', [TroCapXHController::class, 'KyDonPdf'])->name('KyDonPdf');
         });
+        Route::name('TroCapHP.')->prefix('tro-cap-hp')->group(function () {
+            Route::get('/', [TroCapXHController::class, 'index'])->name('index');
+            Route::post('/create_view_pdf', [TroCapXHController::class, 'CreateViewPdf'])->name('CreateViewPdf');
+            Route::post('/ky_don_pdf', [TroCapXHController::class, 'KyDonPdf'])->name('KyDonPdf');
+        });
+
         Route::name('CheDoChinhSach.')->prefix('che-do-chinh-sach')->group(function () {
             Route::get('/', [CheDoChinhSachController::class, 'index'])->name('index');
             Route::post('/create_view_pdf', [CheDoChinhSachController::class, 'CreateViewPdf'])->name('CreateViewPdf');
-            Route::get('/view_pdf/{id}', [CheDoChinhSachController::class, 'viewPdf'])->name('viewPdf');
-            Route::get('/view_demo_pdf', [CheDoChinhSachController::class, 'viewDemoPdf'])->name('viewDemoPdf');
+            Route::post('/ky_don_pdf', [CheDoChinhSachController::class, 'KyDonPdf'])->name('KyDonPdf');
         });
     });
 
@@ -159,6 +162,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::middleware('role:notStudent')->group(function () {
         Route::name('MienGiamHP.')->prefix('mien-giam-hp')->group(function () {
             Route::get('tinh-so-luong', [MienGiamHPPhongDaoTaoController::class, 'tinhSoLuong'])->name('tinhSoLuong');
+        });
+        Route::name('TroCapXaHoi.')->prefix('tro-cap-xh')->group(function () {
+            Route::get('tinh-so-luong', [TroCapXaHoiPhongDaoTaoController::class, 'tinhSoLuong'])->name('tinhSoLuong');
+        });
+        Route::name('TroCapHocPhi.')->prefix('tro-cap-hp')->group(function () {
+            Route::get('tinh-so-luong', [TroCapHocPhiPhongDaoTaoController::class, 'tinhSoLuong'])->name('tinhSoLuong');
         });
     });
     Route::middleware('role:4')->group(function () {
@@ -439,3 +448,59 @@ Route::name('phieu.')->prefix('phieu')->group(function () {
     Route::get('get-data/{id?}', [PhieuController::class, 'getData'])->name('getData');
     Route::get('{id?}', [PhieuController::class, 'index'])->name('index');
 });
+
+
+// use Illuminate\Support\Facades\Storage;
+// use Yaza\LaravelGoogleDriveStorage\Gdrive;
+
+// Route::get('/t', function () {
+//     $folderName = 'demo_upload';
+//     $folderId = Gdrive::makeDir($folderName);
+
+//     $fileName = 'file_gia_test.txt';
+//     $fileContent = "Đây là nội dung file txt giả để test tải lên Google Drive.";
+
+//     $filePath = $folderName . '/' . $fileName;
+//     Storage::disk('google')->put($filePath, $fileContent);
+
+//     return 'Tải file giả lên Google Drive thành công!';
+// });
+
+// // 📥 Lấy file về (download)
+// Route::get('/down', function () {
+//     $filePath = 'demo_upload/file_gia_test.txt';
+
+//     if (Storage::disk('google')->exists($filePath)) {
+//         $content = Storage::disk('google')->get($filePath);
+//         return response($content)
+//             ->header('Content-Type', 'text/plain')
+//             ->header('Content-Disposition', 'attachment; filename="file_gia_test.txt"');
+//     } else {
+//         return 'Không tìm thấy file trên Google Drive.';
+//     }
+// });
+
+// // ✏️ Sửa nội dung file
+// Route::get('/u', function () {
+//     $filePath = 'demo_upload/file_gia_test.txt';
+
+//     if (Storage::disk('google')->exists($filePath)) {
+//         $newContent = "Nội dung đã được cập nhật vào: " . now();
+//         Storage::disk('google')->put($filePath, $newContent);
+//         return 'Đã cập nhật nội dung file thành công!';
+//     } else {
+//         return 'Không tìm thấy file để sửa.';
+//     }
+// });
+
+// // ❌ Xoá file
+// Route::get('/d', function () {
+//     $filePath = 'demo_upload/file_gia_test.txt';
+
+//     if (Storage::disk('google')->exists($filePath)) {
+//         Storage::disk('google')->delete($filePath);
+//         return 'Đã xoá file trên Google Drive thành công!';
+//     } else {
+//         return 'Không tìm thấy file để xoá.';
+//     }
+// });

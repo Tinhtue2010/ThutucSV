@@ -125,7 +125,7 @@
 
 
                             @isset($don_parent)
-                                <a href="{{ route('phieu.index', ['id' => $don_parent->phieu_id]) }}" target="_blank" class="btn btn-warning me-2">Xem đơn</a>
+                                <a href="/storage/{{ $don_parent->file_name }}" target="_blank" class="btn btn-warning me-2">Xem đơn</a>
                             @endisset
                             @if (isset($don_parent))
                                 @if ($don_parent->status <= 0)
@@ -188,28 +188,20 @@
             const formData = new FormData(form);
             validation_create.validate().then(async function(status) {
                 if (status === 'Valid') {
-                    await checkMaXacNhan().then(function(result) {
-                        if (false) {
-                            return;
-                        } else {
-                            formData.append('otp', result);
-                        }
-                    });
                     axios({
                         method: 'POST',
-                        url: "{{ route('CheDoChinhSach.CreateViewPdf') }}",
+                        url: "{{ route('CheDoChinhSach.KyDonPdf') }}",
                         data: formData,
                         headers: {
                             "Content-Type": "multipart/form-data",
                         },
                     }).then((response) => {
-                        if ($('#button_clicked').val() == 'xem_truoc') {
-                            window.open("{{ route('CheDoChinhSach.viewDemoPdf') }}", "_blank");
-                        } else {
-                            mess_success('Thông báo',
-                                "Đơn của bạn đã được gửi")
-                            location.reload();
+                        if (response.data == 0) {
+                            mess_error("Cảnh báo",
+                                "{{ __('Bạn chưa đăng ký chữ ký số cần đăng ký chữ ký số SmartCA') }}"
+                            )
                         }
+                        checkMaXacNhan(formData,response.data,'{{route('CheDoChinhSach.CreateViewPdf')}}');
 
                     }).catch(function(error) {
                         mess_error("Cảnh báo",

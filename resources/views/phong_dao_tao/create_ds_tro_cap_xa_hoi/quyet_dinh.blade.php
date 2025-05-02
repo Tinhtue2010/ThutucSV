@@ -205,6 +205,8 @@
                         const maxDate = new Date(selectedDate);
                     });
                 })
+
+                
         }
     </script>
 @endpush

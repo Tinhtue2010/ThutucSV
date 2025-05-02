@@ -122,8 +122,7 @@
 
 
                             @isset($don_parent)
-                                <a href="{{ route('phieu.index', ['id' => $don_parent->phieu_id]) }}" target="_blank"
-                                    class="btn btn-warning me-2">Xem đơn</a>
+                                <<a href="/storage/{{ $don_parent->file_name }}" target="_blank" class="btn btn-warning me-2">Xem đơn</a>
                             @endisset
                             @if (isset($don_parent))
                                 @if ($don_parent->status <= 0)

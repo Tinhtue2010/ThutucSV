@@ -26,9 +26,8 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
         ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'lops.hocphi');
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi');
 
-        
         if (isset($request->type_miengiamhp)) {
             $query->where('stop_studies.type_miengiamhp', $request->type_miengiamhp);
         }
@@ -170,7 +169,7 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
         ->whereNull('parent_id')
         ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
         ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-        ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'lops.hocphi')
+        ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi')
         ->get();
         
         $content["tong_hs"] = count($query);
@@ -230,11 +229,18 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
 
     function getQuyetDinh(Request $request)
     {
-        $phieu =  Phieu::where('key','DSTCXH')->where('status',0)->first();
-        if($phieu)
-        {
-            return json_decode($phieu->content,true)[0];
-        }
         return [];
+    }
+
+    function tinhSoLuong()
+    {
+        $trocapxh = StopStudy::where('type', 2)->where('stop_studies.status', '>', 0)
+            ->studentActive()
+            ->whereNull('parent_id')
+            ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+            ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->selectRaw('SUM(stop_studies.muctrocapxh) as hocphi, COUNT(*) as tong')
+            ->get()->toArray();
+        return $trocapxh;
     }
 }
