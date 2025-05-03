@@ -57,14 +57,11 @@
 
                     axios({
                         method: 'POST',
-                        url: "{{ route('LanhDaoTruong.TroCapXaHoi.xacnhan') }}",
+                        url: "{{ route('LanhDaoTruong.TroCapXaHoi.xacnhanPDF') }}",
                         data: form.serialize(),
                     }).then((response) => {
-                        mess_success('Thông báo',
-                            "Duyệt danh sách thành công")
-                        $(this).trigger("reset");
-                        model{{ $target }}.hide();
-                        Datatable.loadData();
+                        checkMaXacNhan(null,response.data,'{{ route('LanhDaoTruong.TroCapXaHoi.xacnhan') }}',$('[name="id"]').val(),$('[name="note"]').val())
+
                     }).catch(function(error) {
                         mess_error("Cảnh báo",
                             "{{ __('Có lỗi xảy ra.') }}"

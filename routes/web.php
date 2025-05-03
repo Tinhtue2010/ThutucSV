@@ -350,6 +350,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::name('TroCapXaHoi.')->prefix('tro-cap-xa-hoi')->group(function () {
                 Route::get('/', [TroCapXaHoiLanhDaoTruongController::class, 'index'])->name('index');
                 Route::get('get-data', [TroCapXaHoiLanhDaoTruongController::class, 'getData'])->name('getData');
+                Route::post('xacnhan-pdf', [TroCapXaHoiLanhDaoTruongController::class, 'xacnhanPDF'])->name('xacnhanPDF');
                 Route::post('xacnhan', [TroCapXaHoiLanhDaoTruongController::class, 'xacnhan'])->name('xacnhan');
                 Route::get('tuchoi', [TroCapXaHoiLanhDaoTruongController::class, 'tuchoi'])->name('tuchoi');
             });
@@ -357,6 +358,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::name('TroCapHocPhi.')->prefix('tro-cap-hoc-phi')->group(function () {
                 Route::get('/', [TroCapHocPhiLanhDaoTruongController::class, 'index'])->name('index');
                 Route::get('get-data', [TroCapHocPhiLanhDaoTruongController::class, 'getData'])->name('getData');
+                Route::post('xacnhan-pdf', [TroCapHocPhiLanhDaoTruongController::class, 'xacnhanPDF'])->name('xacnhanPDF');
                 Route::post('xacnhan', [TroCapHocPhiLanhDaoTruongController::class, 'xacnhan'])->name('xacnhan');
                 Route::get('tuchoi', [TroCapHocPhiLanhDaoTruongController::class, 'tuchoi'])->name('tuchoi');
             });

@@ -10,7 +10,6 @@ use App\Models\StopStudy;
 use App\Models\Student;
 use App\Models\User;
 use Carbon\Carbon;
-use Hamcrest\Core\HasToString;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -223,6 +222,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
                         ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
                         ->select('students.*', 'lops.name as lop_name', 'students.hocphi')
                         ->first();
+                        
                     if (!$student) {
                         return response()->json([
                             'error' => "Không tìm thấy sinh viên " . $item[$indexHeader['ho_ten']] . ", mã sinh viên là: " . $item[$indexHeader['ma_sinh_vien']],
@@ -231,10 +231,9 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
                         ], 500);
                     }
                     $check_phieu = StopStudy::where('student_id', $student->id)->where('type', 4)
-                        ->where('status', '>=', 1)
+                        ->where('status', '>=', 0)
                         ->whereNull('parent_id')
                         ->first();
-
                     if ($check_phieu) {
                         $che_do_chinh_sach_data = json_decode($check_phieu->che_do_chinh_sach_data, true);
                         $che_do_chinh_sach_data["diem"] = [
@@ -256,6 +255,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
                             $check_phieu->doi_tuong_chinh_sach = json_encode(["3", "4"]);
                         }
                         $check_phieu->che_do_chinh_sach_data = json_encode($che_do_chinh_sach_data);
+                        $check_phieu->status = 2;
                         $check_phieu->save();
                     } else {
                         $don = new StopStudy();
@@ -529,10 +529,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
             ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi')
             ->get();
 
-        $content_DSCDTA = [];
         $content_DSCDHP = [];
-        $content_DSCDKTX_1 = [];
-        $content_DSCDKTX_4 = [];
 
         $content["tong_hs_cdta"] = 0;
         $content["tong_hs_cdhp"] = 0;
@@ -545,15 +542,6 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
                 if (strpos($item->doi_tuong_chinh_sach, '2') !== false) {
                     $doituong = 2;
                 }
-                $content_DSCDTA[] =  [
-                    "ho_ten" => $item->full_name,
-                    "ngay_sinh" => Carbon::createFromFormat('Y-m-d', $item->date_of_birth)->format('d/m/Y'),
-                    "lop" => $item->lop_name,
-                    "doi_tuong" => 'Đối tượng ' . $doituong,
-                    "muc_tro_cap" => 600000,
-                    "so_thang_tro_cap" => 5,
-                    "tro_cap_ky" => 5 * 600000
-                ];
                 $content["tong_cdta"] += 5 * 600000;
                 $content["tong_hs_cdta"] += 1;
             }
@@ -595,131 +583,67 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
                 $che_do_chinh_sach_data = json_decode($item->che_do_chinh_sach_data, true);
 
                 if (strpos($item->doi_tuong_chinh_sach, '1') !== false) {
-                    $content_DSCDKTX_1[] =  [
-                        "ho_ten" => $item->full_name,
-                        "ngay_sinh" => Carbon::createFromFormat('Y-m-d', $item->date_of_birth)->format('d/m/Y'),
-                        "lop" => $item->lop_name,
-                        "doi_tuong" => 'Đối tượng ' . $doituong,
-                        "ngay_vao" => $che_do_chinh_sach_data["ktx"]["bat_dau"] ?? "",
-                        "so_thang" => $che_do_chinh_sach_data["ktx"]["so_thang"] ?? 0,
-                    ];
                     $content["tong_hs_cdktx_1"] += 1;
                 } else {
-                    $content_DSCDKTX_4[] =  [
-                        "ho_ten" => $item->full_name,
-                        "ngay_sinh" => Carbon::createFromFormat('Y-m-d', $item->date_of_birth)->format('d/m/Y'),
-                        "lop" => $item->lop_name,
-                        "doi_tuong" => 'Đối tượng ' . $doituong,
-                        "diem_ht" => $che_do_chinh_sach_data["diem"]["diemtb"],
-                        "diem_rl" => $che_do_chinh_sach_data["diem"]["diemrenluyen"],
-                        "dia_chi" => $item->diachi ?? "",
-                        "km" => $item->km ?? "",
-                        "ngay_vao" => $che_do_chinh_sach_data["ktx"]["bat_dau"] ?? "",
-                        "so_thang" => $che_do_chinh_sach_data["ktx"]["so_thang"] ?? 0,
-                    ];
                     $content["tong_hs_cdktx_4"] += 1;
                 }
             }
         }
 
-        Phieu::updateOrCreate(
-            [
-                'key' => 'DSCDTA',
-                'status' => 0
-            ],
-            [
-                'name' => 'Danh sách sinh viên được hưởng hỗ trợ tiền ăn (Điều f,g, khoản 3, điều 1)',
-                'content' => json_encode([$content, $content_DSCDTA], true)
-            ]
-        );
-        Phieu::updateOrCreate(
-            [
-                'key' => 'QDCDTA',
-                'status' => 0
-            ],
-            [
-                'name' => 'Quyết định sinh viên được hưởng hỗ trợ tiền ăn (Điều f,g, khoản 3, điều 1)',
-                'content' => json_encode([$content, 0], true)
-            ]
-        );
 
-        Phieu::updateOrCreate(
-            [
-                'key' => 'DSCDHP',
-                'status' => 0
-            ],
-            [
-                'name' => 'Danh sách sinh viên được hưởng hỗ trợ học phí (Điều c, g, khoản 3, điều 1)',
-                'content' => json_encode([$content, $content_DSCDHP], true)
-            ]
-        );
-        Phieu::updateOrCreate(
-            [
-                'key' => 'QDCDHP',
-                'status' => 0
-            ],
-            [
-                'name' => 'Quyết định sinh viên được hưởng hỗ trợ học phí (Điều c, g, khoản 3, điều 1)',
-                'content' => json_encode([$content, 0], true)
-            ]
-        );
+        $phieu1 = new Phieu();
+        $phieu1->key = 'DSCDHP';
+        $phieu1->status = 0;
+        $phieu1->name = 'Danh sách sinh viên được hưởng hỗ trợ học phí (Điều c, g, khoản 3, điều 1)';
+        $phieu1->content = json_encode([$content, $content_DSCDHP], true);
+        $base64 = $this->createPDF($phieu1, 1);
+        $file_list = $this->saveBase64AsPdf($base64, 'CHE_DO_CHINH_SACH/' . $year . '/' . $month, 'ds_che_do_chinh_sach');
 
+        
+        $phieu2 = new Phieu();
+        $phieu2->key = 'QDCDHP';
+        $phieu2->status = 0;
+        $phieu2->name = 'Quyết định sinh viên được hưởng hỗ trợ học phí (Điều c, g, khoản 3, điều 1)';
+        $phieu2->content = json_encode([$content, 0], true);
+        $base64 = $this->createPDF($phieu2);
+        $file_quyet_dinh = $this->saveBase64AsPdf($base64, 'CHE_DO_CHINH_SACH/' . $year . '/' . $month, 'qd_che_do_chinh_sach');
 
-        Phieu::updateOrCreate(
-            [
-                'key' => 'DSCDKTX1',
-                'status' => 0
-            ],
-            [
-                'name' => 'Danh sách sinh viên được hỗ trợ chỗ ở (Điểm g, khoản 3, điều 1)',
-                'content' => json_encode([$content, $content_DSCDKTX_1], true)
-            ]
-        );
+        $hoso = HoSo::where('ky_hoc', $request->ky)
+            ->where('nam_hoc', $request->nam)
+            ->where('type', 5)
+            ->latest('created_at')
+            ->first();
 
-        Phieu::updateOrCreate(
-            [
-                'key' => 'DSCDKTX4',
-                'status' => 0
-            ],
-            [
-                'name' => 'Danh sách sinh viên được hỗ trợ chỗ ở  (Điểm e, khoản 3, điều 1)',
-                'content' => json_encode([$content, $content_DSCDKTX_4], true)
-            ]
-        );
+        if ($hoso) {
+            if ($hoso->file_quyet_dinh != $file_quyet_dinh) {
+                $this->deletePdf($hoso->file_quyet_dinh);
+            }
+            if ($hoso->file_list != $file_list) {
+                $this->deletePdf($hoso->file_list);
+            }
+
+            $hoso->update([
+                'name' => "Chế độ chính sách",
+                'file_quyet_dinh' => $file_quyet_dinh,
+                'file_list' => $file_list,
+                'list_info' => json_encode($content_DSCDHP, true),
+                'type' => 3
+            ]);
+        } else {
+            $hoso = HoSo::create([
+                'name' => "Chế độ chính sách",
+                'file_quyet_dinh' => $file_quyet_dinh,
+                'file_list' => $file_list,
+                'ky_hoc' => $request->ky,
+                'nam_hoc' => $request->nam,
+                'list_info' => json_encode($content_DSCDHP, true),
+                'type' => 3
+            ]);
+        }
+
+        return true;
 
 
-        Phieu::updateOrCreate(
-            [
-                'key' => 'QDCDKTX1',
-                'status' => 0
-            ],
-            [
-                'name' => 'Danh sách sinh viên được hỗ trợ chỗ ở (Điểm g, khoản 3, điều 1)',
-                'content' => json_encode([$content, $content_DSCDKTX_1], true)
-            ]
-        );
-
-        Phieu::updateOrCreate(
-            [
-                'key' => 'QDCDKTX4',
-                'status' => 0
-            ],
-            [
-                'name' => 'Danh sách sinh viên được hỗ trợ chỗ ở  (Điểm e, khoản 3, điều 1)',
-                'content' => json_encode([$content, $content_DSCDKTX_4], true)
-            ]
-        );
-
-        Phieu::updateOrCreate(
-            [
-                'key' => 'PTQT4',
-                'status' => 0
-            ],
-            [
-                'name' => 'Phiếu trình chế độ chính sách',
-                'content' => json_encode([$content, $content_DSCDKTX_4], true)
-            ]
-        );
     }
     public function xepLoaiHocLuc($diemtb, $diemrenluyen)
     {

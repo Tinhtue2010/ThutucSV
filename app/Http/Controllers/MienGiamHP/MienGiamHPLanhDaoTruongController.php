@@ -84,7 +84,7 @@ class MienGiamHPLanhDaoTruongController extends Controller
                 $info_signature,
                 $this->convertPdfToBase64($newFilename),
                 $user->cccd,
-                'QUYET_DINH_MIEN_GIAM_HP_' . $hoso->file_quyet_dinh
+                'MIEN_GIAM_HP_PDT'. $hoso->file_quyet_dinh
             );
         } catch (QueryException $e) {
             abort(404);

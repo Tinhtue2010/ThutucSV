@@ -62,8 +62,8 @@
                                 <th></th>
                                 <th class="text-nowrap" data-name="id">{{__('id')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Tên hồ sơ')}}</th>
-                                <th class="text-nowrap" data-name="id">{{__('Sinh viên')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Phân loại')}}</th>
+                                <th class="text-nowrap" data-name="id">{{__('File')}}</th>
                             </tr>
                             </thead>
                             <tbody class="fw-semibold text-gray-600">

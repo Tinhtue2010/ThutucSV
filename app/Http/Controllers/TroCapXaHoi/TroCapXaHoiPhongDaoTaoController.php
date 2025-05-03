@@ -249,8 +249,6 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
             ]);
         }
 
-
-
         return true;
     }
     function xoaQuyetDinh()

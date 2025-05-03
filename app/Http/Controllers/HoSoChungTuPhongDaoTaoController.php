@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HoSo;
 use App\Models\Phieu;
 use App\Models\StopStudy;
 use Illuminate\Http\Request;
@@ -16,20 +17,14 @@ class HoSoChungTuPhongDaoTaoController extends Controller
 
     function getData(Request $request)
     {
-        $query = Phieu::leftJoin('students', 'phieus.student_id', '=', 'students.id')
-            ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('phieus.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name');
-
-        if (isset($request->group)) {
-            $query->where('key',  $request->group);
-        }
-
+        $query = HoSo::query();
+    
         if (isset($request->type)) {
         }
         if (isset($request->year)) {
-            $query->whereYear('phieus.created_at', $request->year);
+            $query->whereYear('created_at', $request->year);
         }
-        $data = $this->queryPagination($request, $query, ['phieus.name', 'students.student_code', 'lops.name']);
+        $data = $this->queryPagination($request, $query, []);
         return $data;
     }
     function saveAll(Request $request)

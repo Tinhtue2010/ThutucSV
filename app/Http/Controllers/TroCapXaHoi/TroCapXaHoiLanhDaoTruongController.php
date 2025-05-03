@@ -18,9 +18,9 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
     {
         $lop = Lop::get();
         $hoso = HoSo::where('type', 3)->where('status', 0)
-        ->latest('created_at')
-        ->first();
-        return view('lanh_dao_truong.ds_tro_cap_xa_hoi.index', ['lop' => $lop,'hoso'=>$hoso]);
+            ->latest('created_at')
+            ->first();
+        return view('lanh_dao_truong.ds_tro_cap_xa_hoi.index', ['lop' => $lop, 'hoso' => $hoso]);
     }
 
     function getData(Request $request)
@@ -46,9 +46,62 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
 
         return $data;
     }
+    function xacnhanPDF(Request $request)
+    {
+        $user = Auth::user();
+        $hoso = HoSo::where('type', 3)->where('status', 0)
+            ->latest('created_at')
+            ->first();
+        if (!isset($hoso)) {
+            return 0;
+        }
+        $teacher = Teacher::where('id', $user->teacher_id)->first();
 
+        $info_signature = $this->getInfoSignature($user->cccd);
+        if (!$info_signature) {
+            return 0;
+        }
+
+        $oldFilename = $hoso->file_quyet_dinh;
+        $pathInfo = pathinfo($oldFilename);
+        $newFilename = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '-tmp.pdf';
+
+        $this->mergeImageWithTextIntoPdf(
+            storage_path('app/public/' . $oldFilename),
+            storage_path('app/public/' . $teacher->chu_ky),
+            storage_path('app/public/' . $newFilename),
+            $teacher->full_name,
+            1,
+            120,
+            260
+        );
+
+        return $this->craeteSignature(
+            $info_signature,
+            $this->convertPdfToBase64($newFilename),
+            $user->cccd,
+            'TRO_CAP_XH_PDT-' . $hoso->file_quyet_dinh
+        );
+    }
     function xacnhan(Request $request)
     {
+        $hoso = HoSo::where('type', 3)->where('status', 0)
+            ->latest('created_at')
+            ->first();
+        if (!isset($hoso)) {
+            return 0;
+        }
+
+        $getPDF = $this->getPDF($request->fileId, $request->tranId, $request->transIDHash);
+        if (!$getPDF) {
+            return 0;
+        }
+
+        $file_name = $this->saveBase64AsPdf($getPDF, 'TRO_CAP_XH_PDT');
+        $this->deletePdfAndTmp($hoso->file_quyet_dinh, $file_name);
+
+        $hoso->update(["file_quyet_dinh" => $file_name]);
+
         $query = StopStudy::where('type', 2)
             ->studentActive()
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
@@ -60,27 +113,6 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
             ->select('stop_studies.*')
             ->get();
 
-
-        $phieu = Phieu::where('key', 'QDTCXH')->where('status', 0)->first();
-
-        $content = json_decode($phieu->content, true);
-        $teacher = Teacher::find(Auth::user()->teacher_id);
-
-        $content[0]['canbo_truong'] = $teacher->full_name;;
-        $content[0]['canbo_truong_chu_ky'] = $teacher->chu_ky;
-        $phieu->content = json_encode($content, true);
-        $phieu->save();
-
-        $phieu = Phieu::where('key', 'PTTCXH')->where('status', 0)->first();
-
-
-        $content[0]['canbo_truong'] = $teacher->full_name;;
-        $content[0]['canbo_truong_chu_ky'] = $teacher->chu_ky;
-        $phieu->content = json_encode($content, true);
-        $phieu->save();
-
-
-
         foreach ($query as $stopStudy) {
             $this->giaiQuyetCongViec($request->ykientiepnhan ?? '', $stopStudy, 4);
             $stopStudy->status = 6;
@@ -88,7 +120,6 @@ class TroCapXaHoiLanhDaoTruongController extends Controller
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = null;
             $newStopStudy->parent_id = $stopStudy->id;
             $newStopStudy->note = "Lãnh đạo trường đã phê duyệt danh sách";
             $newStopStudy->save();

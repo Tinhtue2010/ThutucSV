@@ -18,17 +18,17 @@ class TroCapHocPhiLanhDaoTruongController extends Controller
     {
         $lop = Lop::get();
         $hoso = HoSo::where('type', 4)->where('status', 0)
-        ->latest('created_at')
-        ->first();
-        return view('lanh_dao_truong.ds_tro_cap_hoc_phi.index', ['lop' => $lop,'hoso'=>$hoso]);
+            ->latest('created_at')
+            ->first();
+        return view('lanh_dao_truong.ds_tro_cap_hoc_phi.index', ['lop' => $lop, 'hoso' => $hoso]);
     }
 
     function getData(Request $request)
     {
         $query = StopStudy::where('type', 3)
-        ->studentActive()
-        ->whereNull('parent_id')->whereNull('parent_id')
-        ->whereNull('parent_id')
+            ->studentActive()
+            ->whereNull('parent_id')->whereNull('parent_id')
+            ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi');
@@ -46,47 +46,80 @@ class TroCapHocPhiLanhDaoTruongController extends Controller
 
         return $data;
     }
+    function xacnhanPDF(Request $request)
+    {
+        $user = Auth::user();
+        $hoso = HoSo::where('type', 4)->where('status', 0)
+            ->latest('created_at')
+            ->first();
+        if (!isset($hoso)) {
+            return 0;
+        }
+        $teacher = Teacher::where('id', $user->teacher_id)->first();
 
-    function xacnhan(Request $request) {
+        $info_signature = $this->getInfoSignature($user->cccd);
+        if (!$info_signature) {
+            return 0;
+        }
+
+        $oldFilename = $hoso->file_quyet_dinh;
+        $pathInfo = pathinfo($oldFilename);
+        $newFilename = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '-tmp.pdf';
+
+        $this->mergeImageWithTextIntoPdf(
+            storage_path('app/public/' . $oldFilename),
+            storage_path('app/public/' . $teacher->chu_ky),
+            storage_path('app/public/' . $newFilename),
+            $teacher->full_name,
+            1,
+            120,
+            260
+        );
+
+        return $this->craeteSignature(
+            $info_signature,
+            $this->convertPdfToBase64($newFilename),
+            $user->cccd,
+            'TRO_CAP_HP_PDT-' . $hoso->file_quyet_dinh
+        );
+    }
+    function xacnhan(Request $request)
+    {
+        $hoso = HoSo::where('type', 4)->where('status', 0)
+            ->latest('created_at')
+            ->first();
+        if (!isset($hoso)) {
+            return 0;
+        }
+
+        $getPDF = $this->getPDF($request->fileId, $request->tranId, $request->transIDHash);
+        if (!$getPDF) {
+            return 0;
+        }
+
+        $file_name = $this->saveBase64AsPdf($getPDF, 'TRO_CAP_HP_PDT');
+        $this->deletePdfAndTmp($hoso->file_quyet_dinh, $file_name);
+
+        $hoso->update(["file_quyet_dinh" => $file_name]);
+
         $query = StopStudy::where('type', 3)
-        ->studentActive()
-        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-        ->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
-            $query->where('stop_studies.status', 5)
-                  ->orWhere('stop_studies.status', 6)
-                  ->orWhere('stop_studies.status', -6);
-        })
-        ->select('stop_studies.*')
-        ->get();
+            ->studentActive()
+            ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+            ->whereNull('parent_id')->whereNull('parent_id')->where(function ($query) {
+                $query->where('stop_studies.status', 5)
+                    ->orWhere('stop_studies.status', 6)
+                    ->orWhere('stop_studies.status', -6);
+            })
+            ->select('stop_studies.*')
+            ->get();
 
-
-        $phieu = Phieu::where('key', 'QDTCHP')->where('status', 0)->first();
-
-        $content = json_decode($phieu->content, true);
-        $teacher = Teacher::find(Auth::user()->teacher_id);
-
-        $content[0]['canbo_truong'] = $teacher->full_name;;
-        $content[0]['canbo_truong_chu_ky'] = $teacher->chu_ky;
-        $phieu->content = json_encode($content, true);
-        $phieu->save();
-
-        $phieu = Phieu::where('key', 'PTTCHP')->where('status', 0)->first();
-
-        $content = json_decode($phieu->content, true);
-        $content[0]['canbo_truong'] = $teacher->full_name;;
-        $content[0]['canbo_truong_chu_ky'] = $teacher->chu_ky;
-        $phieu->content = json_encode($content, true);
-        $phieu->save();
-
-        
         foreach ($query as $stopStudy) {
-            $this->giaiQuyetCongViec($request->ykientiepnhan ?? '',$stopStudy,4);
-            $stopStudy->status = 6; 
-            $stopStudy->save();  
+            $this->giaiQuyetCongViec($request->ykientiepnhan ?? '', $stopStudy, 4);
+            $stopStudy->status = 6;
+            $stopStudy->save();
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = null;
             $newStopStudy->parent_id = $stopStudy->id;
             $newStopStudy->note = "Lãnh đạo trường đã phê duyệt danh sách";
             $newStopStudy->save();
@@ -94,20 +127,21 @@ class TroCapHocPhiLanhDaoTruongController extends Controller
         return redirect()->back();
     }
 
-    function tuchoi() {
+    function tuchoi()
+    {
         $query = StopStudy::where('type', 3)
-        ->studentActive()
-        ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
-        ->whereNull('parent_id')->where(function($query) {
-            $query->where('stop_studies.status', 5)
-                  ->orWhere('stop_studies.status', 6)
-                  ->orWhere('stop_studies.status', -6);
-        })
-        ->select('stop_studies.*')
-        ->get();
+            ->studentActive()
+            ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
+            ->whereNull('parent_id')->where(function ($query) {
+                $query->where('stop_studies.status', 5)
+                    ->orWhere('stop_studies.status', 6)
+                    ->orWhere('stop_studies.status', -6);
+            })
+            ->select('stop_studies.*')
+            ->get();
         foreach ($query as $stopStudy) {
-            $stopStudy->status = -6; 
-            $stopStudy->save();  
+            $stopStudy->status = -6;
+            $stopStudy->save();
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 0;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;

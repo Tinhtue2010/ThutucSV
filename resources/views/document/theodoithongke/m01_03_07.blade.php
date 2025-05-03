@@ -12,6 +12,9 @@
             content: "- ";
             /* Thêm dấu gạch ngang trước mỗi mục */
         }
+body{
+    font-size: 14px!important;
+}
     </style>
     <div id="doc_view" class="A4 d-flex flex-column">
         <table style="width: 100%;">
@@ -33,7 +36,7 @@
             </tr>
         </table>
         
-        <div class="text-center fw-bold" style="margin-top: 30px; text-transform: uppercase">
+        <div class="text-center fw-bold" style="margin-top: 10px; text-transform: uppercase">
             QUYẾT ĐỊNH
         </div>
         <div class="fw-bold text-center mx-auto">
@@ -48,7 +51,7 @@
                     margin-left: auto;
                     margin-right: auto;
                     "></div>
-        <div class="text-center fw-bold mb-2" style="margin-top: 30px; text-transform: uppercase">
+        <div class="text-center fw-bold mb-2" style="margin-top: 10px; text-transform: uppercase">
             HIỆU TRƯỞNG TRƯỜNG ĐẠI HỌC HẠ LONG
         </div>
 
@@ -92,7 +95,7 @@
         </div>
 
 
-        <table style="width: 100%; margin-top: 10px; font-size: 13px;">
+        <table style="width: 100%; margin-top: 5px; font-size: 13px;">
             <tr>
                 <td style="width: 60%; vertical-align: top; padding-left: 30px;">
                     <div class="fw-bold fst-italic">Nơi nhận:</div>

@@ -31,7 +31,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name','students.hocphi');
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi');
 
         if (isset($request->type_miengiamhp)) {
             $query->where('stop_studies.type_miengiamhp', $request->type_miengiamhp);
@@ -104,7 +104,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name','students.hocphi')
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi')
             ->get();
 
         $content["tong_hs"] = count($query);
@@ -145,7 +145,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
         $phieu->content = json_encode([$content, $content_DSMGHP], true);
 
         $base64 = $this->createPDF($phieu, 1);
-        $file_list = $this->saveBase64AsPdf($base64, 'MIEN_GIAM_HP_PDT','ds_mien_giam_hp_');
+        $file_list = $this->saveBase64AsPdf($base64, 'MIEN_GIAM_HP_PDT', 'ds_mien_giam_hp_');
 
 
         $phieu =  new Phieu();
@@ -154,7 +154,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
         $phieu->content = json_encode([$content, 0], true);
 
         $base64 = $this->createPDF($phieu);
-        $file_quyet_dinh = $this->saveBase64AsPdf($base64, 'MIEN_GIAM_HP_PDT','qd_mien_giam_hp_');
+        $file_quyet_dinh = $this->saveBase64AsPdf($base64, 'MIEN_GIAM_HP_PDT', 'qd_mien_giam_hp_');
         // Tìm hồ sơ hiện có
         $hoso = HoSo::where('ky_hoc', $request->ky)
             ->where('nam_hoc', $request->nam)
@@ -211,10 +211,10 @@ class MienGiamHPPhongDaoTaoController extends Controller
         $hoso->delete();
 
         $query = StopStudy::where('type', 1)
-        ->whereNull('parent_id')->get();
+            ->whereNull('parent_id')->get();
         foreach ($query as $stopStudy) {
-            $stopStudy->status = 0; 
-            $stopStudy->save();  
+            $stopStudy->status = 0;
+            $stopStudy->save();
         }
         return redirect()->back();
     }
@@ -252,14 +252,14 @@ class MienGiamHPPhongDaoTaoController extends Controller
             ->where('stop_studies.status', 3)
             ->select('stop_studies.*')
             ->get();
-            $hoso = HoSo::where('type', 2)->where('status', 0)
+        $hoso = HoSo::where('type', 2)->where('status', 0)
             ->latest('created_at')
             ->first();
         foreach ($query as $stopStudy) {
             $stopStudy->status = 4;
             $stopStudy->save();
             $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
-            $this->notification("Danh sách miễn giảm học phí dự kiến",null, $hoso->file_list, "GHP", $user_id);
+            $this->notification("Danh sách miễn giảm học phí dự kiến", null, $hoso->file_list, "GHP", $user_id);
 
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
@@ -274,7 +274,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
                 ->orWhere('role', 3);
         })->get();
         foreach ($users as $item) {
-            $this->notification("Danh sách miễn giảm học phí dự kiến",null, $hoso->file_list,  "GHP", $item->id);
+            $this->notification("Danh sách miễn giảm học phí dự kiến", null, $hoso->file_list,  "GHP", $item->id);
         }
 
         return redirect()->back();
@@ -286,13 +286,13 @@ class MienGiamHPPhongDaoTaoController extends Controller
         if (!$hoso || empty($hoso->list_info)) {
             return redirect()->back();
         }
-    
+
         $data = json_decode($hoso->list_info, true);
         $studentCodes = array_column($data, 'student_code');
-    
+
         $users = !empty($studentCodes) ? User::whereIn('student_id', $studentCodes)->get() : collect();
         $teachers = User::whereNotNull('teacher_id')->whereIn('role', [2, 3])->get();
-    
+
         $stopStudies = StopStudy::where('type', 1)
             ->studentActive()
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
@@ -300,7 +300,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
             ->whereIn('stop_studies.status', [3, 6])
             ->select('stop_studies.*')
             ->get();
-    
+
         if ($stopStudies->where('status', 6)->isNotEmpty()) {
             foreach ($users as $user) {
                 $this->notification("Danh sách miễn giảm học phí", null, $hoso->file_list, "GHP", $user->id);
@@ -312,10 +312,10 @@ class MienGiamHPPhongDaoTaoController extends Controller
             }
             $stopStudies->where('status', 3)->each(fn($stopStudy) => $stopStudy->update(['status' => 4]));
         }
-    
+
         return redirect()->back();
     }
-    
+
 
     function tinhSoLuong()
     {
