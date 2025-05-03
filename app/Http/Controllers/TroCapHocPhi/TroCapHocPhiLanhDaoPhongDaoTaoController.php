@@ -15,7 +15,7 @@ class TroCapHocPhiLanhDaoPhongDaoTaoController extends Controller
     function index()
     {
         $lop = Lop::get();
-        $hoso = HoSo::where('type', 4)
+        $hoso = HoSo::where('type', 4)->where('status', 0)
         ->latest('created_at')
         ->first();
         return view('lanh_dao_phong_dao_tao.ds_tro_cap_hoc_phi.index', ['lop' => $lop,'hoso'=>$hoso]);
@@ -60,7 +60,6 @@ class TroCapHocPhiLanhDaoPhongDaoTaoController extends Controller
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = null;
             $newStopStudy->parent_id = $stopStudy->id;
             $newStopStudy->note = "Cán bộ phòng đào tạo duyệt danh sách";
             $newStopStudy->save();

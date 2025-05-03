@@ -16,7 +16,7 @@ class TroCapXaHoiKeHoachTaiChinhController extends Controller
     function index()
     {
         $lop = Lop::get();
-        $hoso = HoSo::where('type', 3)
+        $hoso = HoSo::where('type', 3)->where('status', 0)
         ->latest('created_at')
         ->first();
         return view('ke_hoach_tai_chinh.ds_tro_cap_xa_hoi.index', ['lop' => $lop,'hoso'=>$hoso]);

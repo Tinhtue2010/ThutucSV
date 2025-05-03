@@ -15,7 +15,7 @@ class MienGiamHPCanBoPhongDaoTaoController extends Controller
     function index()
     {
         $lop = Lop::get();
-        $hoso = HoSo::where('type', 2)
+        $hoso = HoSo::where('type', 2)->where('status', 0)
         ->latest('created_at')
         ->first();
         return view('lanh_dao_phong_dao_tao.ds_mien_giam_hp.index', ['lop' => $lop,'hoso'=>$hoso]);

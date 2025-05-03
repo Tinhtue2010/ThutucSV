@@ -17,7 +17,7 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
     function index()
     {
         $lop = Lop::get();
-        $hoso = HoSo::where('type', 3)
+        $hoso = HoSo::where('type', 3)->where('status', 0)
             ->latest('created_at')
             ->first();
 
@@ -98,7 +98,7 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
             ->where('stop_studies.status', 3)
             ->select('stop_studies.*')
             ->get();
-        $hoso = HoSo::where('type', 3)
+        $hoso = HoSo::where('type', 3)->where('status', 0)
             ->latest('created_at')
             ->first();
         foreach ($query as $stopStudy) {
@@ -127,15 +127,16 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
     function guiTBSALL()
     {
 
-        $phieu = Phieu::where('key', 'DSTCXH')->orderBy('created_at', 'desc')->first();
+        $hoso = HoSo::where('type', 3)->where('status', 0)
+            ->latest('created_at')
+            ->first();
 
         $users = User::get();
         foreach ($users as $item) {
-            $this->notification("Danh sách trợ cấp xã hội", $phieu->id, "TCXH", $item->id);
+            $this->notification("Danh sách trợ cấp xã hội", null, $hoso->file_list,  "TCXH", $item->id);
         }
 
 
-        $phieu = Phieu::where('status', 0)->update(['status' => 1]);
         $query = StopStudy::where('type', 2)
             ->studentActive()
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')

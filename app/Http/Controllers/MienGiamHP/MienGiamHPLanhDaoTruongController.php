@@ -17,7 +17,7 @@ class MienGiamHPLanhDaoTruongController extends Controller
     function index()
     {
         $lop = Lop::get();
-        $hoso = HoSo::where('type', 2)
+        $hoso = HoSo::where('type', 2)->where('status', 0)
         ->latest('created_at')
         ->first();
         return view('lanh_dao_truong.ds_mien_giam_hp.index', ['lop' => $lop,'hoso'=>$hoso]);
@@ -51,7 +51,7 @@ class MienGiamHPLanhDaoTruongController extends Controller
         
         try {
             $user = Auth::user();
-            $hoso = HoSo::where('type', 2)
+            $hoso = HoSo::where('type', 2)->where('status', 0)
                 ->latest('created_at')
                 ->first();
             if (!isset($hoso)) {
@@ -95,7 +95,7 @@ class MienGiamHPLanhDaoTruongController extends Controller
     {
         DB::beginTransaction();
         try {
-            $hoso = HoSo::where('type', 2)
+            $hoso = HoSo::where('type', 2)->where('status', 0)
                 ->latest('created_at')
                 ->first();
             if (!isset($hoso)) {

@@ -46,7 +46,7 @@
                         <a href="{{ route('PhongDaoTao.CheDoChinhSach.xoaQuyetDinh') }}" class="btn btn-danger ms-3">Xóa quyết định</a>
                         <a href="{{ route('PhongDaoTao.CheDoChinhSach.guiTBSALL') }}" class="btn btn-success ms-3">Thông báo và khóa DS</a>
                     </div>
-                    <div class="d-flex align-items-center gap-2 gap-lg-3 mt-3 w-100">
+                    <div class="d-none align-items-center gap-2 gap-lg-3 mt-3 w-100">
                         <div id="import-file-diem-sv" class="btn btn-flex btn-outline h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
                             <input class="cursor-pointer m-0 p-0 top-0 left-0 w-100 h-100 position-absolute" style="opacity: 0" type="file" id="avatar" name="avatar" accept=".csv" />
                             {{ __('Thêm danh sách danh điểm sinh viên thuộc 20%') }}

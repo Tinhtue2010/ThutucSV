@@ -53,6 +53,8 @@
                                 báo và khóa DS</a>
                         @endif
                     </div>
+                    <div id="tinhtong" class="me-auto ms-0">
+                    </div> 
                 </div>
                 <!--end::Toolbar wrapper-->
             </div>

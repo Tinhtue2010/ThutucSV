@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\CheDoChinhSach;
 
 use App\Http\Controllers\Controller;
+use App\Models\HoSo;
 use App\Models\Lop;
 use App\Models\Phieu;
 use App\Models\StopStudy;
@@ -19,12 +20,10 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
     function index()
     {
         $lop = Lop::get();
-        $phieu_2 = Phieu::where('status', 1)
-            ->where('key', 'DSMGHP')
-            ->orderBy('created_at', 'desc')
-            ->take(3)
-            ->get();
-        return view('phong_dao_tao.create_ds_che_do_chinh_sach.index', ['lop' => $lop, 'phieu_2' => $phieu_2]);
+        $hoso = HoSo::where('type', 5)->where('status', 0)
+        ->latest('created_at')
+        ->first();
+        return view('phong_dao_tao.create_ds_che_do_chinh_sach.index', ['lop' => $lop, 'hoso' => $hoso]);
     }
 
     function getData(Request $request)

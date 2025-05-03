@@ -18,7 +18,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
     function index()
     {
         $lop = Lop::get();
-        $hoso = HoSo::where('type', 2)
+        $hoso = HoSo::where('type', 2)->where('status', 0)
             ->latest('created_at')
             ->first();
         return view('phong_dao_tao.create_ds_mien_giam_hp.index', ['lop' => $lop, 'hoso' => $hoso]);
@@ -203,7 +203,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
     }
     function xoaQuyetDinh()
     {
-        $hoso = HoSo::where('type', 2)
+        $hoso = HoSo::where('type', 2)->where('status', 0)
             ->latest('created_at')
             ->first();
         $this->deletePdf($hoso->file_quyet_dinh);
@@ -252,7 +252,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
             ->where('stop_studies.status', 3)
             ->select('stop_studies.*')
             ->get();
-            $hoso = HoSo::where('type', 2)
+            $hoso = HoSo::where('type', 2)->where('status', 0)
             ->latest('created_at')
             ->first();
         foreach ($query as $stopStudy) {
@@ -282,7 +282,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
 
     function guiTBSALL()
     {
-        $hoso = HoSo::where('type', 2)->latest('created_at')->first();
+        $hoso = HoSo::where('type', 2)->where('status', 0)->latest('created_at')->first();
         if (!$hoso || empty($hoso->list_info)) {
             return redirect()->back();
         }

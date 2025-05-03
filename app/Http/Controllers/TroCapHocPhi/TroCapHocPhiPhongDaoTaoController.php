@@ -17,7 +17,7 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
     function index()
     {
         $lop = Lop::get();
-        $hoso = HoSo::where('type', 4)
+        $hoso = HoSo::where('type', 4)->where('status', 0)
             ->latest('created_at')
             ->first();
         return view('phong_dao_tao.create_ds_tro_cap_hoc_phi.index', ['lop' => $lop, 'hoso' => $hoso]);
@@ -92,8 +92,9 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
     function guiTBSV()
     {
 
-        $phieu = Phieu::where('key', 'DSTCHP')->orderBy('created_at', 'desc')->first();
-
+        $hoso = HoSo::where('type', 4)->where('status', 0)
+            ->latest('created_at')
+            ->first();
 
         $query = StopStudy::where('type', 3)
             ->studentActive()
@@ -106,22 +107,21 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
             $stopStudy->status = 4;
             $stopStudy->save();
             $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
-            $this->notification("Danh sách trợ cấp chi phí học tập dự kiến", $phieu->id, "TCXH", $user_id);
+            $this->notification("Danh sách trợ cấp chi phí học tập dự kiến", null,$hoso->file_list, "TCXH", $user_id);
 
-            $users = User::where(function ($query) {
-                $query->where('role', 2)
-                    ->orWhere('role', 3);
-            })->get();
-            foreach ($users as $item) {
-                $this->notification("Danh sách trợ cấp chi phí học tập dự kiến", null, "TCXH", $item->id);
-            }
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = null;
             $newStopStudy->parent_id = $stopStudy->id;
             $newStopStudy->note = "Gửi thông báo về danh sách";
             $newStopStudy->save();
+        }
+        $users = User::where(function ($query) {
+            $query->where('role', 2)
+                ->orWhere('role', 3);
+        })->get();
+        foreach ($users as $item) {
+            $this->notification("Danh sách trợ cấp chi phí học tập dự kiến", null,$hoso->file_list, "TCXH", $item->id);
         }
         return redirect()->back();
     }
@@ -129,15 +129,17 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
     function guiTBSALL()
     {
 
-        $phieu = Phieu::where('key', 'DSTCHP')->orderBy('created_at', 'desc')->first();
+        $hoso = HoSo::where('type', 4)->where('status', 0)
+            ->latest('created_at')
+            ->first();
+        
 
         $users = User::get();
         foreach ($users as $item) {
-            $this->notification("Danh sách trợ cấp chi phí học tập", $phieu->id, "TCXH", $item->id);
+            $this->notification("Danh sách trợ cấp chi phí học tập", null,$hoso->file_list, "TCXH", $item->id);
         }
 
 
-        $phieu = Phieu::where('status', 0)->update(['status' => 1]);
         $query = StopStudy::where('type', 3)
             ->studentActive()
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
