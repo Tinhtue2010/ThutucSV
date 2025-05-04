@@ -7,7 +7,7 @@
         <div id="kt_app_content" class="app-content flex-column-fluid">
             <!--begin::Content container-->
             <div id="kt_app_content_container" class="app-container container-fluid">
-                @include('common.notifi_top_student')
+                {{-- @include('common.notifi_top_student') --}}
 
                 <div class="card card-flush p-5">
 
@@ -42,7 +42,7 @@
                                 @if (isset($don_parent)) @if ($don_parent->status != 0)
                                 readonly @endif
                                 @endif name="doituong"
-                                class="form-select form-select-solid filter-select" data-name="year" data-control="select2"
+                                class="form-select  filter-select" data-name="year" data-control="select2"
                                 data-placeholder="Năm">
                                 @foreach (config('doituong.miengiamhp') as $index => $item)
                                     <option value="{{ $index }}">{{ $item[2] }}</option>
@@ -102,7 +102,7 @@
                         <div class="d-flex w-100">
 
                             @if (isset($don_parent))
-                                @if ($don_parent->status <= 0)
+                                @if ($don_parent->status <= 0 && $don_parent->status > -80)
                                     @if ($don_parent->is_update == 1)
                                         <button type="submit" class="btn btn-success me-2">
                                             {{ __('Sửa hồ sơ bổ sung') }}
@@ -122,8 +122,7 @@
 
 
                             @isset($don_parent)
-                                <a href="{{ route('phieu.index', ['id' => $don_parent->phieu_id]) }}" target="_blank"
-                                    class="btn btn-warning me-2">Xem đơn</a>
+                                <<a href="/storage/{{ $don_parent->file_name }}" target="_blank" class="btn btn-warning me-2">Xem đơn</a>
                             @endisset
                             @if (isset($don_parent))
                                 @if ($don_parent->status <= 0)

@@ -1,7 +1,8 @@
         <!--begin::Toolbar-->
         <div id="kt_app_toolbar" class="app-toolbar pt-7 pt-lg-10">
             <!--begin::Toolbar container-->
-            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex align-items-stretch d-flex flex-column">
+            <div id="kt_app_toolbar_container"
+                class="app-container container-fluid d-flex align-items-stretch d-flex flex-column">
                 <!--begin::Toolbar wrapper-->
                 <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
                     <!--begin::Page title-->
@@ -12,18 +13,23 @@
                         </h1>
                         <!--end::Title-->
                     </div>
-                    
+
                     <!--end::Page title-->
                     <div class="d-flex align-items-center gap-2 gap-lg-3">
                         <div class="d-flex flex-row flex-wrap">
-                            <div onclick="xacnhanDS()" class="btn btn-primary me-2 cursor-pointer">Phê duyệt danh sách</div>
-                            <a href="{{ route('KeHoachTaiChinh.MienGiamHP.tuchoi') }}" class="btn btn-warning">Từ chối danh sách</a>
+                            <div onclick="xacnhanDS()" class="btn btn-primary me-2 cursor-pointer">Phê duyệt danh sách
+                            </div>
+                            <a href="{{ route('KeHoachTaiChinh.MienGiamHP.tuchoi') }}" class="btn btn-warning">Từ chối
+                                danh sách</a>
                         </div>
                     </div>
                     <div class="d-flex w-100 flex-wrap mt-5">
-                        <a target="_bank"  href="{{ route('phieu.index',['id'=>"DSMGHP0"]) }}" class="btn btn-secondary ms-3">Xem danh sách</a>
-                        <a target="_bank"  href="{{ route('phieu.index',['id'=>"QDGHP0"]) }}" class="btn btn-secondary ms-3">Xem quyết định</a>
-                        <a target="_bank"  href="{{ route('phieu.index',['id'=>"PTGHP0"]) }}"  class="btn btn-secondary ms-3">Xem phiếu trình</a>
+                        @if (isset($hoso) && $hoso)
+                            <a target="_blank" href="/storage/{{ $hoso->file_list }}" class="btn btn-secondary ms-3">Xem
+                                danh sách</a>
+                            <a target="_blank" href="/storage/{{ $hoso->file_quyet_dinh }}"
+                                class="btn btn-secondary ms-3">Xem quyết định</a>
+                        @endif
                     </div>
                 </div>
                 <!--end::Toolbar wrapper-->

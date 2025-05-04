@@ -27,7 +27,7 @@
                             <div class="w-100 mw-150px">
                                 <label class="form-label">Lớp</label>
                                 <!--begin::Select2-->
-                                <select class="form-select form-select-solid filter-select" data-name="lop_id" data-control="select2" data-placeholder="Lớp">
+                                <select class="form-select  filter-select" data-name="lop_id" data-control="select2" data-placeholder="Lớp">
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>
                                     @foreach ($lops as $item)
@@ -39,7 +39,7 @@
                             <div class="w-100 mw-150px">
                                 <label class="form-label">Khoá học</label>
                                 <!--begin::Select2-->
-                                <select class="form-select form-select-solid filter-select" data-name="nien_khoa" data-control="select2" data-placeholder="Khoá học">
+                                <select class="form-select  filter-select" data-name="nien_khoa" data-control="select2" data-placeholder="Khoá học">
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>
                                     @for ($year = 1; $year <= 100; $year++)
@@ -51,7 +51,7 @@
                             <div class="w-100 mw-150px">
                                 <label class="form-label">Trạng thái</label>
 
-                                <select class="form-select form-select-solid filter-select" data-name="status" data-control="select2" data-hide-search="true"
+                                <select class="form-select  filter-select" data-name="status" data-control="select2" data-hide-search="true"
                                     data-placeholder="Trạng thái">
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>

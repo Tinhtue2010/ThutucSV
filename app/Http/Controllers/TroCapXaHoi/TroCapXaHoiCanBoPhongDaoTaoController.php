@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\TroCapXaHoi;
 
 use App\Http\Controllers\Controller;
+use App\Models\HoSo;
 use App\Models\Lop;
 use App\Models\StopStudy;
 use App\Models\User;
@@ -14,7 +15,10 @@ class TroCapXaHoiCanBoPhongDaoTaoController extends Controller
     function index()
     {
         $lop = Lop::get();
-        return view('lanh_dao_phong_dao_tao.ds_tro_cap_xa_hoi.index', ['lop' => $lop]);
+        $hoso = HoSo::where('type', 3)->where('status', 0)
+        ->latest('created_at')
+        ->first();
+        return view('lanh_dao_phong_dao_tao.ds_tro_cap_xa_hoi.index', ['lop' => $lop,'hoso'=>$hoso]);
     }
 
     function getData(Request $request)
@@ -24,7 +28,7 @@ class TroCapXaHoiCanBoPhongDaoTaoController extends Controller
         ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'lops.hocphi');
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi');
 
         if (isset($request->type_miengiamhp)) {
             $query->where('stop_studies.type_miengiamhp', $request->type_miengiamhp);

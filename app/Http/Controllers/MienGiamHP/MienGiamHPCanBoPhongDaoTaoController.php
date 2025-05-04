@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\MienGiamHP;
 
 use App\Http\Controllers\Controller;
+use App\Models\HoSo;
 use App\Models\Lop;
 use App\Models\StopStudy;
 use App\Models\User;
@@ -14,7 +15,10 @@ class MienGiamHPCanBoPhongDaoTaoController extends Controller
     function index()
     {
         $lop = Lop::get();
-        return view('lanh_dao_phong_dao_tao.ds_mien_giam_hp.index', ['lop' => $lop]);
+        $hoso = HoSo::where('type', 2)->where('status', 0)
+        ->latest('created_at')
+        ->first();
+        return view('lanh_dao_phong_dao_tao.ds_mien_giam_hp.index', ['lop' => $lop,'hoso'=>$hoso]);
     }
 
     function getData(Request $request)
@@ -24,7 +28,7 @@ class MienGiamHPCanBoPhongDaoTaoController extends Controller
         ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name');
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name','students.hocphi');
 
         if (isset($request->type_miengiamhp)) {
             $query->where('stop_studies.type_miengiamhp', $request->type_miengiamhp);
@@ -84,7 +88,6 @@ class MienGiamHPCanBoPhongDaoTaoController extends Controller
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 0;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = null;
             $newStopStudy->parent_id = $stopStudy->id;
             $newStopStudy->note = "Cán bộ phòng đào tạo từ chối danh sách";
             $newStopStudy->save();

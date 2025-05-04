@@ -22,9 +22,12 @@
                     </div>
 
                     <div class="d-flex w-100 flex-wrap mt-5">
-                        <a target="_bank" href="{{ route('phieu.index', ['id' => 'DSTCXH0']) }}" class="btn btn-secondary ms-3">Xem danh sách</a>
-                        <a target="_bank" href="{{ route('phieu.index', ['id' => 'QDTCXH0']) }}" class="btn btn-secondary ms-3">Xem quyết định</a>
-                        <a target="_bank" href="{{ route('phieu.index', ['id' => 'PTTCXH0']) }}" class="btn btn-secondary ms-3">Xem phiếu trình</a>
+                        @if (isset($hoso) && $hoso)
+                            <a target="_blank" href="/storage/{{ $hoso->file_list }}" class="btn btn-secondary ms-3">Xem
+                                danh sách</a>
+                            <a target="_blank" href="/storage/{{ $hoso->file_quyet_dinh }}"
+                                class="btn btn-secondary ms-3">Xem quyết định</a>
+                        @endif
                     </div>
                 </div>
                 <!--end::Toolbar wrapper-->

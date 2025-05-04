@@ -36,16 +36,10 @@
         <br />
         Nơi thường trú: {{$data["thuongchu"]}}
         <br />
-        Thuộc đối tượng:
-        <div class="ms-3">
-          {{$data["doituong"]}}
-        </div>
+        Thuộc đối tượng: {{$data["doituong"]}} <br>
         Xin hưởng chế độ: Tiền ăn, Tiền Hỗ trợ học phí, Miễn phí chỗ ở tại Ký túc
         xá <br />
-        Hồ sơ xin hưởng chế độ gồm:
-        <div class="ms-3">
-          {{$data["hoso"]}}
-        </div>
+        Hồ sơ xin hưởng chế độ gồm: {{$data["hoso"]}} <br>
         <span class="ms-2"
           >Kính đề nghị Trường xem xét và giải quyết cho tôi được hưởng chế độ chính sách trên. </span
         >
@@ -54,17 +48,21 @@
     <div class="d-flex flex-row justify-content-end mt-2">
       <div class="fst-italic">Quảng Ninh, ngày {{$data['day']}} tháng {{$data['month']}} năm {{$data['year']}}</div>
     </div>
-    <div class="d-flex flex-row justify-content-between px-5 mt-3">
-      <div class="d-flex flex-column text-center fw-bold">
-        BAN GIÁM HIỆU DUYỆT
-      </div>
-      <div class="text-center">
-        NNGƯỜI LÀM ĐƠN
-        <br />
-        <img style="height: 50px; margin-top: 10px; margin-bottom: 10px" src="{{ asset('storage/'.$data['url_chuky']) }}" alt="">
-        <br/>
-        {{$data['full_name']}}
-      </div>
-    </div>
+    <table style="width: 100%; margin-top: 20px; text-align: center; font-weight: bold;">
+        <tr>
+            <td>BAN GIÁM HIỆU DUYỆT</td>
+            <td>NGƯỜI LÀM ĐƠN</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <img style="height: 50px; width: 50px;" src="data:image/png;base64,{{ $data['chu_ky'] }}" alt="">
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>{{ $data['full_name'] }}</td>
+        </tr>
+    </table>
   </div>
   @endsection

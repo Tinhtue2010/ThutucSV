@@ -79,7 +79,7 @@ class MienGiamHPController extends Controller
         $phieu->name = "Đơn xin giảm học phí";
         $phieu->key = "GHP";
         $phieu->content = json_encode($studentData);
-        $phieu->file = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
+        // $phieu->file = json_encode($this->uploadListFile($request, 'files', 'MIEN_GIAM_HOC_PHI', 'file-dinh-kem'));
 
         $pdf =  $this->createPDF($phieu);
 
@@ -91,16 +91,15 @@ class MienGiamHPController extends Controller
         if ($getPDF === 0) {
             return 0;
         }
-        $file_name = $this->saveBase64AsPdf($getPDF,'MIEN_GIAM_HOC_PHI');
-
-    
         $user = Auth::user();
         $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)
             ->first();
-    
+
+        $file_name = $this->saveBase64AsPdf($getPDF,'MIEN_GIAM_HOC_PHI/' . ($student->student_code ?? $student->id),'don-');
+        $uploadedFiles = json_encode($this->uploadListFile($request, 'files', 'MIEN_GIAM_HOC_PHI/' . ($student->student_code ?? $student->id), 'file-dinh-kem-'));
         
         $phantramgiam = match ($request->doituong) {
             null, 5, 6 => 70,
@@ -108,7 +107,7 @@ class MienGiamHPController extends Controller
             default => 100,
         };
     
-        $uploadedFiles = json_encode($this->uploadListFile($request, 'files', 'mien_giam_hp'));
+
         
         $check = StopStudy::where('student_id', $user->student_id)->where('type', 1)->first();
     
@@ -122,6 +121,7 @@ class MienGiamHPController extends Controller
                 'is_update' => 1,
                 'phantramgiam' => $phantramgiam,
                 'type_miengiamhp' => $request->doituong ?? 1,
+                'file_name' => $file_name
             ]);
         } else {
             $query = new StopStudy([

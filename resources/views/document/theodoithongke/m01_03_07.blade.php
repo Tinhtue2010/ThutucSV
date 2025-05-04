@@ -2,17 +2,6 @@
 
 @section('data')
     <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-
         ul {
             list-style-type: none;
             /* Loại bỏ dấu chấm mặc định */
@@ -23,38 +12,31 @@
             content: "- ";
             /* Thêm dấu gạch ngang trước mỗi mục */
         }
+body{
+    font-size: 14px!important;
+}
     </style>
     <div id="doc_view" class="A4 d-flex flex-column">
-        <div class="d-flex flex-row justify-content-between">
-            <div>
-                <div class="text-center">UBND TỈNH QUẢNG NINH</div>
-                <div class="text-center fw-bold">TRƯỜNG ĐẠI HỌC HẠ LONG</div>
-                <div style="
-                    width: 94px;
-                    height: 1px;
-                    background-color: black;
-                    margin-top: 2px;
-                    margin-left: auto;
-                    margin-right: auto;
-                    "></div>
-                <div class="text-center mt-2">Số: {{ $data[0]['so_QD'] }}/QĐ-ĐHHL</div>
-
-            </div>
-            <div>
-                <div class="text-center">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
-                <div class="text-center fw-bold">Độc lập – Tự do – Hạnh phúc</div>
-                <div style="
-                    width: 94px;
-                    height: 1px;
-                    background-color: black;
-                    margin-top: 2px;
-                    margin-left: auto;
-                    margin-right: auto;
-                    "></div>
-                <div class="text-center mt-2">Quảng ninh, ngày {{ $data[0]['thoi_gian_tao_ngay'] }} tháng {{ $data[0]['thoi_gian_tao_thang'] }} năm {{ $data[0]['thoi_gian_tao_nam'] }}</div>
-            </div>
-        </div>
-        <div class="text-center fw-bold" style="margin-top: 30px; text-transform: uppercase">
+        <table style="width: 100%;">
+            <tr>
+                <td style="text-align: center; vertical-align: top;">
+                    <div>UBND TỈNH QUẢNG NINH</div>
+                    <div style="font-weight: bold;">TRƯỜNG ĐẠI HỌC HẠ LONG</div>
+                    <div style="width: 94px; height: 1px; background-color: black; margin: 2px auto 0 auto;"></div>
+                    <div style="margin-top: 8px;">Số: {{ $data[0]['so_QD'] }}/QĐ-ĐHHL</div>
+                </td>
+                <td style="text-align: center; vertical-align: top;">
+                    <div>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
+                    <div style="font-weight: bold;">Độc lập – Tự do – Hạnh phúc</div>
+                    <div style="width: 94px; height: 1px; background-color: black; margin: 2px auto 0 auto;"></div>
+                    <div style="margin-top: 8px;">
+                        Quảng Ninh, ngày {{ $data[0]['thoi_gian_tao_ngay'] }} tháng {{ $data[0]['thoi_gian_tao_thang'] }} năm {{ $data[0]['thoi_gian_tao_nam'] }}
+                    </div>
+                </td>
+            </tr>
+        </table>
+        
+        <div class="text-center fw-bold" style="margin-top: 10px; text-transform: uppercase">
             QUYẾT ĐỊNH
         </div>
         <div class="fw-bold text-center mx-auto">
@@ -69,7 +51,7 @@
                     margin-left: auto;
                     margin-right: auto;
                     "></div>
-        <div class="text-center fw-bold mb-2" style="margin-top: 30px; text-transform: uppercase">
+        <div class="text-center fw-bold mb-2" style="margin-top: 10px; text-transform: uppercase">
             HIỆU TRƯỞNG TRƯỜNG ĐẠI HỌC HẠ LONG
         </div>
 
@@ -113,26 +95,27 @@
         </div>
 
 
-        <div class="d-flex flex-row justify-content-between mt-2" style="">
-            <div style="font-size: 13px" class="ms-5">
-                <div class="fw-bold fst-italic">Nơi nhận:</div>
-                <p>-HT và các phó HT ( để b/c); <br>
-                    -Như Điều 2 (thực hiện); <br>
-                    -Lưu VT; CTSV.
-                </p>
-            </div>
-            <div>
-                <div class="text-center fw-bold">KT. HIỆU TRƯỞNG
-                    <br>KT. HIỆU TRƯỞNG
-                </div>
-                <div class="text-center">
+        <table style="width: 100%; margin-top: 5px; font-size: 13px;">
+            <tr>
+                <td style="width: 60%; vertical-align: top; padding-left: 30px;">
+                    <div class="fw-bold fst-italic">Nơi nhận:</div>
+                    <p>
+                        - HT và các phó HT (để b/c);<br>
+                        - Như Điều 2 (thực hiện);<br>
+                        - Lưu VT; CTSV.
+                    </p>
+                </td>
+                <td style="text-align: center; vertical-align: top;">
+                    <div class="fw-bold">KT. HIỆU TRƯỞNG</div>
+                    <br>
                     @if (!empty($data[0]['canbo_truong']))
-                        <img style="height: 50px" src="{{ asset('storage/' . $data[0]['canbo_truong_chu_ky']) }}" alt="">
+                        <img style="height: 50px;" src="{{ asset('storage/' . $data[0]['canbo_truong_chu_ky']) }}" alt="">
                         <br>
-                        {{ $data[0]['canbo_truong'] }}
+                        <div style="margin-top: 5px;">{{ $data[0]['canbo_truong'] }}</div>
                     @endif
-                </div>
-            </div>
-        </div>
+                </td>
+            </tr>
+        </table>
+        
         </p>
     @endsection

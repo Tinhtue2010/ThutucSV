@@ -28,34 +28,32 @@
                 <br />
                 Lớp: {{ $data['lop'] }} &nbsp; Khoa: {{ $data['khoa'] }} &nbsp; SĐT: {{ $data['sdt'] }}
                 <br />
-                Nơi thường trú: {{ $data['thuongchu'] }}
+                Nơi thường trú: {{ $data['thuongtru'] }}
                 <br />
-                Thuộc đối tượng:
-                <div class="ms-3">
-                    {{ $data['doituong'] }}
-                </div>
-                Hồ sơ xin hưởng chế độ trợ cấp xã hội kèm theo giấy này gồm:
-                <div class="ms-3">
-                    {{ $data['hoso'] }}
-                </div>
+                Thuộc đối tượng: {{ $data['doituong'] }} <br>
+                Hồ sơ xin hưởng chế độ trợ cấp xã hội kèm theo giấy này gồm: {{ $data['hoso'] }} <br>
                 <span class="ms-3">Kính đề nghị Trường xem xét và giải quyết cho tôi được hưởng trợ cấp xã hội theo qui định hiện hành.</span>
             </div>
         </div>
         <div class="d-flex flex-row justify-content-end mt-2">
             <div class="fst-italic">Quảng Ninh, ngày {{ $data['day'] }} tháng {{ $data['month'] }} năm {{ $data['year'] }}</div>
         </div>
-        <div class="d-flex flex-row justify-content-between px-5 mt-3">
-            <div class="d-flex flex-column text-center fw-bold">
-                BAN GIÁM HIỆU DUYỆT
-            </div>
-            <div class="text-center">
-                NNGƯỜI LÀM ĐƠN
-                <br />
-
-                <img style="height: 50px;widows: 50px" src="data:image/png;base64,{{ $data['chu_ky'] }}" alt="">
-                <br>
-                {{ $data['full_name'] }}
-            </div>
-        </div>
+        <table style="width: 100%; margin-top: 20px; text-align: center; font-weight: bold;">
+            <tr>
+                <td>BAN GIÁM HIỆU DUYỆT</td>
+                <td>NGƯỜI LÀM ĐƠN</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <img style="height: 50px; width: 50px;" src="data:image/png;base64,{{ $data['chu_ky'] }}" alt="">
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>{{ $data['full_name'] }}</td>
+            </tr>
+        </table>
+        
     </div>
 @endsection

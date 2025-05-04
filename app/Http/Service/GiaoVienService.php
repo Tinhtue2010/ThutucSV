@@ -59,14 +59,14 @@ class GiaoVienService  extends Controller
             if ($getPDF === 0) {
                 return 0;
             }
+            $student = Student::find($stopStudy->student_id);
 
-            $file_name = $this->saveBase64AsPdf($getPDF, 'RUT_HO_SO');
-            $this->deletePdfAndTmp($stopStudy->file_name);
+            $file_name = $this->saveBase64AsPdf($getPDF, 'DON_XIN_RUT_HO_SO/'.$student->student_code);
+            $this->deletePdfAndTmp($stopStudy->file_name, $file_name);
 
             $stopStudy->update([
                 "status" => 1,
-                "file_name" => $file_name,
-                "note" => $request->note
+                "file_name" => $file_name,               
             ]);
 
             $newStopStudy = $stopStudy->replicate();

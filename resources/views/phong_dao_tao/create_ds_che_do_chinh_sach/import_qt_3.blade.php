@@ -16,7 +16,7 @@
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
                                 <span class="required">Các danh sách sinh viên được hưởng trợ cấp theo nghị định 81/2021/NĐ-CP</span>
                             </label>
-                            @foreach ($phieu_2 as $index=>$item)
+                            {{-- @foreach ($phieu_2 as $index=>$item)
                                 <div class="col-12 ms-5">
                                     <label class="form-check-image active">
                                         <div class="form-check form-check-custom form-check-solid">
@@ -30,7 +30,7 @@
                                         </div>
                                     </label>
                                 </div>
-                            @endforeach
+                            @endforeach --}}
 
                         </div>
                         <!--end::Row-->

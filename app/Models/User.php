@@ -85,8 +85,8 @@ class User extends Authenticatable
         if ($this->teacher_id != null) {
             return false;
         } else {
-            $lop_id = Student::find($this->student_id)->lop_id;
-            $lop = Lop::find($lop_id);
+            $ma_lop = Student::find($this->student_id)->ma_lop;
+            $lop = Lop::where('ma_lop',$ma_lop)->first();
             if(isset($lop))
             {
                 $list_nganh = [
@@ -97,8 +97,9 @@ class User extends Authenticatable
                     "7220210",
                     "7220204",
                     "7620301",
+                    // "7480101" // cntt demo test
                 ];            
-                if (in_array($lop->manganh, $list_nganh)) {
+                if (in_array($lop->nganh_id, $list_nganh)) {
                     return true;
                 }
             }

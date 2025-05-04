@@ -22,7 +22,7 @@ class PhongDaoTaoController extends Controller
     }
     function index()
     {
-        $tb_miengiamhp = StopStudy::where('type', 1)->whereIn('status', [3,5])->count();
+        $tb_miengiamhp = StopStudy::where('type', 1)->whereIn('status', [3,6])->count();
         $tb_trocapxahoi = StopStudy::where('type', 2)->where('status', 3)->count();
         $tb_trocaphocphi = StopStudy::where('type', 3)->where('status', 3)->count();
         $tb_chedochinhsach = StopStudy::where('type', 4)->where('status', 3)->count();

@@ -29,7 +29,8 @@
                             data.order = undefined;
                             data.search = '';
                             $('.filter-select').each(function() {
-                                if ($(this).data('name') == undefined || $(this).val() == 'all') {
+                                if ($(this).data('name') == undefined || $(this).val() ==
+                                    'all') {
                                     return;
                                 }
                                 var name_filter = $(this).data('name');
@@ -55,24 +56,34 @@
                         },
                         {
                             data: 'name',
-                            render: function(data, type, row)
-                            {
-                                return `<a target="_blank" href="/phieu/${row['id']}">${data}</a>`
-                            }
-                        },
-                        {
-                            data: "id",
                             render: function(data, type, row) {
-                                if (row['full_name'] == null) {
-                                    return "";
-                                }
-                                return `Họ tên: ${row['full_name']} 
-                                    <br/> Mã sinh viên: ${row['student_code']}
-                                    <br/> Lớp: ${row['lop_name']} `;
+                                return `${data}`
                             }
                         },
                         {
-                            data: 'key',
+                            data: 'type',
+                            render: function(data, type, row) {
+                                switch (data) {
+                                    case 1:
+                                        return "Rút hồ sơ";
+                                    case 2:
+                                        return "Miễn giảm học phí";
+                                    case 3:
+                                        return "Trợ cấp xã hội";
+                                    case 4:
+                                        return "Trợ cấp học phí";
+                                    default:
+                                        return "Không rõ";
+                                }
+
+                            }
+                        },
+                        {
+                            data: 'name',
+                            render: function(data, type, row) {
+                                return `<a target="_blank" href="/storage/${row['file_quyet_dinh']}">${row['file_quyet_dinh']}</a> <br/>
+                                <a target="_blank" href="/storage/${row['file_list']}">${row['file_list']}</a>`
+                            }
                         },
                         // {
                         //     data: 'file',
@@ -86,9 +97,9 @@
                         //         urlgqcv = "{{ route('phieu.giaQuyetCongViec') }}/" + data;
                         //         if ((row['type'] == 0 && row['status'] == 6) || (row['type'] == 1 && row['status'] == 6) || row['status'] == -99) {
                         //             return `<a href="${urlgqcv}"  target="_blank" class="ki-duotone ki-abstract-4 fs-2x cursor-pointer text-dark">
-                        //                 <span class="path1"></span>
-                        //                 <span class="path2"></span>
-                        //             </a>`
+                    //                 <span class="path1"></span>
+                    //                 <span class="path2"></span>
+                    //             </a>`
                         //         }
                         //     }
                         // },

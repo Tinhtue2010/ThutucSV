@@ -26,7 +26,7 @@
                             <div class="w-100 mw-250px">
                                 <label class="form-label">Loại hồ sơ</label>
                                 <!--begin::Select2-->
-                                <select class="form-select form-select-solid filter-select" data-name="type_miengiamhp" data-control="select2" data-placeholder="Loại hồ sơ">
+                                <select class="form-select  filter-select" data-name="type_miengiamhp" data-control="select2" data-placeholder="Loại hồ sơ">
                                     <option value="all">Hiển thị tất cả</option>
                                     @foreach (config('doituong.miengiamhp') as $index => $item)
                                         <option value="{{ $index }}">{{ $item[1] }}</option>
@@ -37,7 +37,7 @@
                             <div class="w-100 mw-200px">
                                 <label class="form-label">Trạng thái</label>
                                 <!--begin::Select2-->
-                                <select class="form-select form-select-solid filter-select" data-name="status" data-control="select2" data-placeholder="Loại hồ sơ">
+                                <select class="form-select  filter-select" data-name="status" data-control="select2" data-placeholder="Loại hồ sơ">
                                     <option value="all">Hiển thị tất cả</option>
                                     @foreach (config('doituong.statusmiengiamhp') as $index => $item)
                                         <option value="{{ $item[0] }}" style="color: red">{{ $item[1] }}<div class="ki-duotone ki-update-folder fs-2x cursor-pointer text-danger">

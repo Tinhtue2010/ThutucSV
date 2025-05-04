@@ -57,13 +57,6 @@
             let form = $(this);
             validation_{{$target}}.validate().then(async function (status) {
                 if (status === 'Valid') {
-                    await checkMaXacNhan().then(function(result) {
-                        if (false) {
-                            return;
-                        } else {
-                            form.append('otp', result);
-                        }
-                    });
                     axios({
                         method: 'POST',
                         url: "{{route('KeHoachTaiChinh.TroCapXaHoi.xacnhan')}}",
