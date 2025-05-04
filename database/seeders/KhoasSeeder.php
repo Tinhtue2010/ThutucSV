@@ -17,7 +17,7 @@ class KhoasSeeder extends Seeder
      */
     public function run()
     {
-        $response = Http::get('https://api.uhl.edu.vn/quanlysinhvien/api/APITichHop/DanhSachKhoa?Start=0&Length=10000&KeyWord');
+        $response = Http::withoutVerifying()->get('https://api.uhl.edu.vn/quanlysinhvien/api/APITichHop/DanhSachKhoa?Start=0&Length=10000&KeyWord');
 
         if ($response->successful()) {
             $data = $response->json();

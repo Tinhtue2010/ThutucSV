@@ -170,7 +170,7 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('/get-data', [HoSoChungTuPhongDaoTaoController::class, 'getData'])->name('getData');
             });
 
-            
+
             Route::get('/', [PhongDaoTaoController::class, 'index'])->name('index');
             Route::get('get-data', [PhongDaoTaoController::class, 'getData'])->name('getData');
             Route::post('bosunghs', [PhongDaoTaoController::class, 'bosunghs'])->name('bosunghs');
@@ -426,13 +426,26 @@ Route::group(['middleware' => ['auth']], function () {
     Route::name('otp.')->prefix('otp')->group(function () {
         Route::get('chu-ky', [OtpController::class, 'createOtpChuKy'])->name('createOtpChuKy');
         Route::get('check-chu-ky/{otp?}', [OtpController::class, 'checkOtpChuKy'])->name('checkOtpChuKy');
-        Route::get("check-info-signature",[OtpController::class,'checkSignature'])->name('checkSignature');
+        Route::get("check-info-signature", [OtpController::class, 'checkSignature'])->name('checkSignature');
     });
-    
-    
 });
 
 Route::get('pdf', [DocumentController::class, 'index']);
+Route::get('mien-giam-hoc-phi-sinh-vien', [DocumentController::class, 'MienGiamHocPhiSinhVien'])->name('MienGiamHocPhiSinhVien');
+Route::get('tro-cap-xa-hoi-sinh-vien', [DocumentController::class, 'TroCapXaHoiSinhVien'])->name('TroCapXaHoiSinhVien');
+Route::get('che-do-mien-phi-cho-o-ky-tuc-xa', [DocumentController::class, 'CheDoMienPhiChoOKytucXa'])->name('CheDoMienPhiChoOKytucXa');
+Route::get('che-do-ho-tro-do-dung-hoc-tap', [DocumentController::class, 'CheDoHoTroDoDungHocTap'])->name('CheDoHoTroDoDungHocTap');
+Route::get('che-do-ho-tro-hoc-phi-sinh-vien', [DocumentController::class, 'CheDoHoTroHocPhiChoSinhVien'])->name('CheDoHoTroHocPhiChoSinhVien');
+Route::get('ho-tro-chi-phi-hoc-tap', [DocumentController::class, 'HoTroChiPhiHocTap'])->name('HoTroChiPhiHocTap');
+Route::get('danh-sach-mien-giam-hoc-phi', [DocumentController::class, 'DanhSachMienGiamHocPhi'])->name('DanhSachMienGiamHocPhi');
+Route::get('danh-sach-huong-ho-tro-tien-an', [DocumentController::class, 'DanhSachHuongHoTroTienAn'])->name('DanhSachHuongHoTroTienAn');
+Route::get('danh-sach-duoc-ho-tro-hoc-phi', [DocumentController::class, 'DanhSachDuocHoTroHocPhi'])->name('DanhSachDuocHoTroHocPhi');
+Route::get('danh-sach-huong-mien-phi-cho-o-ktx', [DocumentController::class, 'DanhSachHuongMienPhiChoOKTX'])->name('DanhSachHuongMienPhiChoOKTX');
+Route::get('theo-doi-kq-giai-quyet-che-do-cs', [DocumentController::class, 'TheoDoiKQGiaiQuyetCheDoCS'])->name('TheoDoiKQGiaiQuyetCheDoCS');
+Route::get('danh-sach-duoc-huong-tro-cap-xa-hoi', [DocumentController::class, 'DanhSachDuocHuongTroCapXaHoi'])->name('DanhSachDuocHuongTroCapXaHoi');
+Route::get('theo-doi-kq-giai-quyet-che-do-tcxh', [DocumentController::class, 'TheoDoiKQGiaiQuyetCheDoTCXH'])->name('TheoDoiKQGiaiQuyetCheDoTCXH');
+Route::get('so-theo-doi-sv-rut-ho-so', [DocumentController::class, 'SoTheoDoiSVRutHoSo'])->name('SoTheoDoiSVRutHoSo');
+
 
 Route::name('phieu.')->prefix('phieu')->group(function () {
     Route::get('giai-quyet-cong-viec/{id?}', [PhieuController::class, 'giaQuyetCongViec'])->name('giaQuyetCongViec');

@@ -23,7 +23,7 @@ class LopsSeeder extends Seeder
         $start = 0;
         $length = 100;
         do {
-            $response = Http::get("https://api.uhl.edu.vn/quanlysinhvien/api/APITichHop/DanhSachLop", [
+            $response = Http::withoutVerifying()->get("https://api.uhl.edu.vn/quanlysinhvien/api/APITichHop/DanhSachLop", [
                 'Start' => $start,
                 'Length' => $length,
                 'KeyWord' => ''

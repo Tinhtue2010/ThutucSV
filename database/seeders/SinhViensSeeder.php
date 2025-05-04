@@ -27,7 +27,7 @@ class SinhViensSeeder extends Seeder
         $start = 0;
         $length = 100;
         do {
-            $response = Http::get("https://api.uhl.edu.vn/quanlysinhvien/api/APITichHop/DanhSachSinhVien", [
+            $response = Http::withoutVerifying()->get("https://api.uhl.edu.vn/quanlysinhvien/api/APITichHop/DanhSachSinhVien", [
                 'Start' => $start,
                 'Length' => $length,
                 'KeyWord' => ''
