@@ -16,6 +16,7 @@ use App\Exports\TheoDoiKQGiaiQuyetCheDoCSExport;
 use App\Exports\DanhSachDuocHuongTroCapXaHoiExport;
 use App\Exports\TheoDoiKQGiaiQuyetCheDoTCXHExport;
 use App\Exports\SoTheoDoiSVRutHoSoExport;
+use App\Exports\DanhSachHoSoSinhVienExport;
 use Mpdf\Mpdf;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -97,7 +98,11 @@ class DocumentController extends Controller
         $fileName = $this->sanitizeFileName('SỔ THEO DÕI SINH VIÊN RÚT HỒ SƠ.xlsx');
         return Excel::download(new SoTheoDoiSVRutHoSoExport(''), $fileName);
     }
-
+    public function DanhSachHoSoSinhVien(Request $request)
+    {
+        $fileName = 'DANH SÁCH HỒ SƠ SINH VIÊN.xlsx';
+        return Excel::download(new DanhSachHoSoSinhVienExport(''), $fileName);
+    }
 
     function sanitizeFileName($fileName)
     {

@@ -456,6 +456,7 @@ Route::get('theo-doi-kq-giai-quyet-che-do-cs', [DocumentController::class, 'Theo
 Route::get('danh-sach-duoc-huong-tro-cap-xa-hoi', [DocumentController::class, 'DanhSachDuocHuongTroCapXaHoi'])->name('DanhSachDuocHuongTroCapXaHoi');
 Route::get('theo-doi-kq-giai-quyet-che-do-tcxh', [DocumentController::class, 'TheoDoiKQGiaiQuyetCheDoTCXH'])->name('TheoDoiKQGiaiQuyetCheDoTCXH');
 Route::get('so-theo-doi-sv-rut-ho-so', [DocumentController::class, 'SoTheoDoiSVRutHoSo'])->name('SoTheoDoiSVRutHoSo');
+Route::get('danh-sach-ho-so-sinh-vien', [DocumentController::class, 'DanhSachHoSoSinhVien'])->name('DanhSachHoSoSinhVien');
 
 
 Route::name('phieu.')->prefix('phieu')->group(function () {
