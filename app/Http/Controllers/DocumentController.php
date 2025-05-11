@@ -145,5 +145,4 @@ class DocumentController extends Controller
 
         return Excel::download(new SoTheoDoiSVRutHoSoExport($data), $fileName);
     }
-
 }
