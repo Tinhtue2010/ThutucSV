@@ -27,11 +27,12 @@
                                     
                                     <!--begin::Select2-->
                                     <select class="form-select  filter-select" data-name="group" data-control="select2" data-placeholder="Loại hồ sơ">
-                                        <option></option>
-                                        <option value="all">Hiển thị tất cả</option>
-                                        @foreach(config('doituong.phieu_trinh') as $key => $value)
-                                            <option value="{{ $key }}">{{ $value }}</option>
-                                        @endforeach
+                                        <option value="all" selected>Hiển thị tất cả</option>
+                                        <option value="1">Rút hồ sơ</option>
+                                        <option value="2">Miễn giảm học phí</option>
+                                        <option value="3">Trợ cấp xã hội</option>
+                                        <option value="4">Trợ cấp học phí</option>
+                                        <option value="5">Chế độ chính sách</option>
                                     </select>
                                     <!--end::Select2-->
                                 </div>
@@ -39,10 +40,26 @@
                                     <label class="form-label">Năm</label>
                                     <!--begin::Select2-->
                                     <select class="form-select  filter-select" data-name="year" data-control="select2" data-placeholder="Năm">
-                                        <option></option>
                                         <option value="all">Hiển thị tất cả</option>
-                                        @for ($year = 2000; $year <= 2100; $year++)
-                                            <option @if ($year == date('Y')) selected @endif value="{{ $year }}">{{ $year }}</option>
+                                        @php
+                                            $currentYear = date('Y');
+                                            $currentMonth = date('m');
+                                            if ($currentMonth <= 6) {
+                                                $selectedYear = $currentYear - 1 . '-' . $currentYear;
+                                            } else {
+                                                $selectedYear = $currentYear . '-' . ($currentYear + 1);
+                                            }
+                                        @endphp
+
+                                        @for ($year = 2010; $year <= 2100; $year++)
+                                            @php
+                                                $optionValue = $year . '-' . ($year + 1);
+                                            @endphp
+                                            <option value="{{ $optionValue }}"
+                                                {{-- {{ $optionValue == $selectedYear ? 'selected' : '' }} --}}
+                                                >
+                                                {{ $optionValue }}
+                                            </option>
                                         @endfor
                                     </select>
                                     <!--end::Select2-->
@@ -62,6 +79,8 @@
                                 <th></th>
                                 <th class="text-nowrap" data-name="id">{{__('id')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Tên hồ sơ')}}</th>
+                                <th class="text-nowrap" data-name="id">{{__('Kỳ học')}}</th>
+                                <th class="text-nowrap" data-name="id">{{__('Năm học')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Phân loại')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('File')}}</th>
                             </tr>
@@ -120,5 +139,6 @@
         <!--end::Content-->
     </div>
     @include('phong_dao_tao.ho_so_chung_tu.save_phieu', ['target' => 'ho_so_chung_tu'])
+    @include('phong_dao_tao.ho_so_chung_tu.download_ho_so_chung_tu', ['target' => 'download_ho_so_chung_tu'])
     @include('phong_dao_tao.ho_so_chung_tu.table', ['target' => 'ho_so_chung_tu'])
 @endsection

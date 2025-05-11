@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ __('Xác nhận') }}</h5>
+                <h5 class="modal-title">{{ __('Lưu trữ hồ sơ') }}</h5>
                 <div class="btn btn-sm btn-icon btn-active-color-primary close" data-bs-dismiss="modal">
                     <i class="ki-outline ki-cross fs-1"></i>
                 </div>
@@ -13,7 +13,7 @@
                         @csrf
                         <input type="text" name="id" class="d-none">
                         <div class="col-12">
-                            <label for="kt_td_picker_linked_2_input" class="form-label">Bạn có chắc muốn lưu trữ toàn bộ hồ sơ chứng từ hiện tại <br> Lưu ý: nếu lưu trữ hồ sơ chứng từ sẽ không thể tiếp tục quá trình sử lý được nữa</label><br>
+                            <label for="kt_td_picker_linked_2_input" class="form-label">Bạn có chắc muốn lưu trữ toàn bộ hồ sơ chứng từ hiện tại <br> Hành động này sẽ khoá tất cả hồ sơ đã sử lý hoàn tất về trạng thái lưu trữ <br> Tất cả file được lưu tại hệ thống sẽ được chuyển qua drive <br> Lưu ý: nếu lưu trữ hồ sơ chứng từ sẽ không thể tiếp tục quá trình sử lý được nữa</label><br>
                             <div class="mb-3">
                                 <div class="form-check">
                                     <input class="form-check-input" name="RHS" type="checkbox" value="1" checked />
@@ -84,20 +84,13 @@
             let form = $(this);
             validation_{{ $target }}.validate().then(async function(status) {
                 if (status === 'Valid') {
-                    // await checkMaXacNhan().then(function(result) {
-                    //     if (false) {
-                    //         return;
-                    //     } else {
-                    //         form.append('otp', result);
-                    //     }
-                    // });
                     axios({
                         method: 'POST',
                         url: "{{route('PhongDaoTao.HoSoChungTu.saveAll')}}",
                         data: form.serialize(),
                     }).then((response) => {
                         mess_success('Thông báo',
-                            "Duyệt danh sách thành công")
+                            "Đã lưu trữ hồ sơ thành công")
                         $(this).trigger("reset");
                         model{{ $target }}.hide();
                         Datatable.loadData();

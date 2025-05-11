@@ -12,10 +12,16 @@
                         </h1>
                         <!--end::Title-->
                     </div>
-                    <!--end::Page title-->
-                    <div class="d-flex w-100 flex-wrap">
-                        <div onclick="savePhieu()" class="btn btn-secondary">Lưu trữ tất cả hồ sơ chứng từ</div>
+                    <div class="w-100 justify-start d-flex">
+                        <div class="d-flex w-100 flex-wrap">
+                            <div onclick="savePhieu()" class="btn btn-secondary">Lưu trữ tất cả hồ sơ chứng từ</div>
+                        </div>
+                        <div class="d-flex w-100 flex-wrap">
+                            <div onclick="downloadPhieu()" class="btn btn-secondary">Xuất hồ sơ chứng từ</div>
+                        </div>
                     </div>
+                    <!--end::Page title-->
+
                 </div>
                 <!--end::Toolbar wrapper-->
             </div>

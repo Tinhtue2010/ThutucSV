@@ -24,8 +24,6 @@
                     <input type="hidden" class="button_clicked" name="button_clicked" value="">
                     <div class="card-footer">
                         <button type="submit" class="btn btn-success mr-2">{{ __('Tạo') }}</button>
-                        <button type="submit" class="btn btn-warning mr-2">{{ __('Tạo và xem phiếu') }}</button>
-                        <button type="submit" class="btn btn-danger mr-2">{{ __('Hủy phiếu') }}</button>
                         <button type="reset" class="btn btn-secondary">{{ __('Nhập lại') }}</button>
                     </div>
                 </form>

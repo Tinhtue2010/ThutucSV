@@ -34,15 +34,13 @@ class CheDoHoTroDoDungHocTapExport implements FromArray, WithEvents, WithDrawing
         ];
         $stt = 1;
 
-        $result[] = [
-            $stt++,
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-        ];
+        if (is_array($this->data) && !empty($this->data)) {
+            foreach ($this->data as $item) {
+                if (is_array($item)) {
+                    $result[] = array_merge([$stt++], $item);
+                }
+            }
+        }
 
         return $result;
     }

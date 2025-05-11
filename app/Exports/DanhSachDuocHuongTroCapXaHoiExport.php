@@ -35,17 +35,14 @@ class DanhSachDuocHuongTroCapXaHoiExport implements FromArray, WithEvents, WithD
         ];
         $stt = 1;
 
-        $result[] = [
-            $stt++,
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-        ];
+        if (is_array($this->data) && !empty($this->data)) {
+            foreach ($this->data as $item) {
+                if (is_array($item)) {
+                    $result[] = array_merge([$stt++], $item);
+                }
+            }
+        }
+        
         $result[] = [
             'Tổng',
         ];

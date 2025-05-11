@@ -1138,6 +1138,11 @@ trait CommonHelper
         } catch (\Throwable $th) {
             return 0;
         }
+    }
 
+    function sanitizeFileName($fileName)
+    {
+        // Replace slashes and other illegal characters
+        return preg_replace('/[\/:*?"<>|]/', '-', $fileName);
     }
 }

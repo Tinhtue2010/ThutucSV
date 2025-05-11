@@ -58,7 +58,6 @@ use mikehaertl\wkhtmlto\Pdf;
     | contains the "web" middleware group. Now create something great!
     |
     */
-
 Route::get('/create-storage-link', function () {
     Artisan::call('storage:link');
 });
@@ -176,6 +175,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::name('HoSoChungTu.')->prefix('ho-so-chung-tu')->group(function () {
                 Route::get('/', [HoSoChungTuPhongDaoTaoController::class, 'index'])->name('index');
                 Route::post('/save-all', [HoSoChungTuPhongDaoTaoController::class, 'saveAll'])->name('saveAll');
+                Route::post('/download', [HoSoChungTuPhongDaoTaoController::class, 'download'])->name('download');
                 Route::get('/get-data', [HoSoChungTuPhongDaoTaoController::class, 'getData'])->name('getData');
             });
 

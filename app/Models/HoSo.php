@@ -18,7 +18,9 @@ class HoSo extends Model
         'list_info',
         'ky_hoc',
         'nam_hoc',
-        'type'
+        'type',
+        'student_code',
+        'data'
     ];
 
     protected $casts = [

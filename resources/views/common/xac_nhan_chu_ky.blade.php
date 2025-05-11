@@ -16,7 +16,7 @@
                     </div>
                     <div class="card-footer mt-5">
                         <button class="btn btn-success mr-2">{{ __('Đã xác nhận') }}</button>
-                        <button class="btn btn-warning mr-2">{{ __('Gửi lại xác nhận') }}</button>
+                        {{-- <button class="btn btn-warning mr-2">{{ __('Gửi lại xác nhận') }}</button> --}}
                         <button type="reset" class="btn btn-secondary">{{ __('Hủy') }}</button>
                     </div>
                 </div>

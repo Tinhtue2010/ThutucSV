@@ -61,6 +61,18 @@
                             }
                         },
                         {
+                            data: 'ky_hoc',
+                            render: function(data, type, row) {
+                                return `${data}`
+                            }
+                        },
+                        {
+                            data: 'nam_hoc',
+                            render: function(data, type, row) {
+                                return `${data}`
+                            }
+                        },
+                        {
                             data: 'type',
                             render: function(data, type, row) {
                                 switch (data) {
@@ -72,6 +84,8 @@
                                         return "Trợ cấp xã hội";
                                     case 4:
                                         return "Trợ cấp học phí";
+                                    case 5:
+                                        return "Chế độ chính sách";
                                     default:
                                         return "Không rõ";
                                 }
@@ -81,8 +95,11 @@
                         {
                             data: 'name',
                             render: function(data, type, row) {
-                                return `<a target="_blank" href="/storage/${row['file_quyet_dinh']}">${row['file_quyet_dinh']}</a> <br/>
-                                <a target="_blank" href="/storage/${row['file_list']}">${row['file_list']}</a>`
+                                return `
+                                    ${row['file_quyet_dinh'] ? `<a target="_blank" href="/storage/${row['file_quyet_dinh']}">${row['file_quyet_dinh']}</a><br/>` : ''}
+                                    ${row['file_list'] ? `<a target="_blank" href="/storage/${row['file_list']}">${row['file_list']}</a><br/>` : ''}
+                                    ${row['file_name'] ? `<a target="_blank" href="/storage/${row['file_name']}">${row['file_name']}</a>` : ''}
+                                `;
                             }
                         },
                         // {
