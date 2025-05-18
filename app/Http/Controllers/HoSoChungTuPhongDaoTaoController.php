@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TheoDoiKQGiaiQuyetCheDoTCXHExport;
+use App\Exports\MienGiamHocPhiSinhVienExport;
+use App\Exports\HoTroChiPhiHocTapExport;
+use App\Exports\CheDoMienPhiChoOKytucXaExport;
+use App\Exports\CheDoHoTroHocPhiChoSinhVienExport;
+use App\Exports\CheDoHoTroDoDungHocTapExport;
 use App\Exports\DanhSachDuocHuongTroCapXaHoiExport;
 use App\Exports\DanhSachHuongHoTroTienAnExport;
 use App\Exports\DanhSachHuongMienPhiChoOKTXExport;
@@ -300,124 +306,153 @@ class HoSoChungTuPhongDaoTaoController extends Controller
                 }
 
                 return Excel::download(new SoTheoDoiSVRutHoSoExport($data), $fileName);
-                break;
-
             case 2:
-                $fileName = $this->sanitizeFileName('DANH SÁCH SINH VIÊN ĐƯỢC MIỄN, GIẢM HỌC PHÍ THEO NGHỊ ĐỊNH 81/2021/NĐ-CP.xlsx');
-                $query = $query->where('type', 2)->whereNotNull('list_info')->first('list_info');
-                $query = json_decode($query?->list_info);
-                $data = [];
-
-                if (is_array($query)) {
-                    foreach ($query as $item) {
-                        $data[] = [
-                            $item->ho_ten,
-                            $item->ngay_sinh,
-                            $item->lop,
-                            $item->doi_tuong,
-                            $item->muc_hoc_phi,
-                            $item->ti_le_giam . '%',
-                            $item->so_tien_giam_1_thang,
-                            $item->mien_giam_ky,
-
-                        ];
-                    }
-                }
-                return Excel::download(new DanhSachMienGiamHocPhiExport($data), $fileName);
-                break;
+                $data  = [];
+                $fileName = $this->sanitizeFileName('SỔ THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ MIỄN GIẢM HỌC PHÍ CHO SINH VIÊN.xlsx');
+                return Excel::download(new MienGiamHocPhiSinhVienExport($data), $fileName);
             case 3:
-                $fileName = $this->sanitizeFileName('DANH SÁCH SINH VIÊN ĐƯỢC HƯỞNG TRỢ CẤP XÃ HỘI.xlsx');
-                $query = $query->where('type', 3)->whereNotNull('list_info')->first('list_info');
-                $query = json_decode($query?->list_info);
-                $data = [];
-
-                if (is_array($query)) {
-                    foreach ($query as $item) {
-                        foreach ($query as $item) {
-                            $data[] = [
-                                $item->ho_ten,
-                                $item->ngay_sinh,
-                                $item->lop,
-                                $item->doi_tuong,
-                                $item->muc_tro_cap_xh,
-                                $item->tro_cap_ky
-                            ];
-                        }
-                    }
-                }
-                return Excel::download(new DanhSachDuocHuongTroCapXaHoiExport($data), $fileName);
-                break;
+                $data  = [];
+                $fileName = $this->sanitizeFileName('SỔ THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ TRỢ CẤP XÃ HỘI CHO SINH VIÊN.xlsx');
+                return Excel::download(new TheoDoiKQGiaiQuyetCheDoTCXHExport($data), $fileName);
             case 4:
-                $fileName = $this->sanitizeFileName('DANH SÁCH SINH VIÊN ĐƯỢC HƯỞNG TRỢ CẤP XÃ HỘI.xlsx');
-                $query = $query->where('type', 4)->whereNotNull('list_info')->first('list_info');
-                $query = json_decode($query?->list_info);
-                $data = [];
-
-                if (is_array($query)) {
-                    foreach ($query as $item) {
-                        foreach ($query as $item) {
-                            $data[] = [
-                                $item->ho_ten,
-                                $item->ngay_sinh,
-                                $item->lop,
-                                $item->doi_tuong,
-                                $item->muc_tro_cap_hp,
-                                $item->tro_cap_ky
-                            ];
-                        }
-                    }
-                }
-                return Excel::download(new DanhSachDuocHuongTroCapXaHoiExport($data), $fileName);
-                break;
+                $data  = [];
+                $fileName = $this->sanitizeFileName('SỔ THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ HỖ TRỢ CHI PHÍ HỌC TẬP CHO SINH VIÊN.xlsx');
+                return Excel::download(new HoTroChiPhiHocTapExport($data), $fileName);
             case 5:
-                $fileName = $this->sanitizeFileName('DANH SÁCH SINH VIÊN ĐƯỢC HƯỞNG CHẾ ĐỘ MIỄN PHÍ CHỖ Ở TẠI KÝ TÚC XÁ Theo điểm g, khoản 3, điều 1, Nghị quyết 35/2021/NQ-HĐND tỉnh Quảng Ninh.xlsx');
-                return Excel::download(new DanhSachHuongMienPhiChoOKTXExport(''), $fileName);
+                $data  = [];
+                $fileName = $this->sanitizeFileName('SỔ THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ MIỄN PHÍ CHỖ Ở KÝ TÚC XÁ CHO SINH VIÊN THEO NGHỊ QUYẾT 35/2021/NQ-HĐND.xlsx');
+                return Excel::download(new CheDoMienPhiChoOKytucXaExport($data), $fileName);
             case 6:
-                $fileName = $this->sanitizeFileName('DANH SÁCH SINH VIÊN ĐƯỢC HƯỞNG CHẾ ĐỘ HỖ TRỢ TIỀN ĂN Theo điểm f, g, khoản 3, điều 1, Nghị quyết 35/2021/NQ-HĐND tỉnh Quảng Ninh.xlsx');
-                return Excel::download(new DanhSachHuongHoTroTienAnExport(''), $fileName);
+                $data  = [];
+                $fileName = $this->sanitizeFileName('SỔ THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ CHẾ ĐỘ HỖ TRỢ HỌC PHÍ CHO SINH VIÊN THEO NGHỊ QUYẾT 35/2021/NQ-HĐND.xlsx');
+                return Excel::download(new CheDoHoTroHocPhiChoSinhVienExport($data), $fileName);
             case 7:
-                    $fileName = $this->sanitizeFileName('DANH SÁCH SINH VIÊN ĐƯỢC HƯỞNG CHẾ ĐỘ HỖ TRỢ TIỀN ĂN Theo điểm f, g, khoản 3, điều 1, Nghị quyết 35/2021/NQ-HĐND tỉnh Quảng Ninh.xlsx');
+                $data  = [];
+                $fileName = $this->sanitizeFileName('SỔ THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ CHẾ ĐỘ HỖ TRỢ ĐỒ DÙNG HỌC TẬP CHO SINH VIÊN THEO NGHỊ QUYẾT 35/2021/NQ-HĐND.xlsx');
+                return Excel::download(new CheDoHoTroDoDungHocTapExport($data), $fileName);
 
-                    
-                    if ($namHoc === '2024-2025') {
-                        $query = $query->where('type', 5)->first();
-                        // Đường dẫn file PDF trong storage/app/demo/
-                        $pdfPath1 = base_path('storage/app/public/' .$query->file_quyet_dinh);
-                        $pdfPath2 = base_path('storage/app/public/' .$query->file_list);
-                        
 
-                        // Kiểm tra file có tồn tại không
-                        if (!file_exists($pdfPath1) || !file_exists($pdfPath2)) {
-                            return response()->json(['error' => 'File PDF không tồn tại'], 404);
-                        }
-                    
-                        // Đường dẫn file zip tạm trong storage/app/
-                        $zipFileName = 'file_2024-2025.zip';
-                        $zipPath = storage_path('app/' . $zipFileName);
-                    
-                        $zip = new ZipArchive();
-                    
-                        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
-                            $zip->addFile($pdfPath1, 'quyetdinh.pdf');
-                            $zip->addFile($pdfPath2, 'danhsach.pdf');
-                            $zip->close();
-                        } else {
-                            return response()->json(['error' => 'Không tạo được file zip'], 500);
-                        }
-                    
-                        return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
-                    } else {
-                        $fileName = $this->sanitizeFileName('DANH SÁCH SINH VIÊN ĐƯỢC HƯỞNG CHẾ ĐỘ HỖ TRỢ TIỀN ĂN Theo điểm f, g, khoản 3, điều 1, Nghị quyết 35/2021/NQ-HĐND tỉnh Quảng Ninh.xlsx');
-                        return Excel::download(new DanhSachHuongHoTroTienAnExport(''), $fileName);
-                    }
-                    
+
+
+
+
+                // case 2:
+                //     $fileName = $this->sanitizeFileName('DANH SÁCH SINH VIÊN ĐƯỢC MIỄN, GIẢM HỌC PHÍ THEO NGHỊ ĐỊNH 81/2021/NĐ-CP.xlsx');
+                //     $query = $query->where('type', 2)->whereNotNull('list_info')->first('list_info');
+                //     $query = json_decode($query?->list_info);
+                //     $data = [];
+
+                //     if (is_array($query)) {
+                //         foreach ($query as $item) {
+                //             $data[] = [
+                //                 $item->ho_ten,
+                //                 $item->ngay_sinh,
+                //                 $item->lop,
+                //                 $item->doi_tuong,
+                //                 $item->muc_hoc_phi,
+                //                 $item->ti_le_giam . '%',
+                //                 $item->so_tien_giam_1_thang,
+                //                 $item->mien_giam_ky,
+
+                //             ];
+                //         }
+                //     }
+                //     return Excel::download(new DanhSachMienGiamHocPhiExport($data), $fileName);
+                //     break;
+                // case 3:
+                //     $fileName = $this->sanitizeFileName('DANH SÁCH SINH VIÊN ĐƯỢC HƯỞNG TRỢ CẤP XÃ HỘI.xlsx');
+                //     $query = $query->where('type', 3)->whereNotNull('list_info')->first('list_info');
+                //     $query = json_decode($query?->list_info);
+                //     $data = [];
+
+                //     if (is_array($query)) {
+                //         foreach ($query as $item) {
+                //             foreach ($query as $item) {
+                //                 $data[] = [
+                //                     $item->ho_ten,
+                //                     $item->ngay_sinh,
+                //                     $item->lop,
+                //                     $item->doi_tuong,
+                //                     $item->muc_tro_cap_xh,
+                //                     $item->tro_cap_ky
+                //                 ];
+                //             }
+                //         }
+                //     }
+                //     return Excel::download(new DanhSachDuocHuongTroCapXaHoiExport($data), $fileName);
+                //     break;
+                // case 4:
+                //     $fileName = $this->sanitizeFileName('DANH SÁCH SINH VIÊN ĐƯỢC HƯỞNG TRỢ CẤP XÃ HỘI.xlsx');
+                //     $query = $query->where('type', 4)->whereNotNull('list_info')->first('list_info');
+                //     $query = json_decode($query?->list_info);
+                //     $data = [];
+
+                //     if (is_array($query)) {
+                //         foreach ($query as $item) {
+                //             foreach ($query as $item) {
+                //                 $data[] = [
+                //                     $item->ho_ten,
+                //                     $item->ngay_sinh,
+                //                     $item->lop,
+                //                     $item->doi_tuong,
+                //                     $item->muc_tro_cap_hp,
+                //                     $item->tro_cap_ky
+                //                 ];
+                //             }
+                //         }
+                //     }
+                //     return Excel::download(new DanhSachDuocHuongTroCapXaHoiExport($data), $fileName);
+                //     break;
+                // case 5:
+                //     $fileName = $this->sanitizeFileName('DANH SÁCH SINH VIÊN ĐƯỢC HƯỞNG CHẾ ĐỘ MIỄN PHÍ CHỖ Ở TẠI KÝ TÚC XÁ Theo điểm g, khoản 3, điều 1, Nghị quyết 35/2021/NQ-HĐND tỉnh Quảng Ninh.xlsx');
+                //     return Excel::download(new DanhSachHuongMienPhiChoOKTXExport(''), $fileName);
+                // case 6:
+                //     $fileName = $this->sanitizeFileName('DANH SÁCH SINH VIÊN ĐƯỢC HƯỞNG CHẾ ĐỘ HỖ TRỢ TIỀN ĂN Theo điểm f, g, khoản 3, điều 1, Nghị quyết 35/2021/NQ-HĐND tỉnh Quảng Ninh.xlsx');
+                //     return Excel::download(new DanhSachHuongHoTroTienAnExport(''), $fileName);
+                // case 7:
+                //         $fileName = $this->sanitizeFileName('DANH SÁCH SINH VIÊN ĐƯỢC HƯỞNG CHẾ ĐỘ HỖ TRỢ TIỀN ĂN Theo điểm f, g, khoản 3, điều 1, Nghị quyết 35/2021/NQ-HĐND tỉnh Quảng Ninh.xlsx');
+
+
+                //         if ($namHoc === '2024-2025') {
+                //             $query = $query->where('type', 5)->first();
+                //             // Đường dẫn file PDF trong storage/app/demo/
+                //             $pdfPath1 = base_path('storage/app/public/' .$query->file_quyet_dinh);
+                //             $pdfPath2 = base_path('storage/app/public/' .$query->file_list);
+
+
+                //             // Kiểm tra file có tồn tại không
+                //             if (!file_exists($pdfPath1) || !file_exists($pdfPath2)) {
+                //                 return response()->json(['error' => 'File PDF không tồn tại'], 404);
+                //             }
+
+                //             // Đường dẫn file zip tạm trong storage/app/
+                //             $zipFileName = 'file_2024-2025.zip';
+                //             $zipPath = storage_path('app/' . $zipFileName);
+
+                //             $zip = new ZipArchive();
+
+                //             if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+                //                 $zip->addFile($pdfPath1, 'quyetdinh.pdf');
+                //                 $zip->addFile($pdfPath2, 'danhsach.pdf');
+                //                 $zip->close();
+                //             } else {
+                //                 return response()->json(['error' => 'Không tạo được file zip'], 500);
+                //             }
+
+                //             return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+                //         } else {
+                //             $fileName = $this->sanitizeFileName('DANH SÁCH SINH VIÊN ĐƯỢC HƯỞNG CHẾ ĐỘ HỖ TRỢ TIỀN ĂN Theo điểm f, g, khoản 3, điều 1, Nghị quyết 35/2021/NQ-HĐND tỉnh Quảng Ninh.xlsx');
+                //             return Excel::download(new DanhSachHuongHoTroTienAnExport(''), $fileName);
+                //         }
+
             default:
                 break;
         }
     }
 
-    function info() {
+    function info()
+    {
         $hoso = HoSo::get();
-     dd("oke");   
+        dd("oke");
     }
 }

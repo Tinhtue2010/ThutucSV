@@ -27,7 +27,7 @@ class MienGiamHocPhiSinhVienExport implements FromArray, WithEvents, WithDrawing
             ['PHÒNG CTCT, HT&SV'],
             [''],
             ['THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ CHÍNH SÁCH'],
-            ['CHO SINH VIÊN'],
+            ['MIỄN GIẢM HỌC PHÍ CHO SINH VIÊN'],
             [''],
             ['STT', 'Năm học', 'Học kỳ', 'Số SV hưởng', 'Số tiền hưởng', 'Số QĐ', 'Ngày QĐ'],
         ];

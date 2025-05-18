@@ -96,12 +96,16 @@
                             data: 'name',
                             render: function(data, type, row) {
                                 return `
-                                    ${row['file_quyet_dinh'] ? `<a target="_blank" href="/storage/${row['file_quyet_dinh']}">${row['file_quyet_dinh']}</a><br/>` : ''}
-                                    ${row['file_list'] ? `<a target="_blank" href="/storage/${row['file_list']}">${row['file_list']}</a><br/>` : ''}
-                                    ${row['file_name'] ? `<a target="_blank" href="/storage/${row['file_name']}">${row['file_name']}</a>` : ''}
-                                `;
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    ${row['file_quyet_dinh'] ? `<a target="_blank" href="/storage/${row['file_quyet_dinh']}"><button class="btn btn-primary">Quyết định</button></a>` : ''} 
+                                    ${row['file_list'] ? `<a target="_blank" href="/storage/${row['file_list']}"><button class="btn btn-primary">Danh sách</button></a>` : ''}
+                                    ${row['file_name'] ? `<a target="_blank" href="/storage/${row['file_name']}"><button class="btn btn-primary">Đơn</button></a>` : ''}
+                                    ${row['file_quyet_dinh'] ? `<button class="btn btn-secondary print-btn" data-quyet-dinh="${row['file_quyet_dinh']}" data-list="${row['file_list']}">In quyết định</button>` : ''}
+                                </div>
+                            `;
                             }
                         },
+
                         {
                             data: 'nam_hoc',
                             render: function(data, type, row) {
@@ -212,8 +216,60 @@
                 datatable.ajax.reload();
             }
 
+
+
             @include('layout.render_pagination')
         }();
+
+        document.addEventListener('click', async function(e) {
+        if (e.target.classList.contains('print-btn')) {
+            const fileQuyetDinh = e.target.getAttribute('data-quyet-dinh');
+            const fileList = e.target.getAttribute('data-list');
+
+            if (fileQuyetDinh || fileList) {
+                try {
+                    const { PDFDocument } = PDFLib;
+                    const mergedPdf = await PDFDocument.create();
+
+                    // Fetch and add fileQuyetDinh
+                    if (fileQuyetDinh) {
+                        const response1 = await fetch(`/storage/${fileQuyetDinh}`);
+                        const arrayBuffer1 = await response1.arrayBuffer();
+                        const pdf1 = await PDFDocument.load(arrayBuffer1);
+                        const pages1 = await mergedPdf.copyPages(pdf1, pdf1.getPageIndices());
+                        pages1.forEach((page) => mergedPdf.addPage(page));
+                    }
+
+                    // Fetch and add fileList
+                    if (fileList) {
+                        const response2 = await fetch(`/storage/${fileList}`);
+                        const arrayBuffer2 = await response2.arrayBuffer();
+                        const pdf2 = await PDFDocument.load(arrayBuffer2);
+                        const pages2 = await mergedPdf.copyPages(pdf2, pdf2.getPageIndices());
+                        pages2.forEach((page) => mergedPdf.addPage(page));
+                    }
+
+                    // Save the merged PDF
+                    const mergedPdfBytes = await mergedPdf.save();
+                    const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+
+                    // Open in a new tab and print
+                    const printWindow = window.open(url);
+                    printWindow.onload = function() {
+                        printWindow.focus();
+                        printWindow.print();
+                    };
+
+                    // Revoke URL after some time to avoid memory leaks
+                    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+                } catch (error) {
+                    console.error("Error while generating the PDF:", error);
+                }
+            }
+        }
+    });
 
 
         $(document).ready(function() {

@@ -25,7 +25,7 @@ class CheDoHoTroHocPhiChoSinhVienExport implements FromArray, WithEvents, WithDr
             ['TRƯỜNG ĐẠI HỌC HẠ LONG'],
             ['PHÒNG CTCT, HT&SV'],
             [''],
-            ['THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ'],
+            ['THEO DÕI KẾT QUẢ GIẢI QUYẾT'],
             ['CHẾ ĐỘ HỖ TRỢ HỌC PHÍ CHO SINH VIÊN'],
             ['THEO NGHỊ QUYẾT 35/2021/NQ-HĐND'],
             [''],

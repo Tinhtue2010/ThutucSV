@@ -37,9 +37,10 @@ class DocumentController extends Controller
 
     public function TroCapXaHoiSinhVien(Request $request)
     {
-        $fileName = 'THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ HỖ TRỢ CHI PHÍ HỌC TẬP CHO SINH VIÊN.xlsx';
+        $fileName = 'THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ TRỢ CẤP XÃ HỘI CHO SINH VIÊN.xlsx';
         return Excel::download(new TroCapXaHoiSinhVienExport(''), $fileName);
     }
+
     public function CheDoMienPhiChoOKytucXa(Request $request)
     {
         $fileName = $this->sanitizeFileName('THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ MIỄN PHÍ CHỖ Ở KÝ TÚC XÁ CHO SINH VIÊN THEO NGHỊ QUYẾT 35/2021/NQ-HĐND.xlsx');

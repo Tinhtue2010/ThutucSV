@@ -82,7 +82,7 @@
                                 <th class="text-nowrap" data-name="id">{{__('Kỳ học')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Năm học')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Phân loại')}}</th>
-                                <th class="text-nowrap" data-name="id">{{__('File')}}</th>
+                                <th class="text-nowrap" data-name="id">{{__('Chức năng')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Trạng thái')}}</th>
                             </tr>
                             </thead>

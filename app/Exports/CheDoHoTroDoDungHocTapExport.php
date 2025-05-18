@@ -26,7 +26,7 @@ class CheDoHoTroDoDungHocTapExport implements FromArray, WithEvents, WithDrawing
             ['TRƯỜNG ĐẠI HỌC HẠ LONG'],
             ['PHÒNG CTCT, HT&SV'],
             [''],
-            ['THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ'],
+            ['THEO DÕI KẾT QUẢ GIẢI QUYẾT'],
             ['CHẾ ĐỘ HỖ TRỢ ĐỒ DÙNG HỌC TẬP CHO SINH VIÊN'],
             ['THEO NGHỊ QUYẾT 35/2021/NQ-HĐND'],
             [''],

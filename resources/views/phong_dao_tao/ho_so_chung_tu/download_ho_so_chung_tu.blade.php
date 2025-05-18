@@ -77,12 +77,12 @@
                                         data-placeholder="Loại hồ sơ"
                                         data-dropdown-parent="#select-parent-{{ $target }}-3">
                                         <option value="1">Sổ theo dõi sinh viên rút hồ sơ</option>
-                                        <option value="2">Danh sách miễn giảm học phí</option>
-                                        <option value="3">Danh sách trợ cấp xã hội</option>
-                                        <option value="4">Danh sách trợ cấp học phí</option>
-                                        <option value="5">Danh sách sinh viên được miễn ký túc xá</option>
-                                        <option value="6">Danh sách sinh viên được hỗ trợ tiền ăn</option>
-                                        <option value="7">Chế độ chính sách</option>
+                                        <option value="2">Sổ theo dõi kết quả giải quyết chế độ miễn giảm học phí</option>
+                                        <option value="3">Sổ theo dõi kết quả giải quyết chế độ Trợ cấp Xã hội</option>
+                                        <option value="4">Sổ theo dõi kết quả giải quyết chế độ Hỗ trợ chi phí học tập</option>
+                                        <option value="5">Sổ theo dõi kết quả giải quyết Miễn phí chỗ ở KTX</option>
+                                        <option value="6">Sổ theo dõi kết quả giải quyết Chế độ hỗ trợ học phí</option>
+                                        <option value="7">Sổ theo dõi kết quả giải quyết chế độ Hỗ trợ học, đồ dùng học tập</option>
                                     </select>
                                 </div>
                             </div>

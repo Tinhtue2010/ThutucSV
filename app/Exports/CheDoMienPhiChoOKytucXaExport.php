@@ -26,7 +26,7 @@ class CheDoMienPhiChoOKytucXaExport implements FromArray, WithEvents, WithDrawin
             ['TRƯỜNG ĐẠI HỌC HẠ LONG'],
             ['PHÒNG CTCT, HT&SV'],
             [''],
-            ['THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ'],
+            ['THEO DÕI KẾT QUẢ GIẢI QUYẾT'],
             ['CHẾ ĐỘ MIẾN PHÍ CHỖ Ở KÝ TÚC XÁ CHO SINH VIÊN'],
             ['THEO NGHỊ QUYẾT 35/2021/NQ-HĐND'],
             [''],
