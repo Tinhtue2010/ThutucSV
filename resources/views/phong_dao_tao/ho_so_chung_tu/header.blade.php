@@ -13,10 +13,10 @@
                         <!--end::Title-->
                     </div>
                     <div class="w-100 justify-start d-flex">
-                        <div class="d-flex w-100 flex-wrap">
+                        <div class="d-flex me-5">
                             <div onclick="savePhieu()" class="btn btn-secondary">Lưu trữ tất cả hồ sơ chứng từ</div>
                         </div>
-                        <div class="d-flex w-100 flex-wrap">
+                        <div class="d-flex">
                             <div onclick="downloadPhieu()" class="btn btn-secondary">Xuất hồ sơ chứng từ</div>
                         </div>
                     </div>

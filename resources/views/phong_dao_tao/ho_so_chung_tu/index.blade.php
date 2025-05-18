@@ -26,7 +26,7 @@
                                     <label class="form-label">Loại hồ sơ</label>
                                     
                                     <!--begin::Select2-->
-                                    <select class="form-select  filter-select" data-name="group" data-control="select2" data-placeholder="Loại hồ sơ">
+                                    <select class="form-select  filter-select" data-name="type" data-control="select2" data-placeholder="Loại hồ sơ">
                                         <option value="all" selected>Hiển thị tất cả</option>
                                         <option value="1">Rút hồ sơ</option>
                                         <option value="2">Miễn giảm học phí</option>
@@ -83,6 +83,7 @@
                                 <th class="text-nowrap" data-name="id">{{__('Năm học')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('Phân loại')}}</th>
                                 <th class="text-nowrap" data-name="id">{{__('File')}}</th>
+                                <th class="text-nowrap" data-name="id">{{__('Trạng thái')}}</th>
                             </tr>
                             </thead>
                             <tbody class="fw-semibold text-gray-600">

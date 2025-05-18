@@ -80,7 +80,7 @@
                                     <th class="text-nowrap" data-name="lop_name">{{ __('Lớp') }}</th>
                                     <th class="text-nowrap" data-name="khoa_name">{{ __('Khoa') }}</th>
                                     <th class="text-nowrap" data-name="nien_khoa">{{ __('Hệ đào tạo') }}</th>
-                                    <th class="text-nowrap" data-name="nien_khoa">{{ __('Liên khóa') }}</th>
+                                    <th class="text-nowrap" data-name="nien_khoa">{{ __('Niên khóa') }}</th>
                                     <th class="text-nowrap" data-name="khoa_hoc">{{ __('Khoá học') }}</th>
                                     <td class="text-nowrap">{{ __('Chức năng') }}</td>
                                 </tr>

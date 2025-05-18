@@ -24,7 +24,7 @@
             <span class="required">Ngày sinh</span>
         </label>
         <!--end::Label-->
-        <input type="date" class="form-control" name="date_of_birth" />
+        <input type="date" class="form-control" name="date_of_birth" value="2013-01-08">
     </div>
     <div class="d-flex flex-column mb-8 fv-row col-6 ps-4">
         <!--begin::Label-->
@@ -63,22 +63,22 @@
 
 </div>
 <div class="d-flex flex-row">
-    <div class="d-flex flex-column mb-8 fv-row col-6 pe-4">
+    <div class="d-flex flex-column mb-8 fv-row col-12 pe-4">
         <!--begin::Label-->
         <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-            <span class="required">Liên khóa</span>
+            <span class="required">Niên khóa</span>
         </label>
         <!--end::Label-->
         <input type="text" value="{{ date('Y') }}" class="form-control" name="nien_khoa" />
     </div>
-    <div class="d-flex flex-column mb-8 fv-row col-6 ps-4">
+    {{-- <div class="d-flex flex-column mb-8 fv-row col-6 ps-4">
         <!--begin::Label-->
         <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
             <span class="required">Ngày nhập học</span>
         </label>
         <!--end::Label-->
         <input type="date" class="form-control" name="ngay_nhap_hoc" />
-    </div>
+    </div> --}}
 </div>
 
 @if ($type == '_update')
@@ -90,7 +90,7 @@
             </label>
             <!--end::Label-->
             <select data-dropdown-parent="#select-parent-{{ $type }}-3" class="form-select form-select-solid" name="status" data-control="select2" data-hide-search="true" data-placeholder="Trạng thái">
-                <option value="0">Đang học</option>
+                <option value="0" selected>Đang học</option>
                 <option value="1">Rút hồ sơ</option>
                 <option value="2">Đã tốt nghiệp</option>
             </select>
@@ -123,20 +123,20 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            $('#{{ $type }}_field_khoa').change((e) => {
-                const selectedValue = $(e.target).val();
+            // $('#{{ $type }}_field_khoa').change((e) => {
+            //     const selectedValue = $(e.target).val();
 
-                axios.get("{{ route('khoaManager.lop') }}/" + selectedValue).then(
-                    response => {
-                        $('select[name="lop_id"]').prop('disabled', false);
-                        $('select[name="lop_id"]').empty();
-                        response.data.forEach(e => {
-                            var newOption = new Option(`${e.name} - ${e.hedaotao == 0 ? "ĐH" : e.hedaotao == 1 ? "THS" : e.hedaotao == 2 ? "CĐ" : "TC"}`, e.id, false, false);
-                            $('select[name="lop_id"]').append(newOption).trigger('change');
-                        });
-                    }).then()
+            //     axios.get("{{ route('khoaManager.lop') }}/" + selectedValue).then(
+            //         response => {
+            //             $('select[name="lop_id"]').prop('disabled', false);
+            //             $('select[name="lop_id"]').empty();
+            //             response.data.forEach(e => {
+            //                 var newOption = new Option(`${e.name} - ${e.hedaotao == 0 ? "ĐH" : e.hedaotao == 1 ? "THS" : e.hedaotao == 2 ? "CĐ" : "TC"}`, e.id, false, false);
+            //                 $('select[name="lop_id"]').append(newOption).trigger('change');
+            //             });
+            //         }).then()
 
-            })
+            // })
         })
     </script>
 @endpush

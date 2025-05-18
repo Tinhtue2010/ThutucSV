@@ -177,6 +177,7 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::post('/save-all', [HoSoChungTuPhongDaoTaoController::class, 'saveAll'])->name('saveAll');
                 Route::post('/download', [HoSoChungTuPhongDaoTaoController::class, 'download'])->name('download');
                 Route::get('/get-data', [HoSoChungTuPhongDaoTaoController::class, 'getData'])->name('getData');
+                Route::get('/get-info', [HoSoChungTuPhongDaoTaoController::class, 'info'])->name('info');
             });
 
 

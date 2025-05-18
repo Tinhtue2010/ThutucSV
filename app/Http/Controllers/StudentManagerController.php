@@ -57,7 +57,8 @@ class StudentManagerController extends Controller
     {
         try {
             $error = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('students.*','lops.*')
+             ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
+            ->select('students.*','lops.*','khoas.id as khoa_id','lops.id as lop_id')
             ->findOrFail($id);
 
             return $error;

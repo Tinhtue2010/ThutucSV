@@ -75,7 +75,7 @@
                         {
                             data: 'type',
                             render: function(data, type, row) {
-                                switch (data) {
+                                switch (Number(data)) {
                                     case 1:
                                         return "Rút hồ sơ";
                                     case 2:
@@ -100,6 +100,12 @@
                                     ${row['file_list'] ? `<a target="_blank" href="/storage/${row['file_list']}">${row['file_list']}</a><br/>` : ''}
                                     ${row['file_name'] ? `<a target="_blank" href="/storage/${row['file_name']}">${row['file_name']}</a>` : ''}
                                 `;
+                            }
+                        },
+                        {
+                            data: 'nam_hoc',
+                            render: function(data, type, row) {
+                                return `Đã duyệt`
                             }
                         },
                         // {

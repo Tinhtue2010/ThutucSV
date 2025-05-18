@@ -84,32 +84,46 @@
             id = data;
 
             var lop_id = 0;
+            var ma_khoa = '';
             axios.get("{{ route('studentManager.getDataChild') }}/" + data).then(
                 response => {
                     modelUpdate.show();
                     const inputElements = form.querySelectorAll('[name]');
                     inputElements.forEach(e => {
-                        if (e.name != '_token') {
+                        if (e.name != '_token' && e.name != 'status') {
                             e.value = response.data[e.name] == null ? '' : response.data[e.name];
                             var event = new Event('change');
                             e.dispatchEvent(event);
                         }
+                        if (e.name == 'date_of_birth') {
+                            let dateStr = response.data['date_of_birth'];
+                            let formattedDate = dateStr.slice(0, 10);
+                            e.value = formattedDate;
+                        }
                     });
                     lop_id = response.data['lop_id'];
-                    return axios.get("{{ route('khoaManager.lop') }}/" + response.data['khoa_id']);
+                    return response.data['ma_khoa'];
                 }
-            ).then(
-                response => {
-                    $('select[name="lop_id"]').prop('disabled', false);
-                    $('select[name="lop_id"]').empty();
-                    
-                    response.data.forEach(e => {
-                        var newOption = new Option(`${e.name} - ${e.hedaotao == 0 ? "ĐH" : e.hedaotao == 1 ? "THS" : e.hedaotao == 2 ? "CĐ" : "TC"}`, e.id, false, false);
-                        $('select[name="lop_id"]').append(newOption).trigger('change');
-                    });
-                    $('select[name="lop_id"]').val(lop_id).trigger('change');
-                }
-            );
+            ).then((res) => {
+                $('select[name="lop_id"]').prop('disabled', false);
+                $('select[name="lop_id"]').empty();
+
+                axios.get("{{ route('khoaManager.lop') }}/" + res).then(
+                    response => {
+                        $('select[name="lop_id"]').prop('disabled', false);
+                        $('select[name="lop_id"]').empty();
+                        response.data.forEach(e => {
+                            var newOption = new Option(
+                                `${e.name} - ${e.hedaotao == 0 ? "ĐH" : e.hedaotao == 1 ? "THS" : e.hedaotao == 2 ? "CĐ" : "TC"}`,
+                                e.id, false, false);
+                            $('select[name="lop_id"]').append(newOption).trigger('change');
+                        });
+                    }).then()
+                $('select[name="lop_id"]').val(lop_id).trigger('change');
+            });
+
+            $('#_update_field_khoa').val('DL').trigger('change');
+
         }
     </script>
 @endpush

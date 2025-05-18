@@ -82,6 +82,7 @@
                                         <option value="4">Danh sách trợ cấp học phí</option>
                                         <option value="5">Danh sách sinh viên được miễn ký túc xá</option>
                                         <option value="6">Danh sách sinh viên được hỗ trợ tiền ăn</option>
+                                        <option value="7">Chế độ chính sách</option>
                                     </select>
                                 </div>
                             </div>

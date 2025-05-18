@@ -13,7 +13,7 @@
                         @csrf
                         <input type="text" name="id" class="d-none">
                         <div class="col-12">
-                            <label for="kt_td_picker_linked_2_input" class="form-label">Bạn có chắc muốn lưu trữ toàn bộ hồ sơ chứng từ hiện tại <br> Hành động này sẽ khoá tất cả hồ sơ đã sử lý hoàn tất về trạng thái lưu trữ <br> Tất cả file được lưu tại hệ thống sẽ được chuyển qua drive <br> Lưu ý: nếu lưu trữ hồ sơ chứng từ sẽ không thể tiếp tục quá trình sử lý được nữa</label><br>
+                            <label for="kt_td_picker_linked_2_input" class="form-label">Bạn có chắc muốn lưu trữ toàn bộ hồ sơ chứng từ hiện tại <br> Hành động này sẽ khoá tất cả hồ sơ đã xử lý hoàn tất về trạng thái lưu trữ <br> Tất cả file được lưu tại hệ thống sẽ được chuyển qua drive <br> Lưu ý: nếu lưu trữ hồ sơ chứng từ sẽ không thể tiếp tục quá trình xử lý được nữa</label><br>
                             <div class="mb-3">
                                 <div class="form-check">
                                     <input class="form-check-input" name="RHS" type="checkbox" value="1" checked />

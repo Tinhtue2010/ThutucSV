@@ -399,7 +399,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
             DB::rollback();
             \Log::error($e->getMessage(), ['file' => $e->getFile(), 'line' => $e->getLine()]);
             return response()->json([
-                'error' => "Có lỗi khi sử lý dữ liệu",
+                'error' => "Có lỗi khi xử lý dữ liệu",
                 'file' => $e->getFile(),
                 'line' => isset($error_line) ? $error_line : $e->getLine()
             ], 500);
