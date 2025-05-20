@@ -97,7 +97,7 @@ class User extends Authenticatable
                     "7220210",
                     "7220204",
                     "7620301",
-                    // "7480101" // cntt demo test
+                    "7480101" // cntt demo test
                 ];            
                 if (in_array($lop->nganh_id, $list_nganh)) {
                     return true;

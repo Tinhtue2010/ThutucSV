@@ -1030,8 +1030,6 @@ trait CommonHelper
             "serial_number" => $serialNumber,
         ];
         $msg_signHash = $this->api_smartca("https://gwsca.vnpt.vn/sca/sp769/v1/signatures/sign", $data_signhash);
-
-
         return [$fileID, $msg_signHash->data->transaction_id, $transIdHash];
     }
 
