@@ -42,6 +42,11 @@
                         "dataSrc": function(response) {
                             renderPagination(response.page,
                                 response.max_page);
+                                                        const infoSelector = document.getElementById('datatable-info');
+    if (infoSelector) {
+                                infoSelector.innerText =
+                                    `Tổng số bản ghi: ${response.total_items}, Số bản ghi trang hiện tại: ${response.current_page_items_count}`;
+                            }
                             return response.data;
                         },
                     },
@@ -194,7 +199,7 @@
                     ],
                     paging: false,
                     searching: false,
-                    order: [1, 'asc'],
+                    order: [1, 'desc'],
                     columnDefs: [{
                         orderable: false,
                         targets: 0,

@@ -71,7 +71,7 @@ class KeHoachTaiChinhService extends Controller
 
             $file_name = $this->saveBase64AsPdf($getPDF, 'DON_XIN_RUT_HO_SO/'.$student->student_code);
 
-            $this->deletePdfAndTmp($stopStudy->file_name, $file_name);
+            // $this->deletePdfAndTmp($stopStudy->file_name, $file_name);
 
             $stopStudy->update([
                 "is_pay" => 1,

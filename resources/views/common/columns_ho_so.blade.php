@@ -26,6 +26,10 @@
             return "Đơn xin trợ cấp học phí"
         if (data == 4)
             return "Đơn xin chế độ chính sách"
+        if (data == 5)
+            return "Đơn xin chế độ chính sách"
+        if (data == 6)
+            return "Đơn xin chế độ chính sách"
         return ""
     }
 },
@@ -92,7 +96,7 @@
             }
         }
 
-        if(row['type'] == 1 || row['type'] == 2 || row['type'] == 3 || row['type'] == 4)
+        if(row['type'] == 1 || row['type'] == 2 || row['type'] == 3 || row['type'] == 4 || row['type'] == 5 || row['type'] == 6)
         {
             @foreach (config('doituong.statusmiengiamhp') as $index => $item)
             if(data == {{$item[0]}})
@@ -107,7 +111,7 @@
         {
             res += `<span class="mt-1 badge badge-primary">Sinh viên đã bổ sung hồ sơ</span>`;
         }
-        if(!(row['type'] == 1 || row['type'] == 2 || row['type'] == 3 || row['type'] == 4))
+        if(!(row['type'] == 1 || row['type'] == 2 || row['type'] == 3 || row['type'] == 4|| row['type'] == 5|| row['type'] == 6))
         {
 
             if(data < 0 && row['is_update'] == 0 && data != -4)

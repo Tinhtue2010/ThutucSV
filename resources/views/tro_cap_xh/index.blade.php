@@ -25,7 +25,7 @@
                                 @if ($don_parent->status == 0)
                                     {{ __('Đơn của bạn đã được gửi đi hãy chờ thông báo tiếp theo') }}
                                 @else
-                                    {{ $don->note }}
+                                    {{ $don->note ?? '' }}
                                 @endif
 
                             </span>
@@ -116,7 +116,7 @@
                         <div class="d-flex flex-column mb-1 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="">Thường trú</span>
+                                <span class="">Nơi thường trú</span>
                             </label>
                             <!--end::Label-->
                             <input type="text" class="form-control" name="thuongtru">
@@ -246,6 +246,18 @@
 
                 }
             });
+        });
+
+        function xacnhan() {
+            mess_error("Cảnh báo", "{{ __('Bạn chưa cập nhật số điện thoại.') }}");
+            setTimeout(() => {
+                window.location.href = "{{ route('student.info') }}";
+            }, 2000);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (is_null($student->phone))
+                xacnhan();
+            @endif
         });
     </script>
 @endpush

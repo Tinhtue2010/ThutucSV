@@ -28,7 +28,7 @@ class StopStudyController extends Controller
             ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)->first();
-            
+
         return view('stop_study.index', ['don_parent' => $don_parent, 'don' => $don, 'student' => $student]);
     }
 
@@ -67,13 +67,13 @@ class StopStudyController extends Controller
         $phieu->key = "RHS";
         $phieu->file = json_encode($this->uploadListFile($request, 'files', 'DON_XIN_RUT_HO_SO/' . ($student->student_code ?? $student->id)));
         $phieu->content = json_encode($studentData);
-        
+
         $pdf =  $this->createPDF($phieu);
 
         return $this->craeteSignature($info_signature, $pdf, $user->cccd, 'DON_XIN_RUT_HO_SO');
     }
 
-    
+
 
 
     function CreateViewPdf(Request $request)
@@ -85,11 +85,11 @@ class StopStudyController extends Controller
         }
 
         $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-        ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
-        ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
-        ->where('students.id', $user->student_id)->first();
+            ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
+            ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
+            ->where('students.id', $user->student_id)->first();
 
-        $file_name = $this->saveBase64AsPdf($getPDF,'DON_XIN_RUT_HO_SO/' . ($student->student_code ?? $student->id));
+        $file_name = $this->saveBase64AsPdf($getPDF, 'DON_XIN_RUT_HO_SO/' . ($student->student_code ?? $student->id));
 
 
 
@@ -112,13 +112,16 @@ class StopStudyController extends Controller
             $query->files = json_encode($this->uploadListFile($request, 'files', 'DON_XIN_RUT_HO_SO/' . ($student->student_code ?? $student->id)));
             $query->student_id = $user->student_id;
             $query->round = 1;
+            $query->nam_hoc = '2024-2025';
+            $query->ky_hoc = 2;
+            $query->name = 'Hồ sơ thôi học';
             $query->note = $request->data;
             $query->file_name = $file_name;
             $query->ma_lop = $student->ma_lop;
             $query->save();
         }
 
-        $this->notification("Đơn xin rút hồ sơ của bạn đã được gửi, vui lòng chờ thông báo khác", null,$file_name, "RHS");
+        $this->notification("Đơn xin rút hồ sơ của bạn đã được gửi, vui lòng chờ thông báo khác", null, $file_name, "RHS");
 
 
         return true;

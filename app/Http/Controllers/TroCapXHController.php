@@ -17,15 +17,12 @@ class TroCapXHController extends Controller
     {
         $lastSegment = request()->segment(count(request()->segments()));
         $user = Auth::user();
-        if($lastSegment == "tro-cap-xh")
-        {
+        if ($lastSegment == "tro-cap-xh") {
             $don_parent = StopStudy::where('student_id', $user->student_id)->where('type', 2)->first();
-        }
-        else
-        {
+        } else {
             $don_parent = StopStudy::where('student_id', $user->student_id)->where('type', 3)->first();
         }
-        
+
         if ($don_parent) {
             $don = StopStudy::where('parent_id', $don_parent->id)->orderBy('created_at', 'desc')->first();
         } else {
@@ -95,7 +92,8 @@ class TroCapXHController extends Controller
         $student = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
-            ->where('students.id', $user->student_id)->first();
+            ->where('students.id', $user->student_id)
+            ->first();
 
         if (isset($request->trocapxh)) {
             $file_name = $this->saveBase64AsPdf($getPDF, 'TRO_CAP_XH/' . ($student->student_code ?? $student->id), 'don-');
@@ -117,21 +115,26 @@ class TroCapXHController extends Controller
                 'note' => $request->data,
                 'is_update' => 1,
                 'type_miengiamhp' => $request->doituong,
+                'noi_thuong_tru' => $request->thuongtru,
                 'file_name' => $file_name
             ]);
         } else {
             $query = new StopStudy([
                 'files' => $file_dinh_kem,
                 'student_id' => $user->student_id,
+                'nam_hoc' => '2024-2025',
+                'ky_hoc' => 2,
+                'name' => 'Hồ sơ trợ cấp xã hội',
                 'round' => 1,
                 'type' => $request->trocapxh ? 2 : 3,
                 'note' => $request->data,
+                'noi_thuong_tru' => $request->thuongtru,
                 'ma_lop' => $student->ma_lop,
                 'type_miengiamhp' => $request->doituong,
                 'file_name' => $file_name
             ]);
             $query->save();
-            
+
             $this->notification("Đơn xin miễn giảm học phí của bạn đã được gửi, vui lòng chờ thông báo khác", null, $file_name, "GHP");
         }
 

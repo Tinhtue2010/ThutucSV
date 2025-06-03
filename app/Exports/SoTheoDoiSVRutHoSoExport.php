@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
@@ -24,11 +25,15 @@ class SoTheoDoiSVRutHoSoExport implements FromArray, WithEvents, WithDrawings
 
     public function array(): array
     {
+        $carbonDate = Carbon::parse(now());
+        $day = $carbonDate->format('d');
+        $month = $carbonDate->format('m');
+        $year = $carbonDate->format('Y');
         $result = [
-            ['TRƯỜNG ĐẠI HỌC HẠ LONG','','','CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM'],
-            ['PHÒNG CÔNG TÁC CHÍNH TRỊ,','','','Độc lập - Tự do - Hạnh phúc'],
+            ['TRƯỜNG ĐẠI HỌC HẠ LONG', '', '', 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM'],
+            ['PHÒNG CÔNG TÁC CHÍNH TRỊ,', '', '', 'Độc lập - Tự do - Hạnh phúc'],
             ['QUẢN LÝ VÀ HỖ TRỢ SINH VIÊN'],
-            ['','','','Quảng Ninh, ngày tháng năm 20'],
+            ['', '', '', 'Quảng Ninh, ngày '.$day.' tháng '.$month.' năm '.$year],
             [''],
             ['SỔ THEO DÕI SINH VIÊN RÚT HỒ SƠ1'],
             [''],
@@ -46,8 +51,8 @@ class SoTheoDoiSVRutHoSoExport implements FromArray, WithEvents, WithDrawings
 
         $result[] = [
             [''],
-            ['','','','Người lập biểu','',''],
-            ['','','','(kí,ghi rõ họ tên)','',''],
+            ['', '', '', 'Người lập biểu', '', ''],
+            ['', '', '', '(kí,ghi rõ họ tên)', '', ''],
         ];
         return $result;
     }
@@ -104,16 +109,16 @@ class SoTheoDoiSVRutHoSoExport implements FromArray, WithEvents, WithDrawings
                 }
 
                 $this->boldCell($sheet, 'A' . $secondStart . ':F' . $secondStart + 1);
-                $sheet->mergeCells( 'D' . $secondStart . ':F' . $secondStart);
-                $sheet->mergeCells( 'D' . $secondStart+1 . ':F' . $secondStart+1);
-                
+                $sheet->mergeCells('D' . $secondStart . ':F' . $secondStart);
+                $sheet->mergeCells('D' . $secondStart + 1 . ':F' . $secondStart + 1);
 
-                $this->applyBorder($sheet, 'A8:F' . $sheet->getHighestRow()-3);
-                $this->centerCell($sheet, 'A1:F'.$sheet->getHighestRow());
+
+                $this->applyBorder($sheet, 'A8:F' . $sheet->getHighestRow() - 3);
+                $this->centerCell($sheet, 'A1:F' . $sheet->getHighestRow());
                 $this->boldCell($sheet, 'A1:F8');
                 $this->italicCell($sheet, 'D4');
                 $sheet->getStyle('A1')->applyFromArray([
-                    'font' => [ 'bold' => false],
+                    'font' => ['bold' => false],
                 ]);
             },
         ];

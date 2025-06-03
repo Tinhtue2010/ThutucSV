@@ -1,7 +1,7 @@
 @extends('layout.doc_layout')
 
 @section('data')
-    <div id="doc_view" class="A4 d-flex flex-column" style="height: auto;">
+    <div id="doc_view" class="A4 d-flex flex-column times-font vietnamese-text" style="height: auto;">
         <div class="d-flex flex-row justify-content-between">
             <div>
                 <div class="text-center">UBND TỈNH QUẢNG NINH</div>
@@ -19,9 +19,9 @@
             </div>
             <div>
                 <!-- <div class="text-center">CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
-                <div class="text-center fw-bold">Độc lập - Tự do - Hạnh phúc</div>
-                <div
-                  style="
+                    <div class="text-center fw-bold">Độc lập - Tự do - Hạnh phúc</div>
+                    <div
+                      style="
             width: 203px;
             height: 1px;
             background-color: black;
@@ -29,10 +29,10 @@
             margin-left: auto;
             margin-right: auto;
           "
-                ></div>
-                <div class="text-center fst-italic mt-1">
-                  Quảng Ninh, ngày ?? tháng ?? năm ????
-                </div> -->
+                    ></div>
+                    <div class="text-center fst-italic mt-1">
+                      Quảng Ninh, ngày ?? tháng ?? năm ????
+                    </div> -->
             </div>
         </div>
         <div class="text-center fw-bold" style="margin-top: 35px; text-transform: uppercase">

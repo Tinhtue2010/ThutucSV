@@ -32,7 +32,7 @@
                                 @endif class="form-control" name="noisinh"
                             value="{{ $phieu['noisinh'] ?? '' }}"/>
                         </div>
-                        <div class="d-flex flex-column mb-8 fv-row">
+                        {{-- <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
                                 <span class="">Thuộc đối tượng: (ghi rõ đối tượng được quy định tại Nghị định số
@@ -48,7 +48,7 @@
                                     <option value="{{ $index }}">{{ $item[2] }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> --}}
                         <div class="d-flex flex-column mb-8 fv-row">
                             <!--begin::Label-->
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -122,15 +122,16 @@
 
 
                             @isset($don_parent)
-                                <<a href="/storage/{{ $don_parent->file_name }}" target="_blank" class="btn btn-warning me-2">Xem đơn</a>
-                            @endisset
-                            @if (isset($don_parent))
-                                @if ($don_parent->status <= 0)
+                                <a href="/storage/{{ $don_parent->file_name }}" target="_blank" class="btn btn-warning me-2">
+                                    Xem đơn</a>
+                                @endisset
+                                @if (isset($don_parent))
+                                    @if ($don_parent->status <= 0)
+                                        <button type="reset" class="btn btn-secondary">{{ __('Nhập lại') }}</button>
+                                    @endif
+                                @else
                                     <button type="reset" class="btn btn-secondary">{{ __('Nhập lại') }}</button>
                                 @endif
-                            @else
-                                <button type="reset" class="btn btn-secondary">{{ __('Nhập lại') }}</button>
-                            @endif
 
                         </div>
                     </form>
@@ -235,5 +236,17 @@
                 $(".50").hide();
             }
         })
+
+        function xacnhan() {
+            mess_error("Cảnh báo", "{{ __('Bạn chưa cập nhật số điện thoại.') }}");
+            setTimeout(() => {
+                window.location.href = "{{ route('student.info') }}";
+            }, 2000);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (is_null($student->phone))
+                xacnhan();
+            @endif
+        });
     </script>
 @endpush

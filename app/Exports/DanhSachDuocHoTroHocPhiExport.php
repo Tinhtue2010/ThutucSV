@@ -10,43 +10,74 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use App\Helpers\CommonHelper;
+use App\Models\HoSo;
+use Carbon\Carbon;
 
 class DanhSachDuocHoTroHocPhiExport implements FromArray, WithEvents, WithDrawings
 {
     protected $data;
+    protected $nam_hoc;
+    protected $ky_hoc;
 
-    public function __construct($data)
+    public function __construct($data, $nam_hoc, $ky_hoc)
     {
         $this->data = $data;
+        $this->nam_hoc = $nam_hoc;
+        $this->ky_hoc = $ky_hoc;
     }
 
     public function array(): array
     {
+        $hoSo = HoSo::where('ky_hoc', $this->ky_hoc)
+            ->where('nam_hoc', $this->nam_hoc)
+            ->where('type', 3)
+            ->first();
+        if ($hoSo) {
+            $carbonDate = Carbon::parse($hoSo->ngay_quyet_dinh);
+        } else {
+            $carbonDate = Carbon::now();
+        }
+
+        $day = $carbonDate->format('d');
+        $month = $carbonDate->format('m');
+        $year = $carbonDate->format('Y');
         $result = [
             ['UBND TỈNH QUẢNG NINH'],
             ['TRƯỜNG ĐẠI HỌC HẠ LONG'],
             [''],
             ['DANH SÁCH SINH VIÊN ĐƯỢC HỖ TRỢ HỌC PHÍ'],
             ['Theo điểm c, g, khoản 3, điều 1, Nghị quyết 35/2021/NQ-HĐND tỉnh Quảng Ninh.'],
-            ['Học kỳ ….., năm học'],
-            ['(Kèm theo Quyết định số …. /QĐ-ĐHHL, ngày …. tháng …. năm …..của Hiệu trưởng Trường Đại học Hạ Long)'],
+            ['Học kỳ ' . $this->ky_hoc . ', năm học ' . $this->nam_hoc],
+            ['(Kèm theo Quyết định số ' . ($hoSo?->so_quyet_dinh ?? '') . '/QĐ-ĐHHL, ngày ' . $day . ' tháng ' . $month . ' năm ' . $year],
             [''],
-            ['STT', 'Họ và tên', 'Ngày sinh', 'Tên lớp', 'Đối tượng', 'Điểm HT', 'Điểm RL', 'Xếp loại', '% Học phí được Hỗ trợ', 'Số tiền Học phí/tháng', 'Số tiền Hỗ trợ Học phí (5 tháng', 'Ghi chú'],
+            ['STT', 'Họ và tên', 'Ngày sinh', 'Tên lớp', 'Đối tượng', 'Điểm HT', 'Điểm RL', 'Xếp loại', '% Học phí được Hỗ trợ', 'Số tiền Học phí/tháng', 'Số tiền Hỗ trợ Học phí (5 tháng)', 'Ghi chú'],
         ];
         $stt = 1;
-
+        $tong = 0;
         if (is_array($this->data) && !empty($this->data)) {
             foreach ($this->data as $item) {
                 if (is_array($item)) {
                     $result[] = array_merge([$stt++], $item);
+                    $tong += $item[9];
                 }
             }
         }
         $result[] = [
             'Tổng',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            $tong,
         ];
         $result[] = [
-            'Số tiền bằng chữ:',
+            'Số tiền bằng chữ:' . numberInVietnameseCurrency($tong),
         ];
 
         return $result;

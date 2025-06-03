@@ -11,9 +11,7 @@
                 <form class="form" id="form_{{ $target }}">
                     <div class="card-body">
                         <div class="w-100 pb-3">
-                            <a class="w-100 py-2" target="_bank" href="{{ route('phieu.index', ['id' => 'PTQT40']) }}">
-                                Phiếu trình
-                            </a>
+
                         </div>
                         <div class="d-flex fw-medium w-100">
                             <table class="w-100 table-bordered">
@@ -23,52 +21,52 @@
                                 </tr>
                                 <tr>
                                     <th class="p-3">
-                                        <a target="_bank" href="{{ route('phieu.index', ['id' => 'QDCDTA0']) }}">
+                                        <a target="_bank" href="{{ route('downloadQuyetDinh', ['nam_hoc' => "2024-2025", 'ky_hoc' => 2, 'type' => 4]) }}">
                                             Quyết định sinh viên được hưởng hỗ trợ tiền ăn (Điều f,g, khoản 3, điều 1)
                                         </a>
                                     </th>
                                     <th class="p-3">
-                                        <a target="_bank" href="{{ route('phieu.index', ['id' => 'DSCDTA0']) }}">
+                                        <a target="_bank" href="{{ route('downloadDanhSach', ['nam_hoc' => "2024-2025", 'ky_hoc' => 2, 'type' => 4]) }}">
                                             Danh sách sinh viên được hưởng hỗ trợ tiền ăn (Điều f,g, khoản 3, điều 1)
                                         </a>
                                     </th>
                                 </tr>
                                 <tr>
                                     <th class="p-3">
-                                        <a target="_bank" href="{{ route('phieu.index', ['id' => 'QDCDHP0']) }}">
+                                        <a target="_bank" href="{{ route('downloadQuyetDinh', ['nam_hoc' => "2024-2025", 'ky_hoc' => 2, 'type' => 3]) }}">
                                             Quyết định sinh viên được hưởng hỗ trợ học phí (Điều c, g, khoản 3, điều 1)'
                                         </a>
                                     </th>
                                     <th class="p-3">
-                                        <a target="_bank" href="{{ route('phieu.index', ['id' => 'DSCDHP0']) }}">
+                                        <a target="_bank" href="{{ route('downloadDanhSach', ['nam_hoc' => "2024-2025", 'ky_hoc' => 2, 'type' => 3]) }}">
                                             Danh sách sinh viên được hưởng hỗ trợ học phí (Điều c, g, khoản 3, điều 1)'
                                         </a>
                                     </th>
                                 </tr>
                                 <tr>
                                     <th class="p-3">
-                                        <a target="_bank" href="{{ route('phieu.index', ['id' => 'QDCDKTX10']) }}">
+                                        <a target="_bank" href="{{ route('downloadQuyetDinh', ['nam_hoc' => "2024-2025", 'ky_hoc' => 2, 'type' => 4]) }}">
                                             Quyết định sinh viên được hỗ trợ chỗ ở (Điểm g, khoản 3, điều 1)
                                         </a>
                                     </th>
                                     <th class="p-3">
-                                        <a target="_bank" href="{{ route('phieu.index', ['id' => 'DSCDKTX10']) }}">
+                                        <a target="_bank" href="{{ route('downloadDanhSach', ['nam_hoc' => "2024-2025", 'ky_hoc' => 2, 'type' => 5]) }}">
                                             Danh sách sinh viên được hỗ trợ chỗ ở (Điểm g, khoản 3, điều 1)
                                         </a>
                                     </th>
                                 </tr>
-                                <tr>
+                                {{-- <tr>
                                     <th class="p-3">
                                         <a target="_bank" href="{{ route('phieu.index', ['id' => 'QDCDKTX40']) }}">
                                             Quyết định sinh viên được hỗ trợ chỗ ở (Điểm e, khoản 3, điều 1)
                                         </a>
                                     </th>
                                     <th class="p-3">
-                                        <a target="_bank" href="{{ route('phieu.index', ['id' => 'DSCDKTX40']) }}">
+                                        <a target="_bank" href="{{ route('downloadDanhSach', ['nam_hoc' => "2024-2025", 'ky_hoc' => 2, 'type' => 5]) }}">
                                             Danh sách sinh viên được hỗ trợ chỗ ở (Điểm e, khoản 3, điều 1)
                                         </a>
                                     </th>
-                                </tr>
+                                </tr> --}}
                             </table>
                         </div>
                     </div>

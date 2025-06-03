@@ -39,18 +39,18 @@
                                 <!--end::Select2-->
                             </div>
                             <div class="w-100 mw-150px">
-                                <label class="form-label">Năm</label>
+                                <label class="form-label">Năm học</label>
                                 <!--begin::Select2-->
                                 <select class="form-select  filter-select" data-name="year" data-control="select2" data-placeholder="Năm">
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>
-                                    @for ($year = 2000; $year <= 2100; $year++)
-                                        <option @if($year == date('Y')) selected @endif value="{{ $year }}">{{ $year }}</option>
+                                    @for ($year = 2001; $year <= 2030; $year++)
+                                        <option @if($year == date('Y')) selected @endif value="{{ $year }}">{{ $year-1 }}-{{ $year }}</option>
                                     @endfor
                                 </select>
                                 <!--end::Select2-->
                             </div>
-@include('common.select_status_ho_so')
+                        @include('common.select_status_ho_so')
 
 
                         </div>
@@ -77,7 +77,7 @@
                             <tbody class="fw-semibold text-gray-600">
                             </tbody>
                         </table>
-                        <!--end::Table-->
+                                                <!--end::Table--> <div id="datatable-info" class="mt-5 fs-5 text-muted"></div>
                         <div class="row pt-5 pb-5">
                             <div
                                 class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">

@@ -17,7 +17,7 @@
             text-align: center;
         }
     </style>
-    <div id="doc_view" class="A4 d-flex flex-column">
+        <div id="doc_view" class="A4 d-flex flex-column times-font vietnamese-text" style="height: auto;">
         <div class="d-flex flex-row justify-content-between">
             <div>
                 <div class="text-center">UBND TỈNH QUẢNG NINH</div>

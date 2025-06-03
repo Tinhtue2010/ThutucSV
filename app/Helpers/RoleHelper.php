@@ -44,6 +44,21 @@ if (!function_exists('Role')) {
                         return true;
                     }
                     break;
+                case "scoreManager":
+                    if ($user->role != 1) {
+                        return true;
+                    }
+                    break;
+                case "scoreCalculate":
+                    if ($user->role != 1) {
+                        return true;
+                    }
+                    break;
+                case "tuitionManager":
+                    if ($user->role != 1) {
+                        return true;
+                    }
+                    break;
                 case "khoaManager":
                     if ($user->role == 0 || $user->role == 4 || $user->role == 6) {
                         return true;

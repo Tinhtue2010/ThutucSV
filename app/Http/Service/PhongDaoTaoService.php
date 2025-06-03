@@ -183,7 +183,7 @@ class PhongDaoTaoService extends Controller
     {
         $notfi_content = "Đơn xin rút hồ sơ của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả";
         $noti_key = "RHS";
-        $note = "Đã được nhận bởi phòng đào tạo";
+        $note = "Đã được xác nhận bởi phòng CTSV";
         $stopStudyUpdate = ["status" => 3];
 
         return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'DON_XIN_RUT_HO_SO', true);
@@ -223,12 +223,50 @@ class PhongDaoTaoService extends Controller
         if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
             abort(404);
         }
-        return $this->SendSignature($request, $stopStudy, "Phiếu hướng dẫn bổ sung hồ sơ", "HDBSSH", -1, 1, "đơn xin rút trợ cấp xã hội", "BO_XUNG_HS");
+        return $this->SendSignature($request, $stopStudy, "Phiếu hướng dẫn bổ sung hồ sơ", "HDBSSH", -1, 1, "đơn xin trợ cấp xã hội", "BO_XUNG_HS");
+    }
+    function bosunghsTCHPPDF($request, $stopStudy)
+    {
+        if ($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6) {
+            $stopStudy->update(["status" => 0]);
+        }
+        if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
+            abort(404);
+        }
+        return $this->SendSignature($request, $stopStudy, "Phiếu hướng dẫn bổ sung hồ sơ", "HDBSSH", -1, 1, "đơn xin trợ cấp học phí", "BO_XUNG_HS");
+    }
+    function bosunghsCDCSPDF($request, $stopStudy)
+    {
+        if ($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6) {
+            $stopStudy->update(["status" => 0]);
+        }
+        if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
+            abort(404);
+        }
+        return $this->SendSignature($request, $stopStudy, "Phiếu hướng dẫn bổ sung hồ sơ", "HDBSSH", -1, 1, "đơn xin chế độ chính sách", "BO_XUNG_HS");
     }
     function bosunghsTCXH($request, $stopStudy)
     {
         $notfi_content = "Đơn xin trợ cấp xã hội của bạn cần bổ sung hồ sơ";
         $noti_key = "GHP";
+        $note = "Yêu cầu bổ sung hồ sơ";
+        $stopStudyUpdate = ["status" => -1, "is_update" => 0];
+
+        return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'DON_XIN_RUT_HO_SO');
+    }
+    function bosunghsTCHP($request, $stopStudy)
+    {
+        $notfi_content = "Đơn xin trợ cấp học phí của bạn cần bổ sung hồ sơ";
+        $noti_key = "GHP";
+        $note = "Yêu cầu bổ sung hồ sơ";
+        $stopStudyUpdate = ["status" => -1, "is_update" => 0];
+
+        return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'DON_XIN_RUT_HO_SO');
+    }
+    function bosunghsCDCS($request, $stopStudy)
+    {
+        $notfi_content = "Đơn xin chế độ chính sách của bạn cần bổ sung hồ sơ";
+        $noti_key = "CDCS";
         $note = "Yêu cầu bổ sung hồ sơ";
         $stopStudyUpdate = ["status" => -1, "is_update" => 0];
 
@@ -249,10 +287,10 @@ class PhongDaoTaoService extends Controller
     {
         $notfi_content = "Đơn xin miễn giảm học phí của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả";
         $noti_key = "GHP";
-        $note = "Đã được nhận bởi phòng đào tạo";
+        $note = "Đã được xác nhận bởi phòng CTSV";
         $stopStudyUpdate = ["status" => 1];
 
-        return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'GIAM_HOC_PHI');
+        return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'GIAM_HOC_PHI',true);
     }
 
     function tiepnhanhsTCXHPDF($request, $stopStudy)
@@ -272,10 +310,10 @@ class PhongDaoTaoService extends Controller
     {
         $notfi_content = "Đơn xin trợ cấp xã hội của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả";
         $noti_key = "TCXH";
-        $note = "Đã được nhận bởi phòng đào tạo";
+        $note = "Đã được xác nhận bởi phòng CTSV";
         $stopStudyUpdate = ["status" => 1];
 
-        return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'TRO_CAP_XA_HOI');
+        return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'TRO_CAP_XA_HOI',true);
     }
 
     function tiepnhanhsTCHPPDF($request, $stopStudy)
@@ -290,16 +328,39 @@ class PhongDaoTaoService extends Controller
 
         return $this->SendSignature($request, $stopStudy, "Phiếu tiếp nhận hồ sơ", "TNHS", 1, 0, "đơn xin trợ cấp học phí", "TIEP_NHAN_HS");
     }
+    function tiepnhanhsCDCSPDF($request, $stopStudy)
+    {
+        if ($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6) {
+            $stopStudy->update(["status" => 0]);
+        }
+        if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
+            abort(404);
+        }
+
+
+        return $this->SendSignature($request, $stopStudy, "Phiếu tiếp nhận hồ sơ", "TNHS", 1, 0, "đơn xin hỗ trợ chính sách", "TIEP_NHAN_HS");
+    }
+
 
     function tiepnhanhsTCHP($request, $stopStudy)
     {
         $notfi_content = "Đơn xin trợ cấp học phí của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả";
         $noti_key = "GHP";
-        $note = "Đã được nhận bởi phòng đào tạo";
+        $note = "Đã được xác nhận bởi phòng CTSV";
         $stopStudyUpdate = ["status" => 1];
 
-        return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'TRO_CAP_XA_HOI');
+        return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'TRO_CAP_XA_HOI',true);
     }
+    function tiepnhanhsCDCS($request, $stopStudy)
+    {
+        $notfi_content = "Đơn xin hưởng chế độ chính sách của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả";
+        $noti_key = "GHP";
+        $note = "Đã được xác nhận bởi phòng CTSV";
+        $stopStudyUpdate = ["status" => 1];
+
+        return $this->saveFile($request, $stopStudy, $note, $notfi_content, $noti_key, $stopStudyUpdate, 'CHE_DO_CHINH_SACH',true);
+    }
+    
 
     function tuchoihsGHPPDF($request, $stopStudy)
     {
@@ -348,146 +409,146 @@ class PhongDaoTaoService extends Controller
         return $this->saveFile($request, $stopStudy, "Đã bị từ chối bởi phòng đào tạo", "Đơn xin giảm học phí của bạn bị từ chối bởi phòng đào tạo", "GHP", ["status" => -2], "TU_CHOI_GIAI_QUYET_GIAM_HOC_PHI");;
     }
 
-    function tiepnhanhsCDCS($request, $stopStudy)
-    {
-        if ($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6) {
-            $stopStudy->update(["status" => 0]);
-        }
-        if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
-            abort(404);
-        }
+    // function tiepnhanhsCDCS($request, $stopStudy)
+    // {
+    //     if ($stopStudy->status == -3 || $stopStudy->status == -5 || $stopStudy->status == -6) {
+    //         $stopStudy->update(["status" => 0]);
+    //     }
+    //     // if ($stopStudy->status != 0 && $stopStudy->status != -1 && $stopStudy->status != 1 && $stopStudy->status != 2 && $stopStudy->status != -2) {
+    //     //     abort(404);
+    //     // }
 
-        if ($stopStudy->status == -1 || $stopStudy->status == -2) {
-            $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
-            if ($newStopStudy) {
-                try {
-                    $phieu = Phieu::find($newStopStudy->phieu_id);
-                    if ($phieu) {
-                        $phieu->delete();
-                    }
-                    $newStopStudy->delete();
-                    $stopStudy->update(["status" => 0]);
-                } catch (\Exception $e) {
-                }
-            } else {
-            }
-        }
+    //     if ($stopStudy->status == -1 || $stopStudy->status == -2) {
+    //         $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
+    //         if ($newStopStudy) {
+    //             try {
+    //                 $phieu = Phieu::find($newStopStudy->phieu_id);
+    //                 if ($phieu) {
+    //                     $phieu->delete();
+    //                 }
+    //                 $newStopStudy->delete();
+    //                 $stopStudy->update(["status" => 0]);
+    //             } catch (\Exception $e) {
+    //             }
+    //         } else {
+    //         }
+    //     }
 
-        if ($request->button_clicked == "huy_phieu" && $stopStudy->status == 1) {
-            $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
-            if ($newStopStudy) {
-                try {
-                    $phieu = Phieu::find($newStopStudy->phieu_id);
-                    if ($phieu) {
-                        $phieu->delete();
-                    }
-                    $newStopStudy->delete();
-                    $stopStudy->update(["status" => 0]);
+    //     if ($request->button_clicked == "huy_phieu" && $stopStudy->status == 1) {
+    //         $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
+    //         if ($newStopStudy) {
+    //             try {
+    //                 $phieu = Phieu::find($newStopStudy->phieu_id);
+    //                 if ($phieu) {
+    //                     $phieu->delete();
+    //                 }
+    //                 $newStopStudy->delete();
+    //                 $stopStudy->update(["status" => 0]);
 
-                    return true;
-                } catch (\Exception $e) {
-                    abort(404);
-                }
-            } else {
-                abort(404);
-            }
-        }
-        if ($request->button_clicked == "huy_phieu") {
-            return true;
-        }
-        $student = Student::find($stopStudy->student_id);
+    //                 return true;
+    //             } catch (\Exception $e) {
+    //                 abort(404);
+    //             }
+    //         } else {
+    //             abort(404);
+    //         }
+    //     }
+    //     if ($request->button_clicked == "huy_phieu") {
+    //         return true;
+    //     }
+    //     $student = Student::find($stopStudy->student_id);
 
-        $teacher = Teacher::find(Auth::user()->teacher_id);
+    //     $teacher = Teacher::find(Auth::user()->teacher_id);
 
-        $content_phieu['giaovien'] = $teacher->full_name ?? '';
-        $content_phieu['sinhvien'] = $student->full_name ?? '';
-        $content_phieu['chuky'] = $teacher->chu_ky ?? '';
-        $content_phieu['cmnd'] = $student->cmnd ?? '';
-        $content_phieu['ngaycap'] = $student->date_range_cmnd ?? '';
-        $content_phieu['sdt'] = $student->phone ?? '';
-        $content_phieu['email'] = $student->email ?? '';
+    //     $content_phieu['giaovien'] = $teacher->full_name ?? '';
+    //     $content_phieu['sinhvien'] = $student->full_name ?? '';
+    //     $content_phieu['chuky'] = $teacher->chu_ky ?? '';
+    //     $content_phieu['cmnd'] = $student->cmnd ?? '';
+    //     $content_phieu['ngaycap'] = $student->date_range_cmnd ?? '';
+    //     $content_phieu['sdt'] = $student->phone ?? '';
+    //     $content_phieu['email'] = $student->email ?? '';
 
-        if ($student->date_range_cmnd == null) {
-            $content_phieu['ngaycap'] = '';
-        } else {
-            $date = substr($student->date_range_cmnd, 0, 10);
-            $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
-            $content_phieu['ngaycap'] = $formattedDate;
-        }
+    //     if ($student->date_range_cmnd == null) {
+    //         $content_phieu['ngaycap'] = '';
+    //     } else {
+    //         $date = substr($student->date_range_cmnd, 0, 10);
+    //         $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y');
+    //         $content_phieu['ngaycap'] = $formattedDate;
+    //     }
 
-        $content_phieu['day'] = Carbon::now()->day;
-        $content_phieu['month'] = Carbon::now()->month;
-        $content_phieu['year'] = Carbon::now()->year;
+    //     $content_phieu['day'] = Carbon::now()->day;
+    //     $content_phieu['month'] = Carbon::now()->month;
+    //     $content_phieu['year'] = Carbon::now()->year;
 
-        $timestamp = strtotime(str_replace('/', '-', $request->thoigiantiepnhan));
-        $content_phieu['tiepnhan_day'] = date('d', $timestamp);
-        $content_phieu['tiepnhan_month'] = date('m', $timestamp);
-        $content_phieu['tiepnhan_year'] = date('Y', $timestamp);
-        $content_phieu['tiepnhan_gio'] = date('H', $timestamp);
-        $content_phieu['tiepnhan_phut'] = date('i', $timestamp);
+    //     $timestamp = strtotime(str_replace('/', '-', $request->thoigiantiepnhan));
+    //     $content_phieu['tiepnhan_day'] = date('d', $timestamp);
+    //     $content_phieu['tiepnhan_month'] = date('m', $timestamp);
+    //     $content_phieu['tiepnhan_year'] = date('Y', $timestamp);
+    //     $content_phieu['tiepnhan_gio'] = date('H', $timestamp);
+    //     $content_phieu['tiepnhan_phut'] = date('i', $timestamp);
 
-        $timestamp = strtotime(str_replace('/', '-', $request->thoigiantraketqua));
-        $content_phieu['ketqua_day'] = date('d', $timestamp);
-        $content_phieu['ketqua_month'] = date('m', $timestamp);
-        $content_phieu['ketqua_year'] = date('Y', $timestamp);
-        $content_phieu['ketqua_gio'] = date('H', $timestamp);
-        $content_phieu['ketqua_phut'] = date('i', $timestamp);
+    //     $timestamp = strtotime(str_replace('/', '-', $request->thoigiantraketqua));
+    //     $content_phieu['ketqua_day'] = date('d', $timestamp);
+    //     $content_phieu['ketqua_month'] = date('m', $timestamp);
+    //     $content_phieu['ketqua_year'] = date('Y', $timestamp);
+    //     $content_phieu['ketqua_gio'] = date('H', $timestamp);
+    //     $content_phieu['ketqua_phut'] = date('i', $timestamp);
 
-        $tmp = [];
-        foreach ($request->tengiayto as $index => $item) {
-            $tmp[] = [
-                "tengiayto" => $request->tengiayto[$index] ?? '',
-                "hinhthuc" => $request->hinhthuc[$index] ?? '',
-                "ghichu" => $request->ghichu[$index] ?? '',
-            ];
-        }
-        $content_phieu['bang'] = $tmp;
+    //     $tmp = [];
+    //     foreach ($request->tengiayto as $index => $item) {
+    //         $tmp[] = [
+    //             "tengiayto" => $request->tengiayto[$index] ?? '',
+    //             "hinhthuc" => $request->hinhthuc[$index] ?? '',
+    //             "ghichu" => $request->ghichu[$index] ?? '',
+    //         ];
+    //     }
+    //     $content_phieu['bang'] = $tmp;
 
-        $content_phieu['ndgiaiquyet'] = "đơn xin trợ học phí";
+    //     $content_phieu['ndgiaiquyet'] = "đơn xin trợ học phí";
 
-        $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
-        $this->notification("Đơn xin trợ cấp học phí của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả", null, "GHP", $user_id);
+    //     $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
+    //     $this->notification("Đơn xin trợ cấp học phí của bạn đã được nhận bởi phòng đào tạo vui lòng chờ kết quả", null, "GHP", $user_id);
 
 
-        if ($stopStudy->status == 0 || $stopStudy->status == 2) {
+    //     if ($stopStudy->status == 0 || $stopStudy->status == 2) {
 
-            $phieu = new Phieu();
-            $phieu->student_id = $stopStudy->student_id;
-            $phieu->teacher_id = Auth::user()->teacher_id;
-            $phieu->name = "Phiếu tiếp nhận hồ sơ";
-            $phieu->key = "CDCS";
-            $phieu->content = json_encode($content_phieu);
-            $phieu->save();
+    //         $phieu = new Phieu();
+    //         $phieu->student_id = $stopStudy->student_id;
+    //         $phieu->teacher_id = Auth::user()->teacher_id;
+    //         $phieu->name = "Phiếu tiếp nhận hồ sơ";
+    //         $phieu->key = "CDCS";
+    //         $phieu->content = json_encode($content_phieu);
+    //         $phieu->save();
 
-            $newStopStudy = $stopStudy->replicate();
-            $newStopStudy->status = 1;
-            $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = $phieu->id;
-            $newStopStudy->parent_id = $request->id;
-            $newStopStudy->note = "Đã được nhận bởi phòng đào tạo";
-            $newStopStudy->save();
-            $stopStudy->update(["status" => 1]);
-            return $phieu->id;
-        }
-        if ($stopStudy->status == 0) {
-            $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
-            $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->note = "Đã được nhận bởi phòng đào tạo";
-            $newStopStudy->save();
+    //         $newStopStudy = $stopStudy->replicate();
+    //         $newStopStudy->status = 1;
+    //         $newStopStudy->teacher_id = Auth::user()->teacher_id;
+    //         $newStopStudy->phieu_id = $phieu->id;
+    //         $newStopStudy->parent_id = $request->id;
+    //         $newStopStudy->note = "Đã được nhận bởi phòng đào tạo";
+    //         $newStopStudy->save();
+    //         $stopStudy->update(["status" => 1]);
+    //         return $phieu->id;
+    //     }
+    //     if ($stopStudy->status == 0) {
+    //         $newStopStudy = $stopStudy->where('parent_id', $request->id)->orderBy('created_at', 'desc')->first();
+    //         $newStopStudy->teacher_id = Auth::user()->teacher_id;
+    //         $newStopStudy->note = "Đã được nhận bởi phòng đào tạo";
+    //         $newStopStudy->save();
 
-            $phieu = Phieu::find($newStopStudy->phieu_id);
-            $phieu->student_id = $stopStudy->student_id;
-            $phieu->teacher_id = Auth::user()->teacher_id;
-            $phieu->name = "Phiếu hướng dẫn bổ sung hồ sơ";
-            $phieu->key = "CDCS";
-            $phieu->content = json_encode($content_phieu);
-            $phieu->save();
-            $stopStudy->update(["status" => 1]);
-            return $phieu->id;
-        }
+    //         $phieu = Phieu::find($newStopStudy->phieu_id);
+    //         $phieu->student_id = $stopStudy->student_id;
+    //         $phieu->teacher_id = Auth::user()->teacher_id;
+    //         $phieu->name = "Phiếu hướng dẫn bổ sung hồ sơ";
+    //         $phieu->key = "CDCS";
+    //         $phieu->content = json_encode($content_phieu);
+    //         $phieu->save();
+    //         $stopStudy->update(["status" => 1]);
+    //         return $phieu->id;
+    //     }
 
-        abort(404);
-    }
+    //     abort(404);
+    // }
 
 
 

@@ -28,11 +28,11 @@
                                     <!--begin::Select2-->
                                     <select class="form-select  filter-select" data-name="type" data-control="select2" data-placeholder="Loại hồ sơ">
                                         <option value="all" selected>Hiển thị tất cả</option>
-                                        <option value="1">Rút hồ sơ</option>
-                                        <option value="2">Miễn giảm học phí</option>
-                                        <option value="3">Trợ cấp xã hội</option>
-                                        <option value="4">Trợ cấp học phí</option>
-                                        <option value="5">Chế độ chính sách</option>
+                                        <option value="0">Rút hồ sơ</option>
+                                        <option value="1">Miễn giảm học phí</option>
+                                        <option value="2">Trợ cấp xã hội</option>
+                                        <option value="3">Trợ cấp học phí</option>
+                                        <option value="4">Chế độ chính sách</option>
                                     </select>
                                     <!--end::Select2-->
                                 </div>
@@ -89,7 +89,7 @@
                             <tbody class="fw-semibold text-gray-600">
                             </tbody>
                         </table>
-                        <!--end::Table-->
+                                                <!--end::Table--> <div id="datatable-info" class="mt-5 fs-5 text-muted"></div>
                         <div class="row pt-5 pb-5">
                             <div
                                 class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">

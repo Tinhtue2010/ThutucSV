@@ -43,7 +43,7 @@
                     <div class="d-flex w-100 flex-wrap">
                         <div onclick="taoQuyetDinhMGHP()" class="btn btn-secondary">Tạo, cập nhật quyết định</div>
                         @if (isset($hoso) && $hoso)
-                            <a target="_blank" href="/storage/{{ $hoso->file_list }}" class="btn btn-secondary ms-3">Xem
+                            <a target="_blank" href="{{ route('downloadDanhSach', ['nam_hoc' => $hoso->nam_hoc, 'ky_hoc' => $hoso->ky_hoc, 'type' => 2]) }}" class="btn btn-secondary ms-3">Xem
                                 danh sách</a>
                             <a target="_blank" href="/storage/{{ $hoso->file_quyet_dinh }}"
                                 class="btn btn-secondary ms-3">Xem quyết định</a>

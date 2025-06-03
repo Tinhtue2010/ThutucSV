@@ -1,7 +1,7 @@
 @extends('layout.doc_layout')
 
 @section('data')
-<div id="doc_view" class="A4 d-flex flex-column">
+    <div id="doc_view" class="A4 d-flex flex-column times-font vietnamese-text" style="height: auto;">
     <div class="text-center">CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
     <div class="text-center fw-bold">Độc lập - Tự do - Hạnh phúc</div>
     <div

@@ -1,0 +1,59 @@
+@push('js')
+    <script>
+        $('#import-file input[type="file"]').change(function(e) {
+            var file = e.target.files[0];
+            var fileName = file.name;
+            var formData = new FormData();
+
+            formData.append('csv_file', file);
+            formData.append('_token', '{{ csrf_token() }}');
+            var swalWithProgressBar = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                didOpen: () => {
+                    Swal.showLoading();
+                    $('#swal-progress-container').show();
+                },
+                willClose: () => {
+                    $('#swal-progress-container').hide();
+                }
+            });
+
+            swalWithProgressBar.fire({
+                title: 'Tải lên vui lòng không đóng trình duyệt!!',
+                html: '<div id="swal-progress-container"><div id="swal-progress-bar" class="swal-progress-bar"></div></div>',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+            });
+
+            $.ajax({
+                url: '{{ route('studentManager.importFile') }}',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener('progress', function(evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = (evt.loaded / evt.total) * 100;
+                            $('#swal-progress-bar').css('width', percentComplete + '%');
+                        }
+                    }, false);
+                    return xhr;
+                },
+                success: function(response) {
+                    mess_success('Thông báo',
+                        "Tải lên thành công")
+                    Datatable.loadData();
+                },
+                error: function(xhr, status, error) {
+                    mess_error("Cảnh báo",
+                        "{{ __('Có lỗi xảy ra bạn hãy kiểm tra lại file') }}"
+                    )
+                }
+            });
+        });
+    </script>
+@endpush

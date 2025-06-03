@@ -44,6 +44,11 @@
                         "dataSrc": function(response) {
                             renderPagination(response.page,
                                 response.max_page);
+                                                        const infoSelector = document.getElementById('datatable-info');
+    if (infoSelector) {
+                                infoSelector.innerText =
+                                    `Tổng số bản ghi: ${response.total_items}, Số bản ghi trang hiện tại: ${response.current_page_items_count}`;
+                            }
                             return response.data;
                         },
                     },
@@ -103,7 +108,7 @@
                             <td>
                                 <div class="d-flex">
 
-                                    @if (Role(4) || Role(0))
+                                    @if (Role(4) || Role(0 || Role(1)))
                                     <div onClick={btnEdit(${ data })} class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1 svg-icon bg-hover-secondary">
                                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

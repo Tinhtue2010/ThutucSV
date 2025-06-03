@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Khoa;
 use App\Models\Lop;
 use App\Models\Nganhs;
+use App\Models\Teacher;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -131,6 +132,19 @@ class KhoaManagerController extends Controller
         }
         abort(404);
         return true;
+    }
+
+    function teacher() {
+        $teachers = Teacher::whereNull('ma_khoa')->get();
+        return $teachers;
+    }
+    function teacherKhoa($id) {
+        if(!isset($id))
+        {
+            return abort(404);
+        }
+        $teachers = Teacher::where('ma_khoa',$id)->get();
+        return $teachers;
     }
 
     function nganh() {

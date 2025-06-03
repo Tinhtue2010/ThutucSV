@@ -17,7 +17,7 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
     function index()
     {
         $lop = Lop::get();
-        $hoso = HoSo::where('type', 3)->where('status', 0)
+        $hoso = HoSo::where('type', 2)->where('status', 0)
             ->latest('created_at')
             ->first();
 
@@ -98,14 +98,14 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
             ->where('stop_studies.status', 3)
             ->select('stop_studies.*')
             ->get();
-        $hoso = HoSo::where('type', 3)->where('status', 0)
+        $hoso = HoSo::where('type', 2)->where('status', 0)
             ->latest('created_at')
             ->first();
         foreach ($query as $stopStudy) {
             $stopStudy->status = 4;
             $stopStudy->save();
             $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
-            $this->notification("Danh sách trợ cấp xã hội dự kiến", null,$hoso->file_list, "TCXH", $user_id);
+            $this->notification("Danh sách trợ cấp xã hội dự kiến", null, $hoso->file_list, "TCXH", $user_id);
 
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
@@ -120,14 +120,14 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
                 ->orWhere('role', 3);
         })->get();
         foreach ($users as $item) {
-            $this->notification("Danh sách trợ cấp xã hội dự kiến",null, $hoso->file_list,  "TCXH", $item->id);
+            $this->notification("Danh sách trợ cấp xã hội dự kiến", null, $hoso->file_list,  "TCXH", $item->id);
         }
         return redirect()->back();
     }
     function guiTBSALL()
     {
 
-        $hoso = HoSo::where('type', 3)->where('status', 0)
+        $hoso = HoSo::where('type', 2)->where('status', 0)
             ->latest('created_at')
             ->first();
 
@@ -158,7 +158,7 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
         $month = $date->month;
         $year = $date->year;
         $content = [
-            "so_QD" => $request->so_QD,
+            'so_QD' => $request->so_QD,
             "thoi_gian_tao_ngay" => $day,
             "thoi_gian_tao_thang" => $month,
             "thoi_gian_tao_nam" => $year,
@@ -180,7 +180,6 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
             ->get();
 
         $content["tong_hs"] = count($query);
-
         foreach ($query as $item) {
             $content_DSTCXH[] =  [
                 "ho_ten" => $item->full_name,
@@ -196,14 +195,14 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
 
 
 
-        $phieu1 = new Phieu();
-        $phieu1->key = 'DSTCXH';
-        $phieu1->status = 0;
-        $phieu1->name = 'Danh sách sinh viên được trợ cấp xã hội';
-        $phieu1->content = json_encode([$content, $content_DSTCXH], true);
+        // $phieu1 = new Phieu();
+        // $phieu1->key = 'DSTCXH';
+        // $phieu1->status = 0;
+        // $phieu1->name = 'Danh sách sinh viên được trợ cấp xã hội';
+        // $phieu1->content = json_encode([$content, $content_DSTCXH], true);
 
-        $base64 = $this->createPDF($phieu1, 1);
-        $file_list = $this->saveBase64AsPdf($base64, 'TRO_CAP_XH/' . $year . '/' . $month, 'ds_tro_cap_xh');
+        // $base64 = $this->createPDF($phieu1, 1);
+        // $file_list = $this->saveBase64AsPdf($base64, 'TRO_CAP_XH/' . $year . '/' . $month, 'ds_tro_cap_xh');
 
 
         $phieu2 = new Phieu();
@@ -218,34 +217,37 @@ class TroCapXaHoiPhongDaoTaoController extends Controller
         // Tìm hồ sơ hiện có
         $hoso = HoSo::where('ky_hoc', $request->ky)
             ->where('nam_hoc', $request->nam)
-            ->where('type', 3)
+            ->where('type', 2)
             ->latest('created_at')
             ->first();
-
         if ($hoso) {
             if ($hoso->file_quyet_dinh != $file_quyet_dinh) {
                 $this->deletePdf($hoso->file_quyet_dinh);
             }
-            if ($hoso->file_list != $file_list) {
-                $this->deletePdf($hoso->file_list);
-            }
+            // if ($hoso->file_list != $file_list) {
+            //     $this->deletePdf($hoso->file_list);
+            // }
 
             $hoso->update([
                 'name' => "Trợ cấp xã hội",
                 'file_quyet_dinh' => $file_quyet_dinh,
-                'file_list' => $file_list,
-                'list_info' => json_encode($content_DSTCXH, true),
-                'type' => 3
+                'so_quyet_dinh' => $request->so_QD,
+                'ngay_quyet_dinh' => Carbon::createFromFormat('d/m/Y', $request->thoi_gian_tao)->format('Y-m-d'),
+                // 'file_list' => $file_list,
+                // 'list_info' => json_encode($content_DSTCXH, true),
+                'type' => 2
             ]);
         } else {
             $hoso = HoSo::create([
                 'name' => "Trợ cấp xã hội",
                 'file_quyet_dinh' => $file_quyet_dinh,
-                'file_list' => $file_list,
+                'so_quyet_dinh' => $request->so_QD,
+                'ngay_quyet_dinh' => Carbon::createFromFormat('d/m/Y', $request->thoi_gian_tao)->format('Y-m-d'),
                 'ky_hoc' => $request->ky,
                 'nam_hoc' => $request->nam,
-                'list_info' => json_encode($content_DSTCXH, true),
-                'type' => 3
+                // 'file_list' => $file_list,
+                // 'list_info' => json_encode($content_DSTCXH, true),
+                'type' => 2
             ]);
         }
 

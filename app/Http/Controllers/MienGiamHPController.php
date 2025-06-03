@@ -61,7 +61,8 @@ class MienGiamHPController extends Controller
         $studentData['noisinh'] = $request->noisinh;
 
         $doituong = config('doituong.miengiamhp');
-        $studentData['doituong'] = $doituong[$request->doituong][2];
+        // $studentData['doituong'] = $doituong[$request->doituong][2];
+        $studentData['doituong'] = '';
 
         $studentData['daduochuong'] = $request->daduochuong;
         $studentData['sdt'] = $student->phone;
@@ -128,6 +129,9 @@ class MienGiamHPController extends Controller
                 'files' => $uploadedFiles,
                 'student_id' => $user->student_id,
                 'type_miengiamhp' => $request->doituong ?? 1,
+                'name' => 'Hồ sơ miễn, giảm học phí theo NĐ 81',
+                'nam_hoc' => '2024-2025',
+                'ky_hoc' => 2,
                 'round' => 1,
                 'type' => 1,
                 'phantramgiam' => $phantramgiam,

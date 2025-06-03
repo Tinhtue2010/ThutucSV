@@ -76,7 +76,7 @@
                             <tbody class="fw-semibold text-gray-600">
                             </tbody>
                         </table>
-                        <!--end::Table-->
+                                                <!--end::Table--> <div id="datatable-info" class="mt-5 fs-5 text-muted"></div>
                         <div class="row pt-5 pb-5">
                             <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
                                 <div class="d-flex flex-row">

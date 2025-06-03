@@ -25,16 +25,22 @@
                                     <div class="d-flex flex-column">
                                         <!--begin::Name-->
                                         <div class="d-flex align-items-center mb-2">
-                                            <a href="#" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{ $student->full_name }}</a>
+                                            <a href="#"
+                                                class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{ $student->full_name }}</a>
                                         </div>
                                         <!--end::Name-->
                                         <!--begin::Info-->
                                         <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
-                                            <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
-                                                <i class="ki-outline ki-abstract-39 fs-4 me-1"></i>{{ $student->khoa_name }}</a>
-                                            <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
-                                                <i class="ki-outline ki-abstract-23 fs-4 me-1"></i>{{ $student->lop_name }}</a>
-                                            <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
+                                            <a href="#"
+                                                class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
+                                                <i
+                                                    class="ki-outline ki-abstract-39 fs-4 me-1"></i>{{ $student->khoa_name }}</a>
+                                            <a href="#"
+                                                class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
+                                                <i
+                                                    class="ki-outline ki-abstract-23 fs-4 me-1"></i>{{ $student->lop_name }}</a>
+                                            <a href="#"
+                                                class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
                                                 <i class="ki-outline ki-sms fs-4 me-1"></i>{{ $student->email }}</a>
                                         </div>
                                         <!--end::Info-->
@@ -49,15 +55,20 @@
                                         <!--begin::Stats-->
                                         <div class="d-flex flex-wrap">
                                             <!--begin::Stat-->
-                                            <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                            <div
+                                                class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                                 <!--begin::Number-->
                                                 <div class="d-flex align-items-center">
                                                     <i class="ki-outline ki-pointers fs-3 text-success me-2"></i>
-                                                    <div class="fs-2 fw-bold counted" data-kt-countup="true" data-kt-countup-value="{{ $student->sum_point }}" data-kt-countup-prefix="Đ" data-kt-initialized="1">Mã sinh viên</div>
+                                                    <div class="fs-2 fw-bold counted" data-kt-countup="true"
+                                                        data-kt-countup-value="{{ $student->sum_point }}"
+                                                        data-kt-countup-prefix="Đ" data-kt-initialized="1">Mã sinh viên
+                                                    </div>
                                                 </div>
                                                 <!--end::Number-->
                                                 <!--begin::Label-->
-                                                <div class="fw-semibold fs-6 text-gray-400">{{ $student->student_code }}</div>
+                                                <div class="fw-semibold fs-6 text-gray-400">{{ $student->student_code }}
+                                                </div>
                                                 <!--end::Label-->
                                             </div>
                                             <!--end::Stat-->
@@ -125,7 +136,8 @@
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ date('d/m/Y', strtotime($student->date_of_birth)) }}
+                                <span
+                                    class="fw-bold fs-6 text-gray-800">{{ date('d/m/Y', strtotime($student->date_of_birth)) }}
                                 </span>
                             </div>
                             <!--end::Col-->
@@ -158,7 +170,7 @@
                         <!--begin::Row-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">lớp</label>
+                            <label class="col-lg-4 fw-semibold text-muted">Lớp</label>
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8">
@@ -186,7 +198,8 @@
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ date('d/m/Y', strtotime($student->ngay_nhap_hoc)) }}
+                                <span
+                                    class="fw-bold fs-6 text-gray-800">{{ date('d/m/Y', strtotime($student->ngay_nhap_hoc)) }}
                                 </span>
                             </div>
                             <!--end::Col-->
@@ -211,7 +224,8 @@
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ date('d/m/Y', strtotime($student->date_range_cmnd)) }}
+                                <span
+                                    class="fw-bold fs-6 text-gray-800">{{ date('d/m/Y', strtotime($student->date_range_cmnd)) }}
                                 </span>
                             </div>
                             <!--end::Col-->
@@ -224,7 +238,8 @@
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8">
-                                <img src="{{ asset('storage/' . $student->chu_ky) }}" alt="Chữ ký" class="fw-bold fs-6 text-gray-800 w-50px" />
+                                <img src="{{ asset('storage/' . $student->chu_ky) }}" alt="Chữ ký"
+                                    class="fw-bold fs-6 text-gray-800 w-50px" />
                             </div>
                             <!--end::Col-->
                         </div>
@@ -239,4 +254,17 @@
     </div>
     @include('student.validate')
     @include('student.update')
+@push('js')
+    <script>
+        function xacnhanMatKhau() {
+            mess_error("Cảnh báo", "{{ __('Bạn chưa cập nhật mật khẩu.') }}");
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // @if (session('show_login_alert'))
+            //     xacnhanMatKhau();
+            // @endif
+        });
+    </script>
+@endpush
 @endsection

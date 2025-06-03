@@ -14,7 +14,8 @@
             <span class="required">Khoa</span>
         </label>
         <!--end::Label-->
-        <select id="{{ $type }}_field_khoa" data-dropdown-parent="#khoa_{{ $type }}" name="ma_khoa" class="form-select form-select-solid" data-control="select2">
+        <select id="{{ $type }}_field_khoa" data-dropdown-parent="#khoa_{{ $type }}" name="ma_khoa"
+            class="form-select form-select-solid" data-control="select2">
             <option selected disabled>Chọn khoa</option>
             @foreach ($khoas as $item)
                 <option value="{{ $item->ma_khoa }}">{{ $item->name }}</option>
@@ -30,7 +31,8 @@
             <span class="required">Ngành học</span>
         </label>
         <!--end::Label-->
-        <select disabled data-dropdown-parent="#select-parent-{{ $type }}-nganh" class="form-select form-select-solid" data-control="select2" name="nganh_id" data-placeholder="Ngành">
+        <select disabled data-dropdown-parent="#select-parent-{{ $type }}-nganh"
+            class="form-select form-select-solid" data-control="select2" name="nganh_id" data-placeholder="Ngành">
         </select>
     </div>
     <div class="d-flex flex-column mb-8 fv-row col-6 pe-4">
@@ -39,7 +41,8 @@
             <span class="">Giảng viên</span>
         </label>
         <!--end::Label-->
-        <select data-dropdown-parent="#form{{ $type }}" name="teacher_id" class="form-select form-select-solid" data-control="select2">
+        <select data-dropdown-parent="#form{{ $type }}" name="teacher_id" class="form-select form-select-solid"
+            data-control="select2">
             <option selected disabled>Chọn giáo viên</option>
             @foreach ($teachers as $item)
                 <option value="{{ $item->id }}">{{ $item->full_name }}</option>
@@ -61,7 +64,9 @@
                         $('select[name="nganh_id"]').prop('disabled', false);
                         $('select[name="nganh_id"]').empty();
                         response.data.forEach(e => {
-                            var newOption = new Option(`${e.tennganh} - ${e.hedaotao == 0 ? "ĐH" : e.hedaotao == 1 ? "THS" : e.hedaotao == 2 ? "CĐ" : "TC"} (${e.manganh})    `, e.manganh, false, false);
+                            var newOption = new Option(
+                                `${e.tennganh} - ${e.hedaotao == 0 ? "ĐH" : e.hedaotao == 1 ? "THS" : e.hedaotao == 2 ? "CĐ" : "TC"} (${e.manganh})    `,
+                                e.manganh, false, false);
                             $('select[name="nganh_id"]').append(newOption).trigger('change');
                         });
                     }).then()
@@ -69,17 +74,38 @@
             $('#{{ $type }}_field_khoa').change((e) => {
                 const selectedValue = $(e.target).val();
 
-                axios.get("{{ route('khoaManager.nganh') }}/" + selectedValue).then(
-                    response => {
+                // Check if we're in edit mode to avoid conflicts
+                const isEditMode = $('#kt_modal_update_target').hasClass('show');
+
+                if (!isEditMode && selectedValue) {
+                    Promise.all([
+                        axios.get("{{ route('khoaManager.nganh') }}/" + selectedValue),
+                        axios.get("{{ route('khoaManager.teacher') }}/" + selectedValue)
+                    ]).then(([nganhResponse, teacherResponse]) => {
+
+                        // Populate nganh_id dropdown
                         $('select[name="nganh_id"]').prop('disabled', false);
                         $('select[name="nganh_id"]').empty();
-                        response.data.forEach(e => {
-                            var newOption = new Option(`${e.tennganh} - ${e.hedaotao == 0 ? "ĐH" : e.hedaotao == 1 ? "THS" : e.hedaotao == 2 ? "CĐ" : "TC"} (${e.manganh})    `, e.manganh, false, false);
-                            $('select[name="nganh_id"]').append(newOption).trigger('change');
+                        nganhResponse.data.forEach(e => {
+                            var newOption = new Option(
+                                `${e.tennganh} - ${e.hedaotao == 0 ? "ĐH" : e.hedaotao == 1 ? "THS" : e.hedaotao == 2 ? "CĐ" : "TC"} (${e.manganh})`,
+                                e.manganh, false, false);
+                            $('select[name="nganh_id"]').append(newOption).trigger(
+                                'change');
                         });
-                    }).then()
 
-            })
+                        // Populate teacher_id dropdown
+                        $('select[name="teacher_id"]').prop('disabled', false);
+                        $('select[name="teacher_id"]').empty();
+                        teacherResponse.data.forEach(e => {
+                            var newOption = new Option(`${e.full_name}`, e.id, false,
+                                false);
+                            $('select[name="teacher_id"]').append(newOption).trigger(
+                                'change');
+                        });
+                    });
+                }
+            });
         })
     </script>
 @endpush

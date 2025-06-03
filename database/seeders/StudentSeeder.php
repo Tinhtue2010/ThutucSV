@@ -41,7 +41,6 @@ class StudentSeeder extends Seeder
             'gv_tiep_nhan' => 'Nguyen Thi B',
             'gv_thu_tien' => 'Tran Van C',
             'so_tien' => 5000000,
-            'status_dk' => 1,
             'note' => 'Ghi chú cho sinh viên',
         ]);
 
@@ -67,7 +66,6 @@ class StudentSeeder extends Seeder
             'gv_tiep_nhan' => 'Nguyen Thi B',
             'gv_thu_tien' => 'Tran Van C',
             'so_tien' => 5000000,
-            'status_dk' => 1,
             'note' => 'Ghi chú cho sinh viên',
         ]);
 

@@ -68,6 +68,9 @@ class CheDoChinhSachController extends Controller
         $studentData['year'] = Carbon::now()->year;
         $studentData['chu_ky'] = $chu_ky;
 
+        $studentData['mien_giam_hp'] = $request->mien_giam_hp ? true : false;
+        $studentData['mien_phi_ktx'] = $request->mien_phi_ktx ? true : false;
+        $studentData['ho_tro_tien_an'] = $request->ho_tro_tien_an ? true : false;
 
         $phieu = new Phieu();
         $phieu->student_id = $user->student_id;
@@ -109,20 +112,29 @@ class CheDoChinhSachController extends Controller
             }
             $check->files = $uploadedFiles;
             $check->file_name = $file_name;
-
             $check->note = $request->data;
             $check->doi_tuong_chinh_sach = json_encode([$doituong_key]);
+            $check->is_giam_hp = $request->mien_giam_hp ? 1 : 0;
+            $check->is_ky_tuc_xa = $request->mien_phi_ktx ? 1 : 0;
+            $check->is_tien_an = $request->ho_tro_tien_an ? 1 : 0;
             $check->update();
         } else {
             $query = new StopStudy();
             $query->file_name = $file_name;
             $query->files = $uploadedFiles;
             $query->student_id = $user->student_id;
+            $query->nam_hoc = '2024-2025';
+            $query->ky_hoc = 2;
+            $query->name = 'Hồ sơ chế độ chính sách theo NQ 35';
             $query->round = 1;
             $query->type = 4;
             $query->note = $request->data;
             $query->ma_lop = $student->ma_lop;
             $query->doi_tuong_chinh_sach = json_encode([$doituong_key]);
+            $query->is_giam_hp = $request->mien_giam_hp ? 1 : 0;
+            $query->is_ky_tuc_xa = $request->mien_phi_ktx ? 1 : 0;
+            $query->is_tien_an = $request->ho_tro_tien_an ? 1 : 0;
+
             $query->save();
 
             $this->notification("Đơn xin chế độ chính sách của bạn đã được gửi, vui lòng chờ thông báo khác", null, $file_name, "CDCS");

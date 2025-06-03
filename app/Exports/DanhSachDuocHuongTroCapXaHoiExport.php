@@ -10,44 +10,71 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use App\Helpers\CommonHelper;
+use App\Models\HoSo;
+use Carbon\Carbon;
 
 class DanhSachDuocHuongTroCapXaHoiExport implements FromArray, WithEvents, WithDrawings
 {
     protected $data;
+    protected $nam_hoc;
+    protected $ky_hoc;
 
-    public function __construct($data)
+    public function __construct($data, $nam_hoc, $ky_hoc)
     {
         $this->data = $data;
+        $this->nam_hoc = $nam_hoc;
+        $this->ky_hoc = $ky_hoc;
     }
 
     public function array(): array
     {
+        $hoSo = HoSo::where('ky_hoc', $this->ky_hoc)
+            ->where('nam_hoc', $this->nam_hoc)
+            ->where('type', 1)
+            ->first();
+
+        if ($hoSo) {
+            $carbonDate = Carbon::parse($hoSo->ngay_quyet_dinh);
+        } else {
+            $carbonDate = Carbon::now();
+        }
+        $day = $carbonDate->format('d');
+        $month = $carbonDate->format('m');
+        $year = $carbonDate->format('Y');
+
         $result = [
             ['UBND TỈNH QUẢNG NINH'],
             ['TRƯỜNG ĐẠI HỌC HẠ LONG'],
             [''],
             ['DANH SÁCH SINH VIÊN ĐƯỢC HƯỞNG TRỢ CẤP XÃ HỘI'],
-            ['HỌC KÌ .....NĂM HỌC ..........'],
-            ['(Kèm theo Quyết định số …. /QĐ-ĐHHL, ngày …. tháng …. năm …..'],
+            ['81/2021/NĐ-CP. HỌC KỲ ' . $this->ky_hoc . ' NĂM HỌC ' . $this->nam_hoc],
+            ['(Kèm theo Quyết định số ' . ($hoSo?->so_quyet_dinh ?? '') . '/QĐ-ĐHHL, ngày ' . $day . ' tháng ' . $month . ' năm ' . $year],
             ['của Hiệu trưởng Trường Đại học Hạ Long)'],
             [''],
             ['STT', 'Họ và tên', 'Ngày sinh', 'Lớp', 'Đối tượng', 'Mức trợ cấp/tháng (đ)', 'Mức trợ cấp/ 6 tháng (đ)'],
         ];
         $stt = 1;
-
+        $tong = 0;
         if (is_array($this->data) && !empty($this->data)) {
             foreach ($this->data as $item) {
                 if (is_array($item)) {
                     $result[] = array_merge([$stt++], $item);
+                    $tong += $item[5];
                 }
             }
         }
-        
         $result[] = [
             'Tổng',
+            '',
+            '',
+            '',
+            '',
+            '',
+            $tong,
         ];
         $result[] = [
-            'Bằng chữ:',
+            'Bằng chữ:' . numberInVietnameseCurrency($tong),
         ];
 
         return $result;

@@ -27,11 +27,12 @@
                             <div class="w-100 mw-150px">
                                 <label class="form-label">Lớp</label>
                                 <!--begin::Select2-->
-                                <select class="form-select  filter-select" data-name="lop_id" data-control="select2" data-placeholder="Lớp">
+                                <select class="form-select filter-select" data-name="lop_id" data-control="select2"
+                                    id="filter-lop" data-placeholder="Lớp">
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>
                                     @foreach ($lops as $item)
-                                    <option value="{{$item->ma_lop}}">{{$item->name}}</option>
+                                        <option value="{{ $item->ma_lop }}">{{ $item->name }}</option>
                                     @endforeach
                                 </select>
                                 <!--end::Select2-->
@@ -39,11 +40,12 @@
                             <div class="w-100 mw-150px">
                                 <label class="form-label">Khoá học</label>
                                 <!--begin::Select2-->
-                                <select class="form-select  filter-select" data-name="nien_khoa" data-control="select2" data-placeholder="Khoá học">
+                                <select class="form-select  filter-select" data-name="nien_khoa" data-control="select2"
+                                    id="filter-khoa-hoc" data-placeholder="Khoá học">
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>
                                     @for ($year = 1; $year <= 100; $year++)
-                                        <option  value="{{ $year }}">{{ $year }}</option>
+                                        <option value="{{ $year }}">{{ $year }}</option>
                                     @endfor
                                 </select>
                                 <!--end::Select2-->
@@ -51,8 +53,8 @@
                             <div class="w-100 mw-150px">
                                 <label class="form-label">Trạng thái</label>
 
-                                <select class="form-select  filter-select" data-name="status" data-control="select2" data-hide-search="true"
-                                    data-placeholder="Trạng thái">
+                                <select class="form-select  filter-select" data-name="status" data-control="select2"
+                                    data-hide-search="true" data-placeholder="Trạng thái">
                                     <option></option>
                                     <option value="all">Hiển thị tất cả</option>
                                     <option value="0">Đang học</option>
@@ -73,7 +75,7 @@
                             <thead>
                                 <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                                     <th></th>
-                                    <th><input type="checkbox" onchange="selectAll(this)"/></th>
+                                    <th><input type="checkbox" onchange="selectAll(this)" /></th>
                                     <th class="text-nowrap" data-name="student_code">{{ __('Mã sinh viên') }}</th>
                                     <th class="text-nowrap" data-name="full_name">{{ __('Họ và tên') }}</th>
                                     <th class="text-nowrap" data-name="date_of_birth">{{ __('Ngày sinh') }}</th>
@@ -88,7 +90,7 @@
                             <tbody class="fw-semibold text-gray-600">
                             </tbody>
                         </table>
-                        <!--end::Table-->
+                                                <!--end::Table--> <div id="datatable-info" class="mt-5 fs-5 text-muted"></div>
                         <div class="row pt-5 pb-5">
                             <div
                                 class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
@@ -142,5 +144,48 @@
     @include('student_manager.update')
     @include('student_manager.import')
     @include('student_manager.change_pass')
-    
+
+    @push('js')
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#filter-lop').change((e) => {
+                    const selectedValue = $(e.target).val();
+                    if (selectedValue) {
+                        axios.get("{{ route('studentManager.khoaHocLop') }}/" + selectedValue)
+                            .then((khoaHocResponse) => {
+                                const select = $('select[id="filter-khoa-hoc"]');
+                                select.empty();
+                                select.append(new Option("Hiển thị tất cả", "all", false, false));
+
+                                khoaHocResponse.data.forEach(e => {
+                                    select.append(new Option(`${e}`, e, false, false));
+                                });
+
+                                // select.trigger('change'); 
+                            });
+                    }
+                });
+
+                $('#filter-khoa-hoc').change((e) => {
+                    const selectedValue = $(e.target).val();
+                    if (selectedValue) {
+                        axios.get("{{ route('studentManager.lopKhoaHoc') }}/" + selectedValue)
+                            .then((lopResponse) => {
+                                const select = $('select[id="filter-lop"]');
+                                select.empty();
+                                select.append(new Option("Hiển thị tất cả", "all", false, false));
+
+                                lopResponse.data.forEach(e => {
+                                    select.append(new Option(`${e.name}`, e.ma_lop, false, false));
+                                });
+
+                                // select.trigger('change'); 
+                            });
+                    }
+                });
+
+
+            })
+        </script>
+    @endpush
 @endsection

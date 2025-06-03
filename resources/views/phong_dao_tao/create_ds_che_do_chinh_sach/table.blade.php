@@ -29,7 +29,8 @@
                             data.order = undefined;
                             data.search = '';
                             $('.filter-select').each(function() {
-                                if ($(this).data('name') == undefined || $(this).val() == 'all') {
+                                if ($(this).data('name') == undefined || $(this).val() ==
+                                    'all') {
                                     return;
                                 }
                                 var name_filter = $(this).data('name');
@@ -41,6 +42,11 @@
                         "dataSrc": function(response) {
                             renderPagination(response.page,
                                 response.max_page);
+                                                        const infoSelector = document.getElementById('datatable-info');
+    if (infoSelector) {
+                                infoSelector.innerText =
+                                    `Tổng số bản ghi: ${response.total_items}, Số bản ghi trang hiện tại: ${response.current_page_items_count}`;
+                            }
                             return response.data;
                         },
                     },
@@ -59,15 +65,16 @@
                                 var res = '';
                                 @foreach (config('doituong.statusmiengiamhp') as $index => $item)
                                     if (data == {{ $item[0] }}) {
-                                        res = `<span class="text-wrap lh-sm mt-1 badge badge-<?php if ($item[0] < 0) {
-                                            echo 'warning';
-                                        }
-                                        if ($item[0] == 0) {
-                                            echo 'secondary';
-                                        }
-                                        if ($item[0] > 0) {
-                                            echo 'success';
-                                        } ?>">{{ $item[1] }}</span>`;
+                                        res =
+                                            `<span class="text-wrap lh-sm mt-1 badge badge-<?php if ($item[0] < 0) {
+                                                echo 'warning';
+                                            }
+                                            if ($item[0] == 0) {
+                                                echo 'secondary';
+                                            }
+                                            if ($item[0] > 0) {
+                                                echo 'success';
+                                            } ?>">{{ $item[1] }}</span>`;
 
                                     }
                                 @endforeach
@@ -93,16 +100,20 @@
                                 arrayDT.forEach(function($item, $index) {
                                     switch ($item) {
                                         case "1":
-                                            result += `<span onclick="doituong1()" class="cursor-pointer ms-0 me-auto text-wrap lh-sm mt-1 badge badge-primary">Đối tượng 1</span>`;
+                                            result +=
+                                                `<span onclick="doituong1()" class="cursor-pointer ms-0 me-auto text-wrap lh-sm mt-1 badge badge-primary">Đối tượng 1</span>`;
                                             break;
                                         case "2":
-                                            result += `<span onclick="doituong2()" class="cursor-pointer ms-0 me-auto text-wrap lh-sm mt-1 badge badge-success">Đối tượng 2</span>`;
+                                            result +=
+                                                `<span onclick="doituong2()" class="cursor-pointer ms-0 me-auto text-wrap lh-sm mt-1 badge badge-success">Đối tượng 2</span>`;
                                             break;
                                         case "3":
-                                            result += `<span onclick="doituong3()" class="cursor-pointer ms-0 me-auto text-wrap lh-sm mt-1 badge badge-info">Đối tượng 3</span>`;
+                                            result +=
+                                                `<span onclick="doituong3()" class="cursor-pointer ms-0 me-auto text-wrap lh-sm mt-1 badge badge-info">Đối tượng 3</span>`;
                                             break;
                                         case "4":
-                                            result += `<span onclick="doituong4()" class="cursor-pointer ms-0 me-auto text-wrap lh-sm mt-1 badge badge-warning">Đối tượng 4</span>`;
+                                            result +=
+                                                `<span onclick="doituong4()" class="cursor-pointer ms-0 me-auto text-wrap lh-sm mt-1 badge badge-warning">Đối tượng 4</span>`;
                                             break;
                                         default:
                                             return '';
@@ -117,7 +128,10 @@
                             data: "che_do_chinh_sach_data",
                             render: function(data, type, row) {
                                 let array = JSON.parse(data);
-                                if (array == null || array['ktx'] == null || array['ktx'] == "") {
+                                if (row['is_ky_tuc_xa'] == 1) {
+                                    return 'Có';
+                                } else if (array == null || array['ktx'] == null || array['ktx'] ==
+                                    "") {
                                     return '';
                                 }
                                 return `
@@ -133,7 +147,10 @@
                             data: "che_do_chinh_sach_data",
                             render: function(data, type, row) {
                                 let array = JSON.parse(data);
-                                if (array == null || array['mghp'] == null || array['mghp'] == "") {
+                                if (row['is_giam_hp'] == 1) {
+                                    return 'Có';
+                                } else if (array == null || array['mghp'] == null || array[
+                                    'mghp'] == "") {
                                     return '';
                                 }
                                 return `
@@ -149,7 +166,10 @@
                             data: 'che_do_chinh_sach_data',
                             render: function(data, type, row) {
                                 let array = JSON.parse(data);
-                                if (array == null || array['htta'] == null || array['htta'] == "") {
+                                if (row['is_tien_an'] == 1) {
+                                    return 'Có';
+                                } else if (array == null || array['htta'] == null || array[
+                                    'htta'] == "") {
                                     return '';
                                 }
                                 return `
@@ -163,8 +183,13 @@
                             data: 'che_do_chinh_sach_data',
                             render: function(data, type, row) {
                                 let array = JSON.parse(data);
-
-                                if (array == null || array['diem'] == null || array['diem'] == "") {
+                                if (row['diem_ht']) {
+                                    return `
+                                        Điểm TB : ${row['diem_ht']} <br>
+                                        Điểm rèn luyện : ${row['diem_rl']} <br>
+                                `;
+                                } else if (array == null || array['diem'] == null || array[
+                                    'diem'] == "") {
                                     return '';
                                 }
                                 return `
@@ -178,9 +203,11 @@
                             render: function(data, type, row) {
                                 let array = JSON.parse(row['doi_tuong_chinh_sach']);
                                 var dataRes = `<div class="d-flex flex-row">`;
-                                if (array.includes("1") || array.includes("4")) {
+                                if (array.includes("1") || array.includes("2") || array.includes(
+                                        "3") || array.includes("4")) {
                                     if (row['type'] == 4) {
-                                        if (row['status'] == 0 || row['status'] == -1 || row['status'] == 2 || row['status'] == -2) {
+                                        if (row['status'] == 0 || row['status'] == -1 || row[
+                                                'status'] == 2 || row['status'] == -2) {
                                             dataRes += `<div onClick="tiepnhanhs(${data})" class="ki-duotone ki-check-square fs-2x cursor-pointer text-primary">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
@@ -227,7 +254,7 @@
                     ],
                     paging: false,
                     searching: false,
-                    order: [1, 'asc'],
+                    order: [1, 'desc'],
                     columnDefs: [{
                         orderable: false,
                         targets: 0,
@@ -369,6 +396,27 @@
                 clearTimeout(timeoutId);
                 timeoutId = setTimeout(() => func.apply(context, args), delay);
             };
+        }
+
+        function updateDT2(event) {
+            event.preventDefault();
+
+            const link = event.target;
+            const baseUrl = link.getAttribute('data-base-url');
+
+            axios({
+                method: 'GET',
+                url: baseUrl,
+            }).then((response) => {
+                mess_success('Thông báo',
+                    "Cập nhật thành công")
+                Datatable.loadData();
+            }).catch(function(error) {
+                mess_error("Cảnh báo",
+                    "{{ __('An error has occurred.') }}"
+                )
+            });
+
         }
     </script>
 @endpush

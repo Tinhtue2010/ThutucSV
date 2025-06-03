@@ -9,7 +9,9 @@ class Lop extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'ma_lop','ma_khoa','nganh_id','teacher_id','hocphi'];
+    protected $table = 'lops';
+
+    protected $fillable = ['name', 'ma_lop', 'ma_khoa', 'nganh_id', 'teacher_id', 'hocphi'];
 
     public function khoa()
     {

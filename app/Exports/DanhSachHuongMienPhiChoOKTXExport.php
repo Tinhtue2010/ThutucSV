@@ -11,12 +11,17 @@ use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class DanhSachHuongMienPhiChoOKTXExport implements FromArray, WithEvents, WithDrawings {
+class DanhSachHuongMienPhiChoOKTXExport implements FromArray, WithEvents, WithDrawings
+{
     protected $data;
+    protected $nam_hoc;
+    protected $ky_hoc;
 
-    public function __construct($data)
+    public function __construct($data, $nam_hoc, $ky_hoc)
     {
         $this->data = $data;
+        $this->nam_hoc = $nam_hoc;
+        $this->ky_hoc = $ky_hoc;
     }
 
     public function array(): array
@@ -28,11 +33,11 @@ class DanhSachHuongMienPhiChoOKTXExport implements FromArray, WithEvents, WithDr
             ['DANH SÁCH SINH VIÊN ĐƯỢC HƯỞNG CHẾ ĐỘ MIỄN PHÍ CHỖ Ở'],
             ['TẠI KÝ TÚC XÁ'],
             ['Theo điểm g, khoản 3, điều 1, Nghị quyết 35/2021/NQ-HĐND tỉnh Quảng Ninh.'],
-            ['Học kỳ ….., năm học ……………….'],
+            ['Học kỳ ' . $this->ky_hoc . ', năm học ' . $this->nam_hoc],
             ['(Kèm theo Quyết định số ……./QĐ-ĐHHL, ngày….. tháng ……. năm ……'],
             ['của Hiệu trưởng Trường Đại học Hạ Long)'],
             [''],
-            ['STT','Họ và tên','Ngày sinh','Tên lớp','Đối tượng hưởng','Ngày vào ở KTX','Số tháng được miễn'],
+            ['STT', 'Họ và tên', 'Ngày sinh', 'Tên lớp', 'Đối tượng hưởng', 'Ngày vào ở KTX', 'Số tháng được miễn'],
         ];
         $stt = 1;
 
@@ -45,7 +50,7 @@ class DanhSachHuongMienPhiChoOKTXExport implements FromArray, WithEvents, WithDr
         }
 
         $result[] = [
-            'Danh sách có … sinh viên',
+            'Danh sách có '.($stt-1).' sinh viên',
             '',
             '',
             '',
@@ -85,9 +90,9 @@ class DanhSachHuongMienPhiChoOKTXExport implements FromArray, WithEvents, WithDr
                 $sheet->getParent()->getDefaultStyle()->getFont()->setSize(12);
 
                 $highestColumn = $sheet->getHighestColumn();
-                $highestRow = $sheet->getHighestRow();     
+                $highestRow = $sheet->getHighestRow();
                 $sheet->getStyle("A1:{$highestColumn}{$highestRow}")->getAlignment()->setWrapText(true);
-                
+
                 $sheet->getColumnDimension('A')->setWidth(width: 7);
                 $sheet->getColumnDimension('B')->setWidth(width: 15);
                 $sheet->getColumnDimension('C')->setWidth(width: 10);
@@ -103,20 +108,19 @@ class DanhSachHuongMienPhiChoOKTXExport implements FromArray, WithEvents, WithDr
                 $sheet->mergeCells('A5:G5');
                 $sheet->mergeCells('A6:G6');
                 $sheet->mergeCells('A7:G7');
-                $sheet->mergeCells('A8:G8'); 
-                $sheet->mergeCells('A9:G9'); 
+                $sheet->mergeCells('A8:G8');
+                $sheet->mergeCells('A9:G9');
 
 
                 $lastRow = $sheet->getHighestRow();
-                $sheet->mergeCells( 'A' . $lastRow . ':G'.$lastRow);
+                $sheet->mergeCells('A' . $lastRow . ':G' . $lastRow);
 
                 $lastRow = $sheet->getHighestRow();
-                $this->applyBorder($sheet, 'A11:G' . $lastRow-1);
-                $this->centerCell($sheet, 'A1:G'.$lastRow-1);
+                $this->applyBorder($sheet, 'A11:G' . $lastRow - 1);
+                $this->centerCell($sheet, 'A1:G' . $lastRow - 1);
                 $this->boldCell($sheet, 'A2:G11');
                 $this->italicCell($sheet, 'A8:G9');
                 $sheet->getRowDimension($lastRow)->setRowHeight(height: 30);
-
             },
         ];
     }

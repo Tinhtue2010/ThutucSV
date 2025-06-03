@@ -24,10 +24,13 @@ use App\Http\Controllers\MienGiamHPController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\PhieuController;
+use App\Http\Controllers\ScoreCalculateController;
+use App\Http\Controllers\ScoreManagerController;
 use App\Http\Controllers\RutHoSo\GiaoVienRHSController;
 use App\Http\Controllers\ProfileGiaoVienController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentManagerController;
+use App\Http\Controllers\TuitionManagerController;
 use App\Http\Controllers\TeacherManagerController;
 use App\Http\Controllers\StopStudyController;
 use App\Http\Controllers\TroCapHocPhi\TroCapHocPhiKeHoachTaiChinhController;
@@ -58,11 +61,13 @@ use mikehaertl\wkhtmlto\Pdf;
     | contains the "web" middleware group. Now create something great!
     |
     */
+
 Route::get('/create-storage-link', function () {
     Artisan::call('storage:link');
 });
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/link-storage', [AuthController::class, 'linkStorage'])->name('link-storage');
 Route::post('/check_login', [AuthController::class, 'checkLogin'])
     ->name('checkLogin');
 Route::get('/log-out', [AuthController::class, 'logout'])->name('logout');
@@ -244,6 +249,8 @@ Route::group(['middleware' => ['auth']], function () {
                 Route::get('delete-list', [CheDoChinhSachPhongDaoTaoController::class, 'deleteList'])->name('deleteList');
                 Route::get('gui-tb-sv', [CheDoChinhSachPhongDaoTaoController::class, 'guiTBSV'])->name('guiTBSV');
 
+                Route::get('update-dt-2', [CheDoChinhSachPhongDaoTaoController::class, 'updateDT2'])->name('updateDT2');
+
                 Route::post('import-file-ktx', [CheDoChinhSachPhongDaoTaoController::class, 'importFileKTX'])->name('importFileKTX');
                 Route::post('import-file-diem-sv', [CheDoChinhSachPhongDaoTaoController::class, 'importFileDiemSV'])->name('importFileDiemSV');
                 Route::post('import-qt-2', [CheDoChinhSachPhongDaoTaoController::class, 'ImportQTMGHP'])->name('ImportQTMGHP');
@@ -390,7 +397,54 @@ Route::group(['middleware' => ['auth']], function () {
 
             Route::get('reset-pass/{id?}', [StudentManagerController::class, 'resetPass'])->name('resetPass');
 
+            // Route::get('khoa-hoc-lop', [KhoaManagerController::class, 'teacher'])->name('teacher');
+            Route::get('khoa-hoc-lop/{id?}', [StudentManagerController::class, 'khoaHocLop'])->name('khoaHocLop');
+            // Route::get('lop-khoa-hoc', [KhoaManagerController::class, 'nganh'])->name('nganh');
+            Route::get('lop-khoa-hoc/{id?}', [StudentManagerController::class, 'lopKhoaHoc'])->name('lopKhoaHoc');
+            
             Route::post('status', [StudentManagerController::class, 'status'])->name('status');
+        });
+
+    Route::middleware('role:scoreManager')->name('scoreManager.')
+        ->prefix('score-manager')->group(function () {
+            Route::get('/', [ScoreManagerController::class, 'index'])->name('index');
+            Route::get('get-data', [ScoreManagerController::class, 'getData'])->name('getData');
+            Route::get('get-data/{id?}', [ScoreManagerController::class, 'getDataChild'])->name('getDataChild');
+            Route::get('detele/{id?}', [ScoreManagerController::class, 'detele'])->name('detele');
+            Route::post('create', [ScoreManagerController::class, 'create'])->name('create');
+            Route::post('update/{id?}', [ScoreManagerController::class, 'update'])->name('update');
+            Route::post('import-file', [ScoreManagerController::class, 'importFile'])->name('importFile');
+
+            Route::get('reset-pass/{id?}', [ScoreManagerController::class, 'resetPass'])->name('resetPass');
+
+            Route::post('status', [ScoreManagerController::class, 'status'])->name('status');
+        });
+    Route::middleware('role:scoreCalculate')->name('scoreCalculate.')
+        ->prefix('score-calculate')->group(function () {
+            Route::get('/', [ScoreCalculateController::class, 'index'])->name('index');
+            Route::get('get-data', [ScoreCalculateController::class, 'getData'])->name('getData');
+            Route::get('doanload-danh-sach', [ScoreCalculateController::class, 'downloadDanhSach'])->name('downloadDanhSach');
+            Route::get('update-dt3', [ScoreCalculateController::class, 'updateDT3'])->name('updateDT3');
+            Route::get('find-new-added-student', [ScoreCalculateController::class, 'findNewAddedStudent'])->name('findNewAddedStudent');
+            Route::post('status', [ScoreCalculateController::class, 'status'])->name('status');
+        });
+
+
+
+    Route::middleware('role:tuitionManager')->name('tuitionManager.')
+        ->prefix('tuition-manager')->group(function () {
+            Route::get('/', [TuitionManagerController::class, 'index'])->name('index');
+            Route::get('get-data', [TuitionManagerController::class, 'getData'])->name('getData');
+            Route::get('get-data/{id?}', [TuitionManagerController::class, 'getDataChild'])->name('getDataChild');
+            Route::get('detele/{id?}', [TuitionManagerController::class, 'detele'])->name('detele');
+            Route::post('create', [TuitionManagerController::class, 'create'])->name('create');
+            Route::post('update/{id?}', [TuitionManagerController::class, 'update'])->name('update');
+            Route::post('import-file', [TuitionManagerController::class, 'importFile'])->name('importFile');
+
+            Route::get('reset-pass/{id?}', [TuitionManagerController::class, 'resetPass'])->name('resetPass');
+            Route::get('update-hoc-phi', [TuitionManagerController::class, 'updateHocPhi'])->name('updateHocPhi');
+
+            Route::post('status', [TuitionManagerController::class, 'status'])->name('status');
         });
 
     Route::middleware('role:khoaManager')->name('khoaManager.')->prefix('khoa-manager')->group(function () {
@@ -402,6 +456,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('update/{id?}', [KhoaManagerController::class, 'update'])->name('update');
         Route::post('import-file', [KhoaManagerController::class, 'importFile'])->name('importFile');
 
+        Route::get('teacher', [KhoaManagerController::class, 'teacher'])->name('teacher');
+        Route::get('teacher/{id?}', [KhoaManagerController::class, 'teacherKhoa'])->name('teacherKhoa');
         Route::get('nganh', [KhoaManagerController::class, 'nganh'])->name('nganh');
         Route::get('nganh/{id?}', [KhoaManagerController::class, 'nganhKhoa'])->name('nganhKhoa');
         Route::get('lop/{id?}', [KhoaManagerController::class, 'lop'])->name('lop');
@@ -458,6 +514,10 @@ Route::get('danh-sach-duoc-huong-tro-cap-xa-hoi', [DocumentController::class, 'D
 Route::get('theo-doi-kq-giai-quyet-che-do-tcxh', [DocumentController::class, 'TheoDoiKQGiaiQuyetCheDoTCXH'])->name('TheoDoiKQGiaiQuyetCheDoTCXH');
 Route::get('so-theo-doi-sv-rut-ho-so', [DocumentController::class, 'SoTheoDoiSVRutHoSo'])->name('SoTheoDoiSVRutHoSo');
 Route::get('danh-sach-ho-so-sinh-vien', [DocumentController::class, 'DanhSachHoSoSinhVien'])->name('DanhSachHoSoSinhVien');
+
+Route::get('download-danh-sach', [DocumentController::class, 'downloadDanhSach'])->name('downloadDanhSach');
+Route::get('download-quyet-dinh', [DocumentController::class, 'downloadQuyetDinh'])->name('downloadQuyetDinh');
+
 
 
 Route::name('phieu.')->prefix('phieu')->group(function () {

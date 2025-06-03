@@ -2,6 +2,9 @@
 
 namespace App\Exports;
 
+use App\Models\HoSo;
+use App\Models\StopStudy;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
@@ -14,11 +17,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 class HoTroChiPhiHocTapExport implements FromArray, WithEvents, WithDrawings
 {
-    protected $data;
+    protected $request;
 
-    public function __construct($data)
+    public function __construct($request)
     {
-        $this->data = $data;
+        $this->request = $request;
     }
 
     public function array(): array
@@ -34,8 +37,39 @@ class HoTroChiPhiHocTapExport implements FromArray, WithEvents, WithDrawings
         ];
         $stt = 1;
 
-        if (is_array($this->data) && !empty($this->data)) {
-            foreach ($this->data as $item) {
+
+        $hoSo = HoSo::where('ky_hoc', $this->request->ky)
+            ->where('nam_hoc', $this->request->nam_hoc)
+            ->where('type', 3)
+            ->first();
+
+        $query = StopStudy::where('type',  3)
+            ->where('ky_hoc', $this->request->ky)
+            ->where('nam_hoc', $this->request->nam_hoc)
+            ->where('status', '>', 0)
+            ->whereNull('parent_id')
+            ->get();
+        $data  = [];
+        $soSVHuong = 0;
+        $soTienHuong = 0;
+        foreach ($query as $item) {
+            $soSVHuong++;
+            $so_tien_giam_1_thang = 894000;
+            $so_tien_giam = $so_tien_giam_1_thang * 5;
+            $soTienHuong += $so_tien_giam;
+        }
+        $data[] = [
+            $this->request->nam_hoc,
+            $this->request->ky,
+            $soSVHuong == 0 ? '0' : $soSVHuong,
+            $soTienHuong == 0 ? '0' : $soTienHuong,
+            $hoSo->so_quyet_dinh ?? '',
+            $hoSo && $hoSo->ngay_quyet_dinh
+                ? \Carbon\Carbon::parse($hoSo->ngay_quyet_dinh)->format('d/m/Y')
+                : ''        ];
+
+        if (is_array($data) && !empty($data)) {
+            foreach ($data as $item) {
                 if (is_array($item)) {
                     $result[] = array_merge([$stt++], $item);
                 }
@@ -85,7 +119,7 @@ class HoTroChiPhiHocTapExport implements FromArray, WithEvents, WithDrawings
                 $sheet->mergeCells('A5:G5');
 
                 $this->applyBorder($sheet, 'A7:G' . $sheet->getHighestRow());
-                $this->centerCell($sheet, 'A1:G'.$sheet->getHighestRow());
+                $this->centerCell($sheet, 'A1:G' . $sheet->getHighestRow());
                 $this->boldCell($sheet, 'A1:G7');
 
                 $sheet->getStyle('D')->getNumberFormat()->setFormatCode('0');

@@ -22,22 +22,28 @@
                             </div>
                             <div class="col-sm-6">
                                 <label class="form-label required">Thời gian</label>
-                                <div class="input-group log-event" id="kt_td_picker_{{ $target }}_1" data-td-target-input="nearest" data-td-target-toggle="nearest">
-                                    <input readonly name="thoi_gian_tao" type="text" class="form-control" data-td-target="#kt_td_picker_{{ $target }}_1" />
-                                    <span class="input-group-text" data-td-target="#kt_td_picker_{{ $target }}_1" data-td-toggle="datetimepicker">
-                                        <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
+                                <div class="input-group log-event" id="kt_td_picker_{{ $target }}_1"
+                                    data-td-target-input="nearest" data-td-target-toggle="nearest">
+                                    <input readonly name="thoi_gian_tao" type="text" class="form-control"
+                                        data-td-target="#kt_td_picker_{{ $target }}_1" />
+                                    <span class="input-group-text" data-td-target="#kt_td_picker_{{ $target }}_1"
+                                        data-td-toggle="datetimepicker">
+                                        <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span
+                                                class="path2"></span></i>
                                     </span>
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex flex-row">
-                            <div class="d-flex flex-column mb-8 fv-row col-6 pe-4" id="select-parent-{{ $target }}-1">
+                            <div class="d-flex flex-column mb-8 fv-row col-6 pe-4"
+                                id="select-parent-{{ $target }}-1">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
                                     <span class="required">Học kỳ</span>
                                 </label>
                                 <!--end::Label-->
-                                <select data-dropdown-parent="#select-parent-{{ $target }}-1" name="ky" class="form-select" data-control="select2" data-placeholder="Kỳ học">
+                                <select data-dropdown-parent="#select-parent-{{ $target }}-1" name="ky"
+                                    class="form-select" data-control="select2" data-placeholder="Kỳ học">
                                     <option value="1">Kỳ 1</option>
                                     <option value="2">Kỳ 2</option>
                                 </select>
@@ -48,7 +54,8 @@
                                     <span class="required">Năm học</span>
                                 </label>
                                 <!--end::Label-->
-                                <input type="text" class="form-control" name="nam" placeholder="Năm học vd: 2023-2024" />
+                                <input type="text" class="form-control" name="nam"
+                                    placeholder="Năm học vd: 2023-2024" />
                             </div>
                         </div>
                         <div class="d-flex flex-column mb-8 fv-row col-12 pe-4">
@@ -58,7 +65,9 @@
                             <textarea name="tom_tat" class="form-control" cols="30" rows="5"></textarea>
                         </div>
                     </div>
-                    <p class="text-warning"><b>Lưu ý:</b> Các hồ sơ sinh viên đã tiếp nhận sẽ tự động được thêm vào danh sách miễn giảm học phí, nếu không muốn thêm vào danh sách cần chuyển đơn thành từ chối hoặc bổ sung hồ sơ</p>
+                    <p class="text-warning"><b>Lưu ý:</b> Các hồ sơ sinh viên đã tiếp nhận sẽ tự động được thêm vào danh
+                        sách miễn giảm học phí, nếu không muốn thêm vào danh sách cần chuyển đơn thành từ chối hoặc bổ
+                        sung hồ sơ</p>
                     <div class="card-footer">
                         <button type="submit" class="btn btn-success mr-2">{{ __('Tạo, Cập nhật') }}</button>
                         <button type="reset" class="btn btn-secondary">{{ __('Đóng') }}</button>
@@ -117,7 +126,7 @@
             e.preventDefault();
             let form = $(this);
             validation_{{ $target }}.validate().then(function(status) {
-                
+
                 if (status === 'Valid') {
                     axios({
                         method: 'POST',
@@ -127,6 +136,7 @@
                         mess_success('Thông báo',
                             "Thành công")
                         // $(this).trigger("reset");
+                        location.reload();
                         model{{ $target }}.hide();
                         Datatable.loadData();
                     }).catch(function(error) {
@@ -169,7 +179,8 @@
 
                     let date;
 
-                    if (response.data && response.data["thoi_gian_tao_ngay"] && response.data["thoi_gian_tao_thang"] && response.data["thoi_gian_tao_nam"]) {
+                    if (response.data && response.data["thoi_gian_tao_ngay"] && response.data["thoi_gian_tao_thang"] &&
+                        response.data["thoi_gian_tao_nam"]) {
                         const day = parseInt(response.data["thoi_gian_tao_ngay"]);
                         const month = parseInt(response.data["thoi_gian_tao_thang"]) - 1;
                         const year = parseInt(response.data["thoi_gian_tao_nam"]);
@@ -206,7 +217,7 @@
                     });
                 })
 
-                
+
         }
     </script>
 @endpush

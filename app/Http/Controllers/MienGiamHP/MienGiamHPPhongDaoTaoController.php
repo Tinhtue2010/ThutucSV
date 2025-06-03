@@ -12,13 +12,14 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class MienGiamHPPhongDaoTaoController extends Controller
 {
     function index()
     {
         $lop = Lop::get();
-        $hoso = HoSo::where('type', 2)->where('status', 0)
+        $hoso = HoSo::where('type', 1)->where('status', 0)
             ->latest('created_at')
             ->first();
         return view('phong_dao_tao.create_ds_mien_giam_hp.index', ['lop' => $lop, 'hoso' => $hoso]);
@@ -143,7 +144,6 @@ class MienGiamHPPhongDaoTaoController extends Controller
         $phieu->name = 'Danh sách sinh viên được miễn giảm học phí';
         $phieu->key = 'DSMGHP';
         $phieu->content = json_encode([$content, $content_DSMGHP], true);
-
         $base64 = $this->createPDF($phieu, 1);
         $file_list = $this->saveBase64AsPdf($base64, 'MIEN_GIAM_HP_PDT', 'ds_mien_giam_hp_');
 
@@ -155,10 +155,12 @@ class MienGiamHPPhongDaoTaoController extends Controller
 
         $base64 = $this->createPDF($phieu);
         $file_quyet_dinh = $this->saveBase64AsPdf($base64, 'MIEN_GIAM_HP_PDT', 'qd_mien_giam_hp_');
+
+
         // Tìm hồ sơ hiện có
         $hoso = HoSo::where('ky_hoc', $request->ky)
             ->where('nam_hoc', $request->nam)
-            ->where('type', 2)
+            ->where('type', 1)
             ->latest('created_at')
             ->first();
 
@@ -166,26 +168,28 @@ class MienGiamHPPhongDaoTaoController extends Controller
             if ($hoso->file_quyet_dinh != $file_quyet_dinh) {
                 $this->deletePdf($hoso->file_quyet_dinh);
             }
-            if ($hoso->file_list != $file_list) {
-                $this->deletePdf($hoso->file_list);
-            }
+            // if ($hoso->file_list != $file_list) {
+            //     $this->deletePdf($hoso->file_list);
+            // }
 
             $hoso->update([
                 'name' => "Miễn giảm học phí",
+                'so_quyet_dinh' => $request->so_QD,
+                'ngay_quyet_dinh' => Carbon::createFromFormat('d/m/Y', $request->thoi_gian_tao)->format('Y-m-d'),
                 'file_quyet_dinh' => $file_quyet_dinh,
-                'file_list' => $file_list,
-                'list_info' => json_encode($content_DSMGHP, true),
-                'type' => 2
+                // 'list_info' => json_encode($content_DSMGHP, true),
+                'type' => 1
             ]);
         } else {
             $hoso = HoSo::create([
                 'name' => "Miễn giảm học phí",
+                'so_quyet_dinh' => $request->so_QD,
+                'ngay_quyet_dinh' => Carbon::createFromFormat('d/m/Y', $request->thoi_gian_tao)->format('Y-m-d'),
                 'file_quyet_dinh' => $file_quyet_dinh,
-                'file_list' => $file_list,
                 'ky_hoc' => $request->ky,
                 'nam_hoc' => $request->nam,
-                'list_info' => json_encode($content_DSMGHP, true),
-                'type' => 2
+                // 'list_info' => json_encode($content_DSMGHP, true),
+                'type' => 1
             ]);
         }
 
@@ -203,7 +207,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
     }
     function xoaQuyetDinh()
     {
-        $hoso = HoSo::where('type', 2)->where('status', 0)
+        $hoso = HoSo::where('type', 1)->where('status', 0)
             ->latest('created_at')
             ->first();
         $this->deletePdf($hoso->file_quyet_dinh);
@@ -252,7 +256,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
             ->where('stop_studies.status', 3)
             ->select('stop_studies.*')
             ->get();
-        $hoso = HoSo::where('type', 2)->where('status', 0)
+        $hoso = HoSo::where('type', 1)->where('status', 0)
             ->latest('created_at')
             ->first();
         foreach ($query as $stopStudy) {
@@ -282,7 +286,7 @@ class MienGiamHPPhongDaoTaoController extends Controller
 
     function guiTBSALL()
     {
-        $hoso = HoSo::where('type', 2)->where('status', 0)->latest('created_at')->first();
+        $hoso = HoSo::where('type', 1)->where('status', 0)->latest('created_at')->first();
         if (!$hoso || empty($hoso->list_info)) {
             return redirect()->back();
         }

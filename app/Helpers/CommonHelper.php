@@ -391,7 +391,6 @@ trait CommonHelper
     }
     public function queryPagination($request, $query, $searchName = [])
     {
-
         $per_page = $request->per_page ?? 10;
         $page = $request->page ?? 1;
         $offset = 0;
@@ -401,43 +400,71 @@ trait CommonHelper
 
         try {
             if (isset($nameOrder) && isset($order_by)) {
-                if ($order_by == 'ASC' || $order_by == 'DESC' || $order_by == 'asc' || $order_by == 'desc') {
-                    $query = $query->orderBy($nameOrder, $order_by);
+                if (in_array(strtoupper($order_by), ['ASC', 'DESC'])) {
+                    $orderColumn = $this->resolveOrderColumn($nameOrder);
+                    $query = $query->orderBy($orderColumn, $order_by);
                 }
             }
-            if ($searchName !== [] && $search != '') {
 
+            if ($searchName !== [] && $search != '') {
                 $query = $query->where(function ($query) use ($searchName, $search) {
                     foreach ($searchName as $field) {
                         $query->orWhere($field, 'like', '%' . $search . '%');
                     }
                 });
             }
-            if ($per_page == 'all') {
-                $query = $query->get()->toArray();
 
-                $data['max_page'] = 1;
-                $data['data'] = $query;
-                $data['page'] = 1;
+            $total_items = $query->count(); // Get total items after search/filter
+
+            if ($per_page == 'all') {
+                $results = $query->get()->toArray();
+                $data = [
+                    'data' => $results,
+                    'page' => 1,
+                    'max_page' => 1,
+                    'total_items' => $total_items,
+                    'current_page_items_count' => count($results),
+                ];
             } else {
                 $offset = ($page - 1) * $per_page;
-                $max_page = clone $query;
-                $max_page = ceil($max_page->count() / $per_page);
-                if ($page > $max_page) {
+                $max_page = ceil($total_items / $per_page);
+
+                if ($page > $max_page && $max_page > 0) {
                     $page = 1;
                     $offset = 0;
                 }
-                $query = $query->skip($offset)->take($per_page)->get()->toArray();
 
-                $data['max_page'] = $max_page;
-                $data['data'] = $query;
-                $data['page'] = $page;
+                $results = $query->skip($offset)->take($per_page)->get()->toArray();
+
+                $data = [
+                    'data' => $results,
+                    'page' => $page,
+                    'max_page' => $max_page,
+                    'total_items' => $total_items,
+                    'current_page_items_count' => count($results),
+                ];
             }
 
             return $data;
         } catch (QueryException $e) {
             abort(404);
         }
+    }
+
+
+    /**
+     * Resolve ambiguous column names by adding appropriate table prefixes
+     */
+    private function resolveOrderColumn($columnName)
+    {
+        $columnMappings = [
+            'student_code' => 'students.student_code',
+            'full_name' => 'students.full_name',
+            'lop_name' => 'lops.name',
+            // Add other potentially ambiguous columns here
+        ];
+
+        return $columnMappings[$columnName] ?? $columnName;
     }
 
     public function notification($notification, $phieu = null, $file_name = null, $type = null, $user_id = null)
@@ -451,7 +478,7 @@ trait CommonHelper
     }
 
 
-    public function uploadListFile($request, $name,$folder, $type='file-')
+    public function uploadListFile($request, $name, $folder, $type = 'file-')
     {
         $fileNames = [];
 
@@ -459,7 +486,7 @@ trait CommonHelper
             foreach ($request->file($name) as $file) {
                 $extension = $file->getClientOriginalExtension();
                 $originalName = $file->getClientOriginalName();
-                $newFileName = $folder . '/' . $type.date('Y-m-d') .'.'. $extension;
+                $newFileName = $folder . '/' . $type . date('Y-m-d') . '.' . $extension;
                 Storage::putFileAs('public', $file, $newFileName);
                 $fileNames[] = [$originalName, $newFileName];
             }
@@ -559,10 +586,10 @@ trait CommonHelper
         // Xóa ảnh tạm
         unlink($textImagePath);
     }
-    public function saveBase64AsPdf($base64Data, $name,$mota='don_chung_tu_')
+    public function saveBase64AsPdf($base64Data, $name, $mota = 'don_chung_tu_')
     {
         $user = Auth::user(); // Lấy thông tin người dùng
-        $file_name = $mota. $user->id . '_' . date('d_Hi_Y') . '.pdf'; // Tạo tên file
+        $file_name = $mota . $user->id . '_' . date('d_Hi_Y') . '.pdf'; // Tạo tên file
 
         // Kiểm tra nếu không có dữ liệu
         if (!$base64Data) {
@@ -616,8 +643,7 @@ trait CommonHelper
     {
         $filePath = $file_name;
         if (Storage::disk('public')->exists($filePath)) {
-            if($file_name != $file_name_new)
-            {
+            if ($file_name != $file_name_new) {
                 Storage::disk('public')->delete($filePath); // Xóa file
             }
             $oldFilename = $filePath;
@@ -899,7 +925,6 @@ trait CommonHelper
         $config = new OAuth2Config();
 
         $curl = curl_init();
-
         $options = [
             CURLOPT_URL => $link,
             CURLOPT_HTTPHEADER => [
@@ -963,18 +988,55 @@ trait CommonHelper
         }
     }
 
-    function craeteSignature($msg_getCertificate, $pdf, $cccd,  $file_name, $page = 1)
+    function craeteSignature($msg_getCertificate, $pdf, $cccd, $file_name, $page = 1)
+    {
+        $certificates = $msg_getCertificate->data->user_certificates;
+
+        foreach ($certificates as $certificate) {
+            try {
+                $result = $this->trySignWithCertificate($certificate, $pdf, $cccd, $file_name, $page);
+                if ($result !== null) {
+                    return $result;
+                }
+            } catch (Exception $e) {
+                // Log error if needed, then try the next certificate
+                continue;
+            }
+        }
+
+        throw new Exception("Không thể ký với bất kỳ chứng thư nào.");
+    }
+
+    private function trySignWithCertificate($certificate, $pdf, $cccd, $file_name, $page)
     {
         $config = new OAuth2Config();
-        $certBase64 = $msg_getCertificate->data->user_certificates[0]->cert_data;
-        $certBase64 = str_replace("\r\n", "", $certBase64);
-        $serialNumber = $msg_getCertificate->data->user_certificates[0]->serial_number;
 
+        $certBase64 = str_replace("\r\n", "", $certificate->cert_data);
+        $serialNumber = $certificate->serial_number;
 
-        // 2.CalculateHash
-        $unsignDataBase64 = $pdf;
-        $thoiGianKy = Carbon::now()->format('d/m/Y H:i');
+        $hashResult = $this->calculateHash($pdf, $certBase64, $page, $config);
 
+        if ($hashResult['code'] !== "sigSuccess") {
+            throw new Exception("Không thể calculateHash");
+        }
+
+        $signResult = $this->signHash(
+            $hashResult['hash'],
+            $file_name,
+            $cccd,
+            $serialNumber,
+            $config
+        );
+
+        if ($signResult->status_code == 65000) {
+            return null; // try next cert
+        }
+
+        return [$hashResult['fileID'], $signResult->data->transaction_id, $hashResult['transIdHash']];
+    }
+
+    private function calculateHash($pdf, $certBase64, $page, $config)
+    {
         $data_calculate_hash = [
             "transaction_id" => $this->getGUID(),
             "sp_id" => $config->client_id,
@@ -985,12 +1047,12 @@ trait CommonHelper
                 [
                     "storage_file_name" => "",
                     "name" => "test.pdf",
-                    "pdfContent" => $unsignDataBase64,
+                    "pdfContent" => $pdf,
                     "sigOptions" => [
-                        "renderMode" => 2, //0: TextOnly, 1:TEXT_WITH_LOGO_LEFT, 2:LOGO_ONLY, 3:TEXT_WITH_LOGO_TOP,4:TEXT_WITH_BACKGROUND 
-                        "customImage" => "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/UmMprQAAAAASUVORK5CYII=", //base64 của anh gửi
-                        "fontSize" => 10, //kcihs thước chữ
-                        "fontColor" => "#000000", //màu chữ							
+                        "renderMode" => 2,
+                        "customImage" => "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/UmMprQAAAAASUVORK5CYII=",
+                        "fontSize" => 10,
+                        "fontColor" => "#000000",
                         "signatureText" => " ",
                         "signatures" => [
                             [
@@ -1001,19 +1063,20 @@ trait CommonHelper
                     ]
                 ]
             ]
-
         ];
-        $msg_calculateHash = $this->api_smartca("https://gwsca.vnpt.vn/rest/v2/signature/calculateHash", $data_calculate_hash);
 
-        if ($msg_calculateHash->hashResps[0]->code != "sigSuccess") {
-            echo ("Không thể calculateHash đc");
-            exit();
-        }
-        $hashData = $msg_calculateHash->hashResps[0]->hash;
-        $fileID = $msg_calculateHash->hashResps[0]->fileID;
-        $transIdHash = $msg_calculateHash->tranId;
+        $msg = $this->api_smartca("https://gwsca.vnpt.vn/rest/v2/signature/calculateHash", $data_calculate_hash);
 
-        // 3.SignHash
+        return [
+            'code' => $msg->hashResps[0]->code ?? null,
+            'hash' => $msg->hashResps[0]->hash ?? null,
+            'fileID' => $msg->hashResps[0]->fileID ?? null,
+            'transIdHash' => $msg->tranId ?? null
+        ];
+    }
+
+    private function signHash($hashData, $file_name, $cccd, $serialNumber, $config)
+    {
         $data_signhash = [
             "sp_id" => $config->client_id,
             "sp_password" => $config->client_secret,
@@ -1029,9 +1092,10 @@ trait CommonHelper
             ],
             "serial_number" => $serialNumber,
         ];
-        $msg_signHash = $this->api_smartca("https://gwsca.vnpt.vn/sca/sp769/v1/signatures/sign", $data_signhash);
-        return [$fileID, $msg_signHash->data->transaction_id, $transIdHash];
+
+        return $this->api_smartca("https://gwsca.vnpt.vn/sca/sp769/v1/signatures/sign", $data_signhash);
     }
+
 
 
     function api_get_tranInfo_curl($url)
@@ -1115,7 +1179,7 @@ trait CommonHelper
                 return 0;
             }
             $hashSigned = $msg->data->signatures[0]->signature_value;
-    
+
             // 5. signExternal
             $data_signExternal = [
                 "tranId" => $transIDHash,
@@ -1128,16 +1192,85 @@ trait CommonHelper
                     ]
                 ]
             ];
-    
+
             $msg_signExternal = $this->api_service_get_hash("https://gwsca.vnpt.vn/rest/v2/signature/signExternal", $data_signExternal);
-    
-    
+
+
             return $msg_signExternal->signResps[0]->signedData;
         } catch (\Throwable $th) {
             return 0;
         }
     }
+    public static function convertNumberToVietnameseWords($number)
+    {
+        $textNumbers = [
+            0 => 'không',
+            1 => 'một',
+            2 => 'hai',
+            3 => 'ba',
+            4 => 'bốn',
+            5 => 'năm',
+            6 => 'sáu',
+            7 => 'bảy',
+            8 => 'tám',
+            9 => 'chín',
+        ];
 
+        $units = ['', 'nghìn', 'triệu', 'tỷ', 'nghìn tỷ', 'triệu tỷ'];
+
+        if ($number == 0) {
+            return 'Không đồng';
+        }
+
+        $number = str_pad($number, ceil(strlen($number) / 3) * 3, '0', STR_PAD_LEFT);
+        $groups = str_split($number, 3);
+        $result = [];
+        $unitIndex = count($groups) - 1;
+
+        foreach ($groups as $group) {
+            $hundreds = (int)$group[0];
+            $tens = (int)$group[1];
+            $ones = (int)$group[2];
+
+            $groupText = '';
+
+            // Hundreds
+            if ($hundreds > 0 || ($hundreds == 0 && ($tens > 0 || $ones > 0))) {
+                $groupText .= $textNumbers[$hundreds] . ' trăm';
+            }
+
+            // Tens
+            if ($tens > 1) {
+                $groupText .= ' ' . $textNumbers[$tens] . ' mươi';
+                if ($ones == 1) {
+                    $groupText .= ' mốt';
+                } elseif ($ones == 5) {
+                    $groupText .= ' lăm';
+                } elseif ($ones > 0) {
+                    $groupText .= ' ' . $textNumbers[$ones];
+                }
+            } elseif ($tens == 1) {
+                $groupText .= ' mười';
+                if ($ones == 1) {
+                    $groupText .= ' một';
+                } elseif ($ones == 5) {
+                    $groupText .= ' lăm';
+                } elseif ($ones > 0) {
+                    $groupText .= ' ' . $textNumbers[$ones];
+                }
+            } elseif ($tens == 0 && $ones > 0) {
+                $groupText .= ' lẻ ' . $textNumbers[$ones];
+            }
+
+            if (trim($groupText) != '') {
+                $result[] = trim($groupText) . ' ' . $units[$unitIndex];
+            }
+
+            $unitIndex--;
+        }
+
+        return ucfirst(trim(implode(' ', $result))) . ' đồng';
+    }
     function sanitizeFileName($fileName)
     {
         // Replace slashes and other illegal characters

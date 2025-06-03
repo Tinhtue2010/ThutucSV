@@ -16,9 +16,13 @@ class StudentManagerController extends Controller
 {
     function index()
     {
+        $user = Auth::user();
         $lops = Lop::get();
+        if ($user->role == 2 || $user->role == 3) {
+            $lops = Lop::where('teacher_id', $user->teacher_id)->get();
+        }
         $khoas = Khoa::get();
-        return view('student_manager.index', ['lops' => $lops,'khoas' => $khoas, ]);
+        return view('student_manager.index', ['lops' => $lops, 'khoas' => $khoas,]);
     }
 
     public function getData(Request $request)
@@ -29,7 +33,7 @@ class StudentManagerController extends Controller
         $query = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
             ->leftJoin("nganhs", "lops.nganh_id", "=", "nganhs.manganh")
-            ->select('students.*','khoas.name as khoa_name','nganhs.hedaotao', 'lops.ma_khoa', 'lops.name as lop_name', 'khoas.name as khoa_name');
+            ->select('students.*', 'khoas.name as khoa_name', 'nganhs.hedaotao', 'lops.ma_khoa', 'lops.name as lop_name', 'khoas.name as khoa_name');
         if (Role(2) || Role(3)) {
             if (isset($request->khoa)) {
                 $query = $query->where('lops.ma_khoa', $teacher->ma_khoa);
@@ -57,9 +61,9 @@ class StudentManagerController extends Controller
     {
         try {
             $error = Student::leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-             ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
-            ->select('students.*','lops.*','khoas.id as khoa_id','lops.id as lop_id')
-            ->findOrFail($id);
+                ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
+                ->select('students.*', 'lops.*', 'khoas.id as khoa_id', 'lops.id as lop_id')
+                ->findOrFail($id);
 
             return $error;
         } catch (QueryException $e) {
@@ -70,7 +74,7 @@ class StudentManagerController extends Controller
     function detele($id)
     {
         try {
-            User::where('student_id',$id)->delete();
+            User::where('student_id', $id)->delete();
             return Student::findOrFail($id)->delete();
         } catch (QueryException $e) {
             abort(404);
@@ -147,7 +151,7 @@ class StudentManagerController extends Controller
                 "so_dt_ca_nhan" => "phone",
                 "email" => "email",
                 "ten_lop" => "lop_id",
-                "lien_khoa"=>"nien_khoa",
+                "lien_khoa" => "nien_khoa",
                 "ngay_nhap_hoc" => "ngay_nhap_hoc",
                 "ghi_chu_ho_so" => "note",
                 "can_cuoc" => "cmnd",
@@ -189,14 +193,14 @@ class StudentManagerController extends Controller
                         }
                     }
                     $student->save();
-            
+
                     $user = new User();
-            
+
                     $user->name = $student->full_name;
                     $user->username = $student->student_code;
                     $user->password = bcrypt($student->student_code);
                     $user->student_id = $student->id;
-                    
+
                     $user->save();
                 }
             } catch (\Exception $e) {
@@ -210,12 +214,45 @@ class StudentManagerController extends Controller
                 ], 500);
             }
             DB::commit();
-            
+
             return true;
         }
         abort(404);
         return true;
     }
+    function khoaHocLop($id)
+    {
+        if (!isset($id)) {
+            return abort(404);
+        }
+        $khoaHocs = Student::join('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->when($id !== 'all', function ($query) use ($id) {
+                return $query->where('lops.id', $id);
+            })
+            ->pluck('khoa_hoc')
+            ->unique()
+            ->values();
+
+        return $khoaHocs;
+    }
+
+    function lopKhoaHoc($id)
+    {
+        if (!isset($id)) {
+            return abort(404);
+        }
+        $lops = Lop::join('students', 'lops.ma_lop', '=', 'students.ma_lop')
+            ->when($id !== "all", function ($query) use ($id) {
+                return $query->where('students.khoa_hoc', $id);
+            })
+            ->select('lops.*')
+            ->distinct()
+            ->get();
+
+        return $lops;
+    }
+
+
     function status(Request $request)
     {
         Student::whereIn('id', $request->student)->update(["status" => $request->status]);
@@ -226,8 +263,8 @@ class StudentManagerController extends Controller
     {
         try {
             $student = Student::find($id);
-            
-            User::where('student_id',$id)->update(["password"=>bcrypt($student->student_code)]);
+
+            User::where('student_id', $id)->update(["password" => bcrypt($student->student_code)]);
             return true;
         } catch (QueryException $e) {
             abort(404);

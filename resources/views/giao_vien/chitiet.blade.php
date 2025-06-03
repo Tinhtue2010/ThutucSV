@@ -38,7 +38,7 @@
                         $('.list_file').append(`<a href="/storage/${item[1]}" target="_blank">${item[0]}</a>`);
                     })
                     url = "/storage/" + response.data[2];
-                    $('.list_file').append(`<a href="${url}" target="_blank" class="btn btn-primary me-auto ms-0 mt-4">xem đơn</a>`)
+                    $('.list_file').append(`<a href="${url}" target="_blank" class="btn btn-primary me-auto ms-0 mt-4">Xem đơn</a>`)
                 })
 
         }

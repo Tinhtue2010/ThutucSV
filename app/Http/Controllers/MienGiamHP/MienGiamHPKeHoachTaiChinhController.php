@@ -17,24 +17,24 @@ class MienGiamHPKeHoachTaiChinhController extends Controller
     {
         $lop = Lop::get();
         $hoso = HoSo::where('type', 2)->where('status', 0)
-        ->latest('created_at')
-        ->first();
-        return view('ke_hoach_tai_chinh.ds_mien_giam_hp.index', ['lop' => $lop,'hoso'=>$hoso]);
+            ->latest('created_at')
+            ->first();
+        return view('ke_hoach_tai_chinh.ds_mien_giam_hp.index', ['lop' => $lop, 'hoso' => $hoso]);
     }
 
     function getData(Request $request)
     {
-        $query = StopStudy::where('type', 1)
-        ->studentActive()
-        ->whereNull('parent_id')->whereNull('parent_id')
-        ->whereNull('parent_id')
+        $query = StopStudy::where('type', 2)
+            // ->studentActive()
+            // ->whereNull('parent_id')->whereNull('parent_id')
+            // ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name','students.hocphi');
+            ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi');
 
-        if (isset($request->type_miengiamhp)) {
-            $query->where('stop_studies.type_miengiamhp', $request->type_miengiamhp);
-        }
+        // if (isset($request->type_miengiamhp)) {
+        //     $query->where('stop_studies.type_miengiamhp', $request->type_miengiamhp);
+        // }
         if (isset($request->year)) {
             $query->whereYear('stop_studies.created_at', $request->year);
         }
@@ -42,20 +42,21 @@ class MienGiamHPKeHoachTaiChinhController extends Controller
             $query->where('status', $request->status);
         }
         $data = $this->queryPagination($request, $query, ['students.full_name', 'students.student_code']);
-
+        
         return $data;
     }
 
-    function xacnhan(Request $request) {
+    function xacnhan(Request $request)
+    {
         $query = StopStudy::where('type', 1)
-        ->whereNull('parent_id')->whereNull('parent_id')->where(function($query) {
-            $query->where('status', 4)
-                  ->orWhere('status', 5)
-                  ->orWhere('status', -5);
-        })->get(); 
+            ->whereNull('parent_id')->whereNull('parent_id')->where(function ($query) {
+                $query->where('status', 4)
+                    ->orWhere('status', 5)
+                    ->orWhere('status', -5);
+            })->get();
         foreach ($query as $stopStudy) {
-            $stopStudy->status = 5; 
-            $stopStudy->save();  
+            $stopStudy->status = 5;
+            $stopStudy->save();
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
@@ -67,16 +68,17 @@ class MienGiamHPKeHoachTaiChinhController extends Controller
         return redirect()->back();
     }
 
-    function tuchoi() {
+    function tuchoi()
+    {
         $query = StopStudy::where('type', 1)
-        ->whereNull('parent_id')->where(function($query) {
-            $query->where('status', 4)
-                  ->orWhere('status', 5)
-                  ->orWhere('status', -5);
-        })->get();
+            ->whereNull('parent_id')->where(function ($query) {
+                $query->where('status', 4)
+                    ->orWhere('status', 5)
+                    ->orWhere('status', -5);
+            })->get();
         foreach ($query as $stopStudy) {
-            $stopStudy->status = -5; 
-            $stopStudy->save();  
+            $stopStudy->status = -5;
+            $stopStudy->save();
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 0;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;

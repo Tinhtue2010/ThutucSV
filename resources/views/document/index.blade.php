@@ -56,10 +56,21 @@
                 height: 287, // set the height of the pdf to 287 mm (A4 height)
                 windowWidth: 650, // set the width of the html content to 650 pixels
                 windowHeight: 900,
-                fontFaces: [
-                    { family: 'times', style: 'normal', file: 'font/times.ttf' }, // Default font
-                    { family: 'times', style: 'bold', file: 'font/SVN-Times New Roman Bold.ttf' }, // Bold font
-                    { family: 'times', style: 'italic', file: 'font/SVN-Times New Roman Italic.ttf' }, // Italic font
+                fontFaces: [{
+                        family: 'times',
+                        style: 'normal',
+                        file: 'font/times.ttf'
+                    }, // Default font
+                    {
+                        family: 'times',
+                        style: 'bold',
+                        file: 'font/SVN-Times New Roman Bold.ttf'
+                    }, // Bold font
+                    {
+                        family: 'times',
+                        style: 'italic',
+                        file: 'font/SVN-Times New Roman Italic.ttf'
+                    }, // Italic font
                 ],
             });
         }

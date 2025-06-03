@@ -57,17 +57,17 @@ class CheDoChinhSachLanhDaoTruongController extends Controller
             ->get();
 
 
-        $phieus = Phieu::whereIn('key', ['PTQT4', 'QDCDTA', 'QDCDHP', 'QDCDKTX1', 'QDCDKTX4'])->where('status', 0)->get();
+        // $phieus = Phieu::whereIn('key', ['PTQT4', 'QDCDTA', 'QDCDHP', 'QDCDKTX1', 'QDCDKTX4'])->where('status', 0)->get();
         
-        $teacher = Teacher::find(Auth::user()->teacher_id);
+        // $teacher = Teacher::find(Auth::user()->teacher_id);
         
-        foreach ($phieus as $phieu) {
-            $content = json_decode($phieu->content, true);
-            $content[0]['canbo_truong'] = $teacher->full_name;;
-            $content[0]['canbo_truong_chu_ky'] = $teacher->chu_ky;
-            $phieu->content = json_encode($content, true);
-            $phieu->save();
-        }
+        // foreach ($phieus as $phieu) {
+        //     $content = json_decode($phieu->content, true);
+        //     $content[0]['canbo_truong'] = $teacher->full_name;;
+        //     $content[0]['canbo_truong_chu_ky'] = $teacher->chu_ky;
+        //     $phieu->content = json_encode($content, true);
+        //     $phieu->save();
+        // }
 
 
         foreach ($query as $stopStudy) {
@@ -78,7 +78,7 @@ class CheDoChinhSachLanhDaoTruongController extends Controller
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = null;
+            // $newStopStudy->phieu_id = null;
             $newStopStudy->parent_id = $stopStudy->id;
             $newStopStudy->note = "Lãnh đạo trường đã phê duyệt danh sách";
             $newStopStudy->save();
@@ -108,7 +108,7 @@ class CheDoChinhSachLanhDaoTruongController extends Controller
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 0;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = null;
+            // $newStopStudy->phieu_id = null;
             $newStopStudy->parent_id = $stopStudy->id;
             $newStopStudy->note = "Lãnh đạo trường từ chối danh sách";
             $newStopStudy->save();

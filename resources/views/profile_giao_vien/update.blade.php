@@ -15,7 +15,7 @@
                         @include('profile_giao_vien.field',[
                             'type' => '_update',
                         ])
-                        {{ route('Profile.GiaoVien.info') }}
+                        {{-- {{ route('Profile.GiaoVien.info') }} --}}
                     </div>
                     <div class="card-footer">
                         <button type="submit"

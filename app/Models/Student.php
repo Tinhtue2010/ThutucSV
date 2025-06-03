@@ -25,7 +25,8 @@ class Student extends Model
         'gioitinh',
         'status',
         'chu_ky',
-        'hocphi'
+        'hocphi',
+        'tuition_id',
     ];
 
     protected $casts = [

@@ -14,7 +14,7 @@
         </label>
         <!--end::Label-->
         <select data-dropdown-parent="#select-parent-{{$type}}-1" name="ma_khoa" class="form-select " data-control="select2">
-            <option value="">Cán bộ nhà trường</option>
+            <option value="">Ban Giám hiệu</option>
             @foreach ($khoas as $item)
                 <option value="{{ $item->ma_khoa }}">{{ $item->name }}</option>
             @endforeach

@@ -22,7 +22,7 @@ class PhongDaoTaoController extends Controller
     }
     function index()
     {
-        $tb_miengiamhp = StopStudy::where('type', 1)->whereIn('status', [3,6])->count();
+        $tb_miengiamhp = StopStudy::where('type', 1)->whereIn('status', [3, 6])->count();
         $tb_trocapxahoi = StopStudy::where('type', 2)->where('status', 3)->count();
         $tb_trocaphocphi = StopStudy::where('type', 3)->where('status', 3)->count();
         $tb_chedochinhsach = StopStudy::where('type', 4)->where('status', 3)->count();
@@ -39,15 +39,15 @@ class PhongDaoTaoController extends Controller
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
-            ->select('stop_studies.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name')
-            ->where(function ($query) {
-                $query
-                    ->where(function ($query) {
-                        $query->where('doi_tuong_chinh_sach', 'like', '%1%')
-                            ->orWhere('doi_tuong_chinh_sach', 'like', '%4%')
-                            ->orWhereNull('doi_tuong_chinh_sach');
-                    });
-            });
+            ->select('stop_studies.*', 'students.full_name', 'students.student_code', 'lops.name as lop_name');
+            // ->where(function ($query) {
+            //     $query
+            //         ->where(function ($query) {
+            //             $query->where('doi_tuong_chinh_sach', 'like', '%1%')
+            //                 ->orWhere('doi_tuong_chinh_sach', 'like', '%4%')
+            //                 ->orWhereNull('doi_tuong_chinh_sach');
+            //         });
+            // });
         if (isset($request->year)) {
             $query->whereYear('stop_studies.created_at', $request->year);
         }
@@ -67,6 +67,7 @@ class PhongDaoTaoController extends Controller
         if (isset($request->type)) {
             $query->where('stop_studies.type', $request->type);
         }
+
         $data = $this->queryPagination($request, $query, ['students.full_name', 'students.student_code']);
 
         return $data;
@@ -85,6 +86,12 @@ class PhongDaoTaoController extends Controller
             if ($stopStudy->type == 2) {
                 return $this->phongdaotao->bosunghsTCXHPDF($request, $stopStudy);
             }
+            if ($stopStudy->type == 3) {
+                return $this->phongdaotao->bosunghsTCHPPDF($request, $stopStudy);
+            }
+            if ($stopStudy->type == 4) {
+                return $this->phongdaotao->bosunghsCDCSPDF($request, $stopStudy);
+            }
         } catch (\Throwable $th) {
             abort(404);
         }
@@ -101,6 +108,12 @@ class PhongDaoTaoController extends Controller
             }
             if ($stopStudy->type == 2) {
                 return $this->phongdaotao->bosunghsTCXH($request, $stopStudy);
+            }
+            if ($stopStudy->type == 3) {
+                return $this->phongdaotao->bosunghsTCHP($request, $stopStudy);
+            }
+            if ($stopStudy->type == 4) {
+                return $this->phongdaotao->bosunghsCDCS($request, $stopStudy);
             }
         } catch (\Throwable $th) {
             abort(404);
@@ -128,7 +141,6 @@ class PhongDaoTaoController extends Controller
             $stopStudy =  StopStudy::find($request->id);
 
             $this->giaiQuyetCongViec($request->ykientiepnhan ?? '', $stopStudy, 1);
-
             if ($stopStudy->type == 0) {
                 return $this->phongdaotao->tiepnhanhsRHSPDF($request, $stopStudy);
             }
@@ -178,6 +190,7 @@ class PhongDaoTaoController extends Controller
 
     function gettiepnhanhs($id = null)
     {
+
         if ($id == null) {
             abort(404);
         }
@@ -229,7 +242,7 @@ class PhongDaoTaoController extends Controller
             return $this->phongdaotao->tuchoihsCDCS($request, $stopStudy);
         }
     }
-    
+
     function duyeths(Request $request)
     {
         $stopStudy =  StopStudy::find($request->id);

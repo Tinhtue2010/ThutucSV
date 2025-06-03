@@ -17,7 +17,7 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
     function index()
     {
         $lop = Lop::get();
-        $hoso = HoSo::where('type', 4)->where('status', 0)
+        $hoso = HoSo::where('type', 3)->where('status', 0)
             ->latest('created_at')
             ->first();
         return view('phong_dao_tao.create_ds_tro_cap_hoc_phi.index', ['lop' => $lop, 'hoso' => $hoso]);
@@ -32,7 +32,6 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi');
 
-
         if (isset($request->type_miengiamhp)) {
             $query->where('stop_studies.type_miengiamhp', $request->type_miengiamhp);
         }
@@ -40,7 +39,7 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
             $query->whereYear('stop_studies.created_at', $request->year);
         }
         if (isset($request->status)) {
-            $query->where('status', $request->status);
+            $query->where('stop_studies.status', $request->status);
         }
         $data = $this->queryPagination($request, $query, ['students.full_name', 'students.student_code']);
 
@@ -92,7 +91,7 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
     function guiTBSV()
     {
 
-        $hoso = HoSo::where('type', 4)->where('status', 0)
+        $hoso = HoSo::where('type', 3)->where('status', 0)
             ->latest('created_at')
             ->first();
 
@@ -107,7 +106,7 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
             $stopStudy->status = 4;
             $stopStudy->save();
             $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
-            $this->notification("Danh sách trợ cấp chi phí học tập dự kiến", null,$hoso->file_list, "TCXH", $user_id);
+            $this->notification("Danh sách trợ cấp chi phí học tập dự kiến", null, $hoso->file_list, "TCXH", $user_id);
 
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
@@ -121,7 +120,7 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
                 ->orWhere('role', 3);
         })->get();
         foreach ($users as $item) {
-            $this->notification("Danh sách trợ cấp chi phí học tập dự kiến", null,$hoso->file_list, "TCXH", $item->id);
+            $this->notification("Danh sách trợ cấp chi phí học tập dự kiến", null, $hoso->file_list, "TCXH", $item->id);
         }
         return redirect()->back();
     }
@@ -129,14 +128,14 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
     function guiTBSALL()
     {
 
-        $hoso = HoSo::where('type', 4)->where('status', 0)
+        $hoso = HoSo::where('type', 3)->where('status', 0)
             ->latest('created_at')
             ->first();
-        
+
 
         $users = User::get();
         foreach ($users as $item) {
-            $this->notification("Danh sách trợ cấp chi phí học tập", null,$hoso->file_list, "TCXH", $item->id);
+            $this->notification("Danh sách trợ cấp chi phí học tập", null, $hoso->file_list, "TCXH", $item->id);
         }
 
 
@@ -216,7 +215,7 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
 
         $hoso = HoSo::where('ky_hoc', $request->ky)
             ->where('nam_hoc', $request->nam)
-            ->where('type', 4)
+            ->where('type', 3)
             ->latest('created_at')
             ->first();
 
@@ -224,26 +223,30 @@ class TroCapHocPhiPhongDaoTaoController extends Controller
             if ($hoso->file_quyet_dinh != $file_quyet_dinh) {
                 $this->deletePdf($hoso->file_quyet_dinh);
             }
-            if ($hoso->file_list != $file_list) {
-                $this->deletePdf($hoso->file_list);
-            }
+            // if ($hoso->file_list != $file_list) {
+            //     $this->deletePdf($hoso->file_list);
+            // }
 
             $hoso->update([
                 'name' => "Trợ cấp xã hội",
+                'so_quyet_dinh' => $request->so_QD,
+                'ngay_quyet_dinh' => Carbon::createFromFormat('d/m/Y', $request->thoi_gian_tao)->format('Y-m-d'),
                 'file_quyet_dinh' => $file_quyet_dinh,
                 'file_list' => $file_list,
-                'list_info' => json_encode($content_DSTCHP, true),
-                'type' => 4
+                // 'list_info' => json_encode($content_DSTCHP, true),
+                'type' => 3
             ]);
         } else {
             $hoso = HoSo::create([
                 'name' => "Trợ cấp xã hội",
                 'file_quyet_dinh' => $file_quyet_dinh,
+                'so_quyet_dinh' => $request->so_QD,
+                'ngay_quyet_dinh' => Carbon::createFromFormat('d/m/Y', $request->thoi_gian_tao)->format('Y-m-d'),
                 'file_list' => $file_list,
                 'ky_hoc' => $request->ky,
                 'nam_hoc' => $request->nam,
-                'list_info' => json_encode($content_DSTCHP, true),
-                'type' => 4
+                // 'list_info' => json_encode($content_DSTCHP, true),
+                'type' => 3
             ]);
         }
 

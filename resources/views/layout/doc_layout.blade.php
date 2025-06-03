@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
@@ -186,6 +186,42 @@
     .table th div {
         font-size: 14px;
         /* Giữ chữ trong <div> không quá to */
+    }
+</style>
+<style>
+    /* Times New Roman font with Unicode support */
+    .times-font {
+        font-family: "Times New Roman", Times, serif;
+        -webkit-font-feature-settings: "kern" 1;
+        font-feature-settings: "kern" 1;
+        text-rendering: optimizeLegibility;
+    }
+
+    /* Ensure proper Vietnamese character rendering */
+    .vietnamese-text {
+        font-family: "Times New Roman", "Liberation Serif", "DejaVu Serif", Times, serif;
+        font-feature-settings: "liga" 1, "kern" 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Table styling with Times New Roman */
+    .table-times {
+        font-family: "Times New Roman", Times, serif;
+        border-collapse: collapse;
+        font-size: 15px;
+    }
+
+    .table-times th,
+    .table-times td {
+        border: 1px solid #000;
+        padding: 8px;
+        vertical-align: middle;
+    }
+
+    .table-times th {
+        background-color: #f8f9fa;
+        font-weight: bold;
     }
 </style>
 

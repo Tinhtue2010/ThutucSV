@@ -6,7 +6,7 @@
         <div class="text-dark order-2 order-md-1">
             <span class="text-muted fw-semibold me-1">2025&copy;</span>
             <a href="" target="_blank"
-                class="text-gray-800 text-hover-primary">Trường đại học Hạ Long | Khoa Công nghệ thông tin</a>
+                class="text-gray-800 text-hover-primary">Trường Đại học Hạ Long | Khoa Công nghệ thông tin</a>
         </div>
         <!--end::Copyright-->
     </div>

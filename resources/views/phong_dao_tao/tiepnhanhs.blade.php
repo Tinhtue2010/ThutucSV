@@ -234,16 +234,16 @@
 
                 }
             });
-            axios.get("{{ route('PhongDaoTao.gettiepnhanhs') }}/" + data).then(
-                response => {
-                    inputElements.forEach(e => {
-                        if (e.name != '_token' && e.name != 'id') {
-                            e.value = response.data[e.name] == null ? '' : response.data[e.name];
-                            var event = new Event('change');
-                            e.dispatchEvent(event);
-                        }
-                    });
-                })
+            // axios.get("{{ route('PhongDaoTao.gettiepnhanhs') }}/" + data).then(
+            //     response => {
+            //         inputElements.forEach(e => {
+            //             if (e.name != '_token' && e.name != 'id') {
+            //                 e.value = response.data[e.name] == null ? '' : response.data[e.name];
+            //                 var event = new Event('change');
+            //                 e.dispatchEvent(event);
+            //             }
+            //         });
+            //     })
             model{{ $target }}.show();
         }
         const linkedPicker1Element = document.getElementById("kt_td_picker_linked_1");

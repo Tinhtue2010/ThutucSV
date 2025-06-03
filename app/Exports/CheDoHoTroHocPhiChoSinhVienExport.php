@@ -2,6 +2,9 @@
 
 namespace App\Exports;
 
+use App\Models\HoSo;
+use App\Models\StopStudy;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
@@ -10,13 +13,14 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+
 class CheDoHoTroHocPhiChoSinhVienExport implements FromArray, WithEvents, WithDrawings
 {
-    protected $data;
+    protected $request;
 
-    public function __construct($data)
+    public function __construct($request)
     {
-        $this->data = $data;
+        $this->request = $request;
     }
 
     public function array(): array
@@ -29,12 +33,44 @@ class CheDoHoTroHocPhiChoSinhVienExport implements FromArray, WithEvents, WithDr
             ['CHẾ ĐỘ HỖ TRỢ HỌC PHÍ CHO SINH VIÊN'],
             ['THEO NGHỊ QUYẾT 35/2021/NQ-HĐND'],
             [''],
-            ['STT','Năm học','Học kỳ','Số SV hưởng','Số tiền hưởng','Số QĐ','Ngày QĐ'],
+            ['STT', 'Năm học', 'Học kỳ', 'Số SV hưởng', 'Số tiền hưởng', 'Số QĐ', 'Ngày QĐ'],
         ];
-        $stt = 1;
 
-        if (is_array($this->data) && !empty($this->data)) {
-            foreach ($this->data as $item) {
+        $query = StopStudy::join('students', 'stop_studies.student_id', '=', 'students.id')
+            ->where('stop_studies.type',  4)
+            ->whereNull('stop_studies.parent_id')
+            ->where('stop_studies.is_giam_hp', 1)
+            ->where('stop_studies.status', '>', 0)
+            ->where('stop_studies.ky_hoc', $this->request->ky)
+            ->where('stop_studies.nam_hoc', $this->request->nam_hoc)
+            ->get();
+
+        $hoSo = HoSo::where('ky_hoc', $this->request->ky)
+            ->where('nam_hoc', $this->request->nam_hoc)
+            ->where('type', 4)
+            ->first();
+        $data  = [];
+        $soSVHuong = 0;
+        $soTienHuong = 0;
+        foreach ($query as $item) {
+            $soSVHuong++;
+            $hocphi = $item->hocphi ?? 0;
+            $soTienHuong += $hocphi;
+        }
+        $data[] = [
+            $this->request->nam_hoc,
+            $this->request->ky,
+            $soSVHuong == 0 ? '0' : $soSVHuong,
+            $soTienHuong == 0 ? '0' : $soTienHuong,
+            $hoSo->so_quyet_dinh ?? '',
+            $hoSo && $hoSo->ngay_quyet_dinh
+                ? \Carbon\Carbon::parse($hoSo->ngay_quyet_dinh)->format('d/m/Y')
+                : ''
+        ];
+
+        $stt = 1;
+        if (is_array($data) && !empty($data)) {
+            foreach ($data as $item) {
                 if (is_array($item)) {
                     $result[] = array_merge([$stt++], $item);
                 }
@@ -85,13 +121,11 @@ class CheDoHoTroHocPhiChoSinhVienExport implements FromArray, WithEvents, WithDr
                 $sheet->mergeCells('A6:G6');
 
                 $this->applyBorder($sheet, 'A8:G' . $sheet->getHighestRow());
-                $this->centerCell($sheet, 'A1:G'.$sheet->getHighestRow());
+                $this->centerCell($sheet, 'A1:G' . $sheet->getHighestRow());
                 $this->boldCell($sheet, 'A1:G8');
 
                 $sheet->getStyle('D')->getNumberFormat()->setFormatCode('0');
                 $sheet->getStyle('E')->getNumberFormat()->setFormatCode('#,##0');
-
-
             },
         ];
     }

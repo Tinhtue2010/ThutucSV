@@ -13,12 +13,12 @@
             /* Thêm dấu gạch ngang trước mỗi mục */
         }
     </style>
-    <div id="doc_view" class="A4 d-flex flex-column">
+        <div id="doc_view" class="A4 d-flex flex-column times-font vietnamese-text" style="height: auto;">
         <table style="width: 100%;">
             <tr>
                 <td style="text-align: center; vertical-align: top;">
                     <div>UBND TỈNH QUẢNG NINH</div>
-                    <div style="font-weight: bold;">TRƯỜNG ĐẠI HỌC HẠ LONG</div>
+                    <div style="font-weight: bold; font-size: 15px;">TRƯỜNG ĐẠI HỌC HẠ LONG</div>
                     <div style="width: 94px; height: 1px; background-color: black; margin: 2px auto 0 auto;"></div>
                     <div style="margin-top: 8px;">Số: {{ $data[0]['so_QD'] }}/QĐ-ĐHHL</div>
                 </td>

@@ -53,7 +53,7 @@
     <div class="d-flex flex-column mb-8 fv-row col-6 ps-4" id="select-parent-{{ $type }}-1">
         <!--begin::Label-->
         <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-            <span class="required">lớp</span>
+            <span class="required">Lớp</span>
         </label>
         <!--end::Label-->
         <select data-dropdown-parent="#select-parent-{{ $type }}-1" name="lop_id" class="form-select form-select-solid" data-control="select2" data-placeholder="Lớp">
@@ -121,6 +121,7 @@
 
 
 @push('js')
+
     <script>
         $(document).ready(function() {
             // $('#{{ $type }}_field_khoa').change((e) => {
@@ -139,4 +140,5 @@
             // })
         })
     </script>
+    
 @endpush

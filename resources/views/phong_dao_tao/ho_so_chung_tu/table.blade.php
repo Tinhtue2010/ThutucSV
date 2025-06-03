@@ -42,6 +42,11 @@
                         "dataSrc": function(response) {
                             renderPagination(response.page,
                                 response.max_page);
+                                                        const infoSelector = document.getElementById('datatable-info');
+    if (infoSelector) {
+                                infoSelector.innerText =
+                                    `Tổng số bản ghi: ${response.total_items}, Số bản ghi trang hiện tại: ${response.current_page_items_count}`;
+                            }
                             return response.data;
                         },
                     },
@@ -52,11 +57,22 @@
                             }
                         },
                         {
-                            data: 'id',
+                            data: 'position',
                         },
                         {
                             data: 'name',
                             render: function(data, type, row) {
+                                if(row['type'] == 0){
+                                    return `Hồ sơ thôi học`
+                                } else if(row['type'] == 1){
+                                    return `Hồ sơ miễn, giảm học phí`
+                                } else if(row['type'] == 2){
+                                    return `Hồ sơ trợ cấp xã hội`
+                                } else if(row['type'] == 3){
+                                    return `Hồ sơ hỗ trợ chi phí học tập`
+                                } else if(row['type'] == 4){
+                                    return `Hồ sơ chế độ chính sách`
+                                }
                                 return `${data}`
                             }
                         },
@@ -76,16 +92,20 @@
                             data: 'type',
                             render: function(data, type, row) {
                                 switch (Number(data)) {
+                                    case 0:
+                                        return "Hồ sơ thôi học";
                                     case 1:
-                                        return "Rút hồ sơ";
+                                        return "Hồ sơ miễn, giảm học phí theo NĐ 81";
                                     case 2:
-                                        return "Miễn giảm học phí";
+                                        return "Hồ sơ trợ cấp xã hội";
                                     case 3:
-                                        return "Trợ cấp xã hội";
+                                        return "Hồ sơ hỗ trợ chi phí học tập theo TT 35";
                                     case 4:
-                                        return "Trợ cấp học phí";
+                                        return "Hồ sơ chế độ chính sách theo NQ 35";
                                     case 5:
-                                        return "Chế độ chính sách";
+                                        return "Hồ sơ chế độ chính sách theo NQ 35";
+                                    case 6:
+                                        return "Hồ sơ chế độ chính sách theo NQ 35";
                                     default:
                                         return "Không rõ";
                                 }
@@ -95,15 +115,30 @@
                         {
                             data: 'name',
                             render: function(data, type, row) {
+                                const ky_hoc = row['ky_hoc'] ? encodeURIComponent(row['ky_hoc']) :
+                                    '';
+                                const nam_hoc = row['nam_hoc'] ? encodeURIComponent(row[
+                                    'nam_hoc']) : '';
+                                const loai = row['type'] ? encodeURIComponent(row['type']) : '';
+                                const fileQuyetDinh = row['file_quyet_dinh'] ? encodeURIComponent(
+                                    row['file_quyet_dinh']) : '';
+
+                                const quyetDinhBtn = ky_hoc && nam_hoc && loai ?
+                                    `<a target="_blank" href="/download-quyet-dinh?ky_hoc=${ky_hoc}&nam_hoc=${nam_hoc}&type=${loai}"><button class="btn btn-primary">Quyết định</button></a>` :
+                                    '';
+
+                                const danhSachBtn = ky_hoc && nam_hoc && loai ?
+                                    `<a target="_blank" href="/download-danh-sach?ky_hoc=${ky_hoc}&nam_hoc=${nam_hoc}&type=${loai}"><button class="btn btn-primary">Danh sách</button></a>` :
+                                    '';
+
                                 return `
-                                <div style="display: flex; gap: 8px; align-items: center;">
-                                    ${row['file_quyet_dinh'] ? `<a target="_blank" href="/storage/${row['file_quyet_dinh']}"><button class="btn btn-primary">Quyết định</button></a>` : ''} 
-                                    ${row['file_list'] ? `<a target="_blank" href="/storage/${row['file_list']}"><button class="btn btn-primary">Danh sách</button></a>` : ''}
-                                    ${row['file_name'] ? `<a target="_blank" href="/storage/${row['file_name']}"><button class="btn btn-primary">Đơn</button></a>` : ''}
-                                    ${row['file_quyet_dinh'] ? `<button class="btn btn-secondary print-btn" data-quyet-dinh="${row['file_quyet_dinh']}" data-list="${row['file_list']}">In quyết định</button>` : ''}
-                                </div>
-                            `;
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        ${quyetDinhBtn}
+                                        ${danhSachBtn}
+                                    </div>
+                                `;
                             }
+
                         },
 
                         {
@@ -133,7 +168,7 @@
                     ],
                     paging: false,
                     searching: false,
-                    order: [1, 'asc'],
+                    order: [1, 'desc'],
                     columnDefs: [{
                         orderable: false,
                         targets: 0,
@@ -222,54 +257,58 @@
         }();
 
         document.addEventListener('click', async function(e) {
-        if (e.target.classList.contains('print-btn')) {
-            const fileQuyetDinh = e.target.getAttribute('data-quyet-dinh');
-            const fileList = e.target.getAttribute('data-list');
+            if (e.target.classList.contains('print-btn')) {
+                const fileQuyetDinh = e.target.getAttribute('data-quyet-dinh');
+                const fileList = e.target.getAttribute('data-list');
 
-            if (fileQuyetDinh || fileList) {
-                try {
-                    const { PDFDocument } = PDFLib;
-                    const mergedPdf = await PDFDocument.create();
+                if (fileQuyetDinh || fileList) {
+                    try {
+                        const {
+                            PDFDocument
+                        } = PDFLib;
+                        const mergedPdf = await PDFDocument.create();
 
-                    // Fetch and add fileQuyetDinh
-                    if (fileQuyetDinh) {
-                        const response1 = await fetch(`/storage/${fileQuyetDinh}`);
-                        const arrayBuffer1 = await response1.arrayBuffer();
-                        const pdf1 = await PDFDocument.load(arrayBuffer1);
-                        const pages1 = await mergedPdf.copyPages(pdf1, pdf1.getPageIndices());
-                        pages1.forEach((page) => mergedPdf.addPage(page));
+                        // Fetch and add fileQuyetDinh
+                        if (fileQuyetDinh) {
+                            const response1 = await fetch(`/storage/${fileQuyetDinh}`);
+                            const arrayBuffer1 = await response1.arrayBuffer();
+                            const pdf1 = await PDFDocument.load(arrayBuffer1);
+                            const pages1 = await mergedPdf.copyPages(pdf1, pdf1.getPageIndices());
+                            pages1.forEach((page) => mergedPdf.addPage(page));
+                        }
+
+                        // Fetch and add fileList
+                        if (fileList) {
+                            const response2 = await fetch(`/storage/${fileList}`);
+                            const arrayBuffer2 = await response2.arrayBuffer();
+                            const pdf2 = await PDFDocument.load(arrayBuffer2);
+                            const pages2 = await mergedPdf.copyPages(pdf2, pdf2.getPageIndices());
+                            pages2.forEach((page) => mergedPdf.addPage(page));
+                        }
+
+                        // Save the merged PDF
+                        const mergedPdfBytes = await mergedPdf.save();
+                        const blob = new Blob([mergedPdfBytes], {
+                            type: 'application/pdf'
+                        });
+                        const url = URL.createObjectURL(blob);
+
+                        // Open in a new tab and print
+                        const printWindow = window.open(url);
+                        printWindow.onload = function() {
+                            printWindow.focus();
+                            printWindow.print();
+                        };
+
+                        // Revoke URL after some time to avoid memory leaks
+                        setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+                    } catch (error) {
+                        console.error("Error while generating the PDF:", error);
                     }
-
-                    // Fetch and add fileList
-                    if (fileList) {
-                        const response2 = await fetch(`/storage/${fileList}`);
-                        const arrayBuffer2 = await response2.arrayBuffer();
-                        const pdf2 = await PDFDocument.load(arrayBuffer2);
-                        const pages2 = await mergedPdf.copyPages(pdf2, pdf2.getPageIndices());
-                        pages2.forEach((page) => mergedPdf.addPage(page));
-                    }
-
-                    // Save the merged PDF
-                    const mergedPdfBytes = await mergedPdf.save();
-                    const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
-                    const url = URL.createObjectURL(blob);
-
-                    // Open in a new tab and print
-                    const printWindow = window.open(url);
-                    printWindow.onload = function() {
-                        printWindow.focus();
-                        printWindow.print();
-                    };
-
-                    // Revoke URL after some time to avoid memory leaks
-                    setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-                } catch (error) {
-                    console.error("Error while generating the PDF:", error);
                 }
             }
-        }
-    });
+        });
 
 
         $(document).ready(function() {

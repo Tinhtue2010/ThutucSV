@@ -19,6 +19,7 @@ use App\Models\StopStudy;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use ZipArchive;
 
@@ -31,9 +32,21 @@ class HoSoChungTuPhongDaoTaoController extends Controller
 
     function getData(Request $request)
     {
-        $query = HoSo::query();
+        $query = DB::table(DB::raw('(
+            SELECT 
+                nam_hoc,
+                ky_hoc,
+                MAX(id) as id,
+                MAX(name) as name,
+                MAX(type) as type,
+                ROW_NUMBER() OVER (ORDER BY id) as position
+            FROM ho_sos
+            GROUP BY nam_hoc, ky_hoc, type
+        ) as grouped'))
+            ->select('*');
+            
 
-        if (!empty($request->type) && $request->type != 'all') {
+        if (isset($request->type) && $request->type !== null && $request->type != 'all') {
             $query->where('type', $request->type);
         }
 
@@ -283,7 +296,6 @@ class HoSoChungTuPhongDaoTaoController extends Controller
             $query->where('nam_hoc', $namHoc);
         }
 
-
         switch ($loaiHoSo) {
             case 1:
                 $fileName = $this->sanitizeFileName('SỔ THEO DÕI SINH VIÊN RÚT HỒ SƠ.xlsx');
@@ -307,29 +319,23 @@ class HoSoChungTuPhongDaoTaoController extends Controller
 
                 return Excel::download(new SoTheoDoiSVRutHoSoExport($data), $fileName);
             case 2:
-                $data  = [];
                 $fileName = $this->sanitizeFileName('SỔ THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ MIỄN GIẢM HỌC PHÍ CHO SINH VIÊN.xlsx');
-                return Excel::download(new MienGiamHocPhiSinhVienExport($data), $fileName);
+                return Excel::download(new MienGiamHocPhiSinhVienExport($request), $fileName);
             case 3:
-                $data  = [];
                 $fileName = $this->sanitizeFileName('SỔ THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ TRỢ CẤP XÃ HỘI CHO SINH VIÊN.xlsx');
-                return Excel::download(new TheoDoiKQGiaiQuyetCheDoTCXHExport($data), $fileName);
+                return Excel::download(new TheoDoiKQGiaiQuyetCheDoTCXHExport($request), $fileName);
             case 4:
-                $data  = [];
                 $fileName = $this->sanitizeFileName('SỔ THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ HỖ TRỢ CHI PHÍ HỌC TẬP CHO SINH VIÊN.xlsx');
-                return Excel::download(new HoTroChiPhiHocTapExport($data), $fileName);
+                return Excel::download(new HoTroChiPhiHocTapExport($request), $fileName);
             case 5:
-                $data  = [];
                 $fileName = $this->sanitizeFileName('SỔ THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ MIỄN PHÍ CHỖ Ở KÝ TÚC XÁ CHO SINH VIÊN THEO NGHỊ QUYẾT 35/2021/NQ-HĐND.xlsx');
-                return Excel::download(new CheDoMienPhiChoOKytucXaExport($data), $fileName);
+                return Excel::download(new CheDoMienPhiChoOKytucXaExport($request), $fileName);
             case 6:
-                $data  = [];
                 $fileName = $this->sanitizeFileName('SỔ THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ CHẾ ĐỘ HỖ TRỢ HỌC PHÍ CHO SINH VIÊN THEO NGHỊ QUYẾT 35/2021/NQ-HĐND.xlsx');
-                return Excel::download(new CheDoHoTroHocPhiChoSinhVienExport($data), $fileName);
+                return Excel::download(new CheDoHoTroHocPhiChoSinhVienExport($request), $fileName);
             case 7:
-                $data  = [];
                 $fileName = $this->sanitizeFileName('SỔ THEO DÕI KẾT QUẢ GIẢI QUYẾT CHẾ ĐỘ CHẾ ĐỘ HỖ TRỢ ĐỒ DÙNG HỌC TẬP CHO SINH VIÊN THEO NGHỊ QUYẾT 35/2021/NQ-HĐND.xlsx');
-                return Excel::download(new CheDoHoTroDoDungHocTapExport($data), $fileName);
+                return Excel::download(new CheDoHoTroDoDungHocTapExport($request), $fileName);
 
 
 

@@ -19,20 +19,22 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
     function index()
     {
         $lop = Lop::get();
-        $hoso = HoSo::where('type', 5)->where('status', 0)
-        ->latest('created_at')
-        ->first();
+        $hoso = HoSo::where('type', 4)
+            ->latest('created_at')
+            ->first();
         return view('phong_dao_tao.create_ds_che_do_chinh_sach.index', ['lop' => $lop, 'hoso' => $hoso]);
     }
 
     function getData(Request $request)
     {
-        $query = StopStudy::where('type', 4)
+        $query = StopStudy::leftJoin('scores', 'stop_studies.student_id', '=', 'scores.student_id')
+            ->where('type', 4)
             ->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
             ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
             ->select('stop_studies.*', 'students.full_name', 'students.date_of_birth', 'students.student_code', 'lops.name as lop_name', 'students.hocphi');
+
 
 
         if (isset($request->type_miengiamhp)) {
@@ -49,6 +51,61 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
         return $data;
     }
 
+    function updateDT2(Request $request)
+    {
+        $list_nganh = [
+            "7810103",
+            "7810201",
+            "7810202",
+            "7220209",
+            "7220210",
+            "7220204",
+            "7620301",
+        ];
+        $sinhViens = StopStudy::join('students', 'stop_studies.student_id', '=', 'students.id')
+            ->join('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->whereIn('lops.nganh_id', $list_nganh)
+            ->where('stop_studies.type', 1)
+            ->whereNull('stop_studies.parent_id')
+            ->where('stop_studies.ky_hoc', 2)
+            ->where('stop_studies.nam_hoc', '2024-2025')
+            ->where('stop_studies.status', '>', 0)
+            ->pluck('student_id');
+
+        StopStudy::join('students', 'stop_studies.student_id', '=', 'students.id')
+            ->join('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->whereIn('lops.nganh_id', $list_nganh)
+            ->where('stop_studies.type', 4)
+            ->where('stop_studies.is_tien_an', 1)
+            ->where('stop_studies.ky_hoc', 2)
+            ->where('stop_studies.nam_hoc', '2024-2025')
+            ->where('stop_studies.status', 0)
+            ->whereNotIn('stop_studies.student_id', $sinhViens)
+            ->delete();
+
+        $mienGiams = StopStudy::join('students', 'stop_studies.student_id', '=', 'students.id')
+            ->join('lops', 'students.ma_lop', '=', 'lops.ma_lop')
+            ->whereIn('lops.nganh_id', $list_nganh)
+            ->where('stop_studies.ky_hoc', 1)
+            ->where('stop_studies.nam_hoc', '2024-2025')
+            ->whereNull('stop_studies.parent_id')
+            ->where('stop_studies.type', 1)
+            ->where('stop_studies.status', '>', 0)
+            ->whereNotIn('stop_studies.student_id', $sinhViens)
+            ->get();
+            
+        foreach ($mienGiams as $item) {
+            StopStudy::create([
+                'student_id' => $item->student_id,
+                'type' => 4,
+                'status' => 0,
+                'doi_tuong_chinh_sach' => json_encode(["2"]),
+                'is_tien_an' => 1,
+            ]);
+        }
+
+        return;
+    }
     function updatePercent(Request $request)
     {
         $stopStudy =  StopStudy::find($request->id);
@@ -106,7 +163,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
             $user_id = User::where('student_id', $stopStudy->student_id)->first()->id;
             $this->notification("Danh sách hưởng chế độ chính sách dự kiến", null, "CDCS", $user_id);
 
-            $users = User::where('role','!=', 1)->get();
+            $users = User::where('role', '!=', 1)->get();
             foreach ($users as $item) {
                 $this->notification("Danh sách hưởng chế độ chính sách dự kiến", null, "CDCS", $item->id);
             }
@@ -222,7 +279,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
                         ->leftJoin('lops', 'students.ma_lop', '=', 'lops.ma_lop')
                         ->select('students.*', 'lops.name as lop_name', 'students.hocphi')
                         ->first();
-                        
+
                     if (!$student) {
                         return response()->json([
                             'error' => "Không tìm thấy sinh viên " . $item[$indexHeader['ho_ten']] . ", mã sinh viên là: " . $item[$indexHeader['ma_sinh_vien']],
@@ -522,6 +579,8 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
 
         $query = StopStudy::where('type', 4)
             ->where('stop_studies.status', '>=', 1)
+            ->where('stop_studies.nam_hoc',  $nam)
+            ->where('stop_studies.ky_hoc',  $ky)
             ->studentActive()
             ->whereNull('parent_id')
             ->leftJoin('students', 'stop_studies.student_id', '=', 'students.id')
@@ -534,6 +593,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
         $content["tong_hs_cdta"] = 0;
         $content["tong_hs_cdhp"] = 0;
 
+
         foreach ($query as $item) {
             if (strpos($item->doi_tuong_chinh_sach, '1') !== false || strpos($item->doi_tuong_chinh_sach, '2') !== false) {
                 if (strpos($item->doi_tuong_chinh_sach, '1') !== false) {
@@ -545,6 +605,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
                 $content["tong_cdta"] += 5 * 600000;
                 $content["tong_hs_cdta"] += 1;
             }
+
             if (strpos($item->doi_tuong_chinh_sach, '1') !== false || strpos($item->doi_tuong_chinh_sach, '3') !== false) {
                 if (strpos($item->doi_tuong_chinh_sach, '1') !== false) {
                     $doituong = 1;
@@ -552,24 +613,27 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
                 if (strpos($item->doi_tuong_chinh_sach, '3') !== false) {
                     $doituong = 2;
                 }
+
                 $che_do_chinh_sach_data = json_decode($item->che_do_chinh_sach_data, true);
-                if ($che_do_chinh_sach_data["mghp"]["phan_tram_giam"] == 0) {
-                } else {
-                    $content_DSCDHP[] =  [
-                        "ho_ten" => $item->full_name,
-                        "ngay_sinh" => Carbon::createFromFormat('Y-m-d', $item->date_of_birth)->format('d/m/Y'),
-                        "lop" => $item->lop_name,
-                        "doi_tuong" => 'Đối tượng ' . $doituong,
-                        "so_thang_tro_cap" => 5,
-                        "diem_ht" => $che_do_chinh_sach_data["diem"]["diemtb"],
-                        "diem_rl" => $che_do_chinh_sach_data["diem"]["diemrenluyen"],
-                        "phan_tram_giam" => $che_do_chinh_sach_data["mghp"]["phan_tram_giam"],
-                        "tro_cap_thang" => $che_do_chinh_sach_data["mghp"]["so_tien_1_thang_giam"],
-                        "tro_cap_ky" => $che_do_chinh_sach_data["mghp"]["so_tien_1_thang_giam"] * 5,
-                        "xep_loai" => $this->xepLoaiHocLuc($che_do_chinh_sach_data["diem"]["diemtb"], $che_do_chinh_sach_data["diem"]["diemrenluyen"]),
-                    ];
-                    $content["tong_cdhp"] += $che_do_chinh_sach_data["mghp"]["so_tien_1_thang_giam"] * 5;
-                    $content["tong_hs_cdhp"] += 1;
+                if ($che_do_chinh_sach_data != null) {
+                    if ($che_do_chinh_sach_data["mghp"]["phan_tram_giam"] == 0) {
+                    } else {
+                        $content_DSCDHP[] =  [
+                            "ho_ten" => $item->full_name,
+                            "ngay_sinh" => Carbon::createFromFormat('Y-m-d', $item->date_of_birth)->format('d/m/Y'),
+                            "lop" => $item->lop_name,
+                            "doi_tuong" => 'Đối tượng ' . $doituong,
+                            "so_thang_tro_cap" => 5,
+                            "diem_ht" => $che_do_chinh_sach_data["diem"]["diemtb"],
+                            "diem_rl" => $che_do_chinh_sach_data["diem"]["diemrenluyen"],
+                            "phan_tram_giam" => $che_do_chinh_sach_data["mghp"]["phan_tram_giam"],
+                            "tro_cap_thang" => $che_do_chinh_sach_data["mghp"]["so_tien_1_thang_giam"],
+                            "tro_cap_ky" => $che_do_chinh_sach_data["mghp"]["so_tien_1_thang_giam"] * 5,
+                            "xep_loai" => $this->xepLoaiHocLuc($che_do_chinh_sach_data["diem"]["diemtb"], $che_do_chinh_sach_data["diem"]["diemrenluyen"]),
+                        ];
+                        $content["tong_cdhp"] += $che_do_chinh_sach_data["mghp"]["so_tien_1_thang_giam"] * 5;
+                        $content["tong_hs_cdhp"] += 1;
+                    }
                 }
             }
 
@@ -599,7 +663,6 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
         $base64 = $this->createPDF($phieu1, 1);
         $file_list = $this->saveBase64AsPdf($base64, 'CHE_DO_CHINH_SACH/' . $year . '/' . $month, 'ds_che_do_chinh_sach');
 
-        
         $phieu2 = new Phieu();
         $phieu2->key = 'QDCDHP';
         $phieu2->status = 0;
@@ -610,7 +673,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
 
         $hoso = HoSo::where('ky_hoc', $request->ky)
             ->where('nam_hoc', $request->nam)
-            ->where('type', 5)
+            ->where('type', 4)
             ->latest('created_at')
             ->first();
 
@@ -618,32 +681,34 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
             if ($hoso->file_quyet_dinh != $file_quyet_dinh) {
                 $this->deletePdf($hoso->file_quyet_dinh);
             }
-            if ($hoso->file_list != $file_list) {
-                $this->deletePdf($hoso->file_list);
-            }
+            // if ($hoso->file_list != $file_list) {
+            //     $this->deletePdf($hoso->file_list);
+            // }
 
             $hoso->update([
                 'name' => "Chế độ chính sách",
                 'file_quyet_dinh' => $file_quyet_dinh,
-                'file_list' => $file_list,
-                'list_info' => json_encode($content_DSCDHP, true),
-                'type' => 3
+                'so_quyet_dinh' => $request->so_QD,
+                'ngay_quyet_dinh' => Carbon::createFromFormat('d/m/Y', $request->thoi_gian_tao)->format('Y-m-d'),
+                // 'file_list' => $file_list,
+                // 'list_info' => json_encode($content_DSCDHP, true),
+                'type' => 4
             ]);
         } else {
             $hoso = HoSo::create([
                 'name' => "Chế độ chính sách",
                 'file_quyet_dinh' => $file_quyet_dinh,
-                'file_list' => $file_list,
+                'so_quyet_dinh' => $request->so_QD,
+                'ngay_quyet_dinh' => Carbon::createFromFormat('d/m/Y', $request->thoi_gian_tao)->format('Y-m-d'),
                 'ky_hoc' => $request->ky,
                 'nam_hoc' => $request->nam,
-                'list_info' => json_encode($content_DSCDHP, true),
-                'type' => 3
+                // 'file_list' => $file_list,
+                // 'list_info' => json_encode($content_DSCDHP, true),
+                'type' => 4
             ]);
         }
 
         return true;
-
-
     }
     public function xepLoaiHocLuc($diemtb, $diemrenluyen)
     {
@@ -668,7 +733,7 @@ class CheDoChinhSachPhongDaoTaoController extends Controller
     function xoaQuyetDinh()
     {
         Phieu::where('status', 0)
-            ->whereIn('key', ['DSCDTA', 'QDCDTA', 'DSCDHP','QDCDHP','DSCDKTX1','DSCDKTX1','QDCDKTX1','QDCDKTX4','PTQT4'])
+            ->whereIn('key', ['DSCDTA', 'QDCDTA', 'DSCDHP', 'QDCDHP', 'DSCDKTX1', 'DSCDKTX1', 'QDCDKTX1', 'QDCDKTX4', 'PTQT4'])
             ->delete();
         return redirect()->back();
     }

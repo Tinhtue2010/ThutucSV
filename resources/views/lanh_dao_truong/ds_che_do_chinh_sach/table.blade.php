@@ -41,6 +41,11 @@
                         "dataSrc": function(response) {
                             renderPagination(response.page,
                                 response.max_page);
+                                                        const infoSelector = document.getElementById('datatable-info');
+    if (infoSelector) {
+                                infoSelector.innerText =
+                                    `Tổng số bản ghi: ${response.total_items}, Số bản ghi trang hiện tại: ${response.current_page_items_count}`;
+                            }
                             return response.data;
                         },
                     },
@@ -118,7 +123,10 @@
                             data: "che_do_chinh_sach_data",
                             render: function(data, type, row) {
                                 let array = JSON.parse(data);
-                                if (array == null || array['ktx'] == null || array['ktx'] == "") {
+                                if (row['is_ky_tuc_xa'] == 1) {
+                                    return 'Có';
+                                }
+                                else if (array == null || array['ktx'] == null || array['ktx'] == "") {
                                     return '';
                                 }
                                 return `
@@ -134,7 +142,10 @@
                             data: "che_do_chinh_sach_data",
                             render: function(data, type, row) {
                                 let array = JSON.parse(data);
-                                if (array == null || array['mghp'] == null || array['mghp'] == "") {
+                                if (row['is_giam_hp'] == 1) {
+                                    return 'Có';
+                                }
+                                else if (array == null || array['mghp'] == null || array['mghp'] == "") {
                                     return '';
                                 }
                                 return `
@@ -150,7 +161,10 @@
                             data: 'che_do_chinh_sach_data',
                             render: function(data, type, row) {
                                 let array = JSON.parse(data);
-                                if (array == null || array['htta'] == null || array['htta'] == "") {
+                                if (row['is_tien_an'] == 1) {
+                                    return 'Có';
+                                }
+                                else if (array == null || array['htta'] == null || array['htta'] == "") {
                                     return '';
                                 }
                                 return `
@@ -165,7 +179,13 @@
                             render: function(data, type, row) {
                                 let array = JSON.parse(data);
 
-                                if (array == null || array['diem'] == null || array['diem'] == "") {
+                                if(row['diem_ht']) {
+                                    return `
+                                        Điểm TB : ${row['diem_ht']} <br>
+                                        Điểm rèn luyện : ${row['diem_rl']} <br>
+                                `;
+                                }
+                                else if (array == null || array['diem'] == null || array['diem'] == "") {
                                     return '';
                                 }
                                 return `
@@ -198,7 +218,7 @@
                     ],
                     paging: false,
                     searching: false,
-                    order: [1, 'asc'],
+                    order: [1, 'desc'],
                     columnDefs: [{
                         orderable: false,
                         targets: 0,

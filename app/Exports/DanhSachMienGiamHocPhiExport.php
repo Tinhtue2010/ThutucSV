@@ -10,35 +10,60 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use App\Helpers\CommonHelper;
+use App\Models\HoSo;
+use App\Models\StopStudy;
+use Carbon\Carbon;
 
 class DanhSachMienGiamHocPhiExport implements FromArray, WithEvents, WithDrawings
 {
     protected $data;
+    protected $nam_hoc;
+    protected $ky_hoc;
 
-    public function __construct($data)
+    public function __construct($data, $nam_hoc, $ky_hoc)
     {
         $this->data = $data;
+        $this->nam_hoc = $nam_hoc;
+        $this->ky_hoc = $ky_hoc;
     }
 
     public function array(): array
     {
+        $hoSo = HoSo::where('ky_hoc', $this->ky_hoc)
+            ->where('nam_hoc', $this->nam_hoc)
+            ->where('type', 1)
+            ->first();
+
+        if ($hoSo) {
+            $carbonDate = Carbon::parse($hoSo->ngay_quyet_dinh);
+        } else {
+            $carbonDate = Carbon::now();
+        }
+
+        $day = $carbonDate->format('d');
+        $month = $carbonDate->format('m');
+        $year = $carbonDate->format('Y');
+
         $result = [
             ['TRƯỜNG ĐẠI HỌC HẠ LONG'],
             ['PHÒNG CTCT, HT&SV'],
             [''],
             ['DANH SÁCH SINH VIÊN ĐƯỢC MIỄN, GIẢM HỌC PHÍ THEO NGHỊ ĐỊNH'],
-            ['81/2021/NĐ-CP. HỌC KỲ I NĂM HỌC 2022 – 2023'],
-            ['(Kèm theo quyết định số …../QĐ-ĐHHL, ngày …. tháng ….. năm ……..'],
+            ['81/2021/NĐ-CP. HỌC KỲ ' . $this->ky_hoc . ' NĂM HỌC ' . $this->nam_hoc],
+            ['(Kèm theo quyết định số ' . ($hoSo?->so_quyet_dinh ?? '') . '/QĐ-ĐHHL, ngày ' . $day . ' tháng ' . $month . ' năm ' . $year],
             ['của Hiệu trưởng Trường Đại học Hạ Long)'],
             [''],
-            ['STT', 'Họ và tên', 'Ngày sinh', 'Lớp', 'Đối tượng', 'Mức học phí/tháng', 'Mức miễn giảm', '','', 'Số tiền được miễn giảm/kỳ'],
-            ['', '', '', '', '', '', 'Tỷ lệ', 'Số tiền miễn, giảm/tháng','Số tháng miễn giảm'],
+            ['STT', 'Họ và tên', 'Ngày sinh', 'Lớp', 'Đối tượng', 'Mức học phí/tháng', 'Mức miễn giảm', '', '', 'Số tiền được miễn giảm/kỳ'],
+            ['', '', '', '', '', '', 'Tỷ lệ', 'Số tiền miễn, giảm/tháng', 'Số tháng miễn giảm'],
         ];
         $stt = 1;
+        $tong = 0;
         if (is_array($this->data) && !empty($this->data)) {
             foreach ($this->data as $item) {
                 if (is_array($item)) {
                     $result[] = array_merge([$stt++], $item);
+                    $tong += $item[8];
                 }
             }
         }
@@ -52,10 +77,11 @@ class DanhSachMienGiamHocPhiExport implements FromArray, WithEvents, WithDrawing
             '',
             '',
             '',
+            $tong,
         ];
         $result[] = [
             '',
-            'Số tiền bằng chữ:',
+            // 'Số tiền bằng chữ:' . numberInVietnameseCurrency($tong),
             '',
             '',
             '',
@@ -146,6 +172,7 @@ class DanhSachMienGiamHocPhiExport implements FromArray, WithEvents, WithDrawing
 
                 $sheet->getStyle('F')->getNumberFormat()->setFormatCode('#,##0');
                 $sheet->getStyle('H')->getNumberFormat()->setFormatCode('#,##0');
+                $sheet->getStyle('J')->getNumberFormat()->setFormatCode('#,##0');
             },
         ];
     }

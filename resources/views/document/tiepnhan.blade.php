@@ -1,7 +1,7 @@
 @extends('layout.doc_layout')
 
 @section('data')
-    <div id="doc_view" class="A4 d-flex flex-column ">
+        <div id="doc_view" class="A4 d-flex flex-column times-font vietnamese-text" style="height: auto;">
         <table style="width: 100%; border-collapse: collapse;">
             <tr>
                 <!-- Cột bên trái -->

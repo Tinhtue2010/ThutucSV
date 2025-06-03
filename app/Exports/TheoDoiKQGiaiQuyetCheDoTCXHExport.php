@@ -2,6 +2,9 @@
 
 namespace App\Exports;
 
+use App\Models\HoSo;
+use App\Models\StopStudy;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
@@ -14,12 +17,12 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 class TheoDoiKQGiaiQuyetCheDoTCXHExport implements FromArray, WithEvents, WithDrawings
 {
-    protected $data;
+    protected $request;
 
 
-    public function __construct($data)
+    public function __construct($request)
     {
-        $this->data = $data;
+        $this->request = $request;
     }
 
     public function array(): array
@@ -34,9 +37,39 @@ class TheoDoiKQGiaiQuyetCheDoTCXHExport implements FromArray, WithEvents, WithDr
             ['STT', 'Năm học', 'Học kỳ', 'Số SV hưởng', 'Số tiền hưởng', 'Số QĐ', 'Ngày QĐ'],
         ];
         $stt = 1;
+        $hoSo = HoSo::where('ky_hoc', $this->request->ky)
+            ->where('nam_hoc', $this->request->nam_hoc)
+            ->where('type', 2)
+            ->first();
 
-        if (is_array($this->data) && !empty($this->data)) {
-            foreach ($this->data as $item) {
+        $query = StopStudy::join('students', 'stop_studies.student_id', '=', 'students.id')
+            ->where('type',  2)
+            ->whereNull('stop_studies.parent_id')
+            ->where('stop_studies.status', '>', 0)
+            ->where('ky_hoc', $this->request->ky)
+            ->where('nam_hoc', $this->request->nam_hoc)
+            ->get();
+        $data  = [];
+        $soSVHuong = 0;
+        $soTienHuong = 0;
+        foreach ($query as $item) {
+            $soSVHuong++;
+            $muctrocapxh = $item->muctrocapxh ?? 140000;
+            $soTienHuong += $muctrocapxh * 6;
+        }
+        $data[] = [
+            $this->request->nam_hoc,
+            $this->request->ky,
+            $soSVHuong == 0 ? '0' : $soSVHuong,
+            $soTienHuong == 0 ? '0' : $soTienHuong,
+            $hoSo->so_quyet_dinh ?? '',
+            $hoSo && $hoSo->ngay_quyet_dinh
+                ? \Carbon\Carbon::parse($hoSo->ngay_quyet_dinh)->format('d/m/Y')
+                : ''        
+            ];
+
+        if (is_array($data) && !empty($data)) {
+            foreach ($data as $item) {
                 if (is_array($item)) {
                     $result[] = array_merge([$stt++], $item);
                 }
@@ -86,9 +119,9 @@ class TheoDoiKQGiaiQuyetCheDoTCXHExport implements FromArray, WithEvents, WithDr
                 $sheet->mergeCells('A5:G5');
 
                 $this->applyBorder($sheet, 'A7:G' . $sheet->getHighestRow());
-                $this->centerCell($sheet, 'A1:G'.$sheet->getHighestRow());
+                $this->centerCell($sheet, 'A1:G' . $sheet->getHighestRow());
                 $this->boldCell($sheet, 'A2:G7');
-
+                $sheet->getStyle('E')->getNumberFormat()->setFormatCode('#,##0');
             },
         ];
     }

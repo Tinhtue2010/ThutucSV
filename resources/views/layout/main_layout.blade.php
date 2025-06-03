@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en-GB">
 <!--begin::Head-->
 
 <head>
@@ -12,14 +12,17 @@
     <!--begin::Fonts(mandatory for all pages)-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <!--end::Fonts-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!--begin::Vendor Stylesheets(used for this page only)-->
     <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
     <!--end::Vendor Stylesheets-->
 
     <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
     <!--end::Global Stylesheets Bundle-->
 </head>
 <!--end::Head-->
@@ -930,7 +933,7 @@
     <script>
         function mess_success(title, content) {
             Swal.fire({
-                text: content,
+                html: content, // Change from 'text' to 'html'
                 icon: "success",
                 buttonsStyling: false,
                 confirmButtonText: "Oke",
@@ -971,6 +974,7 @@
             });
         }
     </script>
+
     @stack('js')
 </body>
 <!--end::Body-->

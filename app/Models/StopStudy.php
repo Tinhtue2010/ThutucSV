@@ -11,6 +11,9 @@ class StopStudy extends Model
 
     protected $fillable = [
         'student_id',
+        'student_code',
+        'ma_lop',
+        'name',
         'round',
         'parent_id',
         'note',
@@ -22,6 +25,8 @@ class StopStudy extends Model
         'is_update',
         'is_pay',
         'note_pay',
+        'nam_hoc',
+        'ky_hoc',
         'time_receive',
         'type_miengiamhp',
         'phantramgiam',
@@ -34,8 +39,14 @@ class StopStudy extends Model
         'doi_tuong_chinh_sach',
         'che_do_chinh_sach_data',
         'diachi',
+        'noi_thuong_tru',
         'km',
-        'file_name'
+        'file_name',
+        'ly_do',
+        'phieu_id',
+        'is_giam_hp',
+        'is_ky_tuc_xa',
+        'is_tien_an',
     ];
 
 

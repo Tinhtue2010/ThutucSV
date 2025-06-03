@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Student;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +17,10 @@ class StudentController extends Controller
             ->leftJoin('khoas', 'lops.ma_khoa', '=', 'khoas.ma_khoa')
             ->select('students.*', 'lops.name as lop_name', 'khoas.name as khoa_name')
             ->where('students.id', $user->student_id)->first();
-
+            
+        // if (!session()->has('show_login_alert')) {
+        //     session()->put('show_login_alert', true);
+        // }
         return view('student.index', ['student' => $student]);
     }
 
@@ -45,16 +49,17 @@ class StudentController extends Controller
         }
 
         $student->full_name = $request->input('full_name');
-        $student->date_of_birth = $request->input('date_of_birth');
+        $student->date_of_birth = Carbon::createFromFormat('d/m/Y', $request->date_of_birth)->format('Y-m-d');
         $student->phone = $request->input('phone');
         $student->email = $request->input('email');
         $student->cmnd = $request->input('cmnd');
-        $student->date_range_cmnd = $request->input('date_range_cmnd');
-
+        $student->date_range_cmnd = Carbon::createFromFormat('d/m/Y', $request->date_range_cmnd)->format('Y-m-d');
+        if ($request->password != '') {
+            $user->password = bcrypt($request->password);
+        }
         $student->save();
 
         $user->cccd = $request->input('cmnd');
         return $user->update();
-
     }
 }

@@ -10,35 +10,58 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use App\Helpers\CommonHelper;
+use App\Models\HoSo;
+use Carbon\Carbon;
 
-class DanhSachHuongHoTroTienAnExport implements FromArray, WithEvents, WithDrawings {
+class DanhSachHuongHoTroTienAnExport implements FromArray, WithEvents, WithDrawings
+{
     protected $data;
+    protected $nam_hoc;
+    protected $ky_hoc;
 
-    public function __construct($data)
+    public function __construct($data, $nam_hoc, $ky_hoc)
     {
         $this->data = $data;
+        $this->nam_hoc = $nam_hoc;
+        $this->ky_hoc = $ky_hoc;
     }
 
     public function array(): array
     {
+        $hoSo = HoSo::where('ky_hoc', $this->ky_hoc)
+            ->where('nam_hoc', $this->nam_hoc)
+            ->where('type', 1)
+            ->first();
+
+        if ($hoSo) {
+            $carbonDate = Carbon::parse($hoSo->ngay_quyet_dinh);
+        } else {
+            $carbonDate = Carbon::now();
+        }
+
+        $day = $carbonDate->format('d');
+        $month = $carbonDate->format('m');
+        $year = $carbonDate->format('Y');
         $result = [
             ['UBND TỈNH QUẢNG NINH'],
             ['TRƯỜNG ĐẠI HỌC HẠ LONG'],
             [''],
             ['DANH SÁCH SINH VIÊN ĐƯỢC HƯỞNG CHẾ ĐỘ HỖ TRỢ TIỀN ĂN'],
             ['Theo điểm f, g, khoản 3, điều 1, Nghị quyết 35/2021/NQ-HĐND tỉnh Quảng Ninh.'],
-            ['Học kỳ , năm học'],
-            ['(Kèm theo Quyết định số ……./QĐ-ĐHHL, ngày….. tháng ……. năm ……'],
+            ['Học kỳ ' . $this->ky_hoc . ', năm học ' . $this->nam_hoc],
+            ['(Kèm theo quyết định số ' . ($hoSo?->so_quyet_dinh ?? '') . '/QĐ-ĐHHL, ngày ' . $day . ' tháng ' . $month . ' năm ' . $year],
             ['của Hiệu trưởng Trường Đại học Hạ Long)'],
             [''],
-            ['STT','Họ và tên','Ngày sinh','Tên lớp','Đối tượng hưởng','Số tiền hỗ trợ /tháng','Số tháng được hỗ trợ','Số tiền hỗ trợ/ 5 tháng','Ghi chú'],
+            ['STT', 'Họ và tên', 'Ngày sinh', 'Tên lớp', 'Đối tượng hưởng', 'Số tiền hỗ trợ /tháng', 'Số tháng được hỗ trợ', 'Số tiền hỗ trợ/ 5 tháng', 'Ghi chú'],
         ];
         $stt = 1;
-
+        $tong = 0;
         if (is_array($this->data) && !empty($this->data)) {
             foreach ($this->data as $item) {
                 if (is_array($item)) {
                     $result[] = array_merge([$stt++], $item);
+                    $tong += $item[6];
                 }
             }
         }
@@ -50,11 +73,10 @@ class DanhSachHuongHoTroTienAnExport implements FromArray, WithEvents, WithDrawi
             '',
             '',
             '',
-            '',
-            '',
+            $tong
         ];
         $result[] = [
-            'Số tiền bằng chữ:',
+            'Số tiền bằng chữ:' . numberInVietnameseCurrency($tong),
             '',
             '',
             '',
@@ -94,9 +116,9 @@ class DanhSachHuongHoTroTienAnExport implements FromArray, WithEvents, WithDrawi
                 $sheet->getParent()->getDefaultStyle()->getFont()->setSize(12);
 
                 $highestColumn = $sheet->getHighestColumn();
-                $highestRow = $sheet->getHighestRow();     
+                $highestRow = $sheet->getHighestRow();
                 $sheet->getStyle("A1:{$highestColumn}{$highestRow}")->getAlignment()->setWrapText(true);
-                
+
                 $sheet->getColumnDimension('A')->setWidth(width: 7);
                 $sheet->getColumnDimension('B')->setWidth(width: 15);
                 $sheet->getColumnDimension('C')->setWidth(width: 10);
@@ -127,22 +149,20 @@ class DanhSachHuongHoTroTienAnExport implements FromArray, WithEvents, WithDrawi
                 }
 
                 $sheet->mergeCells('A' . $secondStart . ':F' . $secondStart);
-                $this->boldCell($sheet, 'A' . $secondStart . ':I' . $secondStart+1);
-                $sheet->mergeCells( 'A' . $secondStart+1 . ':I'.$secondStart+1);
+                $this->boldCell($sheet, 'A' . $secondStart . ':I' . $secondStart + 1);
+                $sheet->mergeCells('A' . $secondStart + 1 . ':I' . $secondStart + 1);
 
                 $lastRow = $sheet->getHighestRow();
-                $this->applyBorder($sheet, 'A10:I' . $lastRow-1);
-                $this->centerCell($sheet, 'A1:I'.$lastRow-1);
+                $this->applyBorder($sheet, 'A10:I' . $lastRow - 1);
+                $this->centerCell($sheet, 'A1:I' . $lastRow - 1);
                 $this->boldCell($sheet, 'A2:I10');
                 $this->italicCell($sheet, 'A7:I8');
-                $this->centerCell($sheet, 'A' .$lastRow. ':I'.$lastRow);
+                $this->centerCell($sheet, 'A' . $lastRow . ':I' . $lastRow);
                 $sheet->getRowDimension($lastRow)->setRowHeight(height: 30);
 
 
                 $sheet->getStyle('F')->getNumberFormat()->setFormatCode('#,##0');
                 $sheet->getStyle('H')->getNumberFormat()->setFormatCode('#,##0');
-
-
             },
         ];
     }
@@ -169,7 +189,7 @@ class DanhSachHuongHoTroTienAnExport implements FromArray, WithEvents, WithDrawi
 
         return $drawing;
     }
-    
+
     function leftCell($sheet, string $range)
     {
         $sheet->getStyle($range)->applyFromArray([

@@ -43,7 +43,9 @@
                     <div class="d-flex w-100 flex-wrap">
                         <div onclick="taoQuyetDinhMGHP()" class="btn btn-secondary">Tạo, cập nhật quyết định</div>
                         @if (isset($hoso) && $hoso)
-                            <a target="_blank" href="/storage/{{ $hoso->file_list }}" class="btn btn-secondary ms-3">Xem
+                            <a target="_blank"
+                                href="{{ route('downloadDanhSach', ['nam_hoc' => $hoso->nam_hoc, 'ky_hoc' => $hoso->ky_hoc, 'type' => 4]) }}"
+                                class="btn btn-secondary ms-3">Xem
                                 danh sách</a>
                             <a target="_blank" href="/storage/{{ $hoso->file_quyet_dinh }}"
                                 class="btn btn-secondary ms-3">Xem quyết định</a>
@@ -54,10 +56,25 @@
                         @endif
                     </div>
                     <div class="d-flex align-items-center gap-2 gap-lg-3 mt-3 w-100">
-                        <div id="import-file-diem-sv" class="btn btn-flex btn-outline h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
-                            <input class="cursor-pointer m-0 p-0 top-0 left-0 w-100 h-100 position-absolute" style="opacity: 0" type="file" id="avatar" name="avatar" accept=".csv" />
-                            {{ __('Thêm danh sách danh điểm sinh viên thuộc 20%') }}
+                        {{-- <div id="import-file-diem-sv"
+                            class="btn btn-flex btn-outline h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
+                            <input class="cursor-pointer m-0 p-0 top-0 left-0 w-100 h-100 position-absolute"
+                                style="opacity: 0" type="file" id="avatar" name="avatar" accept=".csv" />
+                            {{ __('Thêm danh sách điểm sinh viên thuộc 20%') }}
+                        </div> --}}
+                        {{-- <div id="import-file-diem-sv"
+                            class="btn btn-flex btn-outline h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
+                            <input class="cursor-pointer m-0 p-0 top-0 left-0 w-100 h-100 position-absolute"
+                                style="opacity: 0" type="file" id="avatar" name="avatar" accept=".csv" />
+                            {{ __('Thêm danh sách đối tượng 2') }}
+                        </div> --}}
+                        <div class="btn btn-flex btn-outline h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
+                            <a id="download-link" data-base-url="{{ route('PhongDaoTao.CheDoChinhSach.updateDT2') }}" href=""
+                                onclick="updateDT2(event)">Cập nhật danh sách đối tượng 2</a>
                         </div>
+
+
+
                         {{-- <div id="import-file-ktx" class="btn btn-flex btn-outline h-40px fs-7 fw-bold position-relative cursor-pointer mr-3">
                             <input class="cursor-pointer m-0 p-0 top-0 left-0 w-100 h-100 position-absolute" style="opacity: 0" type="file" id="avatar" name="avatar" accept=".csv" />
                             {{ __('Thêm danh sách sinh viên ở ktx') }}

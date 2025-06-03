@@ -45,7 +45,6 @@ class KhoaController extends Controller
 
         $teacher = Teacher::find($user->teacher_id);
         $lopIds = Lop::where('ma_khoa', $teacher->ma_khoa ?? 0)->pluck('ma_lop') ?? [];
-
         $query = $query->whereIn('stop_studies.ma_lop', $lopIds);
 
         if (isset($request->year)) {
@@ -76,7 +75,7 @@ class KhoaController extends Controller
     {
         try {
             $stopStudy =  StopStudy::find($request->id);
-            
+
             if ($stopStudy->type == 0) {
                 return $this->khoa->KyDonPdfRHS($request, $stopStudy);
             }

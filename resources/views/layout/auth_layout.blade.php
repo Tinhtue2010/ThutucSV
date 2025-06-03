@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-	<html lang="en" style="font-size: 13px!important">
+	<html lang="vi" style="font-size: 13px!important">
 
 	<head>
 		<title>Đăng nhập</title>

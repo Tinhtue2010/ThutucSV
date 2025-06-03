@@ -67,7 +67,7 @@ class CheDoChinhSachKeHoachTaiChinhController extends Controller
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 1;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = null;
+            // $newStopStudy->phieu_id = null;
             $newStopStudy->parent_id = $stopStudy->id;
             $newStopStudy->note = "Phòng kết hoạch tài chính đã phê duyệt danh sách";
             $newStopStudy->save();
@@ -94,7 +94,7 @@ class CheDoChinhSachKeHoachTaiChinhController extends Controller
             $newStopStudy = $stopStudy->replicate();
             $newStopStudy->status = 0;
             $newStopStudy->teacher_id = Auth::user()->teacher_id;
-            $newStopStudy->phieu_id = null;
+            // $newStopStudy->phieu_id = null;
             $newStopStudy->parent_id = $stopStudy->id;
             $newStopStudy->note = "Phòng kết hoạch tài chính từ chối danh sách";
             $newStopStudy->save();

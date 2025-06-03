@@ -56,15 +56,15 @@
                     <div class="w-100 justify-content-end flex-wrap d-flex">
                         <div class="card-toolbar">
                             <!--begin::Menu-->
-                            <button class="btn btn-icon btn-active-color-primary justify-content-end" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-overflow="true">
-                                <i class="ki-outline ki-dots-square fs-2x text-dark me-n1"></i>
+                            <button class="btn btn-secondary justify-content-end" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-overflow="true">
+                                Xử lý các loại đơn
                             </button>
                             <!--begin::Menu 3-->
                             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px py-3" data-kt-menu="true">
                                 <!--begin::Heading-->
-                                <div class="menu-item px-3">
+                                {{-- <div class="menu-item px-3">
                                     <div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">{{ __('Chức năng') }}</div>
-                                </div>
+                                </div> --}}
                                 <!--end::Heading-->
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
@@ -73,12 +73,12 @@
                                 <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="{{ route('LanhDaoPhongDaoTao.TroCapXaHoi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp học phí</a>
+                                    <a href="{{ route('LanhDaoPhongDaoTao.TroCapHocPhi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp học phí</a>
                                 </div>
                                 <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="{{ route('LanhDaoPhongDaoTao.TroCapHocPhi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp xã hội</a>
+                                    <a href="{{ route('LanhDaoPhongDaoTao.TroCapXaHoi.index') }}" target="_blank" class="menu-link px-3">Danh sách trợ cấp xã hội</a>
                                 </div>
                                 <div class="menu-item px-3">
                                     <a href="{{ route('LanhDaoPhongDaoTao.CheDoChinhSach.index') }}" target="_blank" class="menu-link px-3">Danh sách chế độ chính sách</a>

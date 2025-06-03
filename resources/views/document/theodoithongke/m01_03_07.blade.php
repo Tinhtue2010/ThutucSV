@@ -16,7 +16,7 @@ body{
     font-size: 14px!important;
 }
     </style>
-    <div id="doc_view" class="A4 d-flex flex-column">
+        <div id="doc_view" class="A4 d-flex flex-column times-font vietnamese-text" style="height: auto;">
         <table style="width: 100%;">
             <tr>
                 <td style="text-align: center; vertical-align: top;">
